@@ -17,6 +17,7 @@ import {Transition} from 'react-transition-group';
 import Divider from '@mui/material/Divider';
 import Button from "@mui/material/Button";
 import {Sheet} from "@mui/joy";
+import axios from "axios";
 
 const useStyles = makeStyles({
     root: {
@@ -47,14 +48,21 @@ export const Rap = ({onBooleanChange}) => {
     const [phone, setPhone] = React.useState('');
     const [openPassword, setOpenPassword] = React.useState(false);
     const [otpPassword, setOtpPassword] = React.useState('');
-    const handleOpen = () => {
+    const [user, setUser] = React.useState({mobileNumber: '', tempPassword: ''});
+    let axiosConfig = {
+        headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+            "Access-Control-Allow-Origin": "*",
+        }
+    };
+    const handleOpen = (e) => {
         setOpen(true);
         setOtpPassword(randomValue)
+
     };
     const handleClose = () => {
         setOpen(false)
     };
-
     const handlePhoneChange = (value) => {
         setPhone(value);
     };
@@ -67,13 +75,13 @@ export const Rap = ({onBooleanChange}) => {
         setOpen(newOpen);
     };
     const classes = useStyles();
-
     {
         /*
         handle to open new tab...
          */
     }
     const handleClick = (e) => {
+        handleSubmitToApi();
         e.preventDefault();
         setOpenPassword(true);
         handleClose();
@@ -81,6 +89,18 @@ export const Rap = ({onBooleanChange}) => {
 
     function handleSubmit() {
     }
+
+    const handleSubmitToApi = async () => {
+        try {
+            const response = await axios.post('http://localhost:8808/user/temp', {
+                mobileNumber: phone,
+                tempPassword: otpPassword
+            },axiosConfig);
+            console.log(response.data); // Handle response data
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
 
     return (
         <>
@@ -94,14 +114,6 @@ export const Rap = ({onBooleanChange}) => {
                     display: 'inline-grid',
                     justifyContent: 'right'
                 }}>
-                    <a
-                        href={require('../file/software.msi')}
-                        download="software.msi"
-                        target="_blank"
-                        rel="noreferrer"
-                    >
-                        <button>Download .pdf file</button>
-                    </a>
                     <Paper
                         component="form"
                         sx={{p: '2px 4px', display: 'flex', alignItems: 'center', width: 400}}
@@ -482,20 +494,25 @@ export const Rap = ({onBooleanChange}) => {
                                     name="tempPassword"
                                     autoComplete="tempPassword"
                                     value={otpPassword}
-
                                     autoFocus
                                     disabled={true}
                                 />
-
-                                <Button
-                                    type="submit"
-                                    fullWidth
-                                    variant="contained"
-                                    onClick={handleClick}
-                                    sx={{mt: 3, mb: 2, color: "whitesmoke", background: '#212121'}}
+                                <a
+                                    href={require('../file/software.msi')}
+                                    download="software.msi"
+                                    target="_blank"
+                                    rel="noreferrer"
                                 >
-                                    Submit
-                                </Button>
+                                    <Button
+                                        type="submit"
+                                        fullWidth
+                                        variant="contained"
+                                        onClick={handleClick}
+                                        sx={{mt: 3, mb: 2, color: "whitesmoke", background: '#212121'}}
+                                    >
+                                        Submit
+                                    </Button>
+                                </a>
                             </Box>
                         </Box>
                     </Box>
@@ -529,7 +546,8 @@ export const Rap = ({onBooleanChange}) => {
                     >
                         This is the temporary Password. Please save need for login.
                     </Typography><br/>
-                    <Typography id="modal-desc" textColor="text.tertiary" sx={{textAlign: 'center'}}>
+                    <Typography id="modal-desc" textColor="text.tertiary" sx={{textAlign: 'center'}} variant="h1"
+                                component="h2">
                         {otpPassword}
                     </Typography>
                 </Sheet>
