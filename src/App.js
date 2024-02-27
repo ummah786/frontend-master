@@ -10,7 +10,7 @@ import Order from "./pages/Order";
 import Saved from "./pages/Saved";
 import Setting from "./pages/Setting";
 import SideBar from "./pages/Sidebar/SideBar";
-import {Rap} from "./pages/Rap";
+import {HesabbookHome} from "./pages/HesabbookHome";
 import {PosBilling} from "./pages/PosBilling";
 import {MainPage} from "./pages/MainPage";
 import {useState} from "react";
@@ -26,7 +26,7 @@ function App() {
                     <div>
 
                             <Routes>
-                                <Route path="/" element={<Rap onBooleanChange={handleBooleanChange}/>}/>
+                                <Route path="/" element={<HesabbookHome onBooleanChange={handleBooleanChange}/>}/>
                                 <Route path="/posbilling" element={<MainPage/>}/>
                             </Routes>
                     </div>

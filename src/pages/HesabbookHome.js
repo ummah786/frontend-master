@@ -42,7 +42,7 @@ const style = {
     boxShadow: 24,
     p: 4,
 };
-export const Rap = ({onBooleanChange}) => {
+export const HesabbookHome = ({onBooleanChange}) => {
     const randomValue = generateRandomAlphaNumeric(5);
     const [open, setOpen] = React.useState(false);
     const [phone, setPhone] = React.useState('');
