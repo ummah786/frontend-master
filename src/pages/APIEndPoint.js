@@ -1,0 +1,1 @@
+export const SAVE_TEMP_PASSWORD="http://api.hesabbook.in/user/temp";

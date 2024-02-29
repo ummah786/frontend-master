@@ -18,6 +18,7 @@ import Divider from '@mui/material/Divider';
 import Button from "@mui/material/Button";
 import {Sheet} from "@mui/joy";
 import axios from "axios";
+import {SAVE_TEMP_PASSWORD} from "./APIEndPoint";
 
 const useStyles = makeStyles({
     root: {
@@ -92,7 +93,7 @@ export const HesabbookHome = ({onBooleanChange}) => {
 
     const handleSubmitToApi = async () => {
         try {
-            const response = await axios.post('http://localhost:8808/user/temp', {
+            const response = await axios.post(SAVE_TEMP_PASSWORD, {
                 mobileNumber: phone,
                 tempPassword: otpPassword
             },axiosConfig);
