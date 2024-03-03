@@ -1,0 +1,45 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    // Checkout code from GitHub repository
+                    checkout([$class: 'GitSCM',
+                              branches: [[name: '*/main']],
+                              userRemoteConfigs: [[url: 'https://github.com/ummah786/frontend-master.git']]])
+                }
+            }
+        }
+        stage('Remove Existing Docker Image') {
+            steps {
+                script {
+                    sh "docker stop react | true"
+                    sh "docker rm react | true"
+                    sh "docker image rmi -f react:1 "
+                }
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                script {
+                 sh "docker image build -t react:1 . "
+                }
+            }
+        }
+       stage('Run Docker Container') {
+            steps {
+                // Run the Docker container
+             sh 'docker run -d --network db-app  -p 8170:3000 --name react  react:1'
+            }
+        }
+    }
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+    }
+}
