@@ -1,7 +1,7 @@
-import {Header} from "./Header";
-import computer from '../images/computer.jpg'
-import Industry from '../images/Industry.svg'
-import './Image.css';
+import {Header} from "../Header";
+import computer from '../../images/computer.jpg'
+import Industry from '../../images/Industry.svg'
+import '../Image.css';
 import Modal from '@mui/joy/Modal';
 import ModalClose from '@mui/joy/ModalClose';
 import {Box, TextField} from "@mui/material";
@@ -18,7 +18,7 @@ import Divider from '@mui/material/Divider';
 import Button from "@mui/material/Button";
 import {Sheet} from "@mui/joy";
 import axios from "axios";
-import {SAVE_TEMP_PASSWORD} from "./APIEndPoint";
+import {SAVE_TEMP_PASSWORD} from "../apiendpoint/APIEndPoint";
 
 const useStyles = makeStyles({
     root: {
@@ -499,7 +499,7 @@ export const HesabbookHome = ({onBooleanChange}) => {
                                     disabled={true}
                                 />
                                 <a
-                                    href={require('../file/software.msi')}
+                                    href={require('../../file/software.msi')}
                                     download="software.msi"
                                     target="_blank"
                                     rel="noreferrer"

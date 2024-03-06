@@ -10,13 +10,14 @@ import Order from "./pages/Order";
 import Saved from "./pages/Saved";
 import Setting from "./pages/Setting";
 import SideBar from "./pages/Sidebar/SideBar";
-import {HesabbookHome} from "./pages/HesabbookHome";
+import {HesabbookHome} from "./pages/home/HesabbookHome";
 import {PosBilling} from "./pages/PosBilling";
 import {MainPage} from "./pages/MainPage";
 import {useState} from "react";
+import {ManageUsers} from "./pages/account/ManageUsers";
 
 function App() {
-    const [flag, setFlag] = useState(true);
+    const [flag, setFlag] = useState(false);
     const handleBooleanChange = () => {
         setFlag(prevState => !prevState);
     };
@@ -43,6 +44,7 @@ function App() {
                                 <Route path="/saved" element={<Saved/>}/>
                                 <Route path="/settings" element={<Setting/>}/>
                                 <Route path="/posbilling" element={<PosBilling/>}/>
+                                <Route path="/manage-user" element={<ManageUsers/>}/>
                                 <Route path="*" element={<> not found</>}/>
                             </Routes>
                         </SideBar>

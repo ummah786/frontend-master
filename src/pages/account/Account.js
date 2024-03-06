@@ -1,5 +1,5 @@
 import React from 'react'
-import SideBar from "./Sidebar/SideBar";
+import SideBar from "../Sidebar/SideBar";
 
 function Account() {
     return (

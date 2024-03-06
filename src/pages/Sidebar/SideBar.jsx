@@ -140,6 +140,12 @@ const routes = [
     icon: <AiFillHeart />,
   },
   {
+
+    path: "/manage-user",
+    name: "Manage Users",
+    icon: <AiFillHeart />,
+  },
+  {
     path: "/Logout",
     name: "Logout",
     icon: <AiFillHeart />,
