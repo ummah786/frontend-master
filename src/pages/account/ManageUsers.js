@@ -109,11 +109,13 @@ export const ManageUsers = () => {
         setEnable(prevState => !prevState);
     };
 
-    async function handleDelete(id,event) {
+    async function handleDelete(id, event) {
         console.log("DELETE ID " + id)
-        const response = await axios.post('http://localhost:8700/hesabbook/manageuser/delete/', id);
+        const response = await axios.post(`http://localhost:8700/hesabbook/manageuser/delete/${id}`);
         console.log('Submit delete Response :--    ', response.data);
         console.log('on Submit :-->', manageUserObj);
+
+        setMangUser([]);
 
         fetchAllManageUserData();
 
