@@ -1,4 +1,4 @@
-import {Box, ButtonGroup} from "@mui/material";
+import {Box, ButtonGroup, InputLabel, TextField} from "@mui/material";
 import {alpha, styled} from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -11,74 +11,16 @@ import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import {useEffect, useState} from "react";
+import {manageUserDataModel} from "../../datamodel/ManageUserDataModel";
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import IconButton from "@mui/material/IconButton";
+import axios from "axios";
+import {FormControl, Select} from "@mui/joy";
+import UserRole from '../../jsonfile/Role';
+import MenuItem from "@mui/material/MenuItem";
 
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9), createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9), createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-
-
-];
 const StyledTableCell = styled(TableCell)(({theme}) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.common.black,
@@ -142,78 +84,244 @@ function createData(name: string, calories: number, fat: number, carbs: number, 
     return {name, calories, fat, carbs, protein};
 }
 
-
 export const ManageUsers = () => {
+    const [enable, setEnable] = useState(true);
+    const [manageUserObj, setManageUserObj] = useState(manageUserDataModel);
+    const [mangUser, setMangUser] = useState([]);
+
+    const handleBooleanChange = () => {
+        setManageUserObj(manageUserDataModel);
+        setEnable(prevState => !prevState);
+    };
+
+    const handleTextFieldChange = (event, field) => {
+        setManageUserObj({
+            ...manageUserObj,
+            [field]: event.target.value,
+        });
+    };
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const response = await axios.post('http://localhost:8700/hesabbook/manageuser/save',manageUserObj);
+        console.log('Submit Response :--    ',response.data);
+        console.log('on Submit :-->', manageUserObj);
+        setManageUserObj(manageUserDataModel);
+        setEnable(prevState => !prevState);
+    };
+
+    function handleDelete(id) {
+        console.log("DELETE ID " + id)
+
+    }
+
+    function handleEdit(id) {
+        handleBooleanChange();
+        console.log("Edit ID " + id)
+        findObjectById(id);
+        console.log('manage User EDIT >>>  ', manageUserObj);
+        console.log('manage role EDIT >>>  ', manageUserObj.role);
+
+    }
+
+    const findObjectById = (id) => {
+        const foundItem = mangUser.find(item => item.id === id);
+        if (foundItem) {
+            setManageUserObj(foundItem);
+        } else {
+            console.log('Object with ID', id, 'not found');
+        }
+
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('http://localhost:8700/hesabbook/manageuser/all');
+                console.log(response.data);
+                console.log("----before---")
+                setMangUser(response.data);
+                console.log("----after---")
+                localStorage.setItem('mangeUser', mangUser);
+                console.log("Mangoo user", mangUser)
+                // setManageUserObj(response.data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchData();
+    }, []);
+
     return (
         <>
-            <Box>
+            {enable && (
                 <Box>
-                    <h6>Manage Users</h6>
-                </Box>
-                <Box>
-                    <Box sx={{display: "flex"}}>
-                        <Box sx={{border: '1px solid #000'}}>
-                            <Typography variant="caption" display="block" gutterBottom>Number of Users</Typography>
-                            <Box>
-                                <Typography variant="h5">5</Typography>
-                            </Box>
-                        </Box>
-                        <Box sx={{border: '1px solid #000'}}>
-                        <Typography variant="caption" display="block" gutterBottom>Activites Performed</Typography>
-                        <Box>
-                            <Typography variant="h5">2</Typography>
-                        </Box>
-                    </Box>
-                    </Box>
-                    <Box sx={{display: 'flex', width: '100%'}}>
-                        <Box sx={{width: '50%'}}>
-                            <Search>
-                                <SearchIconWrapper>
-                                    <SearchIcon/>
-                                </SearchIconWrapper>
-                                <StyledInputBase
-                                    placeholder="Search by User Name or Mobile Number"
-                                    inputProps={{'aria-label': 'search'}}
-                                />
-                            </Search>
-                        </Box>
-                        <Box sx={{width: '50%', right: '0', float: 'right'}}>
-                            <ButtonGroup variant="contained" aria-label="Basic button group">
-                                <Button>Add Your CA</Button>
-                                <Button>Add New User</Button>
-                            </ButtonGroup>
-                        </Box>
+                    <Box>
+                        <h6>Manage Users</h6>
                     </Box>
                     <Box>
-                        <TableContainer component={Paper} sx={{maxHeight: 500}}>
-                            <Table sx={{minWidth: 1230}} aria-label="customized table" stickyHeader>
-                                <TableHead>
-                                    <TableRow>
-                                        <StyledTableCell>Dessert (100g serving)</StyledTableCell>
-                                        <StyledTableCell align="center">Calories</StyledTableCell>
-                                        <StyledTableCell align="center">Fat&nbsp;(g)</StyledTableCell>
-                                        <StyledTableCell align="center">Carbs&nbsp;(g)</StyledTableCell>
-                                        <StyledTableCell align="center">Protein&nbsp;(g)</StyledTableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {rows.map((row) => (
-                                        <StyledTableRow key={row.name}>
-                                            <StyledTableCell component="th" scope="row">
-                                                {row.name}
-                                            </StyledTableCell>
-                                            <StyledTableCell align="center">{row.calories}</StyledTableCell>
-                                            <StyledTableCell align="center">{row.fat}</StyledTableCell>
-                                            <StyledTableCell align="center">{row.carbs}</StyledTableCell>
-                                            <StyledTableCell align="center">{row.protein}</StyledTableCell>
-                                        </StyledTableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
+                        <Box sx={{display: "flex"}}>
+                            <Box sx={{border: '1px solid #000'}}>
+                                <Typography variant="caption" display="block" gutterBottom>Number of Users</Typography>
+                                <Box>
+                                    <Typography variant="h5">5</Typography>
+                                </Box>
+                            </Box>
+                            <Box sx={{border: '1px solid #000'}}>
+                                <Typography variant="caption" display="block" gutterBottom>Activites
+                                    Performed</Typography>
+                                <Box>
+                                    <Typography variant="h5">2</Typography>
+                                </Box>
+                            </Box>
+                        </Box>
+                        <Box sx={{display: 'flex', width: '100%'}}>
+                            <Box sx={{width: '50%'}}>
+                                <Search>
+                                    <SearchIconWrapper>
+                                        <SearchIcon/>
+                                    </SearchIconWrapper>
+                                    <StyledInputBase
+                                        placeholder="Search by User Name or Mobile Number"
+                                        inputProps={{'aria-label': 'search'}}
+                                    />
+                                </Search>
+                            </Box>
+                            <Box sx={{width: '50%', right: '0', float: 'right'}}>
+                                <ButtonGroup variant="contained" aria-label="Basic button group">
+                                    <Button>Add Your CA</Button>
+                                    <Button onClick={handleBooleanChange}>Add New User</Button>
+                                </ButtonGroup>
+                            </Box>
+                        </Box>
+                        <Box>
+                            <TableContainer component={Paper} sx={{maxHeight: 500}}>
+                                <Table sx={{minWidth: 1230}} aria-label="customized table" stickyHeader>
+                                    <TableHead>
+                                        <TableRow>
+                                            <StyledTableCell align="center">Id</StyledTableCell>
+                                            <StyledTableCell align="center">Business Name</StyledTableCell>
+                                            <StyledTableCell align="center">Name</StyledTableCell>
+                                            <StyledTableCell align="center">Phone</StyledTableCell>
+                                            <StyledTableCell align="center">Role</StyledTableCell>
+                                            <StyledTableCell>Actions</StyledTableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {mangUser.map((row) => (
+                                            <StyledTableRow key={row.id}>
+                                                <StyledTableCell align="center">{row.id}</StyledTableCell>
+                                                <StyledTableCell
+                                                    align="center">{row.accountBusinessName}</StyledTableCell>
+                                                <StyledTableCell align="center">{row.name}</StyledTableCell>
+                                                <StyledTableCell align="center">{row.mobileNumber}</StyledTableCell>
+                                                <StyledTableCell align="center">{row.role}</StyledTableCell>
+                                                <StyledTableCell>
+                                                    <IconButton aria-label="edit" onClick={() => handleEdit(row.id)}>
+                                                        <EditIcon/>
+                                                    </IconButton>
+                                                    <IconButton aria-label="delete"
+                                                                onClick={() => handleDelete(row.id)}>
+                                                        <DeleteIcon/>
+                                                    </IconButton>
+                                                </StyledTableCell>
+                                            </StyledTableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Box>
                     </Box>
                 </Box>
-            </Box>
+            )}
+            {!enable && (
+                <Box>
+                    <Box sx={{display: 'flex'}}>
+                        <Box>
+                            <Button size="small" variant="contained">Create Manage User</Button>
+                        </Box>
+                        <Box sx={{float: 'right', alignItems: 'center', marginLeft: "50px"}}>
+                            <Button size="small" variant="contained" onClick={handleBooleanChange}>Cancel</Button>
+                            <Button size="small" variant="contained" onClick={handleBooleanChange}>Save</Button>
+                        </Box>
+                    </Box>
+                    <form onSubmit={handleSubmit}>
+                        <Box sx={{width: '100%', display: 'flex'}}>
+                            <Box sx={{
+                                width: '50%',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                margin: "100px",
+                                marginLeft: '200px'
+                            }}>
+                                <TextField id="outlined-basic" label="Name" variant="outlined" sx={{margin: '10px'}}
+                                           value={manageUserObj.name}
+                                           onChange={(event) => handleTextFieldChange(event, 'name')}/>
+                                <Box sx={{minWidth: 120, margin: '10px'}}>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="demo-simple-select-label">Bussiness Name</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={manageUserObj.accountBusinessName}
+                                            onChange={(event) => handleTextFieldChange(event, 'accountBusinessName')}
+                                            label="Bussiness Name"
+                                        >
+                                            {
+                                                UserRole.businessName.map(business => (
+                                                    <MenuItem key={business.name}
+                                                              value={business.name}>{business.name}</MenuItem>))
+                                            }
+                                        </Select>
+                                    </FormControl>
+                                </Box>
+                                <TextField id="outlined-basic" label="Email Address" variant="outlined"
+                                           sx={{margin: '10px'}} value={manageUserObj.emailAddress}
+                                           onChange={(event) => handleTextFieldChange(event, 'emailAddress')}/>
+                                <TextField id="outlined-basic" label="Address" variant="outlined" sx={{margin: '10px'}}
+                                           value={manageUserObj.address}
+                                           onChange={(event) => handleTextFieldChange(event, 'address')}/>
+                            </Box>
+                            <Box sx={{width: '50%', display: 'flex', flexDirection: 'column', margin: "100px"}}>
+                                <Box sx={{minWidth: 120, margin: '10px'}}>
+                                    <FormControl fullWidth>
+
+                                        <InputLabel id="demo-simple-select-label">Role</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={manageUserObj.role}
+                                            onChange={(event) => handleTextFieldChange(event, 'role')}
+                                            label="Role"
+                                        >
+                                            {
+                                                UserRole.role.map(userrole => (
+                                                    <MenuItem key={userrole.name}
+                                                              value={userrole.name}>{userrole.name}</MenuItem>
+                                                ))
+                                            }
+
+                                        </Select>
+                                    </FormControl>
+                                </Box>
+                                <TextField id="outlined-basic" label="Phone Number" variant="outlined"
+                                           sx={{margin: '10px'}} value={manageUserObj.mobileNumber}
+                                           onChange={(event) => handleTextFieldChange(event, 'mobileNumber')}/>
+                                <TextField id="outlined-basic" label="Temp Password" variant="outlined"
+                                           sx={{margin: '10px'}} value={manageUserObj.tempPassword}
+                                           onChange={(event) => handleTextFieldChange(event, 'tempPassword')}/>
+
+                                <TextField id="outlined-basic" label="User Id" variant="outlined" disabled={true}
+                                           sx={{margin: '10px'}} value={manageUserObj.secondary_user_id}
+                                           onChange={(event) => handleTextFieldChange(event, 'secondary_user_id')}/>
+                                <Box>
+                                    <Button type="submit">SUBMIT</Button>
+                                </Box>
+                            </Box>
+                        </Box>
+                    </form>
+                </Box>
+            )}
         </>
     )
 }

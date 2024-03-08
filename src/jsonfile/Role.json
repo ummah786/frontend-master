@@ -1,0 +1,21 @@
+{
+  "role": [
+    {
+      "name": "User"
+    },
+    {
+      "name": "Admin"
+    }
+  ],
+  "businessName": [
+    {
+      "name": "Congress pvt ltd"
+    },
+    {
+      "name": "BJP Pvt Ltd"
+    },
+    {
+      "name": "RJD Pvt Ltd"
+    }
+  ]
+}
