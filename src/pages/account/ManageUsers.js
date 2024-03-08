@@ -1,4 +1,4 @@
-import {Box, ButtonGroup, InputLabel, TextField} from "@mui/material";
+import {Box, ButtonGroup, TextField} from "@mui/material";
 import {alpha, styled} from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -17,7 +17,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from "@mui/material/IconButton";
 import axios from "axios";
-import {FormControl, Select} from "@mui/joy";
 import UserRole from '../../jsonfile/Role';
 import MenuItem from "@mui/material/MenuItem";
 
@@ -103,15 +102,20 @@ export const ManageUsers = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const response = await axios.post('http://localhost:8700/hesabbook/manageuser/save',manageUserObj);
-        console.log('Submit Response :--    ',response.data);
+        const response = await axios.post('http://localhost:8700/hesabbook/manageuser/save', manageUserObj);
+        console.log('Submit Response :--    ', response.data);
         console.log('on Submit :-->', manageUserObj);
         setManageUserObj(manageUserDataModel);
         setEnable(prevState => !prevState);
     };
 
-    function handleDelete(id) {
+    async function handleDelete(id,event) {
         console.log("DELETE ID " + id)
+        const response = await axios.post('http://localhost:8700/hesabbook/manageuser/delete/', id);
+        console.log('Submit delete Response :--    ', response.data);
+        console.log('on Submit :-->', manageUserObj);
+
+        fetchAllManageUserData();
 
     }
 
@@ -121,6 +125,7 @@ export const ManageUsers = () => {
         findObjectById(id);
         console.log('manage User EDIT >>>  ', manageUserObj);
         console.log('manage role EDIT >>>  ', manageUserObj.role);
+        fetchAllManageUserData();
 
     }
 
@@ -134,21 +139,22 @@ export const ManageUsers = () => {
 
     };
 
-    useEffect(() => {
+    function fetchAllManageUserData() {
         const fetchData = async () => {
             try {
                 const response = await axios.get('http://localhost:8700/hesabbook/manageuser/all');
                 console.log(response.data);
-                console.log("----before---")
                 setMangUser(response.data);
-                console.log("----after---")
                 localStorage.setItem('mangeUser', mangUser);
-                console.log("Mangoo user", mangUser)
-                // setManageUserObj(response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
+        return fetchData;
+    }
+
+    useEffect(() => {
+        const fetchData = fetchAllManageUserData();
         fetchData();
     }, []);
 
@@ -196,7 +202,7 @@ export const ManageUsers = () => {
                         </Box>
                         <Box>
                             <TableContainer component={Paper} sx={{maxHeight: 500}}>
-                                <Table sx={{minWidth: 1230}} aria-label="customized table" stickyHeader>
+                                <Table sx={{minWidth: 1250}} aria-label="customized table" stickyHeader>
                                     <TableHead>
                                         <TableRow>
                                             <StyledTableCell align="center">Id</StyledTableCell>
@@ -257,24 +263,21 @@ export const ManageUsers = () => {
                                 <TextField id="outlined-basic" label="Name" variant="outlined" sx={{margin: '10px'}}
                                            value={manageUserObj.name}
                                            onChange={(event) => handleTextFieldChange(event, 'name')}/>
-                                <Box sx={{minWidth: 120, margin: '10px'}}>
-                                    <FormControl fullWidth>
-                                        <InputLabel id="demo-simple-select-label">Bussiness Name</InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            value={manageUserObj.accountBusinessName}
-                                            onChange={(event) => handleTextFieldChange(event, 'accountBusinessName')}
-                                            label="Bussiness Name"
-                                        >
-                                            {
-                                                UserRole.businessName.map(business => (
-                                                    <MenuItem key={business.name}
-                                                              value={business.name}>{business.name}</MenuItem>))
-                                            }
-                                        </Select>
-                                    </FormControl>
-                                </Box>
+                                <TextField
+                                    fullWidth
+                                    select
+                                    value={manageUserObj.accountBusinessName}
+                                    onChange={(event) => handleTextFieldChange(event, 'accountBusinessName')}
+                                    label="Bussiness Name"
+                                    variant="outlined"
+                                    margin="normal"
+                                >
+                                    {
+                                        UserRole.businessName.map(business => (
+                                            <MenuItem key={business.name}
+                                                      value={business.name}>{business.name}</MenuItem>))
+                                    }
+                                </TextField>
                                 <TextField id="outlined-basic" label="Email Address" variant="outlined"
                                            sx={{margin: '10px'}} value={manageUserObj.emailAddress}
                                            onChange={(event) => handleTextFieldChange(event, 'emailAddress')}/>
@@ -283,27 +286,22 @@ export const ManageUsers = () => {
                                            onChange={(event) => handleTextFieldChange(event, 'address')}/>
                             </Box>
                             <Box sx={{width: '50%', display: 'flex', flexDirection: 'column', margin: "100px"}}>
-                                <Box sx={{minWidth: 120, margin: '10px'}}>
-                                    <FormControl fullWidth>
-
-                                        <InputLabel id="demo-simple-select-label">Role</InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            value={manageUserObj.role}
-                                            onChange={(event) => handleTextFieldChange(event, 'role')}
-                                            label="Role"
-                                        >
-                                            {
-                                                UserRole.role.map(userrole => (
-                                                    <MenuItem key={userrole.name}
-                                                              value={userrole.name}>{userrole.name}</MenuItem>
-                                                ))
-                                            }
-
-                                        </Select>
-                                    </FormControl>
-                                </Box>
+                                <TextField
+                                    fullWidth
+                                    select
+                                    value={manageUserObj.role}
+                                    onChange={(event) => handleTextFieldChange(event, 'role')}
+                                    label="Role"
+                                    variant="outlined"
+                                    margin="normal"
+                                >
+                                    {
+                                        UserRole.role.map(userrole => (
+                                            <MenuItem key={userrole.name}
+                                                      value={userrole.name}>{userrole.name}</MenuItem>
+                                        ))
+                                    }
+                                </TextField>
                                 <TextField id="outlined-basic" label="Phone Number" variant="outlined"
                                            sx={{margin: '10px'}} value={manageUserObj.mobileNumber}
                                            onChange={(event) => handleTextFieldChange(event, 'mobileNumber')}/>
