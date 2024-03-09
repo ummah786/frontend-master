@@ -1,4 +1,5 @@
-import {Box, ButtonGroup, TextField} from "@mui/material";
+import {Box, Button, ButtonGroup, FormControlLabel, TextField} from "@mui/material";
+import React, { useRef } from 'react';
 import {alpha, styled} from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -9,10 +10,8 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import {useEffect, useState} from "react";
-import {manageUserDataModel} from "../../datamodel/ManageUserDataModel";
+import {businessAccountDataModel, manageUserDataModel} from "../../datamodel/ManageUserDataModel";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from "@mui/material/IconButton";
@@ -20,7 +19,16 @@ import axios from "axios";
 import UserRole from '../../jsonfile/Role';
 import MenuItem from "@mui/material/MenuItem";
 import {useDispatch} from 'react-redux';
-import {addExistingMangeUser, addManageUser, removeEmployee, updateManageUser} from "../../redux/Action";
+import {addExistingMangeUser, removeEmployee, updateManageUser} from "../../redux/Action";
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import Typography from "@mui/material/Typography";
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
 
 const StyledTableCell = styled(TableCell)(({theme}) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -87,11 +95,12 @@ function createData(name: string, calories: number, fat: number, carbs: number, 
 
 export const MyBussinessAccount = () => {
     const [enable, setEnable] = useState(true);
-    const [manageUserObj, setManageUserObj] = useState(manageUserDataModel);
+    const [manageUserObj, setManageUserObj] = useState(businessAccountDataModel);
     const [mangUser, setMangUser] = useState([]);
+    const fileInputRef = useRef(null);
     const dispatch = useDispatch();
     const handleBooleanChange = () => {
-        setManageUserObj(manageUserDataModel);
+        setManageUserObj(businessAccountDataModel);
         setEnable(prevState => !prevState);
     };
 
@@ -104,7 +113,7 @@ export const MyBussinessAccount = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const response = await axios.post('http://localhost:8700/hesabbook/manageuser/save', manageUserObj);
+        const response = await axios.post('http://localhost:8700/hesabbook/business/account/save', manageUserObj);
         console.log('Submit Response :--    ', response.data);
         console.log('on Submit :-->', manageUserObj);
         dispatch(addExistingMangeUser(response.data));
@@ -114,7 +123,7 @@ export const MyBussinessAccount = () => {
 
     async function handleDelete(id, event) {
         console.log("DELETE ID " + id)
-        const response = await axios.post(`http://localhost:8700/hesabbook/manageuser/delete/${id}`);
+        const response = await axios.post(`http://localhost:8700/hesabbook/business/account/delete/${id}`);
         console.log('Submit delete Response :--    ', response.data);
         fetchAllManageUserData();
         dispatch(removeEmployee(id));
@@ -142,11 +151,11 @@ export const MyBussinessAccount = () => {
     function fetchAllManageUserData() {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8700/hesabbook/manageuser/all');
-                console.log(response.data);
-                setMangUser(response.data);
-                localStorage.setItem('mangeUser', mangUser);
-                dispatch(addManageUser(response.data));
+                const response = await axios.get('http://localhost:8700/hesabbook/business/account/all');
+                console.log(response.data.response);
+                setMangUser(response.data.response);
+                localStorage.setItem('business-details', response.data.response);
+                //   dispatch(addManageUser(response.data));
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -154,13 +163,33 @@ export const MyBussinessAccount = () => {
         return fetchData;
     }
 
+    const handleCheckboxChange = (event) => {
+        const {name, checked} = event.target;
+        setManageUserObj({...manageUserObj, [name]: checked});
+    };
+    const [image1, setImage1] = useState('');
+    const [image2, setImage2] = useState('');
+
+    const handleImageUpload = (event, setImage) => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+            setImage(reader.result);
+        };
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8700/hesabbook/manageuser/all');
-                setMangUser(response.data);
-                localStorage.setItem('mangeUser', mangUser);
-                dispatch(addManageUser(response.data));
+                const response = await axios.get('http://localhost:8700/hesabbook/business/account/all');
+                console.log(response.data.response);
+                setMangUser(response.data.response);
+                localStorage.setItem('business-details', response.data.response);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -210,12 +239,12 @@ export const MyBussinessAccount = () => {
                                     <TableBody>
                                         {mangUser.map((row) => (
                                             <StyledTableRow key={row.id}>
-                                                <StyledTableCell align="center">{row.id}</StyledTableCell>
+                                                <StyledTableCell align="center">{row.businessName}</StyledTableCell>
                                                 <StyledTableCell
-                                                    align="center">{row.accountBusinessName}</StyledTableCell>
-                                                <StyledTableCell align="center">{row.name}</StyledTableCell>
-                                                <StyledTableCell align="center">{row.mobileNumber}</StyledTableCell>
-                                                <StyledTableCell align="center">{row.role}</StyledTableCell>
+                                                    align="center">{row.phoneNumber}</StyledTableCell>
+                                                <StyledTableCell align="center">{row.email}</StyledTableCell>
+                                                <StyledTableCell align="center">{row.gstNumber}</StyledTableCell>
+                                                <StyledTableCell align="center">{row.panNumber}</StyledTableCell>
                                                 <StyledTableCell>
                                                     <IconButton aria-label="edit"
                                                                 onClick={() => handleEdit(row.id, row)}>
@@ -239,7 +268,7 @@ export const MyBussinessAccount = () => {
                 <Box>
                     <Box sx={{display: 'flex'}}>
                         <Box>
-                            <Button size="small" variant="contained">Create Manage User</Button>
+                            <Button size="small" variant="contained">Create/Edit Business Account</Button>
                         </Box>
                         <Box sx={{float: 'right', alignItems: 'center', marginLeft: "50px"}}>
                             <Button size="small" variant="contained" onClick={handleBooleanChange}>Cancel</Button>
@@ -249,64 +278,219 @@ export const MyBussinessAccount = () => {
                     <form onSubmit={handleSubmit}>
                         <Box sx={{width: '100%', display: 'flex'}}>
                             <Box sx={{
-                                width: '50%',
+                                width: '25%',
                                 display: 'flex',
                                 flexDirection: 'column',
-                                margin: "100px",
-                                marginLeft: '200px'
+                                margin: "10px",
+                                marginLeft: '180px'
                             }}>
-                                <TextField id="outlined-basic" label="Name" variant="outlined" sx={{margin: '10px'}}
-                                           value={manageUserObj.name}
-                                           onChange={(event) => handleTextFieldChange(event, 'name')}/>
+                                <Card sx={{maxWidth: 305}}>
+                                    <CardMedia
+                                        sx={{height: 100,width:100}}
+                                        sx={{height: 140}}
+                                        image={image1}
+                                        alt="Card 1 Image"
+                                        title="avatar"
+                                    />
+                                    <CardContent>
+                                        <Typography gutterBottom variant="h5" component="div">
+                                            Avatar
+                                        </Typography>
+                                    </CardContent>
+                                    <input
+                                        accept="image/*"
+                                        style={{ display: 'none' }}
+                                        id="image-upload-2"
+                                        type="file"
+                                        onChange={(event) => handleImageUpload(event, setImage2)}
+                                    />
+                                    <CardActions>
+                                        <CardContent>
+                                            <input
+                                                accept="image/*"
+                                                style={{ display: 'none' }}
+                                                id="image-upload-1"
+                                                type="file"
+                                                onChange={(event) => handleImageUpload(event, setImage1)}
+                                            />
+                                            <label htmlFor="image-upload-1">
+                                                <Button variant="contained" component="span">
+                                                    Upload Image for Card 1
+                                                </Button>
+                                            </label>
+                                        </CardContent>
+                                    </CardActions>
+                                </Card>
+                                <Card sx={{maxWidth: 345,marginTop:'30px'}}>
+                                    <CardMedia
+                                        sx={{height: 140}}
+                                        image={image2}
+                                        alt="Card 1 Image"
+                                        title="Signature"
+                                    />
+                                    <CardContent>
+                                        <Typography gutterBottom variant="h5" component="div">
+                                            Signature
+                                        </Typography>
+
+                                    </CardContent>
+                                    <input
+                                        accept="image/*"
+                                        style={{ display: 'none' }}
+                                        id="image-upload-2"
+                                        type="file"
+                                        onChange={(event) => handleImageUpload(event, setImage2)}
+                                    />
+                                    <CardActions>
+                                        <CardContent>
+                                            <input
+                                                accept="image/*"
+                                                style={{ display: 'none' }}
+                                                id="image-upload-2"
+                                                type="file"
+                                                onChange={(event) => handleImageUpload(event, setImage2)}
+                                            />
+                                            <label htmlFor="image-upload-2">
+                                                <Button variant="contained" component="span">
+                                                    Upload Image for Card 2
+                                                </Button>
+                                            </label>
+                                        </CardContent>
+                                    </CardActions>
+                                </Card>
+                            </Box>
+                            <Box sx={{
+                                width: '25%',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                margin: "10px",
+                                marginLeft: '20px'
+                            }}>
+                                <TextField id="outlined-basic" label="Business Name" variant="outlined"
+                                           sx={{margin: '10px'}}
+                                           value={manageUserObj.businessName}
+                                           onChange={(event) => handleTextFieldChange(event, 'businessName')}/>
+                                <TextField id="outlined-basic" label="Phone Number" variant="outlined"
+                                           sx={{margin: '10px'}}
+                                           value={manageUserObj.phoneNumber}
+                                           onChange={(event) => handleTextFieldChange(event, 'phoneNumber')}/>
+                                <TextField id="outlined-basic" label="E-mail" variant="outlined" sx={{margin: '10px'}}
+                                           value={manageUserObj.email}
+                                           onChange={(event) => handleTextFieldChange(event, 'email')}/>
+
+                                <TextField id="outlined-basic" label="PAN Number" variant="outlined"
+                                           sx={{margin: '10px'}} value={manageUserObj.panNumber}
+                                           onChange={(event) => handleTextFieldChange(event, 'panNumber')}/>
+                                <Box sx={{display: 'flex'}}>
+                                    <FormControl>
+                                        <FormLabel id="demo-controlled-radio-buttons-group">Are you GST
+                                            Registered?</FormLabel>
+                                        <RadioGroup aria-labelledby="demo-controlled-radio-buttons-group"
+                                                    name="controlled-radio-buttons-group" value={manageUserObj.gstUser}
+                                                    onChange={(event) => handleTextFieldChange(event, 'gstUser')}>
+                                            <FormControlLabel value="Yes" control={<Radio/>} label="Yes"/>
+                                            <FormControlLabel value="No" control={<Radio/>} label="No"/>
+                                        </RadioGroup>
+                                    </FormControl>
+                                </Box>
+                                <TextField id="outlined-basic" label="GST Number" variant="outlined"
+                                           sx={{margin: '10px'}}
+                                           value={manageUserObj.gstNumber}
+                                           onChange={(event) => handleTextFieldChange(event, 'gstNumber')}/>
+
+                            </Box>
+
+                            <Box sx={{
+                                width: '25%',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                margin: "10px",
+                                marginLeft: '20px'
+                            }}>
+                                <TextField id="outlined-basic" label="Billing Address" variant="outlined"
+                                           sx={{margin: '10px'}}
+                                           value={manageUserObj.billingAddress}
+                                           onChange={(event) => handleTextFieldChange(event, 'billingAddress')}/>
+                                <TextField id="outlined-basic" label="City" variant="outlined" sx={{margin: '10px'}}
+                                           value={manageUserObj.city}
+                                           onChange={(event) => handleTextFieldChange(event, 'city')}/>
+                                <TextField id="outlined-basic" label="District" variant="outlined" sx={{margin: '10px'}}
+                                           value={manageUserObj.district}
+                                           onChange={(event) => handleTextFieldChange(event, 'district')}/>
                                 <TextField
                                     fullWidth
                                     select
-                                    value={manageUserObj.accountBusinessName}
-                                    onChange={(event) => handleTextFieldChange(event, 'accountBusinessName')}
-                                    label="Bussiness Name"
+                                    value={manageUserObj.state}
+                                    onChange={(event) => handleTextFieldChange(event, 'state')}
+                                    label="State"
                                     variant="outlined"
                                     margin="normal"
                                 >
                                     {
-                                        UserRole.businessName.map(business => (
-                                            <MenuItem key={business.name}
-                                                      value={business.name}>{business.name}</MenuItem>))
+                                        UserRole.india.map(indi => (
+                                            <MenuItem key={indi.name}
+                                                      value={indi.name}>{indi.name}</MenuItem>))
                                     }
                                 </TextField>
-                                <TextField id="outlined-basic" label="Email Address" variant="outlined"
-                                           sx={{margin: '10px'}} value={manageUserObj.emailAddress}
-                                           onChange={(event) => handleTextFieldChange(event, 'emailAddress')}/>
-                                <TextField id="outlined-basic" label="Address" variant="outlined" sx={{margin: '10px'}}
-                                           value={manageUserObj.address}
-                                           onChange={(event) => handleTextFieldChange(event, 'address')}/>
+                                <TextField id="outlined-basic" label="Pin Code" variant="outlined"
+                                           sx={{margin: '10px'}} value={manageUserObj.pinCode}
+                                           onChange={(event) => handleTextFieldChange(event, 'pinCode')}/>
+
+
                             </Box>
-                            <Box sx={{width: '50%', display: 'flex', flexDirection: 'column', margin: "100px"}}>
+
+                            <Box sx={{width: '25%', display: 'flex', flexDirection: 'column', margin: "10px"}}>
+
+                                {/*  handle check box */}
                                 <TextField
                                     fullWidth
                                     select
-                                    value={manageUserObj.role}
-                                    onChange={(event) => handleTextFieldChange(event, 'role')}
-                                    label="Role"
+                                    value={manageUserObj.businessType}
+                                    onChange={(event) => handleTextFieldChange(event, 'businessType')}
+                                    label="Business Type"
                                     variant="outlined"
                                     margin="normal"
                                 >
                                     {
-                                        UserRole.role.map(userrole => (
+                                        UserRole.businessType.map(bt => (
+                                            <MenuItem key={bt.name}
+                                                      value={bt.name}>{bt.name}</MenuItem>
+                                        ))
+                                    }
+                                </TextField>
+
+                                <TextField
+                                    fullWidth
+                                    select
+                                    value={manageUserObj.industryType}
+                                    onChange={(event) => handleTextFieldChange(event, 'industryType')}
+                                    label="Industry Type"
+                                    variant="outlined"
+                                    margin="normal"
+                                >
+                                    {
+                                        UserRole.industryType.map(userrole => (
                                             <MenuItem key={userrole.name}
                                                       value={userrole.name}>{userrole.name}</MenuItem>
                                         ))
                                     }
                                 </TextField>
-                                <TextField id="outlined-basic" label="Phone Number" variant="outlined"
-                                           sx={{margin: '10px'}} value={manageUserObj.mobileNumber}
-                                           onChange={(event) => handleTextFieldChange(event, 'mobileNumber')}/>
-                                <TextField id="outlined-basic" label="Temp Password" variant="outlined"
-                                           sx={{margin: '10px'}} value={manageUserObj.tempPassword}
-                                           onChange={(event) => handleTextFieldChange(event, 'tempPassword')}/>
-
-                                <TextField id="outlined-basic" label="User Id" variant="outlined" disabled={true}
-                                           sx={{margin: '10px'}} value={manageUserObj.secondary_user_id}
-                                           onChange={(event) => handleTextFieldChange(event, 'secondary_user_id')}/>
+                                <TextField
+                                    fullWidth
+                                    select
+                                    value={manageUserObj.businessRegistrationType}
+                                    onChange={(event) => handleTextFieldChange(event, 'businessRegistrationType')}
+                                    label="Business Registration Type"
+                                    variant="outlined"
+                                    margin="normal"
+                                >
+                                    {
+                                        UserRole.businessRegistrationType.map(brt => (
+                                            <MenuItem key={brt.name}
+                                                      value={brt.name}>{brt.name}</MenuItem>
+                                        ))
+                                    }
+                                </TextField>
                                 <Box>
                                     <Button type="submit">SUBMIT</Button>
                                 </Box>
