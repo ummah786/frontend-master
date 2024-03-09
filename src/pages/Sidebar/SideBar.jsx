@@ -114,6 +114,27 @@ const routes = [
     ],
   },
   {
+    path: "/account",
+    name: "Account",
+    icon: <AiTwotoneFileExclamation />,
+    subRoutes: [
+      {
+        path: "/account/manageAccount",
+        name: "Manage Account",
+        icon: <FaUser />,
+      },
+      {
+        path: "/account/myuser",
+        name: "My User",
+        icon: <FaLock />,
+      }, {
+        path: "/account/business",
+        name: "Business",
+        icon: <FaUser />,
+      }
+    ],
+  },
+  {
     path: "/bank",
     name: "Cash & Bank",
     icon: <BsCartCheck />,
@@ -137,12 +158,6 @@ const routes = [
 
     path: "/report",
     name: "Reports",
-    icon: <AiFillHeart />,
-  },
-  {
-
-    path: "/manage-user",
-    name: "Manage Users",
     icon: <AiFillHeart />,
   },
   {

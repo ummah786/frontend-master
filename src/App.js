@@ -15,6 +15,8 @@ import {PosBilling} from "./pages/PosBilling";
 import {MainPage} from "./pages/MainPage";
 import {useState} from "react";
 import {ManageUsers} from "./pages/account/ManageUsers";
+import {MyUserDetails} from "./pages/account/MyUserDetails";
+import {MyBussinessAccount} from "./pages/account/MyBussinessAccount";
 
 function App() {
     const [flag, setFlag] = useState(false);
@@ -26,10 +28,10 @@ function App() {
                 {flag && (
                     <div>
 
-                            <Routes>
-                                <Route path="/" element={<HesabbookHome onBooleanChange={handleBooleanChange}/>}/>
-                                <Route path="/posbilling" element={<MainPage/>}/>
-                            </Routes>
+                        <Routes>
+                            <Route path="/" element={<HesabbookHome onBooleanChange={handleBooleanChange}/>}/>
+                            <Route path="/posbilling" element={<MainPage/>}/>
+                        </Routes>
                     </div>
                 )}
                 {!flag && (<div>
@@ -44,7 +46,9 @@ function App() {
                                 <Route path="/saved" element={<Saved/>}/>
                                 <Route path="/settings" element={<Setting/>}/>
                                 <Route path="/posbilling" element={<PosBilling/>}/>
-                                <Route path="/manage-user" element={<ManageUsers/>}/>
+                                <Route path="/account/manageAccount" element={<ManageUsers/>}/>
+                                <Route path="/account/myuser" element={<MyUserDetails/>}/>
+                                <Route path="/account/business" element={<MyBussinessAccount/>}/>
                                 <Route path="*" element={<> not found</>}/>
                             </Routes>
                         </SideBar>

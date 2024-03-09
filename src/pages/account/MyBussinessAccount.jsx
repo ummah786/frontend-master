@@ -85,7 +85,7 @@ function createData(name: string, calories: number, fat: number, carbs: number, 
     return {name, calories, fat, carbs, protein};
 }
 
-export const ManageUsers = () => {
+export const MyBussinessAccount = () => {
     const [enable, setEnable] = useState(true);
     const [manageUserObj, setManageUserObj] = useState(manageUserDataModel);
     const [mangUser, setMangUser] = useState([]);
@@ -173,24 +173,9 @@ export const ManageUsers = () => {
             {enable && (
                 <Box>
                     <Box>
-                        <h6>Manage Users</h6>
+                        <h6>My Business Account</h6>
                     </Box>
                     <Box>
-                        <Box sx={{display: "flex"}}>
-                            <Box sx={{border: '1px solid #000'}}>
-                                <Typography variant="caption" display="block" gutterBottom>Number of Users</Typography>
-                                <Box>
-                                    <Typography variant="h5">5</Typography>
-                                </Box>
-                            </Box>
-                            <Box sx={{border: '1px solid #000'}}>
-                                <Typography variant="caption" display="block" gutterBottom>Activites
-                                    Performed</Typography>
-                                <Box>
-                                    <Typography variant="h5">2</Typography>
-                                </Box>
-                            </Box>
-                        </Box>
                         <Box sx={{display: 'flex', width: '100%'}}>
                             <Box sx={{width: '50%'}}>
                                 <Search>
@@ -198,15 +183,14 @@ export const ManageUsers = () => {
                                         <SearchIcon/>
                                     </SearchIconWrapper>
                                     <StyledInputBase
-                                        placeholder="Search by User Name or Mobile Number"
+                                        placeholder="Enter By Business Name"
                                         inputProps={{'aria-label': 'search'}}
                                     />
                                 </Search>
                             </Box>
                             <Box sx={{width: '50%', right: '0', float: 'right'}}>
                                 <ButtonGroup variant="contained" aria-label="Basic button group">
-                                    <Button>Add Your CA</Button>
-                                    <Button onClick={handleBooleanChange}>Add New User</Button>
+                                    <Button onClick={handleBooleanChange}>Add New Business Details</Button>
                                 </ButtonGroup>
                             </Box>
                         </Box>
@@ -215,11 +199,11 @@ export const ManageUsers = () => {
                                 <Table sx={{minWidth: 1250}} aria-label="customized table" stickyHeader>
                                     <TableHead>
                                         <TableRow>
-                                            <StyledTableCell align="center">Id</StyledTableCell>
                                             <StyledTableCell align="center">Business Name</StyledTableCell>
-                                            <StyledTableCell align="center">Name</StyledTableCell>
                                             <StyledTableCell align="center">Phone</StyledTableCell>
-                                            <StyledTableCell align="center">Role</StyledTableCell>
+                                            <StyledTableCell align="center">Email</StyledTableCell>
+                                            <StyledTableCell align="center">GST</StyledTableCell>
+                                            <StyledTableCell align="center">PAN Number</StyledTableCell>
                                             <StyledTableCell>Actions</StyledTableCell>
                                         </TableRow>
                                     </TableHead>

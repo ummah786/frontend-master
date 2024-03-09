@@ -1,10 +1,22 @@
-import { ADD_EMPLOYEE, REMOVE_EMPLOYEE, UPDATE_EMPLOYEE } from './Action';
+import {
+    ADD_EMPLOYEE,
+    ADD_EXISTING_MANAGE_USER,
+    ADD_MANAGE_USER,
+    REMOVE_EMPLOYEE,
+    REMOVE_MANAGE_USER,
+    UPDATE_EMPLOYEE,
+    UPDATE_MANAGE_USER
+} from './Action';
 
 const initialState = {
-    employees: []
-};
+    employees: [],
 
-const employeeReducer = (state = initialState, action) => {
+};
+const initialStateManageUser = {
+    manageUsers: []
+}
+
+export const employeeReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_EMPLOYEE:
             return {
@@ -27,5 +39,34 @@ const employeeReducer = (state = initialState, action) => {
             return state;
     }
 };
+export const manageUserReducer = (state = initialStateManageUser, action) => {
+    switch (action.type) {
+        case ADD_EXISTING_MANAGE_USER:
+            return {
+                ...state,
+                manageUsers: [action.payload, ...state.manageUsers]
+            };
 
-export default employeeReducer;
+        case ADD_MANAGE_USER:
+            return {
+                ...state,
+                manageUsers: [...state.manageUsers, action.payload]
+            };
+        case REMOVE_MANAGE_USER:
+            return {
+                ...state,
+                manageUsers: state.manageUsers.filter(manageUser => manageUser.id !== action.payload)
+            };
+        case UPDATE_MANAGE_USER:
+            return {
+                ...state,
+                manageUsers: state.manageUsers.map(manageUser =>
+                    manageUser.id === action.payload.id ? action.payload : manageUser
+                )
+            };
+        default:
+            return state;
+    }
+};
+
+export default {employeeReducer, manageUserReducer};

@@ -7,6 +7,17 @@
       "name": "Admin"
     }
   ],
+  "genders": [
+    {
+      "name": "Male"
+    },
+    {
+      "name": "Female"
+    },
+    {
+      "name": "Transgender"
+    }
+  ],
   "businessName": [
     {
       "name": "Congress pvt ltd"
@@ -16,6 +27,787 @@
     },
     {
       "name": "RJD Pvt Ltd"
+    }
+  ],
+  "india": [
+    {
+      "name": "Andhra Pradesh"
+    },
+    {
+      "name": "Arunachal Pradesh"
+    },
+    {
+      "name": "Assam"
+    },
+    {
+      "name": "Bihar"
+    },
+    {
+      "name": "Chhattisgarh"
+    },
+    {
+      "name": "Goa"
+    },
+    {
+      "name": "Gujarat"
+    },
+    {
+      "name": "Haryana"
+    },
+    {
+      "name": "Himachal Pradesh"
+    },
+    {
+      "name": "Jharkhand"
+    },
+    {
+      "name": "Karnataka"
+    },
+    {
+      "name": "Kerala"
+    },
+    {
+      "name": "Madhya Pradesh"
+    },
+    {
+      "name": "Maharashtra"
+    },
+    {
+      "name": "Manipur"
+    },
+    {
+      "name": "Meghalaya"
+    },
+    {
+      "name": "Mizoram"
+    },
+    {
+      "name": "Nagaland"
+    },
+    {
+      "name": "Odisha"
+    },
+    {
+      "name": "Punjab"
+    },
+    {
+      "name": "Rajasthan"
+    },
+    {
+      "name": "Sikkim"
+    },
+    {
+      "name": "Tamil Nadu"
+    },
+    {
+      "name": "Telangana"
+    },
+    {
+      "name": "Tripura"
+    },
+    {
+      "name": "Uttar Pradesh"
+    },
+    {
+      "name": "Uttarakhand"
+    },
+    {
+      "name": "West Bengal"
+    },
+    {
+      "name": "Andaman and Nicobar Islands"
+    },
+    {
+      "name": "Chandigarh"
+    },
+    {
+      "name": "Dadra and Nagar Haveli and Daman and Diu"
+    },
+    {
+      "name": "Lakshadweep"
+    },
+    {
+      "name": "Delhi"
+    },
+    {
+      "name": "Puducherry"
+    }
+  ],
+  "BusinessType": [
+    {
+      "name": "Retailer"
+    },
+    {
+      "name": "Wholesaler"
+    },
+    {
+      "name": "Distributor"
+    },
+    {
+      "name": "Manufacturer"
+    },
+    {
+      "name": "Services"
+    }
+  ],
+  "PartyType": [
+    {
+      "name": "Customer"
+    },
+    {
+      "name": "Supplier"
+    }
+  ],
+  "TransactionType": [
+    {
+      "name": "Sales"
+    },
+    {
+      "name": "Purchase"
+    },
+    {
+      "name": "Payment In"
+    },
+    {
+      "name": "Payment Out"
+    },
+    {
+      "name": "Sales Return"
+    },
+    {
+      "name": "Purchase Return"
+    },
+    {
+      "name": "Credit Note"
+    },
+    {
+      "name": "Debit Note"
+    },
+    {
+      "name": "All Transactions"
+    }
+  ],
+  "ExpenseType": [
+    {
+      "name": "Bank Fee And Charges"
+    },
+    {
+      "name": "Employee Salaries & Advances"
+    },
+    {
+      "name": "Stationery"
+    },
+    {
+      "name": "Raw Material"
+    },
+    {
+      "name": "Electricity & Water Expense"
+    },
+    {
+      "name": "Rent Expense"
+    },
+    {
+      "name": "Repair & Maintenance"
+    },
+    {
+      "name": "Transportation & Travel Expense"
+    },
+    {
+      "name": "Telephone & Internet Expense"
+    },
+    {
+      "name": "Others"
+    }
+  ],
+  "OpeningBalance": [
+    {
+      "name": "To Collect"
+    },
+    {
+      "name": "To Pay"
+    }
+  ],
+  "PaymentMode": [
+    {
+      "name": "Bank Cheque"
+    },
+    {
+      "name": "Cash"
+    },
+    {
+      "name": "UPI"
+    },
+    {
+      "name": "Net Banking"
+    }
+  ],
+  "BusinessRegistrationType": [
+    {
+      "name": "Private Limited Company"
+    },
+    {
+      "name": "Public Limited Company"
+    },
+    {
+      "name": "Partnerships Firm"
+    },
+    {
+      "name": "Limited Liability Partnership"
+    },
+    {
+      "name": "One Person Company"
+    },
+    {
+      "name": "Sole Proprietorship"
+    },
+    {
+      "name": "Section 8 Company"
+    },
+    {
+      "name": "Business Not Registered"
+    }
+  ],
+  "IndustryType": [
+    {
+      "name": "Agriculture"
+    },
+    {
+      "name": "Arts And Design"
+    },
+    {
+      "name": "Automotive"
+    },
+    {
+      "name": "Construction"
+    },
+    {
+      "name": "Consulting"
+    },
+    {
+      "name": "Dairy (Milk)"
+    },
+    {
+      "name": "Education"
+    },
+    {
+      "name": "Electronics"
+    },
+    {
+      "name": "Engineering"
+    },
+    {
+      "name": "Financial Services"
+    },
+    {
+      "name": "FMCG"
+    },
+    {
+      "name": "Fruit And Vegetables"
+    },
+    {
+      "name": "Food Services (Restaurant,Cafe)"
+    },
+    {
+      "name": "Garment (Textile)"
+    },
+    {
+      "name": "General Store (Kirana)"
+    },
+    {
+      "name": "Gift Shop"
+    },
+    {
+      "name": "Government"
+    },
+    {
+      "name": "Hardware"
+    },
+    {
+      "name": "Healthcare"
+    },
+    {
+      "name": "Information Technology"
+    },
+    {
+      "name": "Logistics (Transportation)"
+    },
+    {
+      "name": "Medicine (Pharma)"
+    },
+    {
+      "name": "Meat"
+    },
+    {
+      "name": "Metals And Mining"
+    },
+    {
+      "name": "Mobiles And Accessories"
+    },
+    {
+      "name": "Non Profit"
+    },
+    {
+      "name": "Oil And Gas"
+    },
+    {
+      "name": "Services"
+    },
+    {
+      "name": "Stationary (Book And Copy)"
+    },
+    {
+      "name": "Travel"
+    },
+    {
+      "name": "Others"
+    }
+  ],
+  "CreditPeriod": [
+    {
+      "name": "Days"
+    },
+    {
+      "name": "Month"
+    },
+    {
+      "name": "Year"
+    }
+  ],
+  "UnitList": [
+    {
+      "name": "ACRE"
+    },
+    {
+      "name": "AMPOULE"
+    },
+    {
+      "name": "BAGS"
+    },
+    {
+      "name": "BALE"
+    },
+    {
+      "name": "BALLS"
+    },
+    {
+      "name": "BARNI"
+    },
+    {
+      "name": "BILLIONS OF UNITS"
+    },
+    {
+      "name": "BLISTER"
+    },
+    {
+      "name": "BOLUS"
+    },
+    {
+      "name": "BOOK"
+    },
+    {
+      "name": "BORA"
+    },
+    {
+      "name": "BOTTLES"
+    },
+    {
+      "name": "BOX"
+    },
+    {
+      "name": "BRASS"
+    },
+    {
+      "name": "BRICK"
+    },
+    {
+      "name": "BUCKETS"
+    },
+    {
+      "name": "BUCKLES"
+    },
+    {
+      "name": "BUNCHES"
+    },
+    {
+      "name": "BUNDLES"
+    },
+    {
+      "name": "CANS"
+    },
+    {
+      "name": "CAP"
+    },
+    {
+      "name": "CAPSULES"
+    },
+    {
+      "name": "CARATS"
+    },
+    {
+      "name": "CARD"
+    },
+    {
+      "name": "CARTONS"
+    },
+    {
+      "name": "CASE"
+    },
+    {
+      "name": "CENTIMETER"
+    },
+    {
+      "name": "CENTS"
+    },
+    {
+      "name": "CHOKA"
+    },
+    {
+      "name": "CHUDI"
+    },
+    {
+      "name": "COI"
+    },
+    {
+      "name": "CONTAINER"
+    },
+    {
+      "name": "COPY"
+    },
+    {
+      "name": "CUBIC CENTIMETER"
+    },
+    {
+      "name": "CUBIC FEET PER MINUTE"
+    },
+    {
+      "name": "CUBIC FEET"
+    },
+    {
+      "name": "CUBIC FOOT"
+    },
+    {
+      "name": "CUBIC METER"
+    },
+    {
+      "name": "DAYS"
+    },
+    {
+      "name": "DOZEN"
+    },
+    {
+      "name": "DRUM"
+    },
+    {
+      "name": "EACH"
+    },
+    {
+      "name": "FEET"
+    },
+    {
+      "name": "GEL"
+    },
+    {
+      "name": "GLASSES"
+    },
+    {
+      "name": "GRAMS"
+    },
+    {
+      "name": "GREAT GROSS"
+    },
+    {
+      "name": "GROSS YARDS"
+    },
+    {
+      "name": "GROSS"
+    },
+    {
+      "name": "HANGER"
+    },
+    {
+      "name": "HECTARE"
+    },
+    {
+      "name": "HOURS"
+    },
+    {
+      "name": "INCHES"
+    },
+    {
+      "name": "INSERTION"
+    },
+    {
+      "name": "JARS"
+    },
+    {
+      "name": "KATTA"
+    },
+    {
+      "name": "KILOGRAMS"
+    },
+    {
+      "name": "KILOLITER"
+    },
+    {
+      "name": "KILOMETRE"
+    },
+    {
+      "name": "KILOVOLT-AMP"
+    },
+    {
+      "name": "KILOWATT"
+    },
+    {
+      "name": "KIT"
+    },
+    {
+      "name": "LADI"
+    },
+    {
+      "name": "LENGTH"
+    },
+    {
+      "name": "LIBRA PONDO"
+    },
+    {
+      "name": "LITRE"
+    },
+    {
+      "name": "LOT"
+    },
+    {
+      "name": "MAN-DAYS"
+    },
+    {
+      "name": "MARK"
+    },
+    {
+      "name": "MBPS"
+    },
+    {
+      "name": "METERS"
+    },
+    {
+      "name": "METRIC TON"
+    },
+    {
+      "name": "MILLICOULOMB"
+    },
+    {
+      "name": "MILLIGRAM"
+    },
+    {
+      "name": "MILLILITRE"
+    },
+    {
+      "name": "MILLIMETER"
+    },
+    {
+      "name": "MINUTES"
+    },
+    {
+      "name": "MONTH"
+    },
+    {
+      "name": "NIGHTS"
+    },
+    {
+      "name": "NONE"
+    },
+    {
+      "name": "NUMBERS"
+    },
+    {
+      "name": "OTHERS"
+    },
+    {
+      "name": "OUTER"
+    },
+    {
+      "name": "PACKETS"
+    },
+    {
+      "name": "PACKS"
+    },
+    {
+      "name": "PAD"
+    },
+    {
+      "name": "PADS"
+    },
+    {
+      "name": "PAIR"
+    },
+    {
+      "name": "PAIRS"
+    },
+    {
+      "name": "PATTA"
+    },
+    {
+      "name": "PERSONS"
+    },
+    {
+      "name": "PETI"
+    },
+    {
+      "name": "PIECES"
+    },
+    {
+      "name": "PLATES"
+    },
+    {
+      "name": "POINT"
+    },
+    {
+      "name": "PORTION"
+    },
+    {
+      "name": "POUCH"
+    },
+    {
+      "name": "QUANTITY"
+    },
+    {
+      "name": "QUINTAL"
+    },
+    {
+      "name": "REAM"
+    },
+    {
+      "name": "REEL"
+    },
+    {
+      "name": "RIM"
+    },
+    {
+      "name": "ROLLS"
+    },
+    {
+      "name": "RUNNING FOOT"
+    },
+    {
+      "name": "RUNNING METER"
+    },
+    {
+      "name": "SACHET"
+    },
+    {
+      "name": "SESSION"
+    },
+    {
+      "name": "SETS"
+    },
+    {
+      "name": "SHEET"
+    },
+    {
+      "name": "SLEVES"
+    },
+    {
+      "name": "SQUARE CENTIMETERS"
+    },
+    {
+      "name": "SQUARE FEET"
+    },
+    {
+      "name": "SQUARE INCHES"
+    },
+    {
+      "name": "SQUARE METERS"
+    },
+    {
+      "name": "SQUARE YARDS"
+    },
+    {
+      "name": "STONE"
+    },
+    {
+      "name": "STRIPS"
+    },
+    {
+      "name": "TABLETS"
+    },
+    {
+      "name": "TEN GROSS"
+    },
+    {
+      "name": "TEST"
+    },
+    {
+      "name": "THOUSANDS"
+    },
+    {
+      "name": "TICKET"
+    },
+    {
+      "name": "TIN"
+    },
+    {
+      "name": "TONNES"
+    },
+    {
+      "name": "TRAYS"
+    },
+    {
+      "name": "TRP"
+    },
+    {
+      "name": "TUBES"
+    },
+    {
+      "name": "UNITS"
+    },
+    {
+      "name": "US GALLONS"
+    },
+    {
+      "name": "VIALS"
+    },
+    {
+      "name": "WATT"
+    },
+    {
+      "name": "WEEKS"
+    },
+    {
+      "name": "YEARS"
+    },
+    {
+      "name": "YARDS"
+    }
+  ],
+  "DownloadPdf": [
+    {
+      "name": "Download PDF"
+    },
+    {
+      "name": "Download Duplicate"
+    },
+    {
+      "name": "Download Triplicate"
+    }
+  ],
+  "printPdf": [
+    {
+      "name": "Print Thermal"
+    },
+    {
+      "name": "print Duplicate"
+    },
+    {
+      "name": "Print Triplicate"
+    }
+  ],
+  "share": [
+    {
+      "name": "SMS"
+    },
+    {
+      "name": "Whatsapp"
+    },
+    {
+      "name": "E-Mail"
     }
   ]
 }
