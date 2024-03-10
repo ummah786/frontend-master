@@ -33,7 +33,7 @@ export const businessAccountDataModel = {
 
 export const PartnerDataModel = {
     id: '',
-    pName: '',//show
+    pname: '',//show
     mobileNumber: '',//show
     email: '',
     openingBalance: '',  //show

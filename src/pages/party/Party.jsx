@@ -21,6 +21,7 @@ import MenuItem from "@mui/material/MenuItem";
 import {useDispatch} from 'react-redux';
 import {addExistingMangeUser, addManageUser, removeEmployee, updateManageUser} from "../../redux/Action";
 import ArticleIcon from '@mui/icons-material/Article';
+import * as XLSX from 'xlsx';
 
 const StyledTableCell = styled(TableCell)(({theme}) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -87,13 +88,25 @@ function createData(name: string, calories: number, fat: number, carbs: number, 
 
 export const Party = () => {
     const [enable, setEnable] = useState(true);
+    const [enableBulk, setEnableBulk] = useState(true);
     const [manageUserObj, setManageUserObj] = useState(PartnerDataModel);
     const [mangUser, setMangUser] = useState([]);
     const dispatch = useDispatch();
     const handleBooleanChange = () => {
         setManageUserObj(PartnerDataModel);
-        setEnable(prevState => !prevState);
+        setEnable(false);
+        setEnableBulk(true);
     };
+
+    function handleBooleanCancelChange() {
+        setEnableBulk(true);
+        setEnable(true);
+    }
+
+    const handleBulkChange = () => {
+        setEnableBulk(false);
+        setEnable(true);
+    }
 
     const handleTextFieldChange = (event, field) => {
         setManageUserObj({
@@ -174,16 +187,48 @@ export const Party = () => {
 
     }
 
+    const [tableData, setTableData] = useState([]);
+
+    const handleFileUpload = (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const binaryString = event.target.result;
+            const workbook = XLSX.read(binaryString, {type: 'binary'});
+            const sheetName = workbook.SheetNames[0];
+            const sheet = workbook.Sheets[sheetName];
+            const data = XLSX.utils.sheet_to_json(sheet, {header: 1});
+            setTableData(data);
+        };
+        reader.readAsBinaryString(file);
+    };
+
+    function FileUpload({onFileChange}) {
+        const handleFileChange = (e) => {
+            const file = e.target.files[0];
+            onFileChange(file);
+        };
+
+        return (
+            <div>
+                <input type="file" accept=".xls, .xlsx" onChange={handleFileChange}/>
+            </div>
+        );
+    }
+
+    const handleButtonClick = () => {
+        console.log('Data >>  ', tableData);
+    };
     return (
         <>
-            {enable && (
+            {(enable && enableBulk) && (
                 <Box>
                     <Box>
                         <Button variant="contained">Party</Button>
                         <Box sx={{right: '0', float: 'right'}}>
                             <ButtonGroup variant="contained" aria-label="Basic button group">
-                                <Button>Create Party</Button>
-                                <Button onClick={handleBooleanChange}>Create Bulk Party</Button>
+                                <Button onClick={handleBooleanChange}>Create Party</Button>
+                                <Button onClick={handleBulkChange}>Create Bulk Party</Button>
                             </ButtonGroup>
                         </Box>
                     </Box>
@@ -219,7 +264,7 @@ export const Party = () => {
                                     <TableBody>
                                         {mangUser.map((row) => (
                                             <StyledTableRow key={row.id}>
-                                                <StyledTableCell align="center">{row.pName}</StyledTableCell>
+                                                <StyledTableCell align="center">{row.pname}</StyledTableCell>
                                                 <StyledTableCell
                                                     align="center">{row.company}</StyledTableCell>
                                                 <StyledTableCell align="center">{row.partyType}</StyledTableCell>
@@ -255,11 +300,11 @@ export const Party = () => {
                     <Box>
                         <Box sx={{display: 'flex'}}>
                             <Box>
-                                <Button size="small" variant="contained">Create Manage User</Button>
+                                <Button size="small" variant="contained">Create Partner</Button>
                             </Box>
                             <Box sx={{float: 'right', alignItems: 'center', marginLeft: "50px"}}>
-                                <Button size="small" variant="contained" onClick={handleBooleanChange}>Cancel</Button>
-                                <Button size="small" variant="contained" onClick={handleBooleanChange}>Save</Button>
+                                <Button size="small" variant="contained" onClick={handleBooleanCancelChange}>Cancel</Button>
+                                <Button size="small" variant="contained" onClick={handleBooleanCancelChange}>Save</Button>
                             </Box>
                         </Box>
                         <form onSubmit={handleSubmit}>
@@ -268,61 +313,105 @@ export const Party = () => {
                                     width: '50%',
                                     display: 'flex',
                                     flexDirection: 'column',
-                                    margin: "100px",
+                                    margin: "10px",
                                     marginLeft: '200px'
                                 }}>
                                     <TextField id="outlined-basic" label="Name" variant="outlined" sx={{margin: '10px'}}
-                                               value={manageUserObj.name}
-                                               onChange={(event) => handleTextFieldChange(event, 'name')}/>
-                                    <TextField
-                                        fullWidth
-                                        select
-                                        value={manageUserObj.accountBusinessName}
-                                        onChange={(event) => handleTextFieldChange(event, 'accountBusinessName')}
-                                        label="Bussiness Name"
-                                        variant="outlined"
-                                        margin="normal"
-                                    >
-                                        {
-                                            UserRole.businessName.map(business => (
-                                                <MenuItem key={business.name}
-                                                          value={business.name}>{business.name}</MenuItem>))
-                                        }
-                                    </TextField>
+                                               value={manageUserObj.pname}
+                                               onChange={(event) => handleTextFieldChange(event, 'pname')}/>
+
+                                    <TextField id="outlined-basic" label="Phone Number" variant="outlined"
+                                               sx={{margin: '10px'}} value={manageUserObj.mobileNumber}
+                                               onChange={(event) => handleTextFieldChange(event, 'mobileNumber')}/>
                                     <TextField id="outlined-basic" label="Email Address" variant="outlined"
-                                               sx={{margin: '10px'}} value={manageUserObj.emailAddress}
-                                               onChange={(event) => handleTextFieldChange(event, 'emailAddress')}/>
-                                    <TextField id="outlined-basic" label="Address" variant="outlined" sx={{margin: '10px'}}
-                                               value={manageUserObj.address}
-                                               onChange={(event) => handleTextFieldChange(event, 'address')}/>
+                                               sx={{margin: '10px'}} value={manageUserObj.email}
+                                               onChange={(event) => handleTextFieldChange(event, 'email')}/>
+                                    <TextField id="outlined-basic" label="Billing Address" variant="outlined"
+                                               sx={{margin: '10px'}}
+                                               value={manageUserObj.billingAddress}
+                                               onChange={(event) => handleTextFieldChange(event, 'billingAddress')}/>
+
+                                    <TextField id="outlined-basic" label="Shipping Address" variant="outlined"
+                                               sx={{margin: '10px'}}
+                                               value={manageUserObj.shippingAddress}
+                                               onChange={(event) => handleTextFieldChange(event, 'shippingAddress')}/>
+
+                                    <TextField id="outlined-basic" label="Company" variant="outlined" sx={{margin: '10px'}}
+                                               value={manageUserObj.company}
+                                               onChange={(event) => handleTextFieldChange(event, 'company')}/>
                                 </Box>
-                                <Box sx={{width: '50%', display: 'flex', flexDirection: 'column', margin: "100px"}}>
+                                <Box sx={{display: 'flex', flexDirection: 'column', margin: "10px", paddingRight: '50px'}}>
                                     <TextField
                                         fullWidth
                                         select
-                                        value={manageUserObj.role}
-                                        onChange={(event) => handleTextFieldChange(event, 'role')}
-                                        label="Role"
+                                        value={manageUserObj.partyType}
+                                        onChange={(event) => handleTextFieldChange(event, 'partyType')}
+                                        label="Party Type"
                                         variant="outlined"
                                         margin="normal"
                                     >
                                         {
-                                            UserRole.role.map(userrole => (
+                                            UserRole.PartyType.map(userrole => (
                                                 <MenuItem key={userrole.name}
                                                           value={userrole.name}>{userrole.name}</MenuItem>
                                             ))
                                         }
                                     </TextField>
-                                    <TextField id="outlined-basic" label="Phone Number" variant="outlined"
-                                               sx={{margin: '10px'}} value={manageUserObj.mobileNumber}
-                                               onChange={(event) => handleTextFieldChange(event, 'mobileNumber')}/>
-                                    <TextField id="outlined-basic" label="Temp Password" variant="outlined"
-                                               sx={{margin: '10px'}} value={manageUserObj.tempPassword}
-                                               onChange={(event) => handleTextFieldChange(event, 'tempPassword')}/>
+                                    <TextField id="outlined-basic" label="GST Number" variant="outlined"
+                                               sx={{margin: '10px'}} value={manageUserObj.gstNumber}
+                                               onChange={(event) => handleTextFieldChange(event, 'gstNumber')}/>
+                                    <TextField id="outlined-basic" label="Party Category" variant="outlined"
+                                               sx={{margin: '10px'}} value={manageUserObj.partyCategory}
+                                               onChange={(event) => handleTextFieldChange(event, 'partyCategory')}/>
+                                    <TextField id="outlined-basic" label="Credit Limit" variant="outlined"
+                                               sx={{margin: '10px'}} value={manageUserObj.creditLimit}
+                                               onChange={(event) => handleTextFieldChange(event, 'creditLimit')}/>
 
-                                    <TextField id="outlined-basic" label="User Id" variant="outlined" disabled={true}
-                                               sx={{margin: '10px'}} value={manageUserObj.secondary_user_id}
-                                               onChange={(event) => handleTextFieldChange(event, 'secondary_user_id')}/>
+                                    <Box sx={{display: 'flex'}}>
+                                        <TextField id="outlined-basic" label="Credit Period" variant="outlined"
+                                                   sx={{margin: '10px'}} value={manageUserObj.creditPeriod}
+                                                   onChange={(event) => handleTextFieldChange(event, 'creditPeriod')}/>
+
+                                        <TextField
+                                            fullWidth
+                                            select
+                                            value={manageUserObj.creditPeriodType}
+                                            onChange={(event) => handleTextFieldChange(event, 'creditPeriodType')}
+                                            label="Credit Period Type"
+                                            variant="outlined"
+                                            margin="normal"
+                                        >
+                                            {
+                                                UserRole.creditPeriod.map(userrole => (
+                                                    <MenuItem key={userrole.name}
+                                                              value={userrole.name}>{userrole.name}</MenuItem>
+                                                ))
+                                            }
+                                        </TextField>
+                                    </Box>
+
+                                    <Box sx={{display: 'flex'}}>
+                                        <TextField id="outlined-basic" label="Opening Balance" variant="outlined"
+                                                   sx={{margin: '10px'}} value={manageUserObj.openingBalance}
+                                                   onChange={(event) => handleTextFieldChange(event, 'openingBalance')}/>
+
+                                        <TextField
+                                            fullWidth
+                                            select
+                                            value={manageUserObj.openingBalanceType}
+                                            onChange={(event) => handleTextFieldChange(event, 'openingBalanceType')}
+                                            label="Opening Balance Type"
+                                            variant="outlined"
+                                            margin="normal"
+                                        >
+                                            {
+                                                UserRole.openingBalance.map(userrole => (
+                                                    <MenuItem key={userrole.name}
+                                                              value={userrole.name}>{userrole.name}</MenuItem>
+                                                ))
+                                            }
+                                        </TextField>
+                                    </Box>
                                     <Box>
                                         <Button type="submit">SUBMIT</Button>
                                     </Box>
@@ -332,6 +421,49 @@ export const Party = () => {
                     </Box>
                 )
             }
+            {
+                !enableBulk && (
+                    <Box>
+                        <Box sx={{display: 'flex'}}>
+                            <Box>
+                                <Button size="small" variant="contained">Create Bulk Partner</Button>
+                            </Box>
+                            <Box sx={{float: 'right', alignItems: 'center', marginLeft: "50px"}}>
+                                <Button size="small" variant="contained" onClick={handleBooleanCancelChange}>Cancel</Button>
+                                <Button size="small" variant="contained" onClick={handleBooleanCancelChange}>Save</Button>
+                            </Box>
+                        </Box>
+                        <div>
+                            <input type="file" accept=".xls,.xlsx" onChange={handleFileUpload}/>
+                        </div>
+
+                        {tableData.length > 0 && (
+                            <TableContainer component={Paper} style={{minHeight: 500, maxWidth: 1300}}>
+                                <Table stickyHeader aria-label="scrollable table">
+                                    <TableHead>
+                                        <TableRow>
+                                            {tableData[0].map((header, index) => (
+                                                <StyledTableCell align="center" key={index}>{header}</StyledTableCell>
+                                            ))}
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {tableData.slice(1).map((row, rowIndex) => (
+                                            <TableRow key={rowIndex}>
+                                                {row.map((cell, cellIndex) => (
+                                                    <StyledTableCell align="center" key={cellIndex}>{cell}</StyledTableCell>
+                                                ))}
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        )}
+                        <Button variant="contained" onClick={handleButtonClick}>
+                            Log Data
+                        </Button>
+                    </Box>
+                )}
         </>
     )
 }
