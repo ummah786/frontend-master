@@ -18,7 +18,7 @@ import Divider from '@mui/material/Divider';
 import Button from "@mui/material/Button";
 import {Sheet} from "@mui/joy";
 import axios from "axios";
-import {SAVE_TEMP_PASSWORD} from "../APIEndPoint";
+import {SAVE_TEMP_PASSWORD} from "../apiendpoint/APIEndPoint";
 
 const useStyles = makeStyles({
     root: {

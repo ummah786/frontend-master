@@ -11,7 +11,7 @@ import Paper from '@mui/material/Paper';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import {useEffect, useState} from "react";
-import {businessAccountDataModel, manageUserDataModel} from "../../datamodel/ManageUserDataModel";
+import {businessAccountDataModel, manageUserDataModel, PartnerDataModel} from "../../datamodel/ManageUserDataModel";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from "@mui/material/IconButton";
@@ -89,11 +89,7 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
     },
 }));
 
-function createData(name: string, calories: number, fat: number, carbs: number, protein: number,) {
-    return {name, calories, fat, carbs, protein};
-}
-
-export const MyBussinessAccount = () => {
+export const MyBusinessAccount = () => {
     const [enable, setEnable] = useState(true);
     const [manageUserObj, setManageUserObj] = useState(businessAccountDataModel);
     const [mangUser, setMangUser] = useState([]);

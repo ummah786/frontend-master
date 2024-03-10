@@ -29,3 +29,26 @@ export const businessAccountDataModel = {
     logo: '',
     signature: '',
 }
+
+
+export const PartnerDataModel = {
+    id: '',
+    pName: '',//show
+    mobileNumber: '',//show
+    email: '',
+    openingBalance: '',  //show
+    openingBalanceType: '',
+    partyType: '',  //customer ya Supllier  //show
+    partyCategory: '',
+    billingAddress: '',
+    shippingAddress: '',
+    gstNumber: '',
+    creditPeriod: '',
+    creditLimit: '',  //show
+    creditPeriodType: '',
+    loyality: '',
+    company: '',
+    primary_user_id: '',
+    secondary_user_id: '',
+    creationDateTime: '',
+}

@@ -16,7 +16,8 @@ import {MainPage} from "./pages/MainPage";
 import {useState} from "react";
 import {ManageUsers} from "./pages/account/ManageUsers";
 import {MyUserDetails} from "./pages/account/MyUserDetails";
-import {MyBussinessAccount} from "./pages/account/MyBussinessAccount";
+import {MyBusinessAccount} from "./pages/account/MyBusinessAccount";
+import {Party} from "./pages/party/Party";
 
 function App() {
     const [flag, setFlag] = useState(false);
@@ -38,6 +39,7 @@ function App() {
                         <SideBar>
                             <Routes>
                                 <Route path="/" element={<Dashboard onBooleanChange={handleBooleanChange}/>}/>
+                                <Route path="/party" element={<Party/>}/>
                                 <Route path="/users" element={<Users/>}/>
                                 <Route path="/messages" element={<Messages/>}/>
                                 <Route path="/analytics" element={<Analytics/>}/>
@@ -48,7 +50,7 @@ function App() {
                                 <Route path="/posbilling" element={<PosBilling/>}/>
                                 <Route path="/account/manageAccount" element={<ManageUsers/>}/>
                                 <Route path="/account/myuser" element={<MyUserDetails/>}/>
-                                <Route path="/account/business" element={<MyBussinessAccount/>}/>
+                                <Route path="/account/business" element={<MyBusinessAccount/>}/>
                                 <Route path="*" element={<> not found</>}/>
                             </Routes>
                         </SideBar>

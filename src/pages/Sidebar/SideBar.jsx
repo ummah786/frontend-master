@@ -24,7 +24,7 @@ const routes = [
     icon: <FaHome />,
   },
   {
-    path: "/app/parties",
+    path: "/party",
     name: "Parties",
     icon: <FaUser />,
   },
