@@ -19,7 +19,7 @@ import IconButton from "@mui/material/IconButton";
 import axios from "axios";
 import UserRole from '../../jsonfile/Role';
 import MenuItem from "@mui/material/MenuItem";
-import {useDispatch} from 'react-redux';
+import {useDispatch, useStore} from 'react-redux';
 import {addExistingMangeUser, addManageUser, removeEmployee, updateManageUser} from "../../redux/Action";
 
 const StyledTableCell = styled(TableCell)(({theme}) => ({
@@ -81,6 +81,23 @@ export const ManageUsers = () => {
     const [manageUserObj, setManageUserObj] = useState(manageUserDataModel);
     const [mangUser, setMangUser] = useState([]);
     const dispatch = useDispatch();
+    const store = useStore();
+    const [filter, setFilter] = useState('');
+    const [filteredEmployees, setFilteredEmployees] = useState([]);
+    const handleFilterChange = event => {
+        setFilter(event.target.value);
+    };
+    useEffect(() => {
+        if (mangUser.length > 0) {
+            const filteredData = mangUser.filter(employee => {
+                return (employee.name.toLowerCase().includes(filter.toLowerCase()) ||
+                    employee.accountBusinessName.toLowerCase().includes(filter.toLowerCase()) ||
+                    employee.mobileNumber.includes(filter));
+            });
+            setFilteredEmployees(filteredData);
+        }
+    }, [filter, mangUser]);
+
     const handleBooleanChange = () => {
         setManageUserObj(manageUserDataModel);
         setEnable(prevState => !prevState);
@@ -152,6 +169,7 @@ export const ManageUsers = () => {
                 setMangUser(response.data);
                 localStorage.setItem('mangeUser', mangUser);
                 dispatch(addManageUser(response.data));
+                setFilteredEmployees(response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -188,6 +206,9 @@ export const ManageUsers = () => {
                                         <SearchIcon/>
                                     </SearchIconWrapper>
                                     <StyledInputBase
+                                        type="text"
+                                        value={filter}
+                                        onChange={handleFilterChange}
                                         placeholder="Search by User Name or Mobile Number"
                                         inputProps={{'aria-label': 'search'}}
                                     />
@@ -214,7 +235,10 @@ export const ManageUsers = () => {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {mangUser.map((row) => (
+                                        {/* //    {mangUser*/}
+
+
+                                        {filteredEmployees.map((row) => (
                                             <StyledTableRow key={row.id}>
                                                 <StyledTableCell align="center">{row.id}</StyledTableCell>
                                                 <StyledTableCell

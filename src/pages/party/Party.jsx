@@ -92,6 +92,10 @@ export const Party = () => {
     const [enableBulk, setEnableBulk] = useState(true);
     const [manageUserObj, setManageUserObj] = useState(PartnerDataModel);
     const [mangUser, setMangUser] = useState([]);
+    const [excelData, setExcelData] = useState([]);
+    const [columns, setColumns] = useState([]);
+    const [files, setFiles] = useState([]);
+
     const dispatch = useDispatch();
     const handleBooleanChange = () => {
         setManageUserObj(PartnerDataModel);
@@ -102,6 +106,9 @@ export const Party = () => {
     function handleBooleanCancelChange() {
         setEnableBulk(true);
         setEnable(true);
+        setExcelData([]);
+        setColumns([]);
+        setFiles([]);
     }
 
     const handleBulkChange = () => {
@@ -188,9 +195,6 @@ export const Party = () => {
 
     }
 
-    const [excelData, setExcelData] = useState([]);
-    const [columns, setColumns] = useState([]);
-    const [files, setFiles] = useState([]);
 
     const handleFileUpload = (e) => {
         const file = e.target.files[0];
@@ -471,28 +475,32 @@ export const Party = () => {
                             </Box>
                         </Box>
                         <input type="file" onChange={handleFileUpload}/>
-                        <Box
-                            sx={{
-                                height: 550,
-                                width: 1300,
-                                '& .actions': {
-                                    color: 'text.secondary',
-                                },
-                                '& .textPrimary': {
-                                    color: 'text.primary',
-                                },
-                            }}
-                        >
-                            <DataGrid
-                                rows={excelData}
-                                columns={columns}
-                                pageSize={5}
-                                rowsPerPageOptions={[5, 10, 20]}
-                                checkboxSelection
-                                disableSelectionOnClick
-                            />
-                            <button onClick={handleSave}>Save</button>
-                        </Box>
+                        {
+                            excelData.length>0  && (
+                                <Box
+                                    sx={{
+                                        height: 550,
+                                        width: 1300,
+                                        '& .actions': {
+                                            color: 'text.secondary',
+                                        },
+                                        '& .textPrimary': {
+                                            color: 'text.primary',
+                                        },
+                                    }}
+                                >
+                                    <DataGrid
+                                        rows={excelData}
+                                        columns={columns}
+                                        pageSize={5}
+                                        rowsPerPageOptions={[5, 10, 20]}
+                                        checkboxSelection
+                                        disableSelectionOnClick
+                                    />
+                                    <button onClick={handleSave}>Save</button>
+                                </Box>
+                            )
+                        }
                     </Box>
                 )}
         </>
