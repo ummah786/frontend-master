@@ -22,6 +22,7 @@ import {useDispatch} from 'react-redux';
 import {addExistingMangeUser, addManageUser, removeEmployee, updateManageUser} from "../../redux/Action";
 import ArticleIcon from '@mui/icons-material/Article';
 import * as XLSX from 'xlsx';
+import {DataGrid} from "@mui/x-data-grid";
 
 const StyledTableCell = styled(TableCell)(({theme}) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -187,21 +188,50 @@ export const Party = () => {
 
     }
 
-    const [tableData, setTableData] = useState([]);
+    const [excelData, setExcelData] = useState([]);
+    const [columns, setColumns] = useState([]);
+    const [files, setFiles] = useState([]);
 
     const handleFileUpload = (e) => {
         const file = e.target.files[0];
+        setFiles(e.target.files[0])
         const reader = new FileReader();
+
         reader.onload = (event) => {
             const binaryString = event.target.result;
             const workbook = XLSX.read(binaryString, {type: 'binary'});
+
+            // Assuming you want the first sheet
             const sheetName = workbook.SheetNames[0];
             const sheet = workbook.Sheets[sheetName];
+
             const data = XLSX.utils.sheet_to_json(sheet, {header: 1});
-            setTableData(data);
+
+            // Assuming the first row contains column headers
+            const headers = data.shift();
+            const columns = headers.map((header, index) => ({
+                field: 'col' + index,
+                headerName: header,
+                width: 150,
+            }));
+
+            // Creating rows with columns
+            const rows = data.map((row, rowIndex) => {
+                const rowData = {};
+                row.forEach((cell, cellIndex) => {
+                    rowData['col' + cellIndex] = cell;
+                });
+                rowData.id = rowIndex + 1; // Assigning unique id to each row
+                return rowData;
+            });
+
+            setColumns(columns);
+            setExcelData(rows);
         };
+
         reader.readAsBinaryString(file);
     };
+
 
     function FileUpload({onFileChange}) {
         const handleFileChange = (e) => {
@@ -216,8 +246,15 @@ export const Party = () => {
         );
     }
 
-    const handleButtonClick = () => {
-        console.log('Data >>  ', tableData);
+
+    const handleSave = async () => {
+        console.log("excel sheet  ", excelData);
+        console.log("data sheet ", columns);
+        const formData = new FormData();
+        formData.append('file', files);
+        const response = await axios.post('http://localhost:8700/hesabbook/partner/upload', excelData);
+        console.log("response from handleSave ", response.data)
+
     };
     return (
         <>
@@ -433,35 +470,29 @@ export const Party = () => {
                                 <Button size="small" variant="contained" onClick={handleBooleanCancelChange}>Save</Button>
                             </Box>
                         </Box>
-                        <div>
-                            <input type="file" accept=".xls,.xlsx" onChange={handleFileUpload}/>
-                        </div>
-
-                        {tableData.length > 0 && (
-                            <TableContainer component={Paper} style={{minHeight: 500, maxWidth: 1300}}>
-                                <Table stickyHeader aria-label="scrollable table">
-                                    <TableHead>
-                                        <TableRow>
-                                            {tableData[0].map((header, index) => (
-                                                <StyledTableCell align="center" key={index}>{header}</StyledTableCell>
-                                            ))}
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {tableData.slice(1).map((row, rowIndex) => (
-                                            <TableRow key={rowIndex}>
-                                                {row.map((cell, cellIndex) => (
-                                                    <StyledTableCell align="center" key={cellIndex}>{cell}</StyledTableCell>
-                                                ))}
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        )}
-                        <Button variant="contained" onClick={handleButtonClick}>
-                            Log Data
-                        </Button>
+                        <input type="file" onChange={handleFileUpload}/>
+                        <Box
+                            sx={{
+                                height: 550,
+                                width: 1300,
+                                '& .actions': {
+                                    color: 'text.secondary',
+                                },
+                                '& .textPrimary': {
+                                    color: 'text.primary',
+                                },
+                            }}
+                        >
+                            <DataGrid
+                                rows={excelData}
+                                columns={columns}
+                                pageSize={5}
+                                rowsPerPageOptions={[5, 10, 20]}
+                                checkboxSelection
+                                disableSelectionOnClick
+                            />
+                            <button onClick={handleSave}>Save</button>
+                        </Box>
                     </Box>
                 )}
         </>

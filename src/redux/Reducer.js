@@ -50,7 +50,7 @@ export const manageUserReducer = (state = initialStateManageUser, action) => {
         case ADD_MANAGE_USER:
             return {
                 ...state,
-                manageUsers: [...state.manageUsers, action.payload]
+                manageUsers:  action.payload
             };
         case REMOVE_MANAGE_USER:
             return {

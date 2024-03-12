@@ -31,17 +31,14 @@ const StyledTableCell = styled(TableCell)(({theme}) => ({
         fontSize: 14,
     },
 }));
-
 const StyledTableRow = styled(TableRow)(({theme}) => ({
     '&:nth-of-type(odd)': {
         backgroundColor: theme.palette.action.hover,
     },
-    // hide last border
     '&:last-child td, &:last-child th': {
         border: 0,
     },
 }));
-
 const Search = styled('div')(({theme}) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
@@ -57,7 +54,6 @@ const Search = styled('div')(({theme}) => ({
         width: 'auto',
     },
 }));
-
 const SearchIconWrapper = styled('div')(({theme}) => ({
     padding: theme.spacing(0, 2),
     height: '100%',
@@ -80,11 +76,6 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
         },
     },
 }));
-
-function createData(name: string, calories: number, fat: number, carbs: number, protein: number,) {
-    return {name, calories, fat, carbs, protein};
-}
-
 export const ManageUsers = () => {
     const [enable, setEnable] = useState(true);
     const [manageUserObj, setManageUserObj] = useState(manageUserDataModel);
@@ -94,14 +85,12 @@ export const ManageUsers = () => {
         setManageUserObj(manageUserDataModel);
         setEnable(prevState => !prevState);
     };
-
     const handleTextFieldChange = (event, field) => {
         setManageUserObj({
             ...manageUserObj,
             [field]: event.target.value,
         });
     };
-
     const handleSubmit = async (event) => {
         event.preventDefault();
         const response = await axios.post('http://localhost:8700/hesabbook/manageuser/save', manageUserObj);
@@ -125,8 +114,6 @@ export const ManageUsers = () => {
         findObjectById(id);
         fetchAllManageUserData();
         dispatch(updateManageUser(data));
-
-
     }
 
     const findObjectById = (id) => {
@@ -136,7 +123,6 @@ export const ManageUsers = () => {
         } else {
             console.log('Object with ID', id, 'not found');
         }
-
     };
 
     function fetchAllManageUserData() {
@@ -146,7 +132,12 @@ export const ManageUsers = () => {
                 console.log(response.data);
                 setMangUser(response.data);
                 localStorage.setItem('mangeUser', mangUser);
-                dispatch(addManageUser(response.data));
+                dispatch(addManageUser(mangUser))
+                {
+                    mangUser.map((mangus) => (
+                        dispatch(addManageUser({mangus}))
+                    ))
+                }
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -167,7 +158,6 @@ export const ManageUsers = () => {
         };
         fetchData();
     }, [setMangUser]);
-
     return (
         <>
             {enable && (
