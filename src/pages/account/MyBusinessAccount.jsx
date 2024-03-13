@@ -1,5 +1,5 @@
 import {Box, Button, ButtonGroup, FormControlLabel, TextField} from "@mui/material";
-import React, { useRef } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {alpha, styled} from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -10,8 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
-import {useEffect, useState} from "react";
-import {businessAccountDataModel, manageUserDataModel, PartnerDataModel} from "../../datamodel/ManageUserDataModel";
+import {businessAccountDataModel, manageUserDataModel} from "../../datamodel/ManageUserDataModel";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from "@mui/material/IconButton";
@@ -19,7 +18,7 @@ import axios from "axios";
 import UserRole from '../../jsonfile/Role';
 import MenuItem from "@mui/material/MenuItem";
 import {useDispatch} from 'react-redux';
-import {addExistingMangeUser, removeEmployee, updateManageUser} from "../../redux/Action";
+import {addExistingMangeUser, updateManageUser} from "../../redux/Action";
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControl from '@mui/material/FormControl';
@@ -122,7 +121,6 @@ export const MyBusinessAccount = () => {
         const response = await axios.post(`http://localhost:8700/hesabbook/business/account/delete/${id}`);
         console.log('Submit delete Response :--    ', response.data);
         fetchAllManageUserData();
-        dispatch(removeEmployee(id));
     }
 
     function handleEdit(id, data) {
@@ -282,7 +280,7 @@ export const MyBusinessAccount = () => {
                             }}>
                                 <Card sx={{maxWidth: 305}}>
                                     <CardMedia
-                                        sx={{height: 100,width:100}}
+                                        sx={{height: 100, width: 100}}
                                         sx={{height: 140}}
                                         image={image1}
                                         alt="Card 1 Image"
@@ -295,7 +293,7 @@ export const MyBusinessAccount = () => {
                                     </CardContent>
                                     <input
                                         accept="image/*"
-                                        style={{ display: 'none' }}
+                                        style={{display: 'none'}}
                                         id="image-upload-2"
                                         type="file"
                                         onChange={(event) => handleImageUpload(event, setImage2)}
@@ -304,7 +302,7 @@ export const MyBusinessAccount = () => {
                                         <CardContent>
                                             <input
                                                 accept="image/*"
-                                                style={{ display: 'none' }}
+                                                style={{display: 'none'}}
                                                 id="image-upload-1"
                                                 type="file"
                                                 onChange={(event) => handleImageUpload(event, setImage1)}
@@ -317,7 +315,7 @@ export const MyBusinessAccount = () => {
                                         </CardContent>
                                     </CardActions>
                                 </Card>
-                                <Card sx={{maxWidth: 345,marginTop:'30px'}}>
+                                <Card sx={{maxWidth: 345, marginTop: '30px'}}>
                                     <CardMedia
                                         sx={{height: 140}}
                                         image={image2}
@@ -332,7 +330,7 @@ export const MyBusinessAccount = () => {
                                     </CardContent>
                                     <input
                                         accept="image/*"
-                                        style={{ display: 'none' }}
+                                        style={{display: 'none'}}
                                         id="image-upload-2"
                                         type="file"
                                         onChange={(event) => handleImageUpload(event, setImage2)}
@@ -341,7 +339,7 @@ export const MyBusinessAccount = () => {
                                         <CardContent>
                                             <input
                                                 accept="image/*"
-                                                style={{ display: 'none' }}
+                                                style={{display: 'none'}}
                                                 id="image-upload-2"
                                                 type="file"
                                                 onChange={(event) => handleImageUpload(event, setImage2)}

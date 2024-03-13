@@ -19,8 +19,9 @@ import IconButton from "@mui/material/IconButton";
 import axios from "axios";
 import UserRole from '../../jsonfile/Role';
 import MenuItem from "@mui/material/MenuItem";
-import {useDispatch, useStore} from 'react-redux';
-import {addExistingMangeUser, addManageUser, removeEmployee, updateManageUser} from "../../redux/Action";
+import {useDispatch, useSelector, useStore} from 'react-redux';
+import {addExistingMangeUser, addManageUser, updateManageUser} from "../../redux/Action";
+import {getManageUser} from "../../redux/Selector";
 
 const StyledTableCell = styled(TableCell)(({theme}) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -84,6 +85,7 @@ export const ManageUsers = () => {
     const store = useStore();
     const [filter, setFilter] = useState('');
     const [filteredEmployees, setFilteredEmployees] = useState([]);
+    const mangementUserDetails = useSelector(state => getManageUser(state));
     const handleFilterChange = event => {
         setFilter(event.target.value);
     };
@@ -182,6 +184,8 @@ export const ManageUsers = () => {
                 <Box>
                     <Box>
                         <h6>Manage Users</h6>
+
+                        <h5>Selector :- {mangementUserDetails}</h5>
                     </Box>
                     <Box>
                         <Box sx={{display: "flex"}}>

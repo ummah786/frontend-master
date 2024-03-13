@@ -19,7 +19,7 @@ import axios from "axios";
 import UserRole from '../../jsonfile/Role';
 import MenuItem from "@mui/material/MenuItem";
 import {useDispatch} from 'react-redux';
-import {addExistingMangeUser, addManageUser, removeEmployee, updateManageUser} from "../../redux/Action";
+import {addExistingMangeUser, addManageUser, updateManageUser} from "../../redux/Action";
 import ArticleIcon from '@mui/icons-material/Article';
 import * as XLSX from 'xlsx';
 import {DataGrid} from "@mui/x-data-grid";
@@ -138,7 +138,6 @@ export const Party = () => {
         const response = await axios.post(`http://localhost:8700/hesabbook/partner/delete/${id}`);
         console.log('Submit delete Response :--    ', response.data);
         fetchAllManageUserData();
-        dispatch(removeEmployee(id));
     }
 
     function handleEdit(id, data) {
@@ -476,7 +475,7 @@ export const Party = () => {
                         </Box>
                         <input type="file" onChange={handleFileUpload}/>
                         {
-                            excelData.length>0  && (
+                            excelData.length > 0 && (
                                 <Box
                                     sx={{
                                         height: 550,
