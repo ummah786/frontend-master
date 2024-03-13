@@ -125,7 +125,6 @@ export const ManageUsers = () => {
         const response = await axios.post(`http://localhost:8700/hesabbook/manageuser/delete/${id}`);
         console.log('Submit delete Response :--    ', response.data);
         fetchAllManageUserData();
-        dispatch(removeEmployee(id));
     }
 
     function handleEdit(id, data) {
