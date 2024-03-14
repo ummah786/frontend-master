@@ -1,14 +1,11 @@
 import {Box, ButtonGroup, TextField} from "@mui/material";
-import {alpha, styled} from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell, {tableCellClasses} from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import SearchIcon from '@mui/icons-material/Search';
-import InputBase from '@mui/material/InputBase';
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import {useEffect, useState} from "react";
@@ -19,76 +16,24 @@ import IconButton from "@mui/material/IconButton";
 import axios from "axios";
 import UserRole from '../../jsonfile/Role';
 import MenuItem from "@mui/material/MenuItem";
-import {useDispatch, useSelector, useStore} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {addExistingMangeUser, addManageUser, updateManageUser} from "../../redux/Action";
-import {getManageUser} from "../../redux/Selector";
+import {Search, SearchIconWrapper, StyledInputBase, StyledTableCell, StyledTableRow} from "./commonStyle";
 
-const StyledTableCell = styled(TableCell)(({theme}) => ({
-    [`&.${tableCellClasses.head}`]: {
-        backgroundColor: theme.palette.common.black,
-        color: theme.palette.common.white,
-    },
-    [`&.${tableCellClasses.body}`]: {
-        fontSize: 14,
-    },
-}));
-const StyledTableRow = styled(TableRow)(({theme}) => ({
-    '&:nth-of-type(odd)': {
-        backgroundColor: theme.palette.action.hover,
-    },
-    '&:last-child td, &:last-child th': {
-        border: 0,
-    },
-}));
-const Search = styled('div')(({theme}) => ({
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.black, 0.15),
-    '&:hover': {
-        backgroundColor: alpha(theme.palette.common.black, 0.25),
-    },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-        marginLeft: theme.spacing(3),
-        width: 'auto',
-    },
-}));
-const SearchIconWrapper = styled('div')(({theme}) => ({
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-}));
-const StyledInputBase = styled(InputBase)(({theme}) => ({
-    color: 'inherit',
-    '& .MuiInputBase-input': {
-        padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-        transition: theme.transitions.create('width'),
-        width: '150%',
-        [theme.breakpoints.up('md')]: {
-            width: '40ch',
-        },
-    },
-}));
 export const ManageUsers = () => {
     const [enable, setEnable] = useState(true);
     const [manageUserObj, setManageUserObj] = useState(manageUserDataModel);
     const [mangUser, setMangUser] = useState([]);
     const dispatch = useDispatch();
-    const store = useStore();
     const [filter, setFilter] = useState('');
     const [filteredEmployees, setFilteredEmployees] = useState([]);
-    const mangementUserDetails = useSelector(state => getManageUser(state));
+    const mangementUserDetails = useSelector(state => state.manageUsers);
+
     const handleFilterChange = event => {
         setFilter(event.target.value);
     };
+
+
     useEffect(() => {
         if (mangUser.length > 0) {
             const filteredData = mangUser.filter(employee => {
@@ -350,4 +295,6 @@ export const ManageUsers = () => {
             )}
         </>
     )
+
+
 }
