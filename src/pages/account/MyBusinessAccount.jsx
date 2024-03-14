@@ -28,7 +28,7 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import {Search, SearchIconWrapper, StyledInputBase, StyledTableCell, StyledTableRow} from "./commonStyle";
+import {Search, SearchIconWrapper, StyledInputBase, StyledTableCell, StyledTableRow} from "../../commonStyle";
 export const MyBusinessAccount = () => {
     const [enable, setEnable] = useState(true);
     const [manageUserObj, setManageUserObj] = useState(businessAccountDataModel);

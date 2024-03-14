@@ -3,6 +3,7 @@ export const ADD_EXISTING_MANAGE_USER = 'ADD_EXISTING_MANAGE_USER';
 export const REMOVE_MANAGE_USER = 'REMOVE_MANAGE_USER';
 export const UPDATE_MANAGE_USER = 'UPDATE_MANAGE_USER';
 export const GET_MANAGE_USER='GET_MANAGE_USER';
+export const COUNTER='COUNTER';
 
 export const addManageUser = (manageUser) => ({
     type: ADD_MANAGE_USER,

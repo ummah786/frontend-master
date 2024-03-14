@@ -23,7 +23,7 @@ import {addExistingMangeUser, addManageUser, updateManageUser} from "../../redux
 import ArticleIcon from '@mui/icons-material/Article';
 import * as XLSX from 'xlsx';
 import {DataGrid} from "@mui/x-data-grid";
-import {Search, SearchIconWrapper, StyledInputBase, StyledTableCell, StyledTableRow} from "./& .MuiInputBase-input";
+import {Search, SearchIconWrapper, StyledInputBase, StyledTableCell, StyledTableRow} from "../../commonStyle";
 
 
 

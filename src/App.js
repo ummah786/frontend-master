@@ -14,7 +14,7 @@ import {HesabbookHome} from "./pages/home/HesabbookHome";
 import {PosBilling} from "./pages/PosBilling";
 import {MainPage} from "./pages/MainPage";
 import {useState} from "react";
-import {ManageUsers} from "./pages/account/ManageUsers";
+import {AccountManagementUsers} from "./pages/account/AccountManagementUsers";
 import {MyUserDetails} from "./pages/account/MyUserDetails";
 import {MyBusinessAccount} from "./pages/account/MyBusinessAccount";
 import {Party} from "./pages/party/Party";
@@ -48,7 +48,7 @@ function App() {
                                 <Route path="/saved" element={<Saved/>}/>
                                 <Route path="/settings" element={<Setting/>}/>
                                 <Route path="/posbilling" element={<PosBilling/>}/>
-                                <Route path="/account/manageAccount" element={<ManageUsers/>}/>
+                                <Route path="/account/manageAccount" element={<AccountManagementUsers/>}/>
                                 <Route path="/account/myuser" element={<MyUserDetails/>}/>
                                 <Route path="/account/business" element={<MyBusinessAccount/>}/>
                                 <Route path="*" element={<> not found</>}/>

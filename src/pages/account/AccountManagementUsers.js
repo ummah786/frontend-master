@@ -18,16 +18,18 @@ import UserRole from '../../jsonfile/Role';
 import MenuItem from "@mui/material/MenuItem";
 import {useDispatch, useSelector} from 'react-redux';
 import {addExistingMangeUser, addManageUser, updateManageUser} from "../../redux/Action";
-import {Search, SearchIconWrapper, StyledInputBase, StyledTableCell, StyledTableRow} from "./commonStyle";
+import {Search, SearchIconWrapper, StyledInputBase, StyledTableCell, StyledTableRow} from "../../commonStyle";
 
-export const ManageUsers = () => {
+export const AccountManagementUsers = () => {
     const [enable, setEnable] = useState(true);
     const [manageUserObj, setManageUserObj] = useState(manageUserDataModel);
     const [mangUser, setMangUser] = useState([]);
     const dispatch = useDispatch();
     const [filter, setFilter] = useState('');
     const [filteredEmployees, setFilteredEmployees] = useState([]);
-    const mangementUserDetails = useSelector(state => state.manageUsers);
+
+    const {countt} = useSelector(state => state.counterss);
+    const {manageUsers} = useSelector(state => state.manageUserReducerss);
 
     const handleFilterChange = event => {
         setFilter(event.target.value);
@@ -128,8 +130,46 @@ export const ManageUsers = () => {
                 <Box>
                     <Box>
                         <h6>Manage Users</h6>
+                        <div>
+                            <h1>Data Table</h1>
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Count</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {countt.map((item, index) => (
+                                    <tr key={index}>
+                                        <td>{item.name}</td>
+                                        <td>{item.count}</td>
+                                    </tr>
+                                ))}
+                                </tbody>
+                            </table>
+                        </div>
 
-                        <h5>Selector :- {mangementUserDetails}</h5>
+                        <div>
+                            <h1>Data Table</h1>
+                            <h3>{manageUsers.length}</h3>
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {manageUsers.map((item, index) => (
+                                    <tr key={index}>
+                                        <td>{item.name}</td>
+                                        <td>{item.emailAddress}</td>
+                                    </tr>
+                                ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </Box>
                     <Box>
                         <Box sx={{display: "flex"}}>
