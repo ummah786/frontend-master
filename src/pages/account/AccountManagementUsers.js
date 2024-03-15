@@ -17,7 +17,7 @@ import axios from "axios";
 import UserRole from '../../jsonfile/Role';
 import MenuItem from "@mui/material/MenuItem";
 import {useDispatch, useSelector} from 'react-redux';
-import {addExistingMangeUser, addManageUser, removeManageUser, updateManageUser} from "../../redux/Action";
+import {addManageUser, removeManageUser, updateManageUser} from "../../redux/Action";
 import {Search, SearchIconWrapper, StyledInputBase, StyledTableCell, StyledTableRow} from "../../commonStyle";
 
 export const AccountManagementUsers = () => {
@@ -58,18 +58,32 @@ export const AccountManagementUsers = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const response = await axios.post('http://localhost:8700/hesabbook/manageuser/save', manageUserObj);
-        console.log('Submit Response :--    ', response.data);
-        console.log('on Submit :-->', manageUserObj);
-        dispatch(addExistingMangeUser(response.data));
+
+        addObjectOnTop(response.data)
         setManageUserObj(manageUserDataModel);
         setEnable(prevState => !prevState);
+    };
+
+    const addObjectOnTop = (newObject) => {
+        const existingIndex = manageUsers.findIndex(item => item.id === newObject.id);
+        if (existingIndex === -1) {
+            setFilteredEmployees([newObject, ...manageUsers]);
+            setMangUser([newObject, ...manageUsers]);
+            dispatch(addManageUser([newObject, ...manageUsers]));
+        } else {
+            const updatedArray = [...manageUsers];
+            updatedArray[existingIndex] = newObject;
+            setFilteredEmployees(updatedArray);
+            setMangUser(updatedArray);
+            dispatch(addManageUser(updatedArray));
+        }
     };
 
     async function handleDelete(id, event) {
         const response = await axios.post(`http://localhost:8700/hesabbook/manageuser/delete/${id}`);
         console.log('Submit delete Response :--    ', response.data);
         dispatch(removeManageUser(id));
-     //   fetchAllManageUserData();
+        //   fetchAllManageUserData();
         setFilteredEmployees(manageUsers);
     }
 
