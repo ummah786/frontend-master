@@ -17,7 +17,7 @@ import axios from "axios";
 import UserRole from '../../jsonfile/Role';
 import MenuItem from "@mui/material/MenuItem";
 import {useDispatch, useSelector} from 'react-redux';
-import {addExistingMangeUser, addManageUser, updateManageUser} from "../../redux/Action";
+import {addExistingMangeUser, addManageUser, removeManageUser, updateManageUser} from "../../redux/Action";
 import {Search, SearchIconWrapper, StyledInputBase, StyledTableCell, StyledTableRow} from "../../commonStyle";
 
 export const AccountManagementUsers = () => {
@@ -27,9 +27,7 @@ export const AccountManagementUsers = () => {
     const dispatch = useDispatch();
     const [filter, setFilter] = useState('');
     const [filteredEmployees, setFilteredEmployees] = useState([]);
-
-    const {countt} = useSelector(state => state.counterss);
-    const {manageUsers} = useSelector(state => state.manageUserReducerss);
+    const {manageUsers} = useSelector(state => state.manageUserReducerValue);
 
     const handleFilterChange = event => {
         setFilter(event.target.value);
@@ -68,10 +66,11 @@ export const AccountManagementUsers = () => {
     };
 
     async function handleDelete(id, event) {
-        console.log("DELETE ID " + id)
         const response = await axios.post(`http://localhost:8700/hesabbook/manageuser/delete/${id}`);
         console.log('Submit delete Response :--    ', response.data);
-        fetchAllManageUserData();
+        dispatch(removeManageUser(id));
+     //   fetchAllManageUserData();
+        setFilteredEmployees(manageUsers);
     }
 
     function handleEdit(id, data) {
@@ -111,65 +110,41 @@ export const AccountManagementUsers = () => {
     }
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get('http://localhost:8700/hesabbook/manageuser/all');
-                setMangUser(response.data);
-                localStorage.setItem('mangeUser', mangUser);
-                dispatch(addManageUser(response.data));
-                setFilteredEmployees(response.data);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-        fetchData();
+        if (manageUsers.length > 1 && !(manageUsers[0].id === '')) {
+            console.log("done your job")
+            setFilteredEmployees(manageUsers);
+        }
+    }, [manageUsers]);
+
+
+    useEffect(() => {
+        if (manageUsers.length > 1 && !(manageUsers[0].id === '')) {
+            console.log("done your job")
+            setFilteredEmployees(manageUsers);
+        } else {
+            fetchData();
+        }
     }, [setMangUser]);
+
+
+    const fetchData = async () => {
+        try {
+            const response = await axios.get('http://localhost:8700/hesabbook/manageuser/all');
+            setMangUser(response.data);
+            localStorage.setItem('mangeUser', mangUser);
+            dispatch(addManageUser(response.data));
+            setFilteredEmployees(response.data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
     return (
         <>
             {enable && (
                 <Box>
                     <Box>
                         <h6>Manage Users</h6>
-                        <div>
-                            <h1>Data Table</h1>
-                            <table>
-                                <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Count</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {countt.map((item, index) => (
-                                    <tr key={index}>
-                                        <td>{item.name}</td>
-                                        <td>{item.count}</td>
-                                    </tr>
-                                ))}
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div>
-                            <h1>Data Table</h1>
-                            <h3>{manageUsers.length}</h3>
-                            <table>
-                                <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {manageUsers.map((item, index) => (
-                                    <tr key={index}>
-                                        <td>{item.name}</td>
-                                        <td>{item.emailAddress}</td>
-                                    </tr>
-                                ))}
-                                </tbody>
-                            </table>
-                        </div>
                     </Box>
                     <Box>
                         <Box sx={{display: "flex"}}>
