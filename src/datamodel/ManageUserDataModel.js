@@ -54,7 +54,6 @@ export const PartnerDataModel = {
 }
 export const InventoryDataModel = {
     id: '',
-    insertionDate: '',
     userName: '',
     item: '',
     category: '',//create a new
@@ -64,7 +63,7 @@ export const InventoryDataModel = {
     itemDescription: '',
     totalStock: '',
     lowStock: '',
-    lowStockCheckBox: '',
+    lowStockCheckBox: false,
     rackNo: '',
     challanNo: '',
     unitNo: '',//dose,strip,injection,tables
@@ -78,12 +77,12 @@ export const InventoryDataModel = {
     mfgDate: '',
     expireDate: '',
     mrp: '',
+    gst:'',
     compensationCess: '',
     utgst: '',
     sgst: '',
     igst: '',
     cgst: '',
-    gstPercentage: '',
     supplier: '',
     warehouse: '',
     hsn: '',

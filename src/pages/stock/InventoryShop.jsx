@@ -1,4 +1,4 @@
-import {Box, ButtonGroup, TextField} from "@mui/material";
+import {Box, ButtonGroup, Checkbox, FormControlLabel, TextField} from "@mui/material";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
@@ -34,6 +34,14 @@ export const InventoryShop = () => {
     const [columns, setColumns] = useState([]);
     const [files, setFiles] = useState([]);
 
+    const [checked, setChecked] = useState(true);
+    const [inputValue, setInputValue] = useState('');
+    const handleCheckboxChange = (event) => {
+        setInventoryObject({...inventoryObject, lowStockCheckBox: event.target.checked});
+    };
+    const handleInputChange = (event) => {
+        setInputValue(event.target.value);
+    };
     const dispatch = useDispatch();
     const handleBooleanChange = () => {
         setInventoryObject(InventoryDataModel);
@@ -289,34 +297,29 @@ export const InventoryShop = () => {
                                 }}>
                                     <TextField id="outlined-basic" label="Item" variant="outlined" sx={{margin: '10px'}}
                                                value={inventoryObject.item}
-                                               onChange={(event) => handleTextFieldChange(event, 'pname')}/>
+                                               onChange={(event) => handleTextFieldChange(event, 'item')}/>
                                     <TextField id="outlined-basic" label="Item Code" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.mobileNumber}
-                                               onChange={(event) => handleTextFieldChange(event, 'mobileNumber')}/>
+                                               sx={{margin: '10px'}} value={inventoryObject.itemCode}
+                                               onChange={(event) => handleTextFieldChange(event, 'itemCode')}/>
                                     <TextField id="outlined-basic" label="Bar Code" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.email}
-                                               onChange={(event) => handleTextFieldChange(event, 'email')}/>
+                                               sx={{margin: '10px'}} value={inventoryObject.barCodeValue}
+                                               onChange={(event) => handleTextFieldChange(event, 'barCodeValue')}/>
                                     <TextField id="outlined-basic" label="Item Description" variant="outlined"
                                                sx={{margin: '10px'}}
-                                               value={inventoryObject.billingAddress}
-                                               onChange={(event) => handleTextFieldChange(event, 'billingAddress')}/>
-
+                                               value={inventoryObject.itemDescription}
+                                               onChange={(event) => handleTextFieldChange(event, 'itemDescription')}/>
                                     <TextField id="outlined-basic" label="MRP" variant="outlined"
                                                sx={{margin: '10px'}}
-                                               value={inventoryObject.shippingAddress}
-                                               onChange={(event) => handleTextFieldChange(event, 'shippingAddress')}/>
-
+                                               value={inventoryObject.mrp}
+                                               onChange={(event) => handleTextFieldChange(event, 'mrp')}/>
                                     <TextField id="outlined-basic" label="Sale Price" variant="outlined"
                                                sx={{margin: '10px'}}
-                                               value={inventoryObject.shippingAddress}
-                                               onChange={(event) => handleTextFieldChange(event, 'shippingAddress')}/>
-
+                                               value={inventoryObject.salePrice}
+                                               onChange={(event) => handleTextFieldChange(event, 'salePrice')}/>
                                     <TextField id="outlined-basic" label="Purchase Price" variant="outlined"
                                                sx={{margin: '10px'}}
-                                               value={inventoryObject.shippingAddress}
-                                               onChange={(event) => handleTextFieldChange(event, 'shippingAddress')}/>
-
-
+                                               value={inventoryObject.purchasePrice}
+                                               onChange={(event) => handleTextFieldChange(event, 'purchasePrice')}/>
                                 </Box>
                                 <Box sx={{
                                     width: '25%',
@@ -328,68 +331,82 @@ export const InventoryShop = () => {
                                     <TextField
                                         fullWidth
                                         select
-                                        value={inventoryObject.partyType}
-                                        onChange={(event) => handleTextFieldChange(event, 'partyType')}
-                                        label="GST "
+                                        value={inventoryObject.gst}
+                                        onChange={(event) => handleTextFieldChange(event, 'gst')}
+                                        label="GST %"
                                         variant="outlined"
                                         margin="normal"
                                     >
                                         {
-                                            UserRole.PartyType.map(userrole => (
+                                            UserRole.GST.map(userrole => (
                                                 <MenuItem key={userrole.name}
                                                           value={userrole.name}>{userrole.name}</MenuItem>
                                             ))
                                         }
                                     </TextField>
                                     <TextField id="outlined-basic" label="CGST" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.gstNumber}
-                                               onChange={(event) => handleTextFieldChange(event, 'gstNumber')}/>
+                                               sx={{margin: '10px'}} value={inventoryObject.cgst}
+                                               onChange={(event) => handleTextFieldChange(event, 'cgst')}/>
                                     <TextField id="outlined-basic" label="IGST" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.gstNumber}
-                                               onChange={(event) => handleTextFieldChange(event, 'gstNumber')}/>
+                                               sx={{margin: '10px'}} value={inventoryObject.igst}
+                                               onChange={(event) => handleTextFieldChange(event, 'igst')}/>
                                     <TextField id="outlined-basic" label="SGST" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.gstNumber}
-                                               onChange={(event) => handleTextFieldChange(event, 'gstNumber')}/>
+                                               sx={{margin: '10px'}} value={inventoryObject.sgst}
+                                               onChange={(event) => handleTextFieldChange(event, 'sgst')}/>
                                     <TextField id="outlined-basic" label="UTGST" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.gstNumber}
-                                               onChange={(event) => handleTextFieldChange(event, 'gstNumber')}/>
+                                               sx={{margin: '10px'}} value={inventoryObject.utgst}
+                                               onChange={(event) => handleTextFieldChange(event, 'utgst')}/>
                                     <TextField id="outlined-basic" label="Cess" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.gstNumber}
-                                               onChange={(event) => handleTextFieldChange(event, 'gstNumber')}/>
+                                               sx={{margin: '10px'}} value={inventoryObject.compensationCess}
+                                               onChange={(event) => handleTextFieldChange(event, 'compensationCess')}/>
                                     <TextField id="outlined-basic" label="Supplier" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.partyCategory}
-                                               onChange={(event) => handleTextFieldChange(event, 'partyCategory')}/>
-                                </Box> <Box sx={{
-                                width: '25%',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                margin: "10px",
-                                paddingRight: '50px'
-                            }}>
-                                <TextField id="outlined-basic" label="Rack" variant="outlined"
-                                           sx={{margin: '10px'}}
-                                           value={inventoryObject.shippingAddress}
-                                           onChange={(event) => handleTextFieldChange(event, 'shippingAddress')}/>
+                                               sx={{margin: '10px'}} value={inventoryObject.supplier}
+                                               onChange={(event) => handleTextFieldChange(event, 'supplier')}/>
+                                </Box>
+                                <Box sx={{
+                                    width: '25%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    margin: "10px",
+                                    paddingRight: '50px'
+                                }}>
+                                    <TextField id="outlined-basic" label="Rack" variant="outlined"
+                                               sx={{margin: '10px'}}
+                                               value={inventoryObject.rackNo}
+                                               onChange={(event) => handleTextFieldChange(event, 'rackNo')}/>
+                                    <TextField id="outlined-basic" label="Category" variant="outlined"
+                                               sx={{margin: '10px'}}
+                                               value={inventoryObject.category}
+                                               onChange={(event) => handleTextFieldChange(event, 'category')}/>
+                                    <TextField id="outlined-basic" label="Warehouse" variant="outlined"
+                                               sx={{margin: '10px'}} value={inventoryObject.warehouse}
+                                               onChange={(event) => handleTextFieldChange(event, 'warehouse')}/>
+                                    <TextField id="outlined-basic" label="Company" variant="outlined" sx={{margin: '10px'}}
+                                               value={inventoryObject.companyName}
+                                               onChange={(event) => handleTextFieldChange(event, 'companyName')}/>
+                                    <TextField id="outlined-basic" label="HSN Code" variant="outlined"
+                                               sx={{margin: '10px'}} value={inventoryObject.hsn}
+                                               onChange={(event) => handleTextFieldChange(event, 'hsn')}/>
+                                    <TextField id="outlined-basic" label="Batch No" variant="outlined"
+                                               sx={{margin: '10px'}} value={inventoryObject.batchNo}
+                                               onChange={(event) => handleTextFieldChange(event, 'batchNo')}/>
 
-                                <TextField id="outlined-basic" label="Category" variant="outlined"
-                                           sx={{margin: '10px'}}
-                                           value={inventoryObject.shippingAddress}
-                                           onChange={(event) => handleTextFieldChange(event, 'shippingAddress')}/>
-
-
-                                <TextField id="outlined-basic" label="Company" variant="outlined" sx={{margin: '10px'}}
-                                           value={inventoryObject.company}
-                                           onChange={(event) => handleTextFieldChange(event, 'company')}/>
-                                <TextField id="outlined-basic" label="Warehouse" variant="outlined"
-                                           sx={{margin: '10px'}} value={inventoryObject.creditLimit}
-                                           onChange={(event) => handleTextFieldChange(event, 'creditLimit')}/>
-                                <TextField id="outlined-basic" label="HSN Code" variant="outlined"
-                                           sx={{margin: '10px'}} value={inventoryObject.creditLimit}
-                                           onChange={(event) => handleTextFieldChange(event, 'creditLimit')}/>
-                                <TextField id="outlined-basic" label="Batch No" variant="outlined"
-                                           sx={{margin: '10px'}} value={inventoryObject.creditLimit}
-                                           onChange={(event) => handleTextFieldChange(event, 'creditLimit')}/>
-                            </Box>
+                                    <FormControlLabel
+                                        control={<Checkbox checked={inventoryObject.lowStockCheckBox}
+                                                           onChange={handleCheckboxChange}/>}
+                                        label="Enable Low Stock"
+                                    />
+                                    {inventoryObject.lowStockCheckBox && (
+                                        <TextField
+                                            label="Low Stock"
+                                            value={inventoryObject.lowStock}
+                                            onChange={(event) => handleTextFieldChange(event, 'lowStock')}
+                                            fullWidth
+                                            variant="outlined"
+                                            style={{marginTop: '10px'}}
+                                        />
+                                    )}
+                                </Box>
                                 <Box sx={{
                                     width: '25%',
                                     display: 'flex',
@@ -399,98 +416,97 @@ export const InventoryShop = () => {
                                 }}>
                                     <Input
                                         type="date"
-                                        value={inventoryObject.dob}
+                                        value={inventoryObject.mfgDate}
                                         label="Manufacture Date"
-                                        onChange={(event) => handleTextFieldChange(event, 'dob')}
+                                        onChange={(event) => handleTextFieldChange(event, 'mfgDate')}
                                     />
                                     <Input
                                         type="date"
-                                        value={inventoryObject.dob}
+                                        value={inventoryObject.expireDate}
                                         label="Expire Date"
-                                        onChange={(event) => handleTextFieldChange(event, 'dob')}
+                                        onChange={(event) => handleTextFieldChange(event, 'expireDate')}
                                     />
                                     <TextField id="outlined-basic" label="Salt" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.gstNumber}
-                                               onChange={(event) => handleTextFieldChange(event, 'gstNumber')}/>
+                                               sx={{margin: '10px'}} value={inventoryObject.salt}
+                                               onChange={(event) => handleTextFieldChange(event, 'salt')}/>
                                     <TextField id="outlined-basic" label="Package Items" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.gstNumber}
-                                               onChange={(event) => handleTextFieldChange(event, 'gstNumber')}/>
-                                    <TextField id="outlined-basic" label="Low Stock" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.gstNumber}
-                                               onChange={(event) => handleTextFieldChange(event, 'gstNumber')}/>
+                                               sx={{margin: '10px'}} value={inventoryObject.packageItems}
+                                               onChange={(event) => handleTextFieldChange(event, 'packageItems')}/>
                                     <TextField id="outlined-basic" label="Total Stock" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.partyCategory}
-                                               onChange={(event) => handleTextFieldChange(event, 'partyCategory')}/>
+                                               sx={{margin: '10px'}} value={inventoryObject.totalStock}
+                                               onChange={(event) => handleTextFieldChange(event, 'totalStock')}/>
                                     <TextField id="outlined-basic" label="Unit" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.creditLimit}
-                                               onChange={(event) => handleTextFieldChange(event, 'creditLimit')}/>
-                                    <TextField id="outlined-basic" label="Challan" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.creditLimit}
-                                               onChange={(event) => handleTextFieldChange(event, 'creditLimit')}/>
+                                               sx={{margin: '10px'}} value={inventoryObject.unitNo}
+                                               onChange={(event) => handleTextFieldChange(event, 'unitNo')}/>
+                                    <TextField id="outlined-basic" label="Challan No" variant="outlined"
+                                               sx={{margin: '10px'}} value={inventoryObject.challanNo}
+                                               onChange={(event) => handleTextFieldChange(event, 'challanNo')}/>
+                                    <Box>
+                                        <Button type="submit" variant="contained" color="primary">SUBMIT</Button>
+                                    </Box>
                                 </Box>
                             </Box>
                         </form>
                     </Box>
                 )
             }
-            {
-                !enableBulk && (
-                    <Box>
-                        <Box sx={{display: 'flex'}}>
-                            <Box>
-                                <Button size="small" variant="contained">Create Bulk Inventory</Button>
-                            </Box>
-                            <Box sx={{float: 'right', alignItems: 'center', marginLeft: "50px", display: 'flex'}}>
-                                <Box>
-                                    <a
-                                        href={require('../../file/ProductSample.xlsx')}
-                                        download="ProductSample.xlsx"
-                                        target="_blank"
-                                        rel="noreferrer"
-                                    >
-                                        <Button
-                                            type="submit"
-                                            variant="contained"
-                                            /// onClick={handleClick}
-                                            sx={{mt: 3, mb: 2, color: "whitesmoke", background: '#212121'}}
-                                        >
-                                            Download the sample file
-                                        </Button>
-                                    </a>
-                                </Box>
-                                <Button size="small" variant="contained" onClick={handleBooleanCancelChange}>Cancel</Button>
-                                <Button size="small" variant="contained" onClick={handleBooleanCancelChange}>Save</Button>
-                            </Box>
+            {!enableBulk && (
+                <Box>
+                    <Box sx={{display: 'flex'}}>
+                        <Box>
+                            <Button size="small" variant="contained">Create Bulk Inventory</Button>
                         </Box>
-                        <input type="file" onChange={handleFileUpload}/>
-                        {
-                            excelData.length > 0 && (
-                                <Box
-                                    sx={{
-                                        height: 550,
-                                        width: 1300,
-                                        '& .actions': {
-                                            color: 'text.secondary',
-                                        },
-                                        '& .textPrimary': {
-                                            color: 'text.primary',
-                                        },
-                                    }}
+                        <Box sx={{float: 'right', alignItems: 'center', marginLeft: "50px", display: 'flex'}}>
+                            <Box>
+                                <a
+                                    href={require('../../file/ProductSample.xlsx')}
+                                    download="ProductSample.xlsx"
+                                    target="_blank"
+                                    rel="noreferrer"
                                 >
-                                    <DataGrid
-                                        rows={excelData}
-                                        columns={columns}
-                                        pageSize={5}
-                                        rowsPerPageOptions={[5, 10, 20]}
-                                        checkboxSelection
-                                        disableSelectionOnClick
-                                    />
-                                    <button onClick={handleSave}>Save</button>
-                                </Box>
-                            )
-                        }
+                                    <Button
+                                        type="submit"
+                                        variant="contained"
+                                        /// onClick={handleClick}
+                                        sx={{mt: 3, mb: 2, color: "whitesmoke", background: '#212121'}}
+                                    >
+                                        Download the sample file
+                                    </Button>
+                                </a>
+                            </Box>
+                            <Button size="small" variant="contained" onClick={handleBooleanCancelChange}>Cancel</Button>
+                            <Button size="small" variant="contained" onClick={handleBooleanCancelChange}>Save</Button>
+                        </Box>
                     </Box>
-                )}
+                    <input type="file" onChange={handleFileUpload}/>
+                    {
+                        excelData.length > 0 && (
+                            <Box
+                                sx={{
+                                    height: 550,
+                                    width: 1300,
+                                    '& .actions': {
+                                        color: 'text.secondary',
+                                    },
+                                    '& .textPrimary': {
+                                        color: 'text.primary',
+                                    },
+                                }}
+                            >
+                                <DataGrid
+                                    rows={excelData}
+                                    columns={columns}
+                                    pageSize={5}
+                                    rowsPerPageOptions={[5, 10, 20]}
+                                    checkboxSelection
+                                    disableSelectionOnClick
+                                />
+                                <button onClick={handleSave}>Save</button>
+                            </Box>
+                        )
+                    }
+                </Box>
+            )}
         </>
     )
 }
