@@ -53,7 +53,7 @@ export const StyledInputBase = styled(InputBase)(({theme}) => ({
         transition: theme.transitions.create('width'),
         width: '150%',
         [theme.breakpoints.up('md')]: {
-            width: '40ch',
+            width: '50ch',
         },
     },
 }));

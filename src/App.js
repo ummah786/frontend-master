@@ -18,6 +18,8 @@ import {AccountManagementUsers} from "./pages/account/AccountManagementUsers";
 import {MyUserDetails} from "./pages/account/MyUserDetails";
 import {MyBusinessAccount} from "./pages/account/MyBusinessAccount";
 import {Party} from "./pages/party/Party";
+import {InventoryGodown} from "./pages/stock/InventoryGodown";
+import {InventoryShop} from "./pages/stock/InventoryShop";
 
 function App() {
     const [flag, setFlag] = useState(false);
@@ -51,6 +53,10 @@ function App() {
                                 <Route path="/account/manageAccount" element={<AccountManagementUsers/>}/>
                                 <Route path="/account/myuser" element={<MyUserDetails/>}/>
                                 <Route path="/account/business" element={<MyBusinessAccount/>}/>
+                                <Route path="/stock/shop" element={<InventoryShop/>}/>
+                                <Route path="/stock/godowon" element={<InventoryGodown/>}/>
+
+
                                 <Route path="*" element={<> not found</>}/>
                             </Routes>
                         </SideBar>

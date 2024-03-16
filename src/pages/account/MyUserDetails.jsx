@@ -5,6 +5,7 @@ import {Box, TextField} from "@mui/material";
 import Button from "@mui/material/Button";
 import UserRole from "../../jsonfile/Role.json";
 import MenuItem from "@mui/material/MenuItem";
+import {Input} from "@mui/joy";
 
 export const MyUserDetails = () => {
     const [enable, setEnable] = useState(true);
@@ -94,7 +95,7 @@ export const MyUserDetails = () => {
                                                sx={{margin: '10px'}}
                                                value={myUser.lastName}
                                                onChange={(event) => handleTextFieldChange(event, 'lastName')}/>
-                                    <input
+                                    <Input
                                         type="date"
                                         value={myUser.dob}
                                         onChange={(event) => handleTextFieldChange(event, 'dob')}

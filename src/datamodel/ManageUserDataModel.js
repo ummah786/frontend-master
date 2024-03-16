@@ -9,7 +9,7 @@ export const manageUserDataModel = {
     secondary_user_id: '',
     primary_user_id: '',
     id: ''
-};
+}
 export const businessAccountDataModel = {
     id: '',
     businessName: '',
@@ -51,4 +51,43 @@ export const PartnerDataModel = {
     primary_user_id: '',
     secondary_user_id: '',
     creationDateTime: '',
+}
+export const InventoryDataModel = {
+    id: '',
+    insertionDate: '',
+    userName: '',
+    item: '',
+    category: '',//create a new
+    companyName: '',//create a new
+    itemCode: '',
+    barCodeValue: '', //create a new
+    itemDescription: '',
+    totalStock: '',
+    lowStock: '',
+    lowStockCheckBox: '',
+    rackNo: '',
+    challanNo: '',
+    unitNo: '',//dose,strip,injection,tables
+    packageItems: '', // 5  * 10
+    salePrice: '',
+    salePriceTax: '',
+    purchasePrice: '',
+    purchasePriceTax: '',
+    salt: '',
+    batchNo: '',
+    mfgDate: '',
+    expireDate: '',
+    mrp: '',
+    compensationCess: '',
+    utgst: '',
+    sgst: '',
+    igst: '',
+    cgst: '',
+    gstPercentage: '',
+    supplier: '',
+    warehouse: '',
+    hsn: '',
+    creationDateTime: '',
+    primary_user_id: '',
+    secondary_user_id: '',
 }

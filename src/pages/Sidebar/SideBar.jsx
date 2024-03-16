@@ -49,7 +49,7 @@ const routes = [
         icon: <FaUser />,
       },
       {
-        path: "/stock/Godowon",
+        path: "/stock/godowon",
         name: "Godowon",
         icon: <FaLock />,
       }

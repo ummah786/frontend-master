@@ -49,7 +49,8 @@
     "redux-thunk": "^3.1.0",
     "styled-components": "^6.1.8",
     "web-vitals": "^2.1.4",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "@react-buddy/palette-mui": "^5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -6,12 +6,18 @@ import store from "../src/redux/store";
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {DevSupport} from "@react-buddy/ide-toolbox";
+import {ComponentPreviews, useInitial} from "./dev";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
         <Provider store={store}>
-            <App/>
+            <DevSupport ComponentPreviews={ComponentPreviews}
+                        useInitialHook={useInitial}
+            >
+                <App/>
+            </DevSupport>
         </Provider>
     </React.StrictMode>
 );
