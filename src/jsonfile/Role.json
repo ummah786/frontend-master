@@ -826,5 +826,13 @@
     {
       "name": "28"
     }
+  ],
+  "taxType": [
+    {
+      "name": "With Tax"
+    },
+    {
+      "name": "Without Tax"
+    }
   ]
 }

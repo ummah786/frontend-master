@@ -1,4 +1,4 @@
-import {Box, ButtonGroup, Checkbox, FormControlLabel, TextField} from "@mui/material";
+import {Box, ButtonGroup, Checkbox, FormControlLabel, Input, TextField} from "@mui/material";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
@@ -21,9 +21,12 @@ import {addExistingMangeUser, addManageUser, updateManageUser} from "../../redux
 import ArticleIcon from '@mui/icons-material/Article';
 import * as XLSX from 'xlsx';
 import {DataGrid} from "@mui/x-data-grid";
-import {Search, SearchIconWrapper, StyledInputBase, StyledTableCell, StyledTableRow} from "../../commonStyle";
-import {Input} from "@mui/joy";
+import Modal from '@mui/joy/Modal';
+import ModalClose from '@mui/joy/ModalClose';
+import Typography from '@mui/joy/Typography';
+import Sheet from '@mui/joy/Sheet';
 
+import {Search, SearchIconWrapper, StyledInputBase, StyledTableCell, StyledTableRow} from "../../commonStyle";
 
 export const InventoryShop = () => {
     const [enable, setEnable] = useState(true);
@@ -36,6 +39,13 @@ export const InventoryShop = () => {
 
     const [checked, setChecked] = useState(true);
     const [inputValue, setInputValue] = useState('');
+
+    const [openRack, setOpenRack] = React.useState(false);
+    const [openCategory, setOpenCategory] = React.useState(false);
+    const [openWarehouse, setOpenWarehouse] = React.useState(false);
+    const [openCompany, setOpenCompany] = React.useState(false);
+
+
     const handleCheckboxChange = (event) => {
         setInventoryObject({...inventoryObject, lowStockCheckBox: event.target.checked});
     };
@@ -312,14 +322,49 @@ export const InventoryShop = () => {
                                                sx={{margin: '10px'}}
                                                value={inventoryObject.mrp}
                                                onChange={(event) => handleTextFieldChange(event, 'mrp')}/>
-                                    <TextField id="outlined-basic" label="Sale Price" variant="outlined"
-                                               sx={{margin: '10px'}}
-                                               value={inventoryObject.salePrice}
-                                               onChange={(event) => handleTextFieldChange(event, 'salePrice')}/>
+                                    <Box sx={{display: 'flex'}}>
+                                        <TextField id="outlined-basic" label="Sale Price" variant="outlined"
+                                                   sx={{margin: '10px', width: '60%'}}
+                                                   value={inventoryObject.salePrice}
+                                                   onChange={(event) => handleTextFieldChange(event, 'salePrice')}/>
+                                        <TextField
+                                            sx={{margin: '10px', width: '60%'}}
+                                            select
+                                            value={inventoryObject.salePriceTax}
+                                            onChange={(event) => handleTextFieldChange(event, 'salePriceTax')}
+                                            label="Tax"
+                                            variant="outlined"
+                                            margin="normal"
+                                        >
+                                            {
+                                                UserRole.taxType.map(userrole => (
+                                                    <MenuItem key={userrole.name}
+                                                              value={userrole.name}>{userrole.name}</MenuItem>
+                                                ))
+                                            }
+                                        </TextField>
+                                    </Box><Box sx={{display: 'flex'}}>
                                     <TextField id="outlined-basic" label="Purchase Price" variant="outlined"
-                                               sx={{margin: '10px'}}
+                                               sx={{margin: '10px', width: '60%'}}
                                                value={inventoryObject.purchasePrice}
                                                onChange={(event) => handleTextFieldChange(event, 'purchasePrice')}/>
+                                    <TextField
+                                        select
+                                        value={inventoryObject.purchasePriceTax}
+                                        onChange={(event) => handleTextFieldChange(event, 'purchasePriceTax')}
+                                        label="Tax"
+                                        variant="outlined"
+                                        margin="normal"
+                                        sx={{margin: '10px', width: '60%'}}
+                                    >
+                                        {
+                                            UserRole.taxType.map(userrole => (
+                                                <MenuItem key={userrole.name}
+                                                          value={userrole.name}>{userrole.name}</MenuItem>
+                                            ))
+                                        }
+                                    </TextField>
+                                </Box>
                                 </Box>
                                 <Box sx={{
                                     width: '25%',
@@ -370,20 +415,212 @@ export const InventoryShop = () => {
                                     margin: "10px",
                                     paddingRight: '50px'
                                 }}>
-                                    <TextField id="outlined-basic" label="Rack" variant="outlined"
-                                               sx={{margin: '10px'}}
-                                               value={inventoryObject.rackNo}
-                                               onChange={(event) => handleTextFieldChange(event, 'rackNo')}/>
-                                    <TextField id="outlined-basic" label="Category" variant="outlined"
-                                               sx={{margin: '10px'}}
-                                               value={inventoryObject.category}
-                                               onChange={(event) => handleTextFieldChange(event, 'category')}/>
-                                    <TextField id="outlined-basic" label="Warehouse" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.warehouse}
-                                               onChange={(event) => handleTextFieldChange(event, 'warehouse')}/>
-                                    <TextField id="outlined-basic" label="Company" variant="outlined" sx={{margin: '10px'}}
-                                               value={inventoryObject.companyName}
-                                               onChange={(event) => handleTextFieldChange(event, 'companyName')}/>
+
+                                    <TextField
+                                        fullWidth
+                                        select
+                                        value={inventoryObject.rackNo}
+                                        onChange={(event) => handleTextFieldChange(event, 'rackNo')}
+                                        label="Rack"
+                                        variant="outlined"
+                                        margin="normal"
+                                    >
+                                        <MenuItem onClick={() => setOpenRack(true)}>Create a New Rack</MenuItem>
+                                        {
+                                            UserRole.GST.map(userrole => (
+                                                <MenuItem key={userrole.name}
+                                                          value={userrole.name}>{userrole.name}</MenuItem>
+                                            ))
+                                        }
+
+                                    </TextField>
+                                    <Modal
+                                        aria-labelledby="modal-title"
+                                        aria-describedby="modal-desc"
+                                        open={openRack}
+                                        onClose={() => setOpenRack(false)}
+                                        sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+                                    >
+                                        <Sheet
+                                            variant="outlined"
+                                            sx={{
+                                                maxWidth: 500,
+                                                borderRadius: 'md',
+                                                p: 3,
+                                                boxShadow: 'lg',
+                                            }}
+                                        >
+                                            <ModalClose variant="plain" sx={{m: 1}}/>
+                                            <Typography
+                                                component="h2"
+                                                id="modal-title"
+                                                level="h4"
+                                                textColor="inherit"
+                                                fontWeight="lg"
+                                                mb={1}
+                                            >
+                                                This is the modal title
+                                            </Typography>
+                                            <Typography id="modal-desc" textColor="text.tertiary">
+                                                Make sure to use <code>aria-labelledby</code> on the modal dialog with an
+                                                optional <code>aria-describedby</code> attribute.
+                                            </Typography>
+                                        </Sheet>
+                                    </Modal>
+                                    <TextField
+                                        fullWidth
+                                        select
+                                        value={inventoryObject.category}
+                                        onChange={(event) => handleTextFieldChange(event, 'category')}
+                                        label="Category"
+                                        variant="outlined"
+                                        margin="normal"
+                                    >
+                                        <MenuItem onClick={() => setOpenCategory(true)}>Create a New Category</MenuItem>
+                                        {
+                                            UserRole.GST.map(userrole => (
+                                                <MenuItem key={userrole.name}
+                                                          value={userrole.name}>{userrole.name}</MenuItem>
+                                            ))
+                                        }
+
+                                    </TextField>
+                                    <Modal
+                                        aria-labelledby="modal-title"
+                                        aria-describedby="modal-desc"
+                                        open={openCategory}
+                                        onClose={() => setOpenCategory(false)}
+                                        sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+                                    >
+                                        <Sheet
+                                            variant="outlined"
+                                            sx={{
+                                                maxWidth: 500,
+                                                borderRadius: 'md',
+                                                p: 3,
+                                                boxShadow: 'lg',
+                                            }}
+                                        >
+                                            <ModalClose variant="plain" sx={{m: 1}}/>
+                                            <Typography
+                                                component="h2"
+                                                id="modal-title"
+                                                level="h4"
+                                                textColor="inherit"
+                                                fontWeight="lg"
+                                                mb={1}
+                                            >
+                                                Category
+                                            </Typography>
+                                            <Typography id="modal-desc" textColor="text.tertiary">
+                                                Make sure to use <code>aria-labelledby</code> on the modal dialog with an
+                                                optional <code>aria-describedby</code> attribute.
+                                            </Typography>
+                                        </Sheet>
+                                    </Modal>
+                                    <TextField
+                                        fullWidth
+                                        select
+                                        value={inventoryObject.warehouse}
+                                        onChange={(event) => handleTextFieldChange(event, 'warehouse')}
+                                        label="Warehouse"
+                                        variant="outlined"
+                                        margin="normal"
+                                    >
+                                        <MenuItem onClick={() => setOpenWarehouse(true)}>Create a New WareHouse</MenuItem>
+                                        {
+                                            UserRole.GST.map(userrole => (
+                                                <MenuItem key={userrole.name}
+                                                          value={userrole.name}>{userrole.name}</MenuItem>
+                                            ))
+                                        }
+
+                                    </TextField>
+                                    <Modal
+                                        aria-labelledby="modal-title"
+                                        aria-describedby="modal-desc"
+                                        open={openWarehouse}
+                                        onClose={() => setOpenWarehouse(false)}
+                                        sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+                                    >
+                                        <Sheet
+                                            variant="outlined"
+                                            sx={{
+                                                maxWidth: 500,
+                                                borderRadius: 'md',
+                                                p: 3,
+                                                boxShadow: 'lg',
+                                            }}
+                                        >
+                                            <ModalClose variant="plain" sx={{m: 1}}/>
+                                            <Typography
+                                                component="h2"
+                                                id="modal-title"
+                                                level="h4"
+                                                textColor="inherit"
+                                                fontWeight="lg"
+                                                mb={1}
+                                            >
+                                                WareHouse
+                                            </Typography>
+                                            <Typography id="modal-desc" textColor="text.tertiary">
+                                                Make sure to use <code>aria-labelledby</code> on the modal dialog with an
+                                                optional <code>aria-describedby</code> attribute.
+                                            </Typography>
+                                        </Sheet>
+                                    </Modal>
+                                    <TextField
+                                        fullWidth
+                                        select
+                                        value={inventoryObject.companyName}
+                                        onChange={(event) => handleTextFieldChange(event, 'companyName')}
+                                        label="Company Name"
+                                        variant="outlined"
+                                        margin="normal"
+                                    >
+                                        <MenuItem onClick={() => setOpenCompany(true)}>Create a New Company</MenuItem>
+                                        {
+                                            UserRole.GST.map(userrole => (
+                                                <MenuItem key={userrole.name}
+                                                          value={userrole.name}>{userrole.name}</MenuItem>
+                                            ))
+                                        }
+
+                                    </TextField>
+                                    <Modal
+                                        aria-labelledby="modal-title"
+                                        aria-describedby="modal-desc"
+                                        open={openCompany}
+                                        onClose={() => setOpenCompany(false)}
+                                        sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+                                    >
+                                        <Sheet
+                                            variant="outlined"
+                                            sx={{
+                                                maxWidth: 500,
+                                                borderRadius: 'md',
+                                                p: 3,
+                                                boxShadow: 'lg',
+                                            }}
+                                        >
+                                            <ModalClose variant="plain" sx={{m: 1}}/>
+                                            <Typography
+                                                component="h2"
+                                                id="modal-title"
+                                                level="h4"
+                                                textColor="inherit"
+                                                fontWeight="lg"
+                                                mb={1}
+                                            >
+                                                Company
+                                            </Typography>
+                                            <Typography id="modal-desc" textColor="text.tertiary">
+                                                Make sure to use <code>aria-labelledby</code> on the modal dialog with an
+                                                optional <code>aria-describedby</code> attribute.
+                                            </Typography>
+                                        </Sheet>
+                                    </Modal>
+
                                     <TextField id="outlined-basic" label="HSN Code" variant="outlined"
                                                sx={{margin: '10px'}} value={inventoryObject.hsn}
                                                onChange={(event) => handleTextFieldChange(event, 'hsn')}/>
