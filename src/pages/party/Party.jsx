@@ -36,7 +36,6 @@ export const Party = () => {
     const [excelData, setExcelData] = useState([]);
     const [columns, setColumns] = useState([]);
     const [files, setFiles] = useState([]);
-
     const [openCategory, setOpenCategory] = React.useState(false);
     const [openCompany, setOpenCompany] = React.useState(false);
 

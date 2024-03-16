@@ -1,4 +1,4 @@
-import {Box, ButtonGroup, TextField} from "@mui/material";
+import {Autocomplete, Box, Button, ButtonGroup, Modal, TextField} from "@mui/material";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
@@ -6,7 +6,6 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import SearchIcon from '@mui/icons-material/Search';
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import {useEffect, useState} from "react";
 import {manageUserDataModel} from "../../datamodel/ManageUserDataModel";
@@ -28,6 +27,29 @@ export const AccountManagementUsers = () => {
     const [filter, setFilter] = useState('');
     const [filteredEmployees, setFilteredEmployees] = useState([]);
     const {manageUsers} = useSelector(state => state.manageUserReducerValue);
+
+    const options = ['Asif 1', 'Raja 2', 'Create a business'];
+
+    const [openModal, setOpenModal] = useState(false);
+    const [selectedOption, setSelectedOption] = useState(null);
+
+    const handleOptionClick = (option) => {
+        if (option === 'Create a business') {
+            console.log("option a ", option)
+            setOpenModal(true);
+        } else {
+            console.log("option ab ", option)
+            setSelectedOption(option);
+            setManageUserObj({
+                ...manageUserObj,
+                ['accountBusinessName']: option,
+            });
+        }
+    };
+
+    const handleCloseModal = () => {
+        setOpenModal(false);
+    };
 
     const handleFilterChange = event => {
         setFilter(event.target.value);
@@ -265,21 +287,51 @@ export const AccountManagementUsers = () => {
                                 <TextField id="outlined-basic" label="Name" variant="outlined" sx={{margin: '10px'}}
                                            value={manageUserObj.name}
                                            onChange={(event) => handleTextFieldChange(event, 'name')}/>
-                                <TextField
-                                    fullWidth
-                                    select
-                                    value={manageUserObj.accountBusinessName}
-                                    onChange={(event) => handleTextFieldChange(event, 'accountBusinessName')}
-                                    label="Bussiness Name"
-                                    variant="outlined"
-                                    margin="normal"
-                                >
-                                    {
-                                        UserRole.businessName.map(business => (
-                                            <MenuItem key={business.name}
-                                                      value={business.name}>{business.name}</MenuItem>))
-                                    }
-                                </TextField>
+
+                                <div>
+                                    <Autocomplete
+                                        options={options}
+                                        value={manageUserObj.accountBusinessName}
+                                        renderInput={(params) => <TextField {...params} label="Options"/>}
+                                        onInputChange={(event, value, reason) => {
+                                            if (reason === 'clear') {
+                                                setSelectedOption(null);
+                                                setOpenModal(false);
+                                            } else if (value !== '') {
+                                                setSelectedOption(value)
+                                            } else if (value === '') {
+                                                setSelectedOption(null);
+                                                setOpenModal(false);
+                                            }
+                                        }}
+                                        inputValue={selectedOption || ''}
+                                        onChange={(event, value) => {
+                                            handleOptionClick(value);
+                                        }}
+                                    />
+                                    <Modal
+                                        open={openModal}
+                                        onClose={handleCloseModal}
+                                        aria-labelledby="modal-title"
+                                        aria-describedby="modal-description"
+                                    >
+                                        <Box sx={{
+                                            position: 'absolute',
+                                            top: '50%',
+                                            left: '50%',
+                                            transform: 'translate(-50%, -50%)',
+                                            width: 400,
+                                            bgcolor: 'background.paper',
+                                            boxShadow: 24,
+                                            p: 4
+                                        }}>
+                                            <Typography id="modal-title" variant="h6" component="h2" gutterBottom>
+                                                Selected Option
+                                            </Typography>
+                                      
+                                        </Box>
+                                    </Modal>
+                                </div>
                                 <TextField id="outlined-basic" label="Email Address" variant="outlined"
                                            sx={{margin: '10px'}} value={manageUserObj.emailAddress}
                                            onChange={(event) => handleTextFieldChange(event, 'emailAddress')}/>
