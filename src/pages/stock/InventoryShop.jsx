@@ -1,4 +1,4 @@
-import {Box, ButtonGroup, Checkbox, FormControlLabel, Input, TextField} from "@mui/material";
+import {Box, ButtonGroup, Checkbox, FormControlLabel, TextField} from "@mui/material";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
@@ -27,6 +27,7 @@ import Typography from '@mui/joy/Typography';
 import Sheet from '@mui/joy/Sheet';
 
 import {Search, SearchIconWrapper, StyledInputBase, StyledTableCell, StyledTableRow} from "../../commonStyle";
+import {Input} from "@mui/joy";
 
 export const InventoryShop = () => {
     const [enable, setEnable] = useState(true);
@@ -404,9 +405,23 @@ export const InventoryShop = () => {
                                     <TextField id="outlined-basic" label="Cess" variant="outlined"
                                                sx={{margin: '10px'}} value={inventoryObject.compensationCess}
                                                onChange={(event) => handleTextFieldChange(event, 'compensationCess')}/>
-                                    <TextField id="outlined-basic" label="Supplier" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.supplier}
-                                               onChange={(event) => handleTextFieldChange(event, 'supplier')}/>
+                                    <TextField
+                                        fullWidth
+                                        select
+                                        value={inventoryObject.supplier}
+                                        onChange={(event) => handleTextFieldChange(event, 'supplier')}
+                                        label="Supplier"
+                                        variant="outlined"
+                                        margin="normal"
+                                    >
+                                        {
+                                            UserRole.GST.map(userrole => (
+                                                <MenuItem key={userrole.name}
+                                                          value={userrole.name}>{userrole.name}</MenuItem>
+                                            ))
+                                        }
+
+                                    </TextField>
                                 </Box>
                                 <Box sx={{
                                     width: '25%',

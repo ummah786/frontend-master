@@ -22,6 +22,10 @@ import ArticleIcon from '@mui/icons-material/Article';
 import * as XLSX from 'xlsx';
 import {DataGrid} from "@mui/x-data-grid";
 import {Search, SearchIconWrapper, StyledInputBase, StyledTableCell, StyledTableRow} from "../../commonStyle";
+import Modal from "@mui/joy/Modal";
+import Sheet from "@mui/joy/Sheet";
+import ModalClose from "@mui/joy/ModalClose";
+import Typography from "@mui/joy/Typography";
 
 
 export const Party = () => {
@@ -32,6 +36,9 @@ export const Party = () => {
     const [excelData, setExcelData] = useState([]);
     const [columns, setColumns] = useState([]);
     const [files, setFiles] = useState([]);
+
+    const [openCategory, setOpenCategory] = React.useState(false);
+    const [openCompany, setOpenCompany] = React.useState(false);
 
     const dispatch = useDispatch();
     const handleBooleanChange = () => {
@@ -307,15 +314,61 @@ export const Party = () => {
                                                sx={{margin: '10px'}}
                                                value={manageUserObj.billingAddress}
                                                onChange={(event) => handleTextFieldChange(event, 'billingAddress')}/>
-
                                     <TextField id="outlined-basic" label="Shipping Address" variant="outlined"
                                                sx={{margin: '10px'}}
                                                value={manageUserObj.shippingAddress}
                                                onChange={(event) => handleTextFieldChange(event, 'shippingAddress')}/>
+                                    <TextField
+                                        fullWidth
+                                        select
+                                        value={manageUserObj.company}
+                                        onChange={(event) => handleTextFieldChange(event, 'company')}
+                                        label="Company Name"
+                                        variant="outlined"
+                                        margin="normal"
+                                    >
+                                        <MenuItem onClick={() => setOpenCompany(true)}>Create a New Company</MenuItem>
+                                        {
+                                            UserRole.GST.map(userrole => (
+                                                <MenuItem key={userrole.name}
+                                                          value={userrole.name}>{userrole.name}</MenuItem>
+                                            ))
+                                        }
 
-                                    <TextField id="outlined-basic" label="Company" variant="outlined" sx={{margin: '10px'}}
-                                               value={manageUserObj.company}
-                                               onChange={(event) => handleTextFieldChange(event, 'company')}/>
+                                    </TextField>
+                                    <Modal
+                                        aria-labelledby="modal-title"
+                                        aria-describedby="modal-desc"
+                                        open={openCompany}
+                                        onClose={() => setOpenCompany(false)}
+                                        sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+                                    >
+                                        <Sheet
+                                            variant="outlined"
+                                            sx={{
+                                                maxWidth: 500,
+                                                borderRadius: 'md',
+                                                p: 3,
+                                                boxShadow: 'lg',
+                                            }}
+                                        >
+                                            <ModalClose variant="plain" sx={{m: 1}}/>
+                                            <Typography
+                                                component="h2"
+                                                id="modal-title"
+                                                level="h4"
+                                                textColor="inherit"
+                                                fontWeight="lg"
+                                                mb={1}
+                                            >
+                                                Company
+                                            </Typography>
+                                            <Typography id="modal-desc" textColor="text.tertiary">
+                                                Make sure to use <code>aria-labelledby</code> on the modal dialog with an
+                                                optional <code>aria-describedby</code> attribute.
+                                            </Typography>
+                                        </Sheet>
+                                    </Modal>
                                 </Box>
                                 <Box sx={{display: 'flex', flexDirection: 'column', margin: "10px", paddingRight: '50px'}}>
                                     <TextField
@@ -337,9 +390,58 @@ export const Party = () => {
                                     <TextField id="outlined-basic" label="GST Number" variant="outlined"
                                                sx={{margin: '10px'}} value={manageUserObj.gstNumber}
                                                onChange={(event) => handleTextFieldChange(event, 'gstNumber')}/>
-                                    <TextField id="outlined-basic" label="Party Category" variant="outlined"
-                                               sx={{margin: '10px'}} value={manageUserObj.partyCategory}
-                                               onChange={(event) => handleTextFieldChange(event, 'partyCategory')}/>
+
+                                    <TextField
+                                        fullWidth
+                                        select
+                                        value={manageUserObj.partyCategory}
+                                        onChange={(event) => handleTextFieldChange(event, 'partyCategory')}
+                                        label="Category"
+                                        variant="outlined"
+                                        margin="normal"
+                                    >
+                                        <MenuItem onClick={() => setOpenCategory(true)}>Create a New Category</MenuItem>
+                                        {
+                                            UserRole.GST.map(userrole => (
+                                                <MenuItem key={userrole.name}
+                                                          value={userrole.name}>{userrole.name}</MenuItem>
+                                            ))
+                                        }
+
+                                    </TextField>
+                                    <Modal
+                                        aria-labelledby="modal-title"
+                                        aria-describedby="modal-desc"
+                                        open={openCategory}
+                                        onClose={() => setOpenCategory(false)}
+                                        sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+                                    >
+                                        <Sheet
+                                            variant="outlined"
+                                            sx={{
+                                                maxWidth: 500,
+                                                borderRadius: 'md',
+                                                p: 3,
+                                                boxShadow: 'lg',
+                                            }}
+                                        >
+                                            <ModalClose variant="plain" sx={{m: 1}}/>
+                                            <Typography
+                                                component="h2"
+                                                id="modal-title"
+                                                level="h4"
+                                                textColor="inherit"
+                                                fontWeight="lg"
+                                                mb={1}
+                                            >
+                                                Category
+                                            </Typography>
+                                            <Typography id="modal-desc" textColor="text.tertiary">
+                                                Make sure to use <code>aria-labelledby</code> on the modal dialog with an
+                                                optional <code>aria-describedby</code> attribute.
+                                            </Typography>
+                                        </Sheet>
+                                    </Modal>
                                     <TextField id="outlined-basic" label="Credit Limit" variant="outlined"
                                                sx={{margin: '10px'}} value={manageUserObj.creditLimit}
                                                onChange={(event) => handleTextFieldChange(event, 'creditLimit')}/>
@@ -405,7 +507,7 @@ export const Party = () => {
                             <Box>
                                 <Button size="small" variant="contained">Create Bulk Partner</Button>
                             </Box>
-                            <Box sx={{float: 'right', alignItems: 'center', marginLeft: "50px",display:'flex'}}>
+                            <Box sx={{float: 'right', alignItems: 'center', marginLeft: "50px", display: 'flex'}}>
                                 <Box>
                                     <a
                                         href={require('../../file/PartySample.xlsx')}
