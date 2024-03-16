@@ -67,7 +67,7 @@ export const InventoryShop = () => {
         console.log('Submit Response :--    ', response.data);
         console.log('on Submit :-->', inventoryObject);
         dispatch(addExistingMangeUser(response.data));
-        setInventoryObject(manageUserDataModel);
+        setInventoryObject(InventoryDataModel);
         setEnable(prevState => !prevState);
     };
 
