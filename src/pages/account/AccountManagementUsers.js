@@ -7,6 +7,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import SearchIcon from '@mui/icons-material/Search';
 import Typography from "@mui/material/Typography";
+import * as React from "react";
 import {useEffect, useState} from "react";
 import {manageUserDataModel} from "../../datamodel/ManageUserDataModel";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -18,6 +19,8 @@ import MenuItem from "@mui/material/MenuItem";
 import {useDispatch, useSelector} from 'react-redux';
 import {addManageUser, removeManageUser, updateManageUser} from "../../redux/Action";
 import {Search, SearchIconWrapper, StyledInputBase, StyledTableCell, StyledTableRow} from "../../commonStyle";
+import Sheet from "@mui/joy/Sheet";
+import ModalClose from "@mui/joy/ModalClose";
 
 export const AccountManagementUsers = () => {
     const [enable, setEnable] = useState(true);
@@ -32,6 +35,21 @@ export const AccountManagementUsers = () => {
 
     const [openModal, setOpenModal] = useState(false);
     const [selectedOption, setSelectedOption] = useState(null);
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+    });
+
+
+    const handleChange = (e) => {
+        const {name, value} = e.target;
+        setFormData({...formData, [name]: value});
+    };
+
+    const handleSubmitModal = (e) => {
+        console.log('', formData);
+        handleCloseModal()
+    };
 
     const handleOptionClick = (option) => {
         if (option === 'Create a business') {
@@ -292,7 +310,7 @@ export const AccountManagementUsers = () => {
                                     <Autocomplete
                                         options={options}
                                         value={manageUserObj.accountBusinessName}
-                                        renderInput={(params) => <TextField {...params} label="Options"/>}
+                                        renderInput={(params) => <TextField {...params} label="Business Name"/>}
                                         onInputChange={(event, value, reason) => {
                                             if (reason === 'clear') {
                                                 setSelectedOption(null);
@@ -301,7 +319,7 @@ export const AccountManagementUsers = () => {
                                                 setSelectedOption(value)
                                             } else if (value === '') {
                                                 setSelectedOption(null);
-                                                setOpenModal(false);
+                                                //  setOpenModal(false);
                                             }
                                         }}
                                         inputValue={selectedOption || ''}
@@ -310,26 +328,44 @@ export const AccountManagementUsers = () => {
                                         }}
                                     />
                                     <Modal
+                                        aria-labelledby="modal-title"
+                                        aria-describedby="modal-desc"
                                         open={openModal}
                                         onClose={handleCloseModal}
-                                        aria-labelledby="modal-title"
-                                        aria-describedby="modal-description"
+                                        sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
                                     >
-                                        <Box sx={{
-                                            position: 'absolute',
-                                            top: '50%',
-                                            left: '50%',
-                                            transform: 'translate(-50%, -50%)',
-                                            width: 400,
-                                            bgcolor: 'background.paper',
-                                            boxShadow: 24,
-                                            p: 4
-                                        }}>
-                                            <Typography id="modal-title" variant="h6" component="h2" gutterBottom>
-                                                Selected Option
-                                            </Typography>
-                                      
-                                        </Box>
+                                        <Sheet
+                                            variant="outlined"
+                                            sx={{
+                                                maxWidth: 500,
+                                                borderRadius: 'md',
+                                                p: 3,
+                                                boxShadow: 'lg',
+                                            }}
+                                        >
+                                            <ModalClose variant="plain" sx={{m: 1}} onClick={handleCloseModal}/>
+
+                                            <h2>Modal Form</h2>
+                                            <TextField
+                                                label="Name"
+                                                name="name"
+                                                value={formData.name}
+                                                onChange={handleChange}
+                                                fullWidth
+                                                margin="normal"
+                                            />
+                                            <TextField
+                                                label="Email"
+                                                name="email"
+                                                value={formData.email}
+                                                onChange={handleChange}
+                                                fullWidth
+                                                margin="normal"
+                                            />
+                                            <Button type="submit" variant="contained" color="primary"
+                                                    onClick={handleSubmitModal}>Submit</Button>
+
+                                        </Sheet>
                                     </Modal>
                                 </div>
                                 <TextField id="outlined-basic" label="Email Address" variant="outlined"
