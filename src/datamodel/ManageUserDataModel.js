@@ -77,7 +77,7 @@ export const InventoryDataModel = {
     mfgDate: '',
     expireDate: '',
     mrp: '',
-    gst:'',
+    gst: '',
     compensationCess: '',
     utgst: '',
     sgst: '',
@@ -89,4 +89,23 @@ export const InventoryDataModel = {
     creationDateTime: '',
     primary_user_id: '',
     secondary_user_id: '',
+}
+
+export const userDetailModel = {
+    id: '',
+    firstName: '',
+    lastName: '',
+    dob: '',
+    gender: '',
+    role: '',
+    email: '',
+    password: '',
+    mobileNumber: '',
+    tempPassword: '',
+    primary_user_id: '',
+    secondary_user_id: '',
+    isLogin: '',
+    lastLoginDate: '',
+    token: '',
+
 }
