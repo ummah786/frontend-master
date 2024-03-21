@@ -1,3 +1,13 @@
+
+export const ADD_LOGIN_USER = 'ADD_LOGIN_USER';
+export const DELETE_LOGIN_USER = 'DELETE_LOGIN_USER';
+export const GET_LOGIN_USER = 'GET_LOGIN_USER';
+
+
+
+
+
+
 export const ADD_MANAGE_USER = 'ADD_MANAGE_USER';
 export const ADD_EXISTING_MANAGE_USER = 'ADD_EXISTING_MANAGE_USER';
 export const REMOVE_MANAGE_USER = 'REMOVE_MANAGE_USER';
@@ -33,6 +43,13 @@ export const updateManageUser = (manageUser) => ({
 export const getManageUser=()=>({
     type:GET_MANAGE_USER
 })
+
+
+export const addLogin = (login) => ({
+    type: ADD_LOGIN_USER,
+    payload: login
+});
+
 
 
 export const addInventory = (manageUser) => ({

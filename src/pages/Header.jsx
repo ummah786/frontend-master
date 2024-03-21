@@ -14,6 +14,8 @@ import {TextField} from "@mui/material";
 import {Transition} from "react-transition-group";
 import Modal from '@mui/joy/Modal';
 import ModalClose from '@mui/joy/ModalClose';
+import axios from "axios";
+import {LOGIN_PASSWORD, SAVE_TEMP_PASSWORD} from "./apiendpoint/APIEndPoint";
 
 const style = {
     position: 'absolute',
@@ -38,18 +40,36 @@ export function Header() {
     const [openPassword, setOpenPassword] = React.useState(false);
     const [otpPassword, setOtpPassword] = React.useState('');
 
+    let axiosConfig = {
+        headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+            "Access-Control-Allow-Origin": "*",
+        }
+    };
+
     function handleSubmit() {
     }
 
     const handleClose = () => {
         setOpen(false)
     };
-    const handleClick = (e) => {
-
+    const handleClick = async (e) => {
         e.preventDefault();
+        try {
+            const response = await axios.post(LOGIN_PASSWORD, {
+                mobileNumber: phone,
+                tempPassword: otpPassword
+            }, axiosConfig);
+            console.log(response.data); // Handle response data
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
-    const toggleDrawer = () => {
-        setOpen(!openDrawer);
+    const toggleDrawer = (page) => {
+        if (page === 'Login') {
+            setOpen(!openDrawer);
+        }
+        setAnchorElNav(null);
     };
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -118,7 +138,7 @@ export function Header() {
                             >
                                 {pages.map((page) => (
                                     <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                        <Typography textAlign="center" onClick={toggleDrawer}>{page}</Typography>
+                                        <Typography textAlign="center">{page}</Typography>
                                     </MenuItem>
                                 ))}
                             </Menu>
@@ -144,29 +164,20 @@ export function Header() {
                                         <Typography component="h1" variant="h5">
                                             Login/Registration
                                         </Typography>
-                                        <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
+                                        <Box component="form" onSubmit={handleClick} noValidate sx={{mt: 1}}>
                                             <TextField
                                                 margin="normal"
-                                                required
                                                 fullWidth
-                                                id="phone"
-                                                label="+91 Enter Your Mobile Number"
-                                                name="phone"
-                                                autoComplete="phone"
-                                                value={phone}
-                                                autoFocus
+                                                label="Email Address/ Phone Number"
+                                                onChange={(e)=>setPhone(e.target.value)}
+                                                // value={phone}
                                             />
                                             <TextField
                                                 margin="normal"
-                                                required
+                                                label="Password"
                                                 fullWidth
-                                                id="otp"
-                                                label="Temporary Password"
-                                                name="tempPassword"
-                                                autoComplete="tempPassword"
-                                                value={otpPassword}
-                                                autoFocus
-                                                disabled={true}
+                                                //value={otpPassword}
+                                                onChange={(e)=>setOtpPassword(e.target.value)}
                                             />
                                             <Button
                                                 type="submit"
@@ -195,7 +206,7 @@ export function Header() {
                             {pages.map((page) => (
                                 <Button
                                     key={page}
-                                    onClick={handleCloseNavMenu}
+                                    onClick={() => toggleDrawer(page)}
                                     sx={{my: 2, color: 'white', display: 'block'}}
                                 >
                                     {page}
