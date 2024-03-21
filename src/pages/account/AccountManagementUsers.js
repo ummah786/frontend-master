@@ -30,6 +30,7 @@ export const AccountManagementUsers = () => {
     const [filter, setFilter] = useState('');
     const [filteredEmployees, setFilteredEmployees] = useState([]);
     const {manageUsers} = useSelector(state => state.manageUserReducerValue);
+    const [fetchBusiness, setFetchBusiness] = useState([]);
 
     const options = ['Asif 1', 'Raja 2', 'Create a business'];
 
@@ -180,6 +181,20 @@ export const AccountManagementUsers = () => {
         }
     }, [setMangUser]);
 
+    const  getProductKeyValuePair=async ()=> {
+        const response = await axios.get(`http://localhost:8700/hesabbook/product/key/value/get/business/5`);
+        console.log('Submit delete Response :--    ', response.data.response);
+        let responseData = [];
+        responseData = response.data.response;
+      //  responseData.push('Create a business');
+        console.log('response Date after resp', responseData)
+        setFetchBusiness(responseData);
+    }
+
+    useEffect(  () => {
+         getProductKeyValuePair();
+    },[setFetchBusiness])
+
 
     const fetchData = async () => {
         try {
@@ -308,7 +323,7 @@ export const AccountManagementUsers = () => {
 
                                 <div>
                                     <Autocomplete
-                                        options={options}
+                                        options={fetchBusiness}
                                         value={manageUserObj.accountBusinessName}
                                         renderInput={(params) => <TextField {...params} label="Business Name"/>}
                                         onInputChange={(event, value, reason) => {
