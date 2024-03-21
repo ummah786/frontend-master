@@ -22,7 +22,7 @@ import {InventoryGodown} from "./pages/stock/InventoryGodown";
 import {InventoryShop} from "./pages/stock/InventoryShop";
 
 function App() {
-    const [flag, setFlag] = useState(false);
+    const [flag, setFlag] = useState(true);
     const handleBooleanChange = () => {
         setFlag(prevState => !prevState);
     };

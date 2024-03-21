@@ -10,11 +10,47 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import {TextField} from "@mui/material";
+import {Transition} from "react-transition-group";
+import Modal from '@mui/joy/Modal';
+import ModalClose from '@mui/joy/ModalClose';
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
 
 export function Header() {
-    const pages = ['Home', 'About Us', 'Product', "Price", "Contact"];
+    const pages = ['Home', 'About Us', 'Product', "Price", "Contact", "Login"];
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const [openDrawer, setOpenDrawer] = React.useState(false);
+    const [open, setOpen] = React.useState(false);
+
+    const [phone, setPhone] = React.useState('');
+    const [openPassword, setOpenPassword] = React.useState(false);
+    const [otpPassword, setOtpPassword] = React.useState('');
+
+    function handleSubmit() {
+    }
+
+    const handleClose = () => {
+        setOpen(false)
+    };
+    const handleClick = (e) => {
+
+        e.preventDefault();
+    };
+    const toggleDrawer = () => {
+        setOpen(!openDrawer);
+    };
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
@@ -82,11 +118,70 @@ export function Header() {
                             >
                                 {pages.map((page) => (
                                     <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                        <Typography textAlign="center">{page}</Typography>
+                                        <Typography textAlign="center" onClick={toggleDrawer}>{page}</Typography>
                                     </MenuItem>
                                 ))}
                             </Menu>
                         </Box>
+                        <Transition in={open} timeout={400}>
+                            <Modal
+                                open={open}
+                                onClose={handleClose}
+                                aria-labelledby="modal-modal-title"
+                                aria-describedby="modal-modal-description"
+                                sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+                            >
+                                <Box sx={style}>
+                                    <Box
+                                        sx={{
+                                            marginTop: 8,
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            alignItems: 'center',
+                                        }}
+                                    >
+                                        <ModalClose variant="plain" sx={{m: 1}}/>
+                                        <Typography component="h1" variant="h5">
+                                            Login/Registration
+                                        </Typography>
+                                        <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
+                                            <TextField
+                                                margin="normal"
+                                                required
+                                                fullWidth
+                                                id="phone"
+                                                label="+91 Enter Your Mobile Number"
+                                                name="phone"
+                                                autoComplete="phone"
+                                                value={phone}
+                                                autoFocus
+                                            />
+                                            <TextField
+                                                margin="normal"
+                                                required
+                                                fullWidth
+                                                id="otp"
+                                                label="Temporary Password"
+                                                name="tempPassword"
+                                                autoComplete="tempPassword"
+                                                value={otpPassword}
+                                                autoFocus
+                                                disabled={true}
+                                            />
+                                            <Button
+                                                type="submit"
+                                                fullWidth
+                                                variant="contained"
+                                                onClick={handleClick}
+                                                sx={{mt: 3, mb: 2, color: "whitesmoke", background: '#212121'}}
+                                            >
+                                                Submit
+                                            </Button>
+                                        </Box>
+                                    </Box>
+                                </Box>
+                            </Modal>
+                        </Transition>
 
                         <Typography
                             variant="h6"
