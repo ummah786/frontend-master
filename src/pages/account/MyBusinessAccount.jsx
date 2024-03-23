@@ -1,15 +1,12 @@
 import {Box, Button, ButtonGroup, FormControlLabel, TextField} from "@mui/material";
 import React, {useEffect, useRef, useState} from 'react';
-import {alpha, styled} from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell, {tableCellClasses} from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import SearchIcon from '@mui/icons-material/Search';
-import InputBase from '@mui/material/InputBase';
 import {businessAccountDataModel, manageUserDataModel} from "../../datamodel/ManageUserDataModel";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -29,6 +26,8 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import {Search, SearchIconWrapper, StyledInputBase, StyledTableCell, StyledTableRow} from "../../commonStyle";
+import {extracted} from "../../apiservice/UserApiService";
+
 export const MyBusinessAccount = () => {
     const [enable, setEnable] = useState(true);
     const [manageUserObj, setManageUserObj] = useState(businessAccountDataModel);
@@ -97,7 +96,6 @@ export const MyBusinessAccount = () => {
         };
         return fetchData;
     }
-
     const handleCheckboxChange = (event) => {
         const {name, checked} = event.target;
         setManageUserObj({...manageUserObj, [name]: checked});
@@ -108,28 +106,16 @@ export const MyBusinessAccount = () => {
     const handleImageUpload = (event, setImage) => {
         const file = event.target.files[0];
         const reader = new FileReader();
-
         reader.onloadend = () => {
             setImage(reader.result);
         };
-
         if (file) {
             reader.readAsDataURL(file);
         }
     };
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get('http://localhost:8700/hesabbook/business/account/all');
-                console.log(response.data.response);
-                setMangUser(response.data.response);
-                localStorage.setItem('business-details', response.data.response);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-        fetchData();
+        extracted(setMangUser);
     }, [setMangUser]);
 
     return (
