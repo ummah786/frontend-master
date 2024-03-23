@@ -1,11 +1,12 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {Box, TextField} from "@mui/material";
 import Button from "@mui/material/Button";
 import UserRole from "../../jsonfile/Role.json";
 import MenuItem from "@mui/material/MenuItem";
 import {Input} from "@mui/joy";
+import {addLogin} from "../../redux/Action";
 
 export const MyUserDetails = () => {
     const [enable, setEnable] = useState(true);
@@ -23,9 +24,9 @@ export const MyUserDetails = () => {
         primary_user_id: '',
         secondary_user_id: '',
     });
-
-
+    const loginData = useSelector(state => state.loginReducerValue);
     const dispatch = useDispatch();
+
     const handleBooleanChange = () => {
         setEnable(prevState => !prevState);
     };
@@ -39,11 +40,13 @@ export const MyUserDetails = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8700/hesabbook/user/get/258');
-                console.log("user response ", response.data);
-                if (response.data.code === 200) {
-                    setMyUser(response.data.response);
-                }
+                console.log("LoginData  ", loginData);
+                setMyUser(loginData);
+                /*                const response = await axios.get('http://localhost:8700/hesabbook/user/get/258');
+                                console.log("user response ", response.data);
+                                if (response.data.code === 200) {
+                                    setMyUser(login);
+                                }*/
                 // localStorage.setItem('login-user', JSON.stringify(myUser));
                 //dispatch(addManageUser(response.data));
             } catch (error) {
@@ -55,9 +58,15 @@ export const MyUserDetails = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        myUser['isLogin'] = loginData.isLogin;
+        myUser['token'] = loginData.token;
+        myUser['primary_user_id'] = loginData.primary_user_id;
+        myUser['secondary_user_id'] = loginData.secondary_user_id;
+        console.log('LoginData   secondary_user_id end ', loginData.secondary_user_id);
         const response = await axios.post('http://localhost:8700/hesabbook/user/save', myUser);
         if (response.data.code === 200) {
             localStorage.setItem("login-user-info", JSON.stringify(response.data.response));
+            dispatch(addLogin(response.data.response));
         }
     };
 

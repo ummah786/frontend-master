@@ -9,7 +9,7 @@ import {
 import {manageUserDataModel, userDetailModel} from "../datamodel/ManageUserDataModel";
 
 
-export const LoginReducer = (state = {login: userDetailModel}, action) => {
+export const LoginReducer = (state = {loginData: userDetailModel}, action) => {
     switch (action.type) {
         case ADD_LOGIN_USER:
             return action.payload;

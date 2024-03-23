@@ -36,11 +36,11 @@ export const Header = ({onBooleanChange}) => {
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [openDrawer, setOpenDrawer] = React.useState(false);
     const [open, setOpen] = React.useState(false);
-
     const [phone, setPhone] = React.useState('');
     const [openPassword, setOpenPassword] = React.useState(false);
     const [otpPassword, setOtpPassword] = React.useState('');
     const dispatch = useDispatch();
+
     let axiosConfig = {
         headers: {
             'Content-Type': 'application/json;charset=UTF-8',
