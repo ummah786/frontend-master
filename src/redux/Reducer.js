@@ -1,12 +1,22 @@
 import {
     ADD_EXISTING_MANAGE_USER,
+    ADD_LOGIN_USER,
     ADD_MANAGE_USER,
     GET_MANAGE_USER,
     REMOVE_MANAGE_USER,
     UPDATE_MANAGE_USER
 } from './Action';
-import {manageUserDataModel} from "../datamodel/ManageUserDataModel";
+import {manageUserDataModel, userDetailModel} from "../datamodel/ManageUserDataModel";
 
+
+export const LoginReducer = (state = {login: userDetailModel}, action) => {
+    switch (action.type) {
+        case ADD_LOGIN_USER:
+            return action.payload;
+        default:
+            return state;
+    }
+}
 export const manageUserReducer = (state = {manageUsers: [manageUserDataModel]}, action) => {
     switch (action.type) {
         case ADD_EXISTING_MANAGE_USER:
@@ -42,4 +52,4 @@ export const manageUserReducer = (state = {manageUsers: [manageUserDataModel]}, 
     }
 };
 
-export default {manageUserReducer};
+export default {manageUserReducer, LoginReducer};

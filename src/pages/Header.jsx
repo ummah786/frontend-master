@@ -15,7 +15,9 @@ import {Transition} from "react-transition-group";
 import Modal from '@mui/joy/Modal';
 import ModalClose from '@mui/joy/ModalClose';
 import axios from "axios";
-import {LOGIN_PASSWORD, SAVE_TEMP_PASSWORD} from "./apiendpoint/APIEndPoint";
+import {LOGIN_PASSWORD} from "./apiendpoint/APIEndPoint";
+import {addLogin} from "../redux/Action";
+import {useDispatch} from "react-redux";
 
 const style = {
     position: 'absolute',
@@ -28,8 +30,7 @@ const style = {
     boxShadow: 24,
     p: 4,
 };
-
-export function Header() {
+export const Header = ({onBooleanChange}) => {
     const pages = ['Home', 'About Us', 'Product', "Price", "Contact", "Login"];
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -39,7 +40,7 @@ export function Header() {
     const [phone, setPhone] = React.useState('');
     const [openPassword, setOpenPassword] = React.useState(false);
     const [otpPassword, setOtpPassword] = React.useState('');
-
+    const dispatch = useDispatch();
     let axiosConfig = {
         headers: {
             'Content-Type': 'application/json;charset=UTF-8',
@@ -61,6 +62,13 @@ export function Header() {
                 tempPassword: otpPassword
             }, axiosConfig);
             console.log(response.data); // Handle response data
+            if (response.data.code === 200) {
+                console.log("hesab response if ", response.data.response);
+                dispatch(addLogin(response.data.response));
+                onBooleanChange();
+            } else {
+                console.log("hesab response else ", response.data.response);
+            }
         } catch (error) {
             console.error('Error:', error);
         }
@@ -169,7 +177,7 @@ export function Header() {
                                                 margin="normal"
                                                 fullWidth
                                                 label="Email Address/ Phone Number"
-                                                onChange={(e)=>setPhone(e.target.value)}
+                                                onChange={(e) => setPhone(e.target.value)}
                                                 // value={phone}
                                             />
                                             <TextField
@@ -177,7 +185,7 @@ export function Header() {
                                                 label="Password"
                                                 fullWidth
                                                 //value={otpPassword}
-                                                onChange={(e)=>setOtpPassword(e.target.value)}
+                                                onChange={(e) => setOtpPassword(e.target.value)}
                                             />
                                             <Button
                                                 type="submit"

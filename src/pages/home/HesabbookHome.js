@@ -19,6 +19,7 @@ import Button from "@mui/material/Button";
 import {Sheet} from "@mui/joy";
 import axios from "axios";
 import {SAVE_TEMP_PASSWORD} from "../apiendpoint/APIEndPoint";
+import {useDispatch} from "react-redux";
 
 const useStyles = makeStyles({
     root: {
@@ -50,6 +51,7 @@ export const HesabbookHome = ({onBooleanChange}) => {
     const [openPassword, setOpenPassword] = React.useState(false);
     const [otpPassword, setOtpPassword] = React.useState('');
     const [user, setUser] = React.useState({mobileNumber: '', tempPassword: ''});
+    const dispatch = useDispatch();
     let axiosConfig = {
         headers: {
             'Content-Type': 'application/json;charset=UTF-8',
@@ -96,8 +98,9 @@ export const HesabbookHome = ({onBooleanChange}) => {
             const response = await axios.post(SAVE_TEMP_PASSWORD, {
                 mobileNumber: phone,
                 tempPassword: otpPassword
-            },axiosConfig);
-            console.log(response.data); // Handle response data
+            }, axiosConfig);
+
+
         } catch (error) {
             console.error('Error:', error);
         }
@@ -105,7 +108,7 @@ export const HesabbookHome = ({onBooleanChange}) => {
 
     return (
         <>
-            <Header></Header>
+            <Header onBooleanChange={onBooleanChange}></Header>
             <Box style={{
                 backgroundImage: `url(${computer})`, height: '600px', width: '100%'
             }}>
