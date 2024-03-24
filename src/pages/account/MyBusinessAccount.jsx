@@ -62,11 +62,13 @@ export const MyBusinessAccount = () => {
         const existingIndex = businessUser.findIndex(item => item.id === newObject.id);
         if (existingIndex === -1) {
             setFilteredEmployees([newObject, ...businessUser]);
+            setMangUser([newObject, ...businessUser]);
             dispatch(addBusinessUser([newObject, ...businessUser]));
         } else {
             const updatedArray = [...businessUser];
             updatedArray[existingIndex] = newObject;
             setFilteredEmployees(updatedArray);
+            setMangUser(updatedArray);
             dispatch(addBusinessUser(updatedArray));
         }
     };
@@ -80,7 +82,7 @@ export const MyBusinessAccount = () => {
     }
 
     function handleEdit(id, data) {
-        handleBooleanChange();
+        setEnable(prevState => !prevState);
         findObjectById(id);
         // fetchAllManageUserData();
         dispatch(updateBusinessUser(data));
@@ -97,14 +99,14 @@ export const MyBusinessAccount = () => {
     };
 
     useEffect(() => {
-        if (filteredEmployees.length > 0) {
-            const filteredData = filteredEmployees.filter(employee => {
+        if (businessUser.length > 0) {
+            const filteredData = businessUser.filter(employee => {
                 return (employee.businessName.toLowerCase().includes(filter.toLowerCase()) ||
                     employee.gstNumber.toLowerCase().includes(filter.toLowerCase()));
             });
             setFilteredEmployees(filteredData);
         }
-    }, [filter, mangUser]);
+    }, [filter, businessUser]);
 
     function fetchAllManageUserData() {
         const fetchData = async () => {
