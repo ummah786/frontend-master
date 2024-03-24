@@ -83,10 +83,9 @@ export const MyBusinessAccount = () => {
 
     function handleEdit(id, data) {
         handleBooleanChange();
-        setEnable(prevState => !prevState);
         findObjectById(id);
         // fetchAllManageUserData();
-        dispatch(updateBusinessUser(data));
+       // dispatch(updateBusinessUser(data));
     }
 
     const findObjectById = (id) => {
