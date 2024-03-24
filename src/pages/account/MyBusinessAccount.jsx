@@ -14,8 +14,8 @@ import IconButton from "@mui/material/IconButton";
 import axios from "axios";
 import UserRole from '../../jsonfile/Role';
 import MenuItem from "@mui/material/MenuItem";
-import {useDispatch} from 'react-redux';
-import {addExistingMangeUser, updateManageUser} from "../../redux/Action";
+import {useDispatch, useSelector} from 'react-redux';
+import {updateManageUser} from "../../redux/Action";
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControl from '@mui/material/FormControl';
@@ -26,7 +26,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import {Search, SearchIconWrapper, StyledInputBase, StyledTableCell, StyledTableRow} from "../../commonStyle";
-import {extracted} from "../../apiservice/UserApiService";
+import {fetchBusinessDetailsBasedOnPrimaryUserIds, saveBusinessAccount} from "../../apiservice/UserApiService";
 
 export const MyBusinessAccount = () => {
     const [enable, setEnable] = useState(true);
@@ -34,6 +34,7 @@ export const MyBusinessAccount = () => {
     const [mangUser, setMangUser] = useState([]);
     const fileInputRef = useRef(null);
     const dispatch = useDispatch();
+    const loginData = useSelector(state => state.loginReducerValue);
     const handleBooleanChange = () => {
         setManageUserObj(businessAccountDataModel);
         setEnable(prevState => !prevState);
@@ -48,10 +49,9 @@ export const MyBusinessAccount = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const response = await axios.post('http://localhost:8700/hesabbook/business/account/save', manageUserObj);
-        console.log('Submit Response :--    ', response.data);
-        console.log('on Submit :-->', manageUserObj);
-        dispatch(addExistingMangeUser(response.data));
+        manageUserObj['primary_user_id'] = loginData.primary_user_id;
+        manageUserObj['secondary_user_id'] = loginData.secondary_user_id;
+        await saveBusinessAccount(manageUserObj, dispatch);
         setManageUserObj(manageUserDataModel);
         setEnable(prevState => !prevState);
     };
@@ -96,6 +96,7 @@ export const MyBusinessAccount = () => {
         };
         return fetchData;
     }
+
     const handleCheckboxChange = (event) => {
         const {name, checked} = event.target;
         setManageUserObj({...manageUserObj, [name]: checked});
@@ -115,7 +116,7 @@ export const MyBusinessAccount = () => {
     };
 
     useEffect(() => {
-        extracted(setMangUser);
+        fetchBusinessDetailsBasedOnPrimaryUserIds(setMangUser, dispatch);
     }, [setMangUser]);
 
     return (

@@ -1,5 +1,5 @@
 import axios from "axios";
-import {addLogin} from "../redux/Action";
+import {addBusinessUser, addExistingBusinessUser, addLogin} from "../redux/Action";
 
 export async function saveLoggedInUser(myUser, dispatch) {
     const response = await axios.post('http://localhost:8700/hesabbook/user/save', myUser);
@@ -9,16 +9,21 @@ export async function saveLoggedInUser(myUser, dispatch) {
     }
 }
 
-export function extracted(setMangUser) {
+export function fetchBusinessDetailsBasedOnPrimaryUserIds(setMangUser, dispatch) {
     const fetchData = async () => {
         try {
             const response = await axios.get('http://localhost:8700/hesabbook/business/account/all/2');
-            console.log(response.data.response);
             setMangUser(response.data.response);
             localStorage.setItem('business-details', response.data.response);
+            dispatch(addBusinessUser(response.data.response));
         } catch (error) {
             console.error('Error fetching data:', error);
         }
     };
     fetchData();
+}
+
+export async function saveBusinessAccount(manageUserObj, dispatch) {
+    const response = await axios.post('http://localhost:8700/hesabbook/business/account/save', manageUserObj);
+    dispatch(addExistingBusinessUser(response.data.response));
 }
