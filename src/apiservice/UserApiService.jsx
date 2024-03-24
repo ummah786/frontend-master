@@ -1,5 +1,6 @@
 import axios from "axios";
-import {addBusinessUser, addExistingBusinessUser, addLogin} from "../redux/Action";
+import {addBusinessUser, addLogin} from "../redux/Action";
+import {manageUserDataModel} from "../datamodel/ManageUserDataModel";
 
 export async function saveLoggedInUser(myUser, dispatch) {
     const response = await axios.post('http://localhost:8700/hesabbook/user/save', myUser);
@@ -9,12 +10,12 @@ export async function saveLoggedInUser(myUser, dispatch) {
     }
 }
 
-export function fetchBusinessDetailsBasedOnPrimaryUserIds(setMangUser, dispatch) {
+//---------------- Bussiness Account API----------------------
+export function fetchBusinessDetailsBasedOnPrimaryUserIds(setFilteredEmployees, dispatch) {
     const fetchData = async () => {
         try {
             const response = await axios.get('http://localhost:8700/hesabbook/business/account/all/2');
-            setMangUser(response.data.response);
-            localStorage.setItem('business-details', response.data.response);
+            setFilteredEmployees(response.data.response);
             dispatch(addBusinessUser(response.data.response));
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -23,7 +24,12 @@ export function fetchBusinessDetailsBasedOnPrimaryUserIds(setMangUser, dispatch)
     fetchData();
 }
 
-export async function saveBusinessAccount(manageUserObj, dispatch) {
+
+export async function saveBusinessAccount(manageUserObj, loginData, addObjectOnTop, setFilteredEmployees, setEnable) {
+    manageUserObj['primary_user_id'] = loginData.primary_user_id;
+    manageUserObj['secondary_user_id'] = loginData.secondary_user_id;
     const response = await axios.post('http://localhost:8700/hesabbook/business/account/save', manageUserObj);
-    dispatch(addExistingBusinessUser(response.data.response));
+    addObjectOnTop(response.data.response)
+    setFilteredEmployees(manageUserDataModel);
+    setEnable(prevState => !prevState);
 }

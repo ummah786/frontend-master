@@ -7,7 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import SearchIcon from '@mui/icons-material/Search';
-import {businessAccountDataModel, manageUserDataModel} from "../../datamodel/ManageUserDataModel";
+import {businessAccountDataModel} from "../../datamodel/ManageUserDataModel";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from "@mui/material/IconButton";
@@ -15,7 +15,7 @@ import axios from "axios";
 import UserRole from '../../jsonfile/Role';
 import MenuItem from "@mui/material/MenuItem";
 import {useDispatch, useSelector} from 'react-redux';
-import {updateManageUser} from "../../redux/Action";
+import {addBusinessUser, removeBusinessUser, updateBusinessUser} from "../../redux/Action";
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControl from '@mui/material/FormControl';
@@ -35,6 +35,13 @@ export const MyBusinessAccount = () => {
     const fileInputRef = useRef(null);
     const dispatch = useDispatch();
     const loginData = useSelector(state => state.loginReducerValue);
+    const {businessUser} = useSelector(state => state.manageBusinessReducerValue);
+    const [filteredEmployees, setFilteredEmployees] = useState([]);
+    const [filter, setFilter] = useState('');
+    const handleFilterChange = event => {
+        setFilter(event.target.value);
+    };
+
     const handleBooleanChange = () => {
         setManageUserObj(businessAccountDataModel);
         setEnable(prevState => !prevState);
@@ -49,31 +56,38 @@ export const MyBusinessAccount = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        manageUserObj['primary_user_id'] = loginData.primary_user_id;
-        manageUserObj['secondary_user_id'] = loginData.secondary_user_id;
-        await saveBusinessAccount(manageUserObj, dispatch);
-        setManageUserObj(manageUserDataModel);
-        setEnable(prevState => !prevState);
+        await saveBusinessAccount(manageUserObj, loginData, addObjectOnTop, setManageUserObj, setEnable);
+    };
+    const addObjectOnTop = (newObject) => {
+        const existingIndex = businessUser.findIndex(item => item.id === newObject.id);
+        if (existingIndex === -1) {
+            setFilteredEmployees([newObject, ...businessUser]);
+            dispatch(addBusinessUser([newObject, ...businessUser]));
+        } else {
+            const updatedArray = [...businessUser];
+            updatedArray[existingIndex] = newObject;
+            setFilteredEmployees(updatedArray);
+            dispatch(addBusinessUser(updatedArray));
+        }
     };
 
     async function handleDelete(id, event) {
         console.log("DELETE ID " + id)
         const response = await axios.post(`http://localhost:8700/hesabbook/business/account/delete/${id}`);
-        console.log('Submit delete Response :--    ', response.data);
-        fetchAllManageUserData();
+        //  fetchAllManageUserData();
+        dispatch(removeBusinessUser(id));
+        setFilteredEmployees(businessUser);
     }
 
     function handleEdit(id, data) {
         handleBooleanChange();
         findObjectById(id);
-        fetchAllManageUserData();
-        dispatch(updateManageUser(data));
-
-
+        // fetchAllManageUserData();
+        dispatch(updateBusinessUser(data));
     }
 
     const findObjectById = (id) => {
-        const foundItem = mangUser.find(item => item.id === id);
+        const foundItem = filteredEmployees.find(item => item.id === id);
         if (foundItem) {
             setManageUserObj(foundItem);
         } else {
@@ -81,6 +95,16 @@ export const MyBusinessAccount = () => {
         }
 
     };
+
+    useEffect(() => {
+        if (filteredEmployees.length > 0) {
+            const filteredData = filteredEmployees.filter(employee => {
+                return (employee.businessName.toLowerCase().includes(filter.toLowerCase()) ||
+                    employee.gstNumber.toLowerCase().includes(filter.toLowerCase()));
+            });
+            setFilteredEmployees(filteredData);
+        }
+    }, [filter, mangUser]);
 
     function fetchAllManageUserData() {
         const fetchData = async () => {
@@ -116,8 +140,8 @@ export const MyBusinessAccount = () => {
     };
 
     useEffect(() => {
-        fetchBusinessDetailsBasedOnPrimaryUserIds(setMangUser, dispatch);
-    }, [setMangUser]);
+        fetchBusinessDetailsBasedOnPrimaryUserIds(setFilteredEmployees, dispatch);
+    }, [setFilteredEmployees]);
 
     return (
         <>
@@ -136,6 +160,10 @@ export const MyBusinessAccount = () => {
                                     <StyledInputBase
                                         placeholder="Enter By Business Name"
                                         inputProps={{'aria-label': 'search'}}
+
+                                        type="text"
+                                        value={filter}
+                                        onChange={handleFilterChange}
                                     />
                                 </Search>
                             </Box>
@@ -159,7 +187,7 @@ export const MyBusinessAccount = () => {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {mangUser.map((row) => (
+                                        {filteredEmployees.map((row) => (
                                             <StyledTableRow key={row.id}>
                                                 <StyledTableCell align="center">{row.businessName}</StyledTableCell>
                                                 <StyledTableCell
