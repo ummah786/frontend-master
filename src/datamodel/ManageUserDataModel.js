@@ -33,7 +33,7 @@ export const businessAccountDataModel = {
 }
 
 
-export const PartnerDataModel = {
+export const partnerDataModel = {
     id: '',
     pname: '',//show
     mobileNumber: '',//show

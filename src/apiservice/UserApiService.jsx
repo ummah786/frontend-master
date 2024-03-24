@@ -11,10 +11,10 @@ export async function saveLoggedInUser(myUser, dispatch) {
 }
 
 //---------------- Bussiness Account API----------------------
-export function fetchBusinessDetailsBasedOnPrimaryUserIds(setFilteredEmployees, dispatch) {
+export function fetchBusinessDetailsBasedOnPrimaryUserIds(setFilteredEmployees, dispatch,id) {
     const fetchData = async () => {
         try {
-            const response = await axios.get('http://localhost:8700/hesabbook/business/account/all/2');
+            const response = await axios.get(`http://localhost:8700/hesabbook/business/account/all/${id}`);
             setFilteredEmployees(response.data.response);
             dispatch(addBusinessUser(response.data.response));
         } catch (error) {

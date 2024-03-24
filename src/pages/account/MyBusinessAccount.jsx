@@ -142,7 +142,7 @@ export const MyBusinessAccount = () => {
     };
 
     useEffect(() => {
-        fetchBusinessDetailsBasedOnPrimaryUserIds(setFilteredEmployees, dispatch);
+        fetchBusinessDetailsBasedOnPrimaryUserIds(setFilteredEmployees, dispatch,loginData.primary_user_id);
     }, [setFilteredEmployees]);
 
     return (

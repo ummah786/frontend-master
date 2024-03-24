@@ -1,4 +1,11 @@
 
+export const ADD_PARTY = 'ADD_PARTY';
+export const ADD_EXISTING_PARTY = 'ADD_EXISTING_PARTY';
+export const REMOVE_PARTY = 'REMOVE_PARTY';
+export const UPDATE_PARTY = 'UPDATE_PARTY';
+export const GET_PARTY='GET_PARTY';
+
+
 export const ADD_LOGIN_USER = 'ADD_LOGIN_USER';
 export const DELETE_LOGIN_USER = 'DELETE_LOGIN_USER';
 export const GET_LOGIN_USER = 'GET_LOGIN_USER';
@@ -24,6 +31,26 @@ export const ADD_EXISTING_INVENTORY = 'ADD_EXISTING_INVENTORY';
 export const REMOVE_INVENTORY = 'REMOVE_INVENTORY';
 export const UPDATE_INVENTORY = 'UPDATE_INVENTORY';
 export const GET_INVENTORY='GET_INVENTORY';
+
+
+export const addParty = (party) => ({
+    type: ADD_PARTY,
+    payload: party
+});
+export const addExistingParty = (party) => ({
+    type: ADD_EXISTING_PARTY,
+    payload: party
+})
+
+export const removeParty = (id) => ({
+    type: REMOVE_PARTY,
+    payload: id
+});
+
+export const updateParty= (party) => ({
+    type: UPDATE_PARTY,
+    payload: party
+});
 
 
 export const addBusinessUser = (businessUser) => ({

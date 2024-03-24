@@ -9,15 +9,15 @@ import SearchIcon from '@mui/icons-material/Search';
 import Button from "@mui/material/Button";
 import * as React from "react";
 import {useEffect, useState} from "react";
-import {manageUserDataModel, PartnerDataModel} from "../../datamodel/ManageUserDataModel";
+import {manageUserDataModel, partnerDataModel} from "../../datamodel/ManageUserDataModel";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from "@mui/material/IconButton";
 import axios from "axios";
 import UserRole from '../../jsonfile/Role';
 import MenuItem from "@mui/material/MenuItem";
-import {useDispatch} from 'react-redux';
-import {addExistingMangeUser, addManageUser, updateManageUser} from "../../redux/Action";
+import {useDispatch, useSelector} from 'react-redux';
+import {addExistingMangeUser, addManageUser, addParty, updateManageUser} from "../../redux/Action";
 import ArticleIcon from '@mui/icons-material/Article';
 import * as XLSX from 'xlsx';
 import {DataGrid} from "@mui/x-data-grid";
@@ -31,17 +31,17 @@ import Typography from "@mui/joy/Typography";
 export const Party = () => {
     const [enable, setEnable] = useState(true);
     const [enableBulk, setEnableBulk] = useState(true);
-    const [manageUserObj, setManageUserObj] = useState(PartnerDataModel);
+    const [manageUserObj, setManageUserObj] = useState(partnerDataModel);
     const [mangUser, setMangUser] = useState([]);
     const [excelData, setExcelData] = useState([]);
     const [columns, setColumns] = useState([]);
     const [files, setFiles] = useState([]);
     const [openCategory, setOpenCategory] = React.useState(false);
     const [openCompany, setOpenCompany] = React.useState(false);
-
     const dispatch = useDispatch();
+    const loginData = useSelector(state => state.loginReducerValue);
     const handleBooleanChange = () => {
-        setManageUserObj(PartnerDataModel);
+        setManageUserObj(partnerDataModel);
         setEnable(false);
         setEnableBulk(true);
     };
@@ -68,11 +68,13 @@ export const Party = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        manageUserObj['primary_user_id'] = loginData.primary_user_id;
+        manageUserObj['secondary_user_id'] = loginData.secondary_user_id;
         const response = await axios.post('http://localhost:8700/hesabbook/partner/save', manageUserObj);
         console.log('Submit Response :--    ', response.data);
         console.log('on Submit :-->', manageUserObj);
-        dispatch(addExistingMangeUser(response.data));
-        setManageUserObj(manageUserDataModel);
+        dispatch(addParty(response.data.response));
+        setManageUserObj(partnerDataModel);
         setEnable(prevState => !prevState);
     };
 
@@ -87,9 +89,7 @@ export const Party = () => {
         handleBooleanChange();
         findObjectById(id);
         fetchAllManageUserData();
-        dispatch(updateManageUser(data));
-
-
+    //    dispatch(updateManageUser(data));
     }
 
     const findObjectById = (id) => {
@@ -120,7 +120,7 @@ export const Party = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8700/hesabbook/partner/all');
+                const response = await axios.get(`http://localhost:8700/hesabbook/partner/all/${loginData.primary_user_id}`);
                 console.log('Party Response ', response.data.response);
                 if (response.data.code === 200) {
                     setMangUser(response.data.response);
@@ -130,7 +130,6 @@ export const Party = () => {
                 console.error('Error fetching data:', error);
             }
         };
-        fetchData();
     }, [setMangUser]);
 
     function handleView(id, row) {
