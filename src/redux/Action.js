@@ -5,7 +5,11 @@ export const GET_LOGIN_USER = 'GET_LOGIN_USER';
 
 
 
-
+export const ADD_BUSINESS_USER = 'ADD_BUSINESS_USER';
+export const ADD_EXISTING_BUSINESS_USER = 'ADD_EXISTING_BUSINESS_USER';
+export const REMOVE_BUSINESS_USER = 'REMOVE_BUSINESS_USER';
+export const UPDATE_BUSINESS_USER = 'UPDATE_BUSINESS_USER';
+export const GET_BUSINESS_USER='GET_BUSINESS_USER';
 
 
 export const ADD_MANAGE_USER = 'ADD_MANAGE_USER';
@@ -20,6 +24,26 @@ export const ADD_EXISTING_INVENTORY = 'ADD_EXISTING_INVENTORY';
 export const REMOVE_INVENTORY = 'REMOVE_INVENTORY';
 export const UPDATE_INVENTORY = 'UPDATE_INVENTORY';
 export const GET_INVENTORY='GET_INVENTORY';
+
+
+export const addBusinessUser = (businessUser) => ({
+    type: ADD_BUSINESS_USER,
+    payload: businessUser
+});
+export const addExistingBusinessUser = (businessUser) => ({
+    type: ADD_EXISTING_BUSINESS_USER,
+    payload: businessUser
+})
+
+export const removeBusinessUser = (id) => ({
+    type: REMOVE_BUSINESS_USER,
+    payload: id
+});
+
+export const updateBusinessUser= (businessUser) => ({
+    type: UPDATE_BUSINESS_USER,
+    payload: businessUser
+});
 
 export const addManageUser = (manageUser) => ({
     type: ADD_MANAGE_USER,

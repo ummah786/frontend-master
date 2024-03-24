@@ -28,6 +28,8 @@ export const businessAccountDataModel = {
     businessRegistrationType: '',
     logo: '',
     signature: '',
+    primary_user_id: '',
+    secondary_user_id: '',
 }
 
 
