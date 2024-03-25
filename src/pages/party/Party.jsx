@@ -39,6 +39,7 @@ export const Party = () => {
     const [filteredEmployees, setFilteredEmployees] = useState([]);
     const [openCategory, setOpenCategory] = React.useState(false);
     const [openCompany, setOpenCompany] = React.useState(false);
+    const [filter, setFilter] = useState('');
     const dispatch = useDispatch();
     const loginData = useSelector(state => state.loginReducerValue);
     const {partyUser} = useSelector(state => state.partyReducerValue);
@@ -47,6 +48,21 @@ export const Party = () => {
         setEnable(false);
         setEnableBulk(true);
     };
+    const handleFilterChange = event => {
+        setFilter(event.target.value);
+    };
+    useEffect(() => {
+        if (mangUser.length > 0) {
+            const filteredData = mangUser.filter(employee => {
+                return (
+                    employee.pname.toLowerCase().includes(filter.toLowerCase()) ||
+                    employee.company.includes(filter.toLowerCase()) ||
+                    employee.gstNumber.includes(filter.toLowerCase()) ||
+                    employee.mobileNumber.includes(filter));
+            });
+            setFilteredEmployees(filteredData);
+        }
+    }, [filter, mangUser]);
 
     function handleBooleanCancelChange() {
         setEnableBulk(true);
@@ -246,6 +262,8 @@ export const Party = () => {
                                         <SearchIcon/>
                                     </SearchIconWrapper>
                                     <StyledInputBase
+                                        value={filter}
+                                        onChange={handleFilterChange}
                                         placeholder="Search by Business Name,Company,Gst And Mobile Number"
                                         inputProps={{'aria-label': 'search'}}
                                     />

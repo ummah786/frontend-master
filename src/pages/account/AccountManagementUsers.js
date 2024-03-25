@@ -31,11 +31,9 @@ export const AccountManagementUsers = () => {
     const [filteredEmployees, setFilteredEmployees] = useState([]);
     const {manageUsers} = useSelector(state => state.manageUserReducerValue);
     const [fetchBusiness, setFetchBusiness] = useState([]);
-
-    const options = ['Asif 1', 'Raja 2', 'Create a business'];
-
     const [openModal, setOpenModal] = useState(false);
     const [selectedOption, setSelectedOption] = useState(null);
+    const loginData = useSelector(state => state.loginReducerValue);
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -181,28 +179,28 @@ export const AccountManagementUsers = () => {
         }
     }, [setMangUser]);
 
-    const  getProductKeyValuePair=async ()=> {
-        const response = await axios.get(`http://localhost:8700/hesabbook/product/key/value/get/business/5`);
+    const getProductKeyValuePair = async () => {
+        const response = await axios.get(`http://localhost:8700/hesabbook/product/key/value/get/business/${loginData.primary_user_id}`);
         console.log('Submit delete Response :--    ', response.data.response);
         let responseData = [];
         responseData = response.data.response;
-      //  responseData.push('Create a business');
+        //  responseData.push('Create a business');
         console.log('response Date after resp', responseData)
         setFetchBusiness(responseData);
     }
 
-    useEffect(  () => {
-         getProductKeyValuePair();
-    },[setFetchBusiness])
+    useEffect(() => {
+        getProductKeyValuePair();
+    }, [setFetchBusiness])
 
 
     const fetchData = async () => {
         try {
-            const response = await axios.get('http://localhost:8700/hesabbook/manageuser/all');
+            const response = await axios.get(`http://localhost:8700/hesabbook/manageuser/all/${loginData.primary_user_id}`);
             setMangUser(response.data);
             localStorage.setItem('mangeUser', mangUser);
-            dispatch(addManageUser(response.data));
-            setFilteredEmployees(response.data);
+            dispatch(addManageUser(response.data.response));
+            setFilteredEmployees(response.data.response);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
