@@ -96,6 +96,8 @@ export const AccountManagementUsers = () => {
     };
     const handleSubmit = async (event) => {
         event.preventDefault();
+        manageUserObj['primary_user_id'] = loginData.primary_user_id;
+        manageUserObj['secondary_user_id'] = loginData.secondary_user_id;
         const response = await axios.post('http://localhost:8700/hesabbook/manageuser/save', manageUserObj);
 
         addObjectOnTop(response.data.response)
@@ -197,7 +199,7 @@ export const AccountManagementUsers = () => {
     const fetchData = async () => {
         try {
             const response = await axios.get(`http://localhost:8700/hesabbook/manageuser/all/${loginData.primary_user_id}`);
-            setMangUser(response.data);
+            setMangUser(response.data.response);
             localStorage.setItem('mangeUser', mangUser);
             dispatch(addManageUser(response.data.response));
             setFilteredEmployees(response.data.response);
