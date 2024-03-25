@@ -20,6 +20,7 @@ import {MyBusinessAccount} from "./pages/account/MyBusinessAccount";
 import {Party} from "./pages/party/Party";
 import {InventoryGodown} from "./pages/stock/InventoryGodown";
 import {InventoryShop} from "./pages/stock/InventoryShop";
+import {ChatApp} from "./WebRtc/ChatApp";
 
 function App() {
     const [flag, setFlag] = useState(true);
@@ -55,8 +56,7 @@ function App() {
                                 <Route path="/account/business" element={<MyBusinessAccount/>}/>
                                 <Route path="/stock/shop" element={<InventoryShop/>}/>
                                 <Route path="/stock/godowon" element={<InventoryGodown/>}/>
-
-
+                                <Route path="/chat" element={<ChatApp/>}/>
                                 <Route path="*" element={<> not found</>}/>
                             </Routes>
                         </SideBar>

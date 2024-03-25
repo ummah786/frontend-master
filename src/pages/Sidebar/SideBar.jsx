@@ -148,6 +148,10 @@ const routes = [
     path: "/settings",
     name: "Serttings",
     icon: <AiFillHeart />,
+  },  {
+    path: "/chat",
+    name: "Chat",
+    icon: <AiFillHeart />,
   },
   {
     path: "/help",

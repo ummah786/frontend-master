@@ -1,45 +1,48 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useRef } from 'react';
 import io from 'socket.io-client';
+import axios from "axios";
 
 export const ChatApp = () => {
-    const [socket, setSocket] = useState(null);
-    const [messages, setMessages] = useState([]);
-    const [inputMessage, setInputMessage] = useState('');
+    const localVideoRef = useRef();
+    const remoteVideoRef = useRef();
+    const peerConnectionRef = useRef();
 
     useEffect(() => {
-        const socket = io('http://localhost:8700'); // Replace with your backend URL
-        setSocket(socket);
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('http://localhost:8700/generate-offer');
+                const offer = response.data.offer;
 
-        socket.on('message', (message) => {
-            setMessages((prevMessages) => [...prevMessages, message]);
-        });
+                const peerConnection = new RTCPeerConnection();
+                peerConnectionRef.current = peerConnection;
+
+                peerConnection.ontrack = event => {
+                    remoteVideoRef.current.srcObject = event.streams[0];
+                };
+
+                await peerConnection.setRemoteDescription(offer);
+                const answer = await peerConnection.createAnswer();
+                await peerConnection.setLocalDescription(answer);
+
+                await axios.post('http://localhost:8700/send-answer', { answer });
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
+        fetchData();
 
         return () => {
-            socket.disconnect();
+            if (peerConnectionRef.current) {
+                peerConnectionRef.current.close();
+            }
         };
     }, []);
 
-    const sendMessage = () => {
-        if (inputMessage.trim() !== '') {
-            socket.emit('message', inputMessage);
-            setInputMessage('');
-        }
-    };
     return (
-        <>
-            <div>
-                <div>
-                    {messages.map((message, index) => (
-                        <div key={index}>{message}</div>
-                    ))}
-                </div>
-                <input
-                    type="text"
-                    value={inputMessage}
-                    onChange={(e) => setInputMessage(e.target.value)}
-                />
-                <button onClick={sendMessage}>Send</button>
-            </div>
-        </>
-    )
-}
+        <div>
+            <video ref={localVideoRef} autoPlay muted></video>
+            <video ref={remoteVideoRef} autoPlay></video>
+        </div>
+    );
+};
