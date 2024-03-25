@@ -122,6 +122,34 @@ export const Party = () => {
         setFilteredEmployees(partyUser);
     }
 
+    useEffect(() => {
+        if (partyUser.length > 1 && !(partyUser[0].id === '')) {
+            console.log("done your job")
+            setFilteredEmployees(partyUser);
+        }
+    }, [partyUser]);
+
+
+    useEffect(() => {
+        if (partyUser.length > 1 && !(partyUser[0].id === '')) {
+            console.log("done your job")
+            setFilteredEmployees(partyUser);
+        } else {
+            // fetchData();
+        }
+    }, [partyUser]);
+
+    /*    const fetchData = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8700/hesabbook/manageuser/all/${loginData.primary_user_id}`);
+                setMangUser(response.data.response);
+                dispatch(a(response.data.response));
+                setFilteredEmployees(response.data.response);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };*/
+
     function handleEdit(id, data) {
         handleBooleanChange();
         findObjectById(id);
