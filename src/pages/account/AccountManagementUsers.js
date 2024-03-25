@@ -100,7 +100,7 @@ export const AccountManagementUsers = () => {
         event.preventDefault();
         const response = await axios.post('http://localhost:8700/hesabbook/manageuser/save', manageUserObj);
 
-        addObjectOnTop(response.data)
+        addObjectOnTop(response.data.response)
         setManageUserObj(manageUserDataModel);
         setEnable(prevState => !prevState);
     };

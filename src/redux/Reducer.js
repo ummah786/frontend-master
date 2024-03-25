@@ -49,12 +49,12 @@ export const partyReducer = (state = {partyUser: [partnerDataModel]}, action) =>
         case REMOVE_PARTY:
             return {
                 ...state,
-                partyUser: state.manageUsers.filter(manageUser => manageUser.id !== action.payload)
+                partyUser: state.partyUser.filter(manageUser => manageUser.id !== action.payload)
             };
         case UPDATE_PARTY:
             return {
                 ...state,
-                partyUser: state.manageUsers.map(manageUser =>
+                partyUser: state.partyUser.map(manageUser =>
                     manageUser.id === action.payload.id ? action.payload : manageUser
                 )
             };

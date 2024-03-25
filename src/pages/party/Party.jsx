@@ -9,7 +9,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import Button from "@mui/material/Button";
 import * as React from "react";
 import {useEffect, useState} from "react";
-import {manageUserDataModel, partnerDataModel} from "../../datamodel/ManageUserDataModel";
+import {partnerDataModel} from "../../datamodel/ManageUserDataModel";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from "@mui/material/IconButton";
@@ -17,7 +17,7 @@ import axios from "axios";
 import UserRole from '../../jsonfile/Role';
 import MenuItem from "@mui/material/MenuItem";
 import {useDispatch, useSelector} from 'react-redux';
-import {addExistingMangeUser, addManageUser, addParty, updateManageUser} from "../../redux/Action";
+import {addManageUser, addParty, removeParty} from "../../redux/Action";
 import ArticleIcon from '@mui/icons-material/Article';
 import * as XLSX from 'xlsx';
 import {DataGrid} from "@mui/x-data-grid";
@@ -36,10 +36,12 @@ export const Party = () => {
     const [excelData, setExcelData] = useState([]);
     const [columns, setColumns] = useState([]);
     const [files, setFiles] = useState([]);
+    const [filteredEmployees, setFilteredEmployees] = useState([]);
     const [openCategory, setOpenCategory] = React.useState(false);
     const [openCompany, setOpenCompany] = React.useState(false);
     const dispatch = useDispatch();
     const loginData = useSelector(state => state.loginReducerValue);
+    const {partyUser} = useSelector(state => state.partyReducerValue);
     const handleBooleanChange = () => {
         setManageUserObj(partnerDataModel);
         setEnable(false);
@@ -73,23 +75,42 @@ export const Party = () => {
         const response = await axios.post('http://localhost:8700/hesabbook/partner/save', manageUserObj);
         console.log('Submit Response :--    ', response.data);
         console.log('on Submit :-->', manageUserObj);
-        dispatch(addParty(response.data.response));
+        addObjectOnTop(response.data.response)
         setManageUserObj(partnerDataModel);
         setEnable(prevState => !prevState);
+    };
+
+
+    const addObjectOnTop = (newObject) => {
+        const existingIndex = partyUser.findIndex(item => item.id === newObject.id);
+        if (existingIndex === -1) {
+            setFilteredEmployees([newObject, ...partyUser]);
+            setMangUser([newObject, ...partyUser]);
+            dispatch(addParty([newObject, ...partyUser]));
+        } else {
+            const updatedArray = [...partyUser];
+            updatedArray[existingIndex] = newObject;
+            setFilteredEmployees(updatedArray);
+            setMangUser(updatedArray);
+            dispatch(addParty(updatedArray));
+        }
     };
 
     async function handleDelete(id, event) {
         console.log("DELETE ID " + id)
         const response = await axios.post(`http://localhost:8700/hesabbook/partner/delete/${id}`);
         console.log('Submit delete Response :--    ', response.data);
-        fetchAllManageUserData();
+        dispatch(removeParty(id));
+        // fetchAllManageUserData();
+
+        setFilteredEmployees(partyUser);
     }
 
     function handleEdit(id, data) {
         handleBooleanChange();
         findObjectById(id);
         fetchAllManageUserData();
-    //    dispatch(updateManageUser(data));
+        //    dispatch(updateManageUser(data));
     }
 
     const findObjectById = (id) => {
@@ -125,11 +146,14 @@ export const Party = () => {
                 if (response.data.code === 200) {
                     setMangUser(response.data.response);
                     localStorage.setItem('Party-details', response.data.response);
+                    dispatch(addParty(response.data.response));
+                    setFilteredEmployees(response.data.response);
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
+        fetchData();
     }, [setMangUser]);
 
     function handleView(id, row) {
@@ -244,7 +268,7 @@ export const Party = () => {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {mangUser.map((row) => (
+                                        {filteredEmployees.map((row) => (
                                             <StyledTableRow key={row.id}>
                                                 <StyledTableCell align="center">{row.pname}</StyledTableCell>
                                                 <StyledTableCell
