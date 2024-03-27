@@ -1,5 +1,5 @@
 import {applyMiddleware, combineReducers, compose, createStore} from 'redux';
-import {businessUserReducer, LoginReducer, manageUserReducer, partyReducer} from './Reducer';
+import {businessUserReducer, godownReducer, LoginReducer, manageUserReducer, partyReducer} from './Reducer';
 
 import {thunk} from 'redux-thunk';
 
@@ -8,7 +8,8 @@ const reducer = combineReducers({
     manageUserReducerValue: manageUserReducer,
     loginReducerValue: LoginReducer,
     manageBusinessReducerValue: businessUserReducer,
-    partyReducerValue: partyReducer
+    partyReducerValue: partyReducer,
+    godownReducerValue: godownReducer
 });
 const store = createStore(reducer,
     composeEnhancers(

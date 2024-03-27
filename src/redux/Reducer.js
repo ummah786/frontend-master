@@ -3,6 +3,7 @@ import {
     ADD_EXISTING_BUSINESS_USER,
     ADD_EXISTING_MANAGE_USER,
     ADD_EXISTING_PARTY,
+    ADD_GODOWN,
     ADD_LOGIN_USER,
     ADD_MANAGE_USER,
     ADD_PARTY,
@@ -10,14 +11,17 @@ import {
     GET_MANAGE_USER,
     GET_PARTY,
     REMOVE_BUSINESS_USER,
+    REMOVE_GODOWN,
     REMOVE_MANAGE_USER,
     REMOVE_PARTY,
     UPDATE_BUSINESS_USER,
+    UPDATE_GODOWN,
     UPDATE_MANAGE_USER,
     UPDATE_PARTY
 } from './Action';
 import {
     businessAccountDataModel,
+    godownDataModel,
     manageUserDataModel,
     partnerDataModel,
     userDetailModel
@@ -32,6 +36,30 @@ export const LoginReducer = (state = {loginData: userDetailModel}, action) => {
             return state;
     }
 }
+
+export const godownReducer = (state = {godownUser: [godownDataModel]}, action) => {
+    switch (action.type) {
+        case ADD_GODOWN:
+            return {
+                ...state,
+                godownUser: action.payload
+            };
+        case REMOVE_GODOWN:
+            return {
+                ...state,
+                godownUser: state.godownUser.filter(manageUser => manageUser.id !== action.payload)
+            };
+        case UPDATE_GODOWN:
+            return {
+                ...state,
+                godownUser: state.godownUser.map(manageUser =>
+                    manageUser.id === action.payload.id ? action.payload : manageUser
+                )
+            };
+        default:
+            return state;
+    }
+};
 
 
 export const partyReducer = (state = {partyUser: [partnerDataModel]}, action) => {

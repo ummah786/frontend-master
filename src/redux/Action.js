@@ -11,6 +11,12 @@ export const DELETE_LOGIN_USER = 'DELETE_LOGIN_USER';
 export const GET_LOGIN_USER = 'GET_LOGIN_USER';
 
 
+export const ADD_GODOWN = 'ADD_GODOWN';
+export const DELETE_GODOWN = 'DELETE_GODOWN';
+export const REMOVE_GODOWN = 'REMOVE_GODOWN';
+export const UPDATE_GODOWN = 'UPDATE_GODOWN';
+export const GET_GODOWN = 'GET_GODOWN';
+
 
 export const ADD_BUSINESS_USER = 'ADD_BUSINESS_USER';
 export const ADD_EXISTING_BUSINESS_USER = 'ADD_EXISTING_BUSINESS_USER';
@@ -32,6 +38,22 @@ export const REMOVE_INVENTORY = 'REMOVE_INVENTORY';
 export const UPDATE_INVENTORY = 'UPDATE_INVENTORY';
 export const GET_INVENTORY='GET_INVENTORY';
 
+
+
+
+export const updateGodown = (godown) => ({
+    type: UPDATE_GODOWN,
+    payload: godown
+});
+export const addGodown = (godown) => ({
+    type: ADD_GODOWN,
+    payload: godown
+})
+
+export const removeGodown = (id) => ({
+    type: REMOVE_GODOWN,
+    payload: id
+});
 
 export const addParty = (party) => ({
     type: ADD_PARTY,

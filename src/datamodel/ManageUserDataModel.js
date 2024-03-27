@@ -111,3 +111,17 @@ export const userDetailModel = {
     token: '',
 
 }
+
+
+export const godownDataModel = {
+    id: '',
+    wareHouseName: '',
+    address: '',
+    state: '',
+    zipCode: '',
+    notes: '',
+    date: '',
+    city:'',
+    primary_user_id: '',
+    secondary_user_id: ''
+}
