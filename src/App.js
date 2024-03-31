@@ -45,6 +45,8 @@ function App() {
                                 <Route path="/" element={<Dashboard onBooleanChange={handleBooleanChange}/>}/>
                                 <Route path="/party" element={<Party/>}/>
                                 <Route path="/users" element={<Users/>}/>
+                                <Route path="/app/dashboard"
+                                       element={<Dashboard onBooleanChange={handleBooleanChange}/>}/>
                                 <Route path="/messages" element={<Messages/>}/>
                                 <Route path="/analytics" element={<Analytics/>}/>
                                 <Route path="/file-manager" element={<FileManager/>}/>

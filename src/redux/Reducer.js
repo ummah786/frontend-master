@@ -4,6 +4,11 @@ import {
     ADD_EXISTING_MANAGE_USER,
     ADD_EXISTING_PARTY,
     ADD_GODOWN,
+    ADD_KEY_BUSINESS,
+    ADD_KEY_CATEGORY,
+    ADD_KEY_COMPANY,
+    ADD_KEY_RACK,
+    ADD_KEY_WAREHOUSE,
     ADD_LOGIN_USER,
     ADD_MANAGE_USER,
     ADD_PARTY,
@@ -36,7 +41,6 @@ export const LoginReducer = (state = {loginData: userDetailModel}, action) => {
             return state;
     }
 }
-
 export const godownReducer = (state = {godownUser: [godownDataModel]}, action) => {
     switch (action.type) {
         case ADD_GODOWN:
@@ -60,8 +64,6 @@ export const godownReducer = (state = {godownUser: [godownDataModel]}, action) =
             return state;
     }
 };
-
-
 export const partyReducer = (state = {partyUser: [partnerDataModel]}, action) => {
     switch (action.type) {
         case ADD_EXISTING_PARTY:
@@ -95,8 +97,6 @@ export const partyReducer = (state = {partyUser: [partnerDataModel]}, action) =>
             return state;
     }
 };
-
-
 export const manageUserReducer = (state = {manageUsers: [manageUserDataModel]}, action) => {
     switch (action.type) {
         case ADD_EXISTING_MANAGE_USER:
@@ -131,7 +131,6 @@ export const manageUserReducer = (state = {manageUsers: [manageUserDataModel]}, 
             return state;
     }
 };
-
 export const businessUserReducer = (state = {businessUser: [businessAccountDataModel]}, action) => {
     switch (action.type) {
         case ADD_EXISTING_BUSINESS_USER:
@@ -167,4 +166,47 @@ export const businessUserReducer = (state = {businessUser: [businessAccountDataM
     }
 };
 
-export default {manageUserReducer, LoginReducer, businessUserReducer, partyReducer};
+export const keyCompanyReducer = (state = {keyCompanyData: []}, action) => {
+    switch (action.type) {
+        case ADD_KEY_COMPANY:
+            return action.payload;
+        default:
+            return state;
+    }
+}
+export const keyBusinessReducer = (state = {KeyBusinessData: []}, action) => {
+    switch (action.type) {
+        case ADD_KEY_BUSINESS:
+            return action.payload;
+        default:
+            return state;
+    }
+}
+export const keyRackReducer = (state = {KeyRackData: []}, action) => {
+    switch (action.type) {
+        case ADD_KEY_RACK:
+            return action.payload;
+        default:
+            return state;
+    }
+}
+export const keyWarehouseReducer = (state = {KeyWarehouseData: []}, action) => {
+    switch (action.type) {
+        case ADD_KEY_WAREHOUSE:
+            return action.payload;
+        default:
+            return state;
+    }
+}
+export const keyCategoryReducer = (state = {KeyCategoryData: []}, action) => {
+    switch (action.type) {
+        case ADD_KEY_CATEGORY:
+            return action.payload;
+        default:
+            return state;
+    }
+}
+export default {
+    manageUserReducer, LoginReducer, businessUserReducer, partyReducer, keyCompanyReducer,
+    keyBusinessReducer, keyRackReducer, keyWarehouseReducer, keyCategoryReducer
+};

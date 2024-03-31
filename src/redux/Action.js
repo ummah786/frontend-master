@@ -1,9 +1,8 @@
-
 export const ADD_PARTY = 'ADD_PARTY';
 export const ADD_EXISTING_PARTY = 'ADD_EXISTING_PARTY';
 export const REMOVE_PARTY = 'REMOVE_PARTY';
 export const UPDATE_PARTY = 'UPDATE_PARTY';
-export const GET_PARTY='GET_PARTY';
+export const GET_PARTY = 'GET_PARTY';
 
 
 export const ADD_LOGIN_USER = 'ADD_LOGIN_USER';
@@ -22,23 +21,46 @@ export const ADD_BUSINESS_USER = 'ADD_BUSINESS_USER';
 export const ADD_EXISTING_BUSINESS_USER = 'ADD_EXISTING_BUSINESS_USER';
 export const REMOVE_BUSINESS_USER = 'REMOVE_BUSINESS_USER';
 export const UPDATE_BUSINESS_USER = 'UPDATE_BUSINESS_USER';
-export const GET_BUSINESS_USER='GET_BUSINESS_USER';
+export const GET_BUSINESS_USER = 'GET_BUSINESS_USER';
 
 
 export const ADD_MANAGE_USER = 'ADD_MANAGE_USER';
 export const ADD_EXISTING_MANAGE_USER = 'ADD_EXISTING_MANAGE_USER';
 export const REMOVE_MANAGE_USER = 'REMOVE_MANAGE_USER';
 export const UPDATE_MANAGE_USER = 'UPDATE_MANAGE_USER';
-export const GET_MANAGE_USER='GET_MANAGE_USER';
+export const GET_MANAGE_USER = 'GET_MANAGE_USER';
 
 
 export const ADD_INVENTORY = 'ADD_INVENTORY';
 export const ADD_EXISTING_INVENTORY = 'ADD_EXISTING_INVENTORY';
 export const REMOVE_INVENTORY = 'REMOVE_INVENTORY';
 export const UPDATE_INVENTORY = 'UPDATE_INVENTORY';
-export const GET_INVENTORY='GET_INVENTORY';
-
-
+export const GET_INVENTORY = 'GET_INVENTORY';
+export const ADD_KEY_COMPANY = 'ADD_KEY_COMPANY';
+export const ADD_KEY_BUSINESS = 'ADD_KEY_BUSINESS';
+export const ADD_KEY_RACK = 'ADD_KEY_RACK';
+export const ADD_KEY_WAREHOUSE = 'ADD_KEY_HOUSE';
+export const ADD_KEY_CATEGORY = 'ADD_KEY_CATEGORY';
+export const addKeyCompany = (keyCompany) => ({
+    type: ADD_KEY_COMPANY,
+    payload: keyCompany
+});
+export const addKeyBusiness = (KeyBusiness) => ({
+    type: ADD_KEY_BUSINESS,
+    payload: KeyBusiness
+});
+export const addKeyRack = (KeyRack) => ({
+    type: ADD_KEY_RACK,
+    payload: KeyRack
+});
+export const addKeyWarehouse = (KeyWarehouse) => ({
+    type: ADD_KEY_WAREHOUSE,
+    payload: KeyWarehouse
+});
+export const addKeyCategory = (KeyCategory) => ({
+    type: ADD_KEY_CATEGORY,
+    payload: KeyCategory
+});
 
 
 export const updateGodown = (godown) => ({
@@ -69,7 +91,7 @@ export const removeParty = (id) => ({
     payload: id
 });
 
-export const updateParty= (party) => ({
+export const updateParty = (party) => ({
     type: UPDATE_PARTY,
     payload: party
 });
@@ -89,7 +111,7 @@ export const removeBusinessUser = (id) => ({
     payload: id
 });
 
-export const updateBusinessUser= (businessUser) => ({
+export const updateBusinessUser = (businessUser) => ({
     type: UPDATE_BUSINESS_USER,
     payload: businessUser
 });
@@ -113,8 +135,8 @@ export const updateManageUser = (manageUser) => ({
     payload: manageUser
 });
 
-export const getManageUser=()=>({
-    type:GET_MANAGE_USER
+export const getManageUser = () => ({
+    type: GET_MANAGE_USER
 })
 
 
@@ -122,7 +144,6 @@ export const addLogin = (login) => ({
     type: ADD_LOGIN_USER,
     payload: login
 });
-
 
 
 export const addInventory = (manageUser) => ({
@@ -144,6 +165,6 @@ export const updateInventory = (manageUser) => ({
     payload: manageUser
 });
 
-export const getInventory=()=>({
-    type:GET_INVENTORY
+export const getInventory = () => ({
+    type: GET_INVENTORY
 })
