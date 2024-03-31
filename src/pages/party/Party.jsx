@@ -386,57 +386,10 @@ export const Party = () => {
                                                sx={{margin: '10px'}}
                                                value={manageUserObj.shippingAddress}
                                                onChange={(event) => handleTextFieldChange(event, 'shippingAddress')}/>
-                                    <TextField
-                                        fullWidth
-                                        select
-                                        value={manageUserObj.company}
-                                        onChange={(event) => handleTextFieldChange(event, 'company')}
-                                        label="Company Name"
-                                        variant="outlined"
-                                        margin="normal"
-                                    >
-                                        <MenuItem onClick={() => setOpenCompany(true)}>Create a New Company</MenuItem>
-                                        {
-                                            UserRole.GST.map(userrole => (
-                                                <MenuItem key={userrole.name}
-                                                          value={userrole.name}>{userrole.name}</MenuItem>
-                                            ))
-                                        }
-
-                                    </TextField>
-                                    <Modal
-                                        aria-labelledby="modal-title"
-                                        aria-describedby="modal-desc"
-                                        open={openCompany}
-                                        onClose={() => setOpenCompany(false)}
-                                        sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
-                                    >
-                                        <Sheet
-                                            variant="outlined"
-                                            sx={{
-                                                maxWidth: 500,
-                                                borderRadius: 'md',
-                                                p: 3,
-                                                boxShadow: 'lg',
-                                            }}
-                                        >
-                                            <ModalClose variant="plain" sx={{m: 1}}/>
-                                            <Typography
-                                                component="h2"
-                                                id="modal-title"
-                                                level="h4"
-                                                textColor="inherit"
-                                                fontWeight="lg"
-                                                mb={1}
-                                            >
-                                                Company
-                                            </Typography>
-                                            <Typography id="modal-desc" textColor="text.tertiary">
-                                                Make sure to use <code>aria-labelledby</code> on the modal dialog with an
-                                                optional <code>aria-describedby</code> attribute.
-                                            </Typography>
-                                        </Sheet>
-                                    </Modal>
+                                    <TextField id="outlined-basic" label="Company Name" variant="outlined"
+                                               sx={{margin: '10px'}}
+                                               value={manageUserObj.company}
+                                               onChange={(event) => handleTextFieldChange(event, 'company')}/>
                                 </Box>
                                 <Box sx={{display: 'flex', flexDirection: 'column', margin: "10px", paddingRight: '50px'}}>
                                     <TextField

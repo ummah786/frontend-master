@@ -11,7 +11,7 @@ export async function saveLoggedInUser(myUser, dispatch) {
 }
 
 //---------------- Bussiness Account API----------------------
-export function fetchBusinessDetailsBasedOnPrimaryUserIds(setFilteredEmployees, dispatch,id) {
+export function fetchBusinessDetailsBasedOnPrimaryUserIds(setFilteredEmployees, dispatch, id) {
     const fetchData = async () => {
         try {
             const response = await axios.get(`http://localhost:8700/hesabbook/business/account/all/${id}`);
@@ -25,11 +25,12 @@ export function fetchBusinessDetailsBasedOnPrimaryUserIds(setFilteredEmployees, 
 }
 
 
-export async function saveBusinessAccount(manageUserObj, loginData, addObjectOnTop, setFilteredEmployees, setEnable) {
+export async function saveBusinessAccount(manageUserObj, loginData, addObjectOnTop, setFilteredEmployees, setEnable, addBusinessName) {
     manageUserObj['primary_user_id'] = loginData.primary_user_id;
     manageUserObj['secondary_user_id'] = loginData.secondary_user_id;
     const response = await axios.post('http://localhost:8700/hesabbook/business/account/save', manageUserObj);
     addObjectOnTop(response.data.response)
+    addBusinessName(response.data.response.businessName);
     setFilteredEmployees(manageUserDataModel);
     setEnable(prevState => !prevState);
 }
@@ -45,7 +46,7 @@ export async function saveGodown(manageUserObj, loginData, addObjectOnTop, setFi
     setEnable(prevState => !prevState);
 }
 
-export function fetchGodownBasedOnPrimaryUserIds(setFilteredEmployees, dispatch,id) {
+export function fetchGodownBasedOnPrimaryUserIds(setFilteredEmployees, dispatch, id) {
     const fetchData = async () => {
         try {
             const response = await axios.get(`http://localhost:8700/hesabbook/godown/all/${id}`);

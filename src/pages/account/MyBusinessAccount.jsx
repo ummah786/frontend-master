@@ -15,7 +15,7 @@ import axios from "axios";
 import UserRole from '../../jsonfile/Role';
 import MenuItem from "@mui/material/MenuItem";
 import {useDispatch, useSelector} from 'react-redux';
-import {addBusinessUser, removeBusinessUser, updateBusinessUser} from "../../redux/Action";
+import {addBusinessUser, addKeyBusiness, removeBusinessUser, updateBusinessUser} from "../../redux/Action";
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControl from '@mui/material/FormControl';
@@ -35,6 +35,7 @@ export const MyBusinessAccount = () => {
     const fileInputRef = useRef(null);
     const dispatch = useDispatch();
     const loginData = useSelector(state => state.loginReducerValue);
+    const KeyBusinessData = useSelector(state => state.keyBusinessReducerValue);
     const {businessUser} = useSelector(state => state.manageBusinessReducerValue);
     const [filteredEmployees, setFilteredEmployees] = useState([]);
     const [filter, setFilter] = useState('');
@@ -56,8 +57,12 @@ export const MyBusinessAccount = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        await saveBusinessAccount(manageUserObj, loginData, addObjectOnTop, setManageUserObj, setEnable);
+        await saveBusinessAccount(manageUserObj, loginData, addObjectOnTop, setManageUserObj, setEnable,addBusinessName);
     };
+
+    const addBusinessName=(newObject)=>{
+        dispatch(addKeyBusiness([newObject,...KeyBusinessData]))
+    }
     const addObjectOnTop = (newObject) => {
         const existingIndex = businessUser.findIndex(item => item.id === newObject.id);
         if (existingIndex === -1) {
