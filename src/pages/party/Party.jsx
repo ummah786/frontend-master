@@ -17,7 +17,7 @@ import axios from "axios";
 import UserRole from '../../jsonfile/Role';
 import MenuItem from "@mui/material/MenuItem";
 import {useDispatch, useSelector} from 'react-redux';
-import {addManageUser, addParty, removeParty} from "../../redux/Action";
+import {addKeyCompany, addManageUser, addParty, removeParty} from "../../redux/Action";
 import ArticleIcon from '@mui/icons-material/Article';
 import * as XLSX from 'xlsx';
 import {DataGrid} from "@mui/x-data-grid";
@@ -43,6 +43,7 @@ export const Party = () => {
     const dispatch = useDispatch();
     const loginData = useSelector(state => state.loginReducerValue);
     const {partyUser} = useSelector(state => state.partyReducerValue);
+    const keyCompanyData = useSelector(state => state.keyCompanyReducerValue);
     const handleBooleanChange = () => {
         setManageUserObj(partnerDataModel);
         setEnable(false);
@@ -91,11 +92,15 @@ export const Party = () => {
         const response = await axios.post('http://localhost:8700/hesabbook/partner/save', manageUserObj);
         console.log('Submit Response :--    ', response.data);
         console.log('on Submit :-->', manageUserObj);
-        addObjectOnTop(response.data.response)
+        addObjectOnTop(response.data.response);
+        addBusinessName(response.data.response.company);
         setManageUserObj(partnerDataModel);
         setEnable(prevState => !prevState);
     };
 
+    const addBusinessName = (newObject) => {
+        dispatch(addKeyCompany([newObject, ...keyCompanyData]))
+    }
 
     const addObjectOnTop = (newObject) => {
         const existingIndex = partyUser.findIndex(item => item.id === newObject.id);
