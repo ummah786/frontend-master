@@ -503,10 +503,10 @@ export const Party = () => {
                                     >
                                         <MenuItem onClick={() => setOpenCategory(true)}>Create a New Category</MenuItem>
                                         {
-                                            keyCategoryData.map(userrole => (
+                                            keyCategoryData.length > 0 ? (keyCategoryData.map(userrole => (
                                                 <MenuItem key={userrole}
                                                           value={userrole}>{userrole}</MenuItem>
-                                            ))
+                                            )))
                                         }
 
                                     </TextField>
