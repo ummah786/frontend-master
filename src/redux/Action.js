@@ -41,6 +41,7 @@ export const ADD_KEY_BUSINESS = 'ADD_KEY_BUSINESS';
 export const ADD_KEY_RACK = 'ADD_KEY_RACK';
 export const ADD_KEY_WAREHOUSE = 'ADD_KEY_HOUSE';
 export const ADD_KEY_CATEGORY = 'ADD_KEY_CATEGORY';
+export const DELETE_KEY_CATEGORY = 'DELETE_KEY_CATEGORY';
 export const addKeyCompany = (keyCompany) => ({
     type: ADD_KEY_COMPANY,
     payload: keyCompany
@@ -61,7 +62,10 @@ export const addKeyCategory = (KeyCategory) => ({
     type: ADD_KEY_CATEGORY,
     payload: KeyCategory
 });
-
+export const removeKeyCategory = (id) => ({
+    type: DELETE_KEY_CATEGORY,
+    payload: id
+});
 
 export const updateGodown = (godown) => ({
     type: UPDATE_GODOWN,

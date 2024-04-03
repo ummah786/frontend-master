@@ -121,7 +121,15 @@ export const godownDataModel = {
     zipCode: '',
     notes: '',
     date: '',
-    city:'',
+    city: '',
     primary_user_id: '',
     secondary_user_id: ''
+}
+
+export const productKeyValueModel = {
+    id: '',
+    kes: '',
+    primary_user_id: '',
+    secondary_user_id: '',
+    value: ''
 }

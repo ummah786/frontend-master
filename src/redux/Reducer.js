@@ -12,6 +12,7 @@ import {
     ADD_LOGIN_USER,
     ADD_MANAGE_USER,
     ADD_PARTY,
+    DELETE_KEY_CATEGORY,
     GET_BUSINESS_USER,
     GET_MANAGE_USER,
     GET_PARTY,
@@ -202,6 +203,11 @@ export const keyCategoryReducer = (state = {KeyCategoryData: []}, action) => {
     switch (action.type) {
         case ADD_KEY_CATEGORY:
             return action.payload;
+        case DELETE_KEY_CATEGORY:
+            return {
+                ...state,
+                KeyCategoryData: state.filter(manageUser => manageUser !== action.payload)
+            };
         default:
             return state;
     }

@@ -11,21 +11,31 @@ import * as React from "react";
 import {useEffect, useState} from "react";
 import {partnerDataModel} from "../../datamodel/ManageUserDataModel";
 import DeleteIcon from '@mui/icons-material/Delete';
+import Delete from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from "@mui/material/IconButton";
 import axios from "axios";
 import UserRole from '../../jsonfile/Role';
 import MenuItem from "@mui/material/MenuItem";
 import {useDispatch, useSelector} from 'react-redux';
-import {addKeyCompany, addManageUser, addParty, removeParty} from "../../redux/Action";
+import {
+    addKeyCategory,
+    addKeyCompany,
+    addManageUser,
+    addParty,
+    removeKeyCategory,
+    removeParty
+} from "../../redux/Action";
 import ArticleIcon from '@mui/icons-material/Article';
 import * as XLSX from 'xlsx';
 import {DataGrid} from "@mui/x-data-grid";
 import {Search, SearchIconWrapper, StyledInputBase, StyledTableCell, StyledTableRow} from "../../commonStyle";
 import Modal from "@mui/joy/Modal";
-import Sheet from "@mui/joy/Sheet";
 import ModalClose from "@mui/joy/ModalClose";
 import Typography from "@mui/joy/Typography";
+import {Transition} from "react-transition-group";
+import {DELETE_CATEGORY, SAVE_CATEGORY} from "../apiendpoint/APIEndPoint";
+import {List, ListItem, ListItemButton} from "@mui/joy";
 
 
 export const Party = () => {
@@ -38,12 +48,18 @@ export const Party = () => {
     const [files, setFiles] = useState([]);
     const [filteredEmployees, setFilteredEmployees] = useState([]);
     const [openCategory, setOpenCategory] = React.useState(false);
+    const [categoryApi, setCategoryApi] = useState();
     const [openCompany, setOpenCompany] = React.useState(false);
+    const [open, setOpen] = React.useState(false);
     const [filter, setFilter] = useState('');
     const dispatch = useDispatch();
     const loginData = useSelector(state => state.loginReducerValue);
     const {partyUser} = useSelector(state => state.partyReducerValue);
     const keyCompanyData = useSelector(state => state.keyCompanyReducerValue);
+    const keyCategoryData = useSelector(state => state.keyCategoryReducerValue);
+
+    const [addCategory, setAddCategory] = React.useState([]);
+
     const handleBooleanChange = () => {
         setManageUserObj(partnerDataModel);
         setEnable(false);
@@ -94,6 +110,7 @@ export const Party = () => {
         console.log('on Submit :-->', manageUserObj);
         addObjectOnTop(response.data.response);
         addBusinessName(response.data.response.company);
+
         setManageUserObj(partnerDataModel);
         setEnable(prevState => !prevState);
     };
@@ -274,6 +291,64 @@ export const Party = () => {
         console.log("response from handleSave ", response.data)
 
     };
+
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+    };
+    const handleClick = (e) => {
+        e.preventDefault();
+        handleSubmitToApi();
+        setCategoryApi('');
+
+    };
+    let axiosConfig = {
+        headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+            "Access-Control-Allow-Origin": "*",
+        }
+    };
+
+    const handleSubmitToApi = async () => {
+        try {
+            const response = await axios.post(SAVE_CATEGORY, {
+                kes: 'category',
+                value: categoryApi,
+                primary_user_id: loginData.primary_user_id
+            }, axiosConfig);
+            console.log("save Categroy response ", response.data.response.value);
+            dispatch(addKeyCategory([response.data.response.value, ...keyCategoryData]))
+            setAddCategory([...addCategory, response.data.response]);
+            console.log('Add Category ', addCategory);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+    const handleClose = () => {
+        setOpen(false)
+    };
+
+    async function deleteCategory(id, value) {
+        try {
+            const response = await axios.get(DELETE_CATEGORY + `/${id}`);
+            console.log("DELETE CATEGORY  ", response.data.response);
+            //add logic for remove from
+            dispatch(removeKeyCategory(value));
+            setAddCategory(prevItems => prevItems.filter(item => item.id !== id));
+            console.log('Add Category ', addCategory);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+
+    }
+
     return (
         <>
             {(enable && enableBulk) && (
@@ -428,46 +503,81 @@ export const Party = () => {
                                     >
                                         <MenuItem onClick={() => setOpenCategory(true)}>Create a New Category</MenuItem>
                                         {
-                                            UserRole.GST.map(userrole => (
-                                                <MenuItem key={userrole.name}
-                                                          value={userrole.name}>{userrole.name}</MenuItem>
+                                            keyCategoryData.map(userrole => (
+                                                <MenuItem key={userrole}
+                                                          value={userrole}>{userrole}</MenuItem>
                                             ))
                                         }
 
                                     </TextField>
-                                    <Modal
-                                        aria-labelledby="modal-title"
-                                        aria-describedby="modal-desc"
-                                        open={openCategory}
-                                        onClose={() => setOpenCategory(false)}
-                                        sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
-                                    >
-                                        <Sheet
-                                            variant="outlined"
-                                            sx={{
-                                                maxWidth: 500,
-                                                borderRadius: 'md',
-                                                p: 3,
-                                                boxShadow: 'lg',
-                                            }}
+                                    <Transition in={openCategory} timeout={400}>
+                                        <Modal
+                                            open={openCategory}
+                                            onClose={() => setOpenCategory(false)}
+                                            aria-labelledby="modal-modal-title"
+                                            aria-describedby="modal-modal-description"
+                                            sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
                                         >
-                                            <ModalClose variant="plain" sx={{m: 1}}/>
-                                            <Typography
-                                                component="h2"
-                                                id="modal-title"
-                                                level="h4"
-                                                textColor="inherit"
-                                                fontWeight="lg"
-                                                mb={1}
-                                            >
-                                                Category
-                                            </Typography>
-                                            <Typography id="modal-desc" textColor="text.tertiary">
-                                                Make sure to use <code>aria-labelledby</code> on the modal dialog with an
-                                                optional <code>aria-describedby</code> attribute.
-                                            </Typography>
-                                        </Sheet>
-                                    </Modal>
+                                            <Box sx={style}>
+                                                <Box
+                                                    sx={{
+                                                        marginTop: 8,
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        alignItems: 'center',
+                                                    }}
+                                                >
+                                                    <ModalClose variant="plain" sx={{m: 1}}/>
+                                                    <Typography component="h1" variant="h5">
+                                                        Save Into Category
+                                                    </Typography>
+                                                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
+                                                        <TextField
+                                                            margin="normal"
+                                                            required
+                                                            fullWidth
+                                                            id="Category"
+                                                            label="Categroy"
+                                                            name="Category"
+                                                            autoComplete="Category"
+                                                            value={categoryApi}
+                                                            onChange={(e) => setCategoryApi(e.target.value)}
+                                                            autoFocus
+                                                        />
+                                                        <Button
+                                                            type="submit"
+                                                            fullWidth
+                                                            variant="contained"
+                                                            onClick={handleClick}
+                                                            sx={{mt: 3, mb: 2, color: "whitesmoke", background: '#212121'}}
+                                                        >
+                                                            Submit
+                                                        </Button>
+                                                        <List sx={{maxWidth: 300}}>
+                                                            {addCategory.length > 0 ? (
+                                                                addCategory.map((item, index) => (
+                                                                    <ListItem
+                                                                        endAction={
+                                                                            <IconButton aria-label="Delete" size="sm"
+                                                                                        color="danger">
+                                                                                <Delete
+                                                                                    onClick={() => deleteCategory(item.id, item.value)}/>
+                                                                            </IconButton>
+                                                                        }
+                                                                    >
+                                                                        <ListItemButton
+                                                                            key={index}>{item.value}</ListItemButton>
+                                                                    </ListItem>
+                                                                ))) : (
+                                                                <p>Add New Category</p>
+                                                            )
+                                                            }
+                                                        </List>
+                                                    </Box>
+                                                </Box>
+                                            </Box>
+                                        </Modal>
+                                    </Transition>
                                     <TextField id="outlined-basic" label="Credit Limit" variant="outlined"
                                                sx={{margin: '10px'}} value={manageUserObj.creditLimit}
                                                onChange={(event) => handleTextFieldChange(event, 'creditLimit')}/>
