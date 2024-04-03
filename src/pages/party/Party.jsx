@@ -340,7 +340,7 @@ export const Party = () => {
             const response = await axios.get(DELETE_CATEGORY + `/${id}`);
             console.log("DELETE CATEGORY  ", response.data.response);
             //add logic for remove from
-            dispatch(removeKeyCategory(value));
+           // dispatch(removeKeyCategory(value));
             setAddCategory(prevItems => prevItems.filter(item => item.id !== id));
             console.log('Add Category ', addCategory);
         } catch (error) {
@@ -502,13 +502,12 @@ export const Party = () => {
                                         margin="normal"
                                     >
                                         <MenuItem onClick={() => setOpenCategory(true)}>Create a New Category</MenuItem>
-                                        {
-                                            keyCategoryData.length > 0 ? (keyCategoryData.map(userrole => (
+                                        {Array.isArray(keyCategoryData) &&
+                                            keyCategoryData.map(userrole => (
                                                 <MenuItem key={userrole}
                                                           value={userrole}>{userrole}</MenuItem>
-                                            )))
+                                            ))
                                         }
-
                                     </TextField>
                                     <Transition in={openCategory} timeout={400}>
                                         <Modal
