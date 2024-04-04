@@ -206,7 +206,7 @@ export const keyCategoryReducer = (state = {KeyCategoryData: []}, action) => {
         case DELETE_KEY_CATEGORY:
             return {
                 ...state,
-                KeyCategoryData: state.filter(manageUser => manageUser !== action.payload)
+                KeyCategoryData: state.KeyCategoryData.filter(manageUser => manageUser.id !== action.payload)
             };
         default:
             return state;

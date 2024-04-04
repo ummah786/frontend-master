@@ -324,7 +324,7 @@ export const Party = () => {
                 primary_user_id: loginData.primary_user_id
             }, axiosConfig);
             console.log("save Categroy response ", response.data.response.value);
-            dispatch(addKeyCategory([response.data.response.value, ...keyCategoryData]))
+            dispatch(addKeyCategory([response.data.response, ...keyCategoryData]))
             setAddCategory([...addCategory, response.data.response]);
             console.log('Add Category ', addCategory);
         } catch (error) {
@@ -340,7 +340,7 @@ export const Party = () => {
             const response = await axios.get(DELETE_CATEGORY + `/${id}`);
             console.log("DELETE CATEGORY  ", response.data.response);
             //add logic for remove from
-           // dispatch(removeKeyCategory(value));
+            dispatch(removeKeyCategory(id));
             setAddCategory(prevItems => prevItems.filter(item => item.id !== id));
             console.log('Add Category ', addCategory);
         } catch (error) {
@@ -504,8 +504,8 @@ export const Party = () => {
                                         <MenuItem onClick={() => setOpenCategory(true)}>Create a New Category</MenuItem>
                                         {Array.isArray(keyCategoryData) &&
                                             keyCategoryData.map(userrole => (
-                                                <MenuItem key={userrole}
-                                                          value={userrole}>{userrole}</MenuItem>
+                                                <MenuItem key={userrole.id}
+                                                          value={userrole.value}>{userrole.value}</MenuItem>
                                             ))
                                         }
                                     </TextField>
