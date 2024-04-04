@@ -24,15 +24,15 @@ function Dashboard({onBooleanChange}) {
         responseData = response.data.response;
         responseData.forEach(obj => {
             if (obj.kes === 'businessName') {
-                businessData.push(obj);
+                businessData.push(obj.value);
             } else if (obj.kes === 'warehouse') {
-                warehouseData.push(obj);
+                warehouseData.push(obj.value);
             } else if (obj.kes === 'company') {
-                companyData.push(obj);
+                companyData.push(obj.value);
             } else if (obj.kes === 'category') {
-                categoryData.push(obj);
+                categoryData.push(obj.value);
             } else if (obj.kes === 'rack') {
-                rackData.push(obj);
+                rackData.push(obj.value);
             }
         });
         setFetchBusiness(responseData);
