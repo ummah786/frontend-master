@@ -20,8 +20,9 @@ import {MyBusinessAccount} from "./pages/account/MyBusinessAccount";
 import {Party} from "./pages/party/Party";
 import {InventoryGodown} from "./pages/stock/InventoryGodown";
 import {InventoryShop} from "./pages/stock/InventoryShop";
-import {ChatApp} from "./WebRtc/ChatApp";
 import {Expense} from "./pages/Expense";
+import {Chat} from "./pages/Chat";
+import ExampleWithProviders from "./pages/Example";
 
 function App() {
     const [flag, setFlag] = useState(true);
@@ -59,7 +60,9 @@ function App() {
                                 <Route path="/account/business" element={<MyBusinessAccount/>}/>
                                 <Route path="/stock/shop" element={<InventoryShop/>}/>
                                 <Route path="/stock/godowon" element={<InventoryGodown/>}/>
-                                <Route path="/chat" element={<ChatApp/>}/>
+                                <Route path="/chat" element={<Chat/>}/>
+
+                                <Route path="/report" element={<ExampleWithProviders/>}/>
                                 <Route path="/expenses" element={<Expense/>}/>
                                 <Route path="*" element={<> not found</>}/>
                             </Routes>

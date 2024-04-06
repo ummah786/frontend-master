@@ -1,12 +1,6 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
-import {manageUserDataModel} from "../datamodel/ManageUserDataModel";
-import {useDispatch, useSelector} from "react-redux";
-import axios from "axios";
-import Tooltip from '@mui/material/Tooltip';
-import Stack from '@mui/material/Stack';
-import {addManageUser, removeManageUser, updateManageUser} from "../redux/Action";
-import {Autocomplete, Box, Button, ButtonGroup, Modal, TextField} from "@mui/material";
+import {Box, Button, ButtonGroup, TextField} from "@mui/material";
 import {Search, SearchIconWrapper, StyledInputBase, StyledTableCell, StyledTableRow} from "../commonStyle";
 import SearchIcon from "@mui/icons-material/Search";
 import TableContainer from "@mui/material/TableContainer";
@@ -18,19 +12,14 @@ import TableBody from "@mui/material/TableBody";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Sheet from "@mui/joy/Sheet";
-import ModalClose from "@mui/joy/ModalClose";
 import UserRole from "../jsonfile/Role.json";
 import MenuItem from "@mui/material/MenuItem";
-import "react-datepicker/dist/react-datepicker.css";
-import {styled} from '@mui/material/styles';
-import {DemoContainer, DemoItem} from '@mui/x-date-pickers/internals/demo';
-import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
-import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
-import {DatePicker} from '@mui/x-date-pickers/DatePicker';
-import {TimePicker} from '@mui/x-date-pickers/TimePicker';
-import {DateTimePicker} from '@mui/x-date-pickers/DateTimePicker';
-import {DateRangePicker} from '@mui/x-date-pickers-pro/DateRangePicker';
+import {manageUserDataModel} from "../datamodel/ManageUserDataModel";
+import {useDispatch, useSelector} from "react-redux";
+import TableCell from '@mui/material/TableCell';
+import axios from "axios";
+import {addManageUser, removeManageUser, updateManageUser} from "../redux/Action";
+import {Input} from "@mui/joy";
 
 export const Expense = () => {
     const [enable, setEnable] = useState(true);
@@ -44,60 +33,41 @@ export const Expense = () => {
     const [openModal, setOpenModal] = useState(false);
     const [selectedOption, setSelectedOption] = useState(null);
     const loginData = useSelector(state => state.loginReducerValue);
+    const KeyBusinessData = useSelector(state => state.keyBusinessReducerValue);
     const [formData, setFormData] = useState({
         name: '',
         email: '',
     });
-    const [date, setDate] = useState(new Date());
-    const [startDate, setStartDate] = useState();
-    const [endDate, setEndDate] = useState();
+    const [employees, setEmployees] = useState([]);
 
-
-    const ProSpan = styled('span')({
-        display: 'inline-block',
-        height: '1em',
-        width: '1em',
-        verticalAlign: 'middle',
-        marginLeft: '0.3em',
-        marginBottom: '0.08em',
-        backgroundSize: 'contain',
-        backgroundRepeat: 'no-repeat',
-        backgroundImage: 'url(https://mui.com/static/x/pro.svg)',
-    });
-
-    function Label({componentName, valueType, isProOnly}) {
-        const content = (
-            <span>
-      <strong>{componentName}</strong> for {valueType} editing
-    </span>
-        );
-
-        if (isProOnly) {
-            return (
-                <Stack direction="row" spacing={0.5} component="span">
-                    <Tooltip title="Included on Pro package">
-                        <a
-                            href="https://mui.com/x/introduction/licensing/#pro-plan"
-                            aria-label="Included on Pro package"
-                        >
-                            <ProSpan/>
-                        </a>
-                    </Tooltip>
-                    {content}
-                </Stack>
-            );
-        }
-
-        return content;
-    }
-
-
-    const handleStartDateChange = date => {
-        setStartDate(date);
+    const addRow = () => {
+        const newEmployee = {id: employees.length + 1, item: '', quantity: 0, rate: 0, total: 0};
+        setEmployees([...employees, newEmployee]);
     };
 
-    const handleEndDateChange = date => {
-        setEndDate(date);
+    const deleteRow = (id) => {
+        const updatedEmployees = employees.filter(employee => employee.id !== id);
+        setEmployees(updatedEmployees);
+    };
+
+    const handleInputChange = (id, key, value) => {
+        const updatedEmployees = employees.map(employee => {
+            if (employee.id === id) {
+                if (key === 'quantity') {
+                    employee.total = value * employee.rate;
+                    return {...employee, [key]: value};
+                } else if (key === 'rate') {
+                    employee.total = value * employee.quantity;
+                    return {...employee, [key]: value};
+                } else {
+                    return {...employee, [key]: value};
+                }
+            }
+            return employee;
+        });
+
+        setEmployees(updatedEmployees);
+        console.log("Employee  ", employees)
     };
 
 
@@ -159,11 +129,14 @@ export const Expense = () => {
         event.preventDefault();
         manageUserObj['primary_user_id'] = loginData.primary_user_id;
         manageUserObj['secondary_user_id'] = loginData.secondary_user_id;
-        const response = await axios.post('http://localhost:8700/hesabbook/manageuser/save', manageUserObj);
+        /*  const response = await axios.post('http://localhost:8700/hesabbook/manageuser/save', manageUserObj);
 
-        addObjectOnTop(response.data.response)
-        setManageUserObj(manageUserDataModel);
+          addObjectOnTop(response.data.response)
+          setManageUserObj(manageUserDataModel);*/
         setEnable(prevState => !prevState);
+
+
+        console.log("submit   --->>>>>", employees);
     };
 
     const addObjectOnTop = (newObject) => {
@@ -242,20 +215,21 @@ export const Expense = () => {
         }
     }, [setMangUser]);
 
-    const getProductKeyValuePair = async () => {
-        const response = await axios.get(`http://localhost:8700/hesabbook/product/key/value/get/business/${loginData.primary_user_id}`);
-        console.log('Submit delete Response :--    ', response.data.response);
-        let responseData = [];
-        responseData = response.data.response;
-        //  responseData.push('Create a business');
-        console.log('response Date after resp', responseData)
-        setFetchBusiness(responseData);
-    }
+    /*    const getProductKeyValuePair = async () => {
+            const response = await axios.get(`http://localhost:8700/hesabbook/product/key/value/get/business/${loginData.primary_user_id}`);
+            console.log('Submit delete Response :--    ', response.data.response);
+            let responseData = [];
+            responseData = response.data.response;
+            //  responseData.push('Create a business');
+            console.log('response Date after resp', responseData)
+            setFetchBusiness(responseData);
+        }
 
+      */
     useEffect(() => {
-        getProductKeyValuePair();
+        console.log("Business Name ", KeyBusinessData);
+        setFetchBusiness(KeyBusinessData);
     }, [setFetchBusiness])
-
 
     const fetchData = async () => {
         try {
@@ -273,12 +247,22 @@ export const Expense = () => {
         <>
             {enable && (
                 <Box>
-                    <Box>
-                        <h2>Expense</h2>
+
+                    <Box sx={{display: 'flex', width: '100%'}}>
+                        <Box sx={{width: '50%'}}>
+                            <Box>
+                                <h3>Expenses</h3>
+                            </Box>
+                        </Box>
+                        <Box sx={{width: '50%', right: '0', float: 'right'}}>
+                            <ButtonGroup variant="contained" aria-label="Basic button group">
+                                <Button onClick={handleBooleanChange}>Create Expense</Button>
+                            </ButtonGroup>
+                        </Box>
                     </Box>
                     <Box>
                         <Box sx={{display: 'flex', width: '100%'}}>
-                            <Box>
+                            <Box sx={{width: '40%'}}>
                                 <Search>
                                     <SearchIconWrapper>
                                         <SearchIcon/>
@@ -287,56 +271,47 @@ export const Expense = () => {
                                         type="text"
                                         value={filter}
                                         onChange={handleFilterChange}
-                                        placeholder="Search Expense"
+                                        placeholder="Search by Expense Id Or Note "
                                         inputProps={{'aria-label': 'search'}}
                                     />
                                 </Search>
                             </Box>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DemoContainer
-                                    components={[
-                                        'DatePicker',
-                                        'TimePicker',
-                                        'DateTimePicker',
-                                        'DateRangePicker',
-                                    ]}
-                                >
-                                    <DemoItem label={<Label componentName="DatePicker" valueType="date"/>}>
-                                        <DatePicker/>
-                                    </DemoItem>
-                                    <DemoItem label={<Label componentName="TimePicker" valueType="time"/>}>
-                                        <TimePicker/>
-                                    </DemoItem>
-                                    <DemoItem
-                                        label={<Label componentName="DateTimePicker" valueType="date time"/>}
+                            <Box sx={{width: '60%', right: '0', float: 'right'}}>
+                                <Box sx={{width: '50%', right: '0', float: 'right'}}>
+                                    <TextField
+                                        fullWidth
+                                        select
+                                        value={manageUserObj.role}
+                                        onChange={(event) => handleTextFieldChange(event, 'role')}
+                                        label="Select Expense Type"
+                                        variant="outlined"
+                                        margin="normal"
                                     >
-                                        <DateTimePicker/>
-                                    </DemoItem>
-                                    <DemoItem
-                                        label={
-                                            <Label
-                                                componentName="DateRangePicker"
-                                                valueType="date range"
-                                                isProOnly
-                                            />
+                                        {
+                                            UserRole.expenseType.map(userrole => (
+                                                <MenuItem key={userrole.name}
+                                                          value={userrole.name}>{userrole.name}</MenuItem>
+                                            ))
                                         }
-                                        component="DateRangePicker"
+                                    </TextField></Box>
+                                <Box sx={{width: '50%', right: '0', float: 'right'}}>
+                                    <TextField
+                                        fullWidth
+                                        select
+                                        value={manageUserObj.role}
+                                        onChange={(event) => handleTextFieldChange(event, 'role')}
+                                        label="Select Payment Mode"
+                                        variant="outlined"
+                                        margin="normal"
                                     >
-                                        <DateRangePicker
-                                            localeText={{
-                                                start: '',
-                                                end: '',
-                                            }}
-                                        />
-                                    </DemoItem>
-                                </DemoContainer>
-                            </LocalizationProvider>
-
-                            <Box sx={{right: '0', float: 'right'}}>
-                                <ButtonGroup variant="contained" aria-label="Basic button group">
-                                    <Button>Add Your CA</Button>
-                                    <Button onClick={handleBooleanChange}>Add New User</Button>
-                                </ButtonGroup>
+                                        {
+                                            UserRole.paymentMode.map(userrole => (
+                                                <MenuItem key={userrole.name}
+                                                          value={userrole.name}>{userrole.name}</MenuItem>
+                                            ))
+                                        }
+                                    </TextField>
+                                </Box>
                             </Box>
                         </Box>
                         <Box>
@@ -345,14 +320,15 @@ export const Expense = () => {
                                     <TableHead>
                                         <TableRow>
                                             <StyledTableCell align="center">Id</StyledTableCell>
-                                            <StyledTableCell align="center">Business Name</StyledTableCell>
-                                            <StyledTableCell align="center">Name</StyledTableCell>
-                                            <StyledTableCell align="center">Phone</StyledTableCell>
-                                            <StyledTableCell align="center">Role</StyledTableCell>
+                                            <StyledTableCell align="center">Total Amount</StyledTableCell>
+                                            <StyledTableCell align="center">Expense Type</StyledTableCell>
+                                            <StyledTableCell align="center">Note</StyledTableCell>
+                                            <StyledTableCell align="center">Expense Date</StyledTableCell>
                                             <StyledTableCell>Actions</StyledTableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
+                                        {/* //    {mangUser*/}
 
 
                                         {filteredEmployees.map((row) => (
@@ -382,134 +358,124 @@ export const Expense = () => {
                     </Box>
                 </Box>
             )}
-            {!enable && (
-                <Box>
-                    <Box sx={{display: 'flex'}}>
-                        <Box>
-                            <Button size="small" variant="contained">Create Manage User</Button>
-                        </Box>
-                        <Box sx={{float: 'right', alignItems: 'center', marginLeft: "50px"}}>
-                            <Button size="small" variant="contained" onClick={handleBooleanChange}>Cancel</Button>
-                            <Button size="small" variant="contained" onClick={handleBooleanChange}>Save</Button>
-                        </Box>
-                    </Box>
-                    <form onSubmit={handleSubmit}>
-                        <Box sx={{width: '100%', display: 'flex'}}>
-                            <Box sx={{
-                                width: '50%',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                margin: "100px",
-                                marginLeft: '200px'
-                            }}>
-                                <TextField id="outlined-basic" label="Name" variant="outlined" sx={{margin: '10px'}}
-                                           value={manageUserObj.name}
-                                           onChange={(event) => handleTextFieldChange(event, 'name')}/>
-
-                                <div>
-                                    <Autocomplete
-                                        options={fetchBusiness}
-                                        value={manageUserObj.accountBusinessName}
-                                        renderInput={(params) => <TextField {...params} label="Business Name"/>}
-                                        onInputChange={(event, value, reason) => {
-                                            if (reason === 'clear') {
-                                                setSelectedOption(null);
-                                                setOpenModal(false);
-                                            } else if (value !== '') {
-                                                setSelectedOption(value)
-                                            } else if (value === '') {
-                                                setSelectedOption(null);
-                                                //  setOpenModal(false);
-                                            }
-                                        }}
-                                        inputValue={selectedOption || ''}
-                                        onChange={(event, value) => {
-                                            handleOptionClick(value);
-                                        }}
-                                    />
-                                    <Modal
-                                        aria-labelledby="modal-title"
-                                        aria-describedby="modal-desc"
-                                        open={openModal}
-                                        onClose={handleCloseModal}
-                                        sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
-                                    >
-                                        <Sheet
-                                            variant="outlined"
-                                            sx={{
-                                                maxWidth: 500,
-                                                borderRadius: 'md',
-                                                p: 3,
-                                                boxShadow: 'lg',
-                                            }}
-                                        >
-                                            <ModalClose variant="plain" sx={{m: 1}} onClick={handleCloseModal}/>
-
-                                            <h2>Modal Form</h2>
-                                            <TextField
-                                                label="Name"
-                                                name="name"
-                                                value={formData.name}
-                                                onChange={handleChange}
-                                                fullWidth
-                                                margin="normal"
-                                            />
-                                            <TextField
-                                                label="Email"
-                                                name="email"
-                                                value={formData.email}
-                                                onChange={handleChange}
-                                                fullWidth
-                                                margin="normal"
-                                            />
-                                            <Button type="submit" variant="contained" color="primary"
-                                                    onClick={handleSubmitModal}>Submit</Button>
-
-                                        </Sheet>
-                                    </Modal>
-                                </div>
-                                <TextField id="outlined-basic" label="Email Address" variant="outlined"
-                                           sx={{margin: '10px'}} value={manageUserObj.emailAddress}
-                                           onChange={(event) => handleTextFieldChange(event, 'emailAddress')}/>
-                                <TextField id="outlined-basic" label="Address" variant="outlined" sx={{margin: '10px'}}
-                                           value={manageUserObj.address}
-                                           onChange={(event) => handleTextFieldChange(event, 'address')}/>
+            {
+                !enable && (
+                    <Box>
+                        <Box sx={{display: 'flex'}}>
+                            <Box>
+                                <Button size="small" variant="contained">Create Manage User</Button>
                             </Box>
-                            <Box sx={{width: '50%', display: 'flex', flexDirection: 'column', margin: "100px"}}>
-                                <TextField
-                                    fullWidth
-                                    select
-                                    value={manageUserObj.role}
-                                    onChange={(event) => handleTextFieldChange(event, 'role')}
-                                    label="Role"
-                                    variant="outlined"
-                                    margin="normal"
-                                >
-                                    {
-                                        UserRole.role.map(userrole => (
-                                            <MenuItem key={userrole.name}
-                                                      value={userrole.name}>{userrole.name}</MenuItem>
-                                        ))
-                                    }
-                                </TextField>
-                                <TextField id="outlined-basic" label="Phone Number" variant="outlined"
-                                           sx={{margin: '10px'}} value={manageUserObj.mobileNumber}
-                                           onChange={(event) => handleTextFieldChange(event, 'mobileNumber')}/>
-                                <TextField id="outlined-basic" label="Temp Password" variant="outlined"
-                                           sx={{margin: '10px'}} value={manageUserObj.tempPassword}
-                                           onChange={(event) => handleTextFieldChange(event, 'tempPassword')}/>
+                            <Box sx={{float: 'right', alignItems: 'center', marginLeft: "50px"}}>
+                                <Button size="small" variant="contained" onClick={handleBooleanChange}>Cancel</Button>
+                                <Button size="small" variant="contained" onClick={handleBooleanChange}>Save</Button>
+                            </Box>
+                        </Box>
+                        <form onSubmit={handleSubmit}>
+                            <Box sx={{margin: '20px'}}>
+                                <Box sx={{display: 'inline'}}>
+                                    <TextField
+                                        fullWidth
+                                        select
 
-                                <TextField id="outlined-basic" label="User Id" variant="outlined" disabled={true}
-                                           sx={{margin: '10px'}} value={manageUserObj.secondary_user_id}
-                                           onChange={(event) => handleTextFieldChange(event, 'secondary_user_id')}/>
+                                        value={manageUserObj.role}
+                                        onChange={(event) => handleTextFieldChange(event, 'role')}
+                                        label="Select Expense Type"
+                                        variant="outlined"
+                                        margin="normal"
+                                    >
+                                        {
+                                            UserRole.expenseType.map(userrole => (
+                                                <MenuItem key={userrole.name}
+                                                          value={userrole.name}>{userrole.name}</MenuItem>
+                                            ))
+                                        }
+                                    </TextField>
+                                    <TextField
+                                        fullWidth
+                                        select
+                                        value={manageUserObj.role}
+                                        onChange={(event) => handleTextFieldChange(event, 'role')}
+                                        label="Select Payment Mode"
+                                        variant="outlined"
+                                        margin="normal"
+                                    >
+                                        {
+                                            UserRole.paymentMode.map(userrole => (
+                                                <MenuItem key={userrole.name}
+                                                          value={userrole.name}>{userrole.name}</MenuItem>
+                                            ))
+                                        }
+                                    </TextField>
+                                    <Input
+                                        type="date"
+                                        value={manageUserObj.dob}
+                                        onChange={(event) => handleTextFieldChange(event, 'dob')}
+                                    />
+
+
+                                </Box>
+                                <Box>
+                                    <TableContainer component={Paper}>
+                                        <Table>
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell>Item Name</TableCell>
+                                                    <TableCell>Quantity</TableCell>
+                                                    <TableCell>Rate</TableCell>
+                                                    <TableCell>Total</TableCell>
+                                                    <TableCell>Action</TableCell>
+                                                </TableRow>
+                                            </TableHead>
+
+
+                                            <TableBody>
+                                                {employees.map(employee => (
+
+                                                    <TableRow key={employee.id}>
+                                                        <TableCell>
+                                                            <TextField
+                                                                value={employee.item}
+                                                                onChange={(e) => handleInputChange(employee.id, 'item', e.target.value)}
+                                                            />
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <TextField
+                                                                value={employee.quantity}
+                                                                onChange={(e) => handleInputChange(employee.id, 'quantity', e.target.value)}
+                                                            />
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <TextField
+                                                                value={employee.rate}
+                                                                onChange={(e) => handleInputChange(employee.id, 'rate', e.target.value)}
+                                                            />
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <TextField
+                                                                value={employee.total}
+                                                                //   onChange={(e) => handleInputChange(employee.id, 'total', employee.quantity * employee.rate)}
+                                                            />
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <Button onClick={() => deleteRow(employee.id)}>Delete</Button>
+                                                        </TableCell>employee.quantity * employee.rate
+                                                    </TableRow>
+
+
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                        <Button onClick={addRow}>Add Row</Button>
+                                    </TableContainer>
+                                </Box>
                                 <Box>
                                     <Button type="submit">SUBMIT</Button>
                                 </Box>
                             </Box>
-                        </Box>
-                    </form>
-                </Box>
-            )}
+                        </form>
+                    </Box>
+                )
+            }
         </>
     )
 
