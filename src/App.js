@@ -20,7 +20,7 @@ import {MyBusinessAccount} from "./pages/account/MyBusinessAccount";
 import {Party} from "./pages/party/Party";
 import {InventoryGodown} from "./pages/stock/InventoryGodown";
 import {InventoryShop} from "./pages/stock/InventoryShop";
-import {Expense} from "./pages/Expense";
+import {Expense} from "./pages/expense/Expense";
 import {Chat} from "./pages/Chat";
 import ExampleWithProviders from "./pages/Example";
 

@@ -1,7 +1,7 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {Box, Button, ButtonGroup, TextField} from "@mui/material";
-import {Search, SearchIconWrapper, StyledInputBase, StyledTableCell, StyledTableRow} from "../commonStyle";
+import {Search, SearchIconWrapper, StyledInputBase, StyledTableCell, StyledTableRow} from "../../commonStyle";
 import SearchIcon from "@mui/icons-material/Search";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
@@ -12,13 +12,13 @@ import TableBody from "@mui/material/TableBody";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import UserRole from "../jsonfile/Role.json";
+import UserRole from "../../jsonfile/Role.json";
 import MenuItem from "@mui/material/MenuItem";
-import {manageUserDataModel} from "../datamodel/ManageUserDataModel";
+import {manageUserDataModel} from "../../datamodel/ManageUserDataModel";
 import {useDispatch, useSelector} from "react-redux";
 import TableCell from '@mui/material/TableCell';
 import axios from "axios";
-import {addManageUser, removeManageUser, updateManageUser} from "../redux/Action";
+import {addManageUser, removeManageUser, updateManageUser} from "../../redux/Action";
 import {Input} from "@mui/joy";
 
 export const Expense = () => {
