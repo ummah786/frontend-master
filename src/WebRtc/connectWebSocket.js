@@ -9,7 +9,7 @@ const connectWebSocket = (onMessageReceived) => {
 
     stompClient.connect({}, () => {
         stompClient.subscribe('/topic/messages', (message) => {
-            onMessageReceived(JSON.parse(message.body));
+            onMessageReceived(message.body);
         });
     });
 

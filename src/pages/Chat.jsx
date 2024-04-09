@@ -14,7 +14,7 @@ export const Chat = () => {
 
         return () => {
             if (stomp) {
-                stomp.disconnect();
+                //     stomp.disconnect();
             }
         };
     }, []);
