@@ -371,48 +371,53 @@ export const Expense = () => {
                             </Box>
                         </Box>
                         <form onSubmit={handleSubmit}>
-                            <Box sx={{margin: '20px'}}>
-                                <Box sx={{display: 'inline'}}>
-                                    <TextField
-                                        fullWidth
-                                        select
+                            <Box>
+                                <Box sx={{display: 'flex'}}>
+                                    <Box sx={{width: '50%'}}>
+                                        <TextField
+                                            fullWidth
+                                            select
 
-                                        value={manageUserObj.role}
-                                        onChange={(event) => handleTextFieldChange(event, 'role')}
-                                        label="Select Expense Type"
-                                        variant="outlined"
-                                        margin="normal"
-                                    >
-                                        {
-                                            UserRole.expenseType.map(userrole => (
-                                                <MenuItem key={userrole.name}
-                                                          value={userrole.name}>{userrole.name}</MenuItem>
-                                            ))
-                                        }
-                                    </TextField>
-                                    <TextField
-                                        fullWidth
-                                        select
-                                        value={manageUserObj.role}
-                                        onChange={(event) => handleTextFieldChange(event, 'role')}
-                                        label="Select Payment Mode"
-                                        variant="outlined"
-                                        margin="normal"
-                                    >
-                                        {
-                                            UserRole.paymentMode.map(userrole => (
-                                                <MenuItem key={userrole.name}
-                                                          value={userrole.name}>{userrole.name}</MenuItem>
-                                            ))
-                                        }
-                                    </TextField>
-                                    <Input
-                                        type="date"
-                                        value={manageUserObj.dob}
-                                        onChange={(event) => handleTextFieldChange(event, 'dob')}
-                                    />
-
-
+                                            value={manageUserObj.role}
+                                            onChange={(event) => handleTextFieldChange(event, 'role')}
+                                            label="Select Expense Type"
+                                            variant="outlined"
+                                            margin="normal"
+                                        >
+                                            {
+                                                UserRole.expenseType.map(userrole => (
+                                                    <MenuItem key={userrole.name}
+                                                              value={userrole.name}>{userrole.name}</MenuItem>
+                                                ))
+                                            }
+                                        </TextField>
+                                        <TextField
+                                            fullWidth
+                                            select
+                                            value={manageUserObj.role}
+                                            onChange={(event) => handleTextFieldChange(event, 'role')}
+                                            label="Select Payment Mode"
+                                            variant="outlined"
+                                            margin="normal"
+                                        >
+                                            {
+                                                UserRole.paymentMode.map(userrole => (
+                                                    <MenuItem key={userrole.name}
+                                                              value={userrole.name}>{userrole.name}</MenuItem>
+                                                ))
+                                            }
+                                        </TextField>
+                                    </Box>
+                                    <Box sx={{width: '50%'}}>
+                                        <TextField id="outlined-basic" label="Notes" variant="outlined"
+                                                   fullWidth value={manageUserObj.mobileNumber}
+                                                   onChange={(event) => handleTextFieldChange(event, 'mobileNumber')}/>
+                                        <Input
+                                            type="date"
+                                            value={manageUserObj.dob}
+                                            onChange={(event) => handleTextFieldChange(event, 'dob')}
+                                        />
+                                    </Box>
                                 </Box>
                                 <Box>
                                     <TableContainer component={Paper} sx={{maxHeight: 280}}>
@@ -430,7 +435,6 @@ export const Expense = () => {
 
                                             <TableBody>
                                                 {employees.map(employee => (
-
                                                     <TableRow key={employee.id}>
                                                         <StyledTableCell align="center">
                                                             <TextField
@@ -468,9 +472,7 @@ export const Expense = () => {
                                         <Button onClick={addRow}>Add Row</Button>
                                     </TableContainer>
                                 </Box>
-                                <TextField id="outlined-basic" label="Notes" variant="outlined"
-                                           sx={{margin: '10px'}} value={manageUserObj.mobileNumber}
-                                           onChange={(event) => handleTextFieldChange(event, 'mobileNumber')}/>
+
                                 <Box>
                                     <Button type="submit">SUBMIT</Button>
                                 </Box>
