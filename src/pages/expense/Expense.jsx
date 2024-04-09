@@ -16,7 +16,6 @@ import UserRole from "../../jsonfile/Role.json";
 import MenuItem from "@mui/material/MenuItem";
 import {manageUserDataModel} from "../../datamodel/ManageUserDataModel";
 import {useDispatch, useSelector} from "react-redux";
-import TableCell from '@mui/material/TableCell';
 import axios from "axios";
 import {addManageUser, removeManageUser, updateManageUser} from "../../redux/Action";
 import {Input} from "@mui/joy";
@@ -41,7 +40,8 @@ export const Expense = () => {
     const [employees, setEmployees] = useState([]);
 
     const addRow = () => {
-        const newEmployee = {id: employees.length + 1, item: '', quantity: 0, rate: 0, total: 0};
+        //     const newEmployee = {id: employees.length + 1, item: '', quantity: 0, rate: 0, total: 0};
+        const newEmployee = {id: employees.length + 1, item: ''};
         setEmployees([...employees, newEmployee]);
     };
 
@@ -415,15 +415,15 @@ export const Expense = () => {
 
                                 </Box>
                                 <Box>
-                                    <TableContainer component={Paper}>
-                                        <Table>
+                                    <TableContainer component={Paper} sx={{maxHeight: 280}}>
+                                        <Table sx={{minWidth: 1250}} aria-label="customized table" stickyHeader>
                                             <TableHead>
                                                 <TableRow>
-                                                    <TableCell>Item Name</TableCell>
-                                                    <TableCell>Quantity</TableCell>
-                                                    <TableCell>Rate</TableCell>
-                                                    <TableCell>Total</TableCell>
-                                                    <TableCell>Action</TableCell>
+                                                    <StyledTableCell align="center">Item Name</StyledTableCell>
+                                                    <StyledTableCell align="center">Quantity</StyledTableCell>
+                                                    <StyledTableCell align="center">Rate</StyledTableCell>
+                                                    <StyledTableCell align="center">Total</StyledTableCell>
+                                                    <StyledTableCell align="center">Action</StyledTableCell>
                                                 </TableRow>
                                             </TableHead>
 
@@ -432,33 +432,33 @@ export const Expense = () => {
                                                 {employees.map(employee => (
 
                                                     <TableRow key={employee.id}>
-                                                        <TableCell>
+                                                        <StyledTableCell align="center">
                                                             <TextField
                                                                 value={employee.item}
                                                                 onChange={(e) => handleInputChange(employee.id, 'item', e.target.value)}
                                                             />
-                                                        </TableCell>
-                                                        <TableCell>
+                                                        </StyledTableCell>
+                                                        <StyledTableCell align="center">
                                                             <TextField
                                                                 value={employee.quantity}
                                                                 onChange={(e) => handleInputChange(employee.id, 'quantity', e.target.value)}
                                                             />
-                                                        </TableCell>
-                                                        <TableCell>
+                                                        </StyledTableCell>
+                                                        <StyledTableCell align="center">
                                                             <TextField
                                                                 value={employee.rate}
                                                                 onChange={(e) => handleInputChange(employee.id, 'rate', e.target.value)}
                                                             />
-                                                        </TableCell>
-                                                        <TableCell>
+                                                        </StyledTableCell>
+                                                        <StyledTableCell align="center">
                                                             <TextField
                                                                 value={employee.total}
                                                                 //   onChange={(e) => handleInputChange(employee.id, 'total', employee.quantity * employee.rate)}
                                                             />
-                                                        </TableCell>
-                                                        <TableCell>
+                                                        </StyledTableCell>
+                                                        <StyledTableCell align="center">
                                                             <Button onClick={() => deleteRow(employee.id)}>Delete</Button>
-                                                        </TableCell>employee.quantity * employee.rate
+                                                        </StyledTableCell>
                                                     </TableRow>
 
 
@@ -468,6 +468,9 @@ export const Expense = () => {
                                         <Button onClick={addRow}>Add Row</Button>
                                     </TableContainer>
                                 </Box>
+                                <TextField id="outlined-basic" label="Notes" variant="outlined"
+                                           sx={{margin: '10px'}} value={manageUserObj.mobileNumber}
+                                           onChange={(event) => handleTextFieldChange(event, 'mobileNumber')}/>
                                 <Box>
                                     <Button type="submit">SUBMIT</Button>
                                 </Box>
