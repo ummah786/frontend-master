@@ -1,6 +1,7 @@
 import {applyMiddleware, combineReducers, compose, createStore} from 'redux';
 import {
     businessUserReducer,
+    expenseReducer,
     godownReducer,
     keyBusinessReducer,
     keyCategoryReducer,
@@ -16,6 +17,7 @@ import {thunk} from 'redux-thunk';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const reducer = combineReducers({
+    expenseReducerValue: expenseReducer,
     manageUserReducerValue: manageUserReducer,
     loginReducerValue: LoginReducer,
     manageBusinessReducerValue: businessUserReducer,

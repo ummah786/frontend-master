@@ -17,7 +17,7 @@ import MenuItem from "@mui/material/MenuItem";
 import {expenseDataModel} from "../../datamodel/ManageUserDataModel";
 import {useDispatch, useSelector} from "react-redux";
 import axios from "axios";
-import {addManageUser, removeManageUser, updateManageUser} from "../../redux/Action";
+import {addExpense, removeManageUser, updateManageUser} from "../../redux/Action";
 import {Input} from "@mui/joy";
 
 export const Expense = () => {
@@ -27,7 +27,7 @@ export const Expense = () => {
     const dispatch = useDispatch();
     const [filter, setFilter] = useState('');
     const [filteredEmployees, setFilteredEmployees] = useState([]);
-    const {manageUsers} = useSelector(state => state.manageUserReducerValue);
+    const {expenseData} = useSelector(state => state.expenseReducerValue);
     const [fetchBusiness, setFetchBusiness] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [selectedOption, setSelectedOption] = useState(null);
@@ -76,9 +76,11 @@ export const Expense = () => {
     useEffect(() => {
         if (mangUser.length > 0) {
             const filteredData = mangUser.filter(employee => {
-                return (employee.name.includes(filter) ||
-                    employee.accountBusinessName.includes(filter) ||
-                    employee.mobileNumber.includes(filter));
+                return (
+                    employee.id.includes(filter) ||
+                    employee.paymentMode.includes(filter) ||
+                    employee.expenseType.includes(filter) ||
+                    employee.note.includes(filter));
             });
             setFilteredEmployees(filteredData);
         }
@@ -111,8 +113,6 @@ export const Expense = () => {
         addObjectOnTop(response.data.response)
         setManageUserObj(expenseDataModel);
         setEnable(prevState => !prevState);
-
-
         console.log("submit   --->>>>>", employees);
     };
 
@@ -121,18 +121,18 @@ export const Expense = () => {
         if (existingIndex === -1) {
             setFilteredEmployees([newObject, ...manageUsers]);
             setMangUser([newObject, ...manageUsers]);
-            dispatch(addManageUser([newObject, ...manageUsers]));
+            dispatch(addExpense([newObject, ...manageUsers]));
         } else {
             const updatedArray = [...manageUsers];
             updatedArray[existingIndex] = newObject;
             setFilteredEmployees(updatedArray);
             setMangUser(updatedArray);
-            dispatch(addManageUser(updatedArray));
+            dispatch(addExpense(updatedArray));
         }
     };
 
     async function handleDelete(id, event) {
-        const response = await axios.post(`http://localhost:8700/hesabbook/manageuser/delete/${id}`);
+        const response = await axios.post(`http://localhost:8700/hesabbook/expense/delete/${id}`);
         console.log('Submit delete Response :--    ', response.data);
         dispatch(removeManageUser(id));
         //   fetchAllManageUserData();
@@ -158,14 +158,13 @@ export const Expense = () => {
     function fetchAllManageUserData() {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8700/hesabbook/manageuser/all');
-                console.log(response.data);
-                setMangUser(response.data);
-                localStorage.setItem('mangeUser', mangUser);
-                dispatch(addManageUser(mangUser))
+                const response = await axios.get(`http://localhost:8700/hesabbook/expense/all/${loginData.primary_user_id}`);
+                console.log(response.data.response);
+                setMangUser(response.data.response);
+                dispatch(addEx(mangUser))
                 {
                     mangUser.map((mangus) => (
-                        dispatch(addManageUser({mangus}))
+                        dispatch(addExpense({mangus}))
                     ))
                 }
             } catch (error) {
@@ -213,7 +212,7 @@ export const Expense = () => {
             const response = await axios.get(`http://localhost:8700/hesabbook/manageuser/all/${loginData.primary_user_id}`);
             setMangUser(response.data.response);
             localStorage.setItem('mangeUser', mangUser);
-            dispatch(addManageUser(response.data.response));
+            dispatch(addExpense(response.data.response));
             setFilteredEmployees(response.data.response);
         } catch (error) {
             console.error('Error fetching data:', error);

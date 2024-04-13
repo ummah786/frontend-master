@@ -2,7 +2,7 @@ import {
     ADD_BUSINESS_USER,
     ADD_EXISTING_BUSINESS_USER,
     ADD_EXISTING_MANAGE_USER,
-    ADD_EXISTING_PARTY,
+    ADD_EXISTING_PARTY, ADD_EXPENSE,
     ADD_GODOWN,
     ADD_KEY_BUSINESS,
     ADD_KEY_CATEGORY,
@@ -26,13 +26,22 @@ import {
     UPDATE_PARTY
 } from './Action';
 import {
-    businessAccountDataModel,
+    businessAccountDataModel, expenseDataModel,
     godownDataModel,
     manageUserDataModel,
     partnerDataModel,
     userDetailModel
 } from "../datamodel/ManageUserDataModel";
 
+
+export const expenseReducer = (state = {expenseData: expenseDataModel}, action) => {
+    switch (action.type) {
+        case ADD_EXPENSE:
+            return action.payload;
+        default:
+            return state;
+    }
+}
 
 export const LoginReducer = (state = {loginData: userDetailModel}, action) => {
     switch (action.type) {

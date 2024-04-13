@@ -42,6 +42,12 @@ export const ADD_KEY_RACK = 'ADD_KEY_RACK';
 export const ADD_KEY_WAREHOUSE = 'ADD_KEY_HOUSE';
 export const ADD_KEY_CATEGORY = 'ADD_KEY_CATEGORY';
 export const DELETE_KEY_CATEGORY = 'DELETE_KEY_CATEGORY';
+export const ADD_EXPENSE = 'ADD_EXPENSE';
+export const addExpense = (expenseUser) => ({
+    type: ADD_EXPENSE,
+    payload: expenseUser
+});
+
 export const addKeyCompany = (keyCompany) => ({
     type: ADD_KEY_COMPANY,
     payload: keyCompany
@@ -119,7 +125,6 @@ export const updateBusinessUser = (businessUser) => ({
     type: UPDATE_BUSINESS_USER,
     payload: businessUser
 });
-
 export const addManageUser = (manageUser) => ({
     type: ADD_MANAGE_USER,
     payload: manageUser
