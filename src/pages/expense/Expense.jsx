@@ -27,7 +27,7 @@ export const Expense = () => {
     const dispatch = useDispatch();
     const [filter, setFilter] = useState('');
     const [filteredEmployees, setFilteredEmployees] = useState([]);
-    const expenseData = useSelector(state => state.expenseReducerValue);
+    const expenseUser = useSelector(state => state.expenseReducerValue);
     const [fetchBusiness, setFetchBusiness] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [selectedOption, setSelectedOption] = useState(null);
@@ -117,13 +117,13 @@ export const Expense = () => {
     };
 
     const addObjectOnTop = (newObject) => {
-        const existingIndex = expenseData.findIndex(item => item.id === newObject.id);
+        const existingIndex = expenseUser.findIndex(item => item.id === newObject.id);
         if (existingIndex === -1) {
-            setFilteredEmployees([newObject, ...expenseData]);
-            setMangUser([newObject, ...expenseData]);
-            dispatch(addExpense([newObject, ...expenseData]));
+            setFilteredEmployees([newObject, ...expenseUser]);
+            setMangUser([newObject, ...expenseUser]);
+            dispatch(addExpense([newObject, ...expenseUser]));
         } else {
-            const updatedArray = [...expenseData];
+            const updatedArray = [...expenseUser];
             updatedArray[existingIndex] = newObject;
             setFilteredEmployees(updatedArray);
             setMangUser(updatedArray);
@@ -133,10 +133,8 @@ export const Expense = () => {
 
     async function handleDelete(id, event) {
         const response = await axios.post(`http://localhost:8700/hesabbook/expense/delete/${id}`);
-        console.log('Submit delete Response :--    ', response.data);
         dispatch(removeExpense(id));
-        //   fetchAllManageUserData();
-        setFilteredEmployees(expenseData);
+        setFilteredEmployees(expenseUser);
     }
 
     function handleEdit(id, data) {
@@ -175,17 +173,17 @@ export const Expense = () => {
     }
 
     useEffect(() => {
-        if (expenseData?.id !== '' && expenseData?.length > 1 && !(expenseData[0]?.id === '')) {
+        if (expenseUser?.id !== '' && expenseUser?.length > 1 && !(expenseUser[0]?.id === '')) {
             console.log("done your job")
-            setFilteredEmployees(expenseData);
+            setFilteredEmployees(expenseUser);
         }
-    }, [expenseData]);
+    }, [expenseUser]);
 
 
     useEffect(() => {
-        if (expenseData?.id !== '' && expenseData?.length > 1 && !(expenseData[0]?.id === '')) {
+        if (expenseUser?.id !== '' && expenseUser?.length > 1 && !(expenseUser[0]?.id === '')) {
             console.log("done your job")
-            setFilteredEmployees(expenseData);
+            setFilteredEmployees(expenseUser);
         } else {
             fetchData();
         }

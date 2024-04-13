@@ -37,14 +37,14 @@ import {
 } from "../datamodel/ManageUserDataModel";
 
 
-export const expenseReducer = (state = {expenseData: [expenseDataModel]}, action) => {
+export const expenseReducer = (state = {expenseUser: [expenseDataModel]}, action) => {
     switch (action.type) {
         case ADD_EXPENSE:
             return action.payload;
         case REMOVE_EXPENSE:
             return {
                 ...state,
-                expenseData: state.filter(manageUser => manageUser.id !== action.payload)
+                expenseUser: state.filter(manageUser => manageUser.id !== action.payload)
             };
         default:
             return state;
@@ -69,7 +69,7 @@ export const godownReducer = (state = {godownUser: [godownDataModel]}, action) =
         case REMOVE_GODOWN:
             return {
                 ...state,
-                godownUser: state.filter(manageUser => manageUser.id !== action.payload)
+                godownUser: state.godownUser.filter(manageUser => manageUser.id !== action.payload)
             };
         case UPDATE_GODOWN:
             return {
