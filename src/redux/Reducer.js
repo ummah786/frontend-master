@@ -44,7 +44,7 @@ export const expenseReducer = (state = {expenseUser: [expenseDataModel]}, action
         case REMOVE_EXPENSE:
             return {
                 ...state,
-                expenseUser: state.filter(manageUser => manageUser.id !== action.payload)
+                expenseUser: state.expenseUser.filter(manageUser => manageUser.id !== action.payload)
             };
         default:
             return state;

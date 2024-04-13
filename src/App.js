@@ -23,6 +23,8 @@ import {InventoryShop} from "./pages/stock/InventoryShop";
 import {Expense} from "./pages/expense/Expense";
 import {Chat} from "./pages/Chat";
 import ExampleWithProviders from "./pages/Example";
+import {CashAndBank} from "./pages/CashAndBank/CashAndBank";
+import {SalesInvoice} from "./pages/sales/SalesInvoice";
 
 function App() {
     const [flag, setFlag] = useState(true);
@@ -60,8 +62,9 @@ function App() {
                                 <Route path="/account/business" element={<MyBusinessAccount/>}/>
                                 <Route path="/stock/shop" element={<InventoryShop/>}/>
                                 <Route path="/stock/godowon" element={<InventoryGodown/>}/>
+                                <Route path="/bank" element={<CashAndBank/>}/>
                                 <Route path="/chat" element={<Chat/>}/>
-
+                                <Route path="/sales/invoice" element={<SalesInvoice/>}/>
                                 <Route path="/report" element={<ExampleWithProviders/>}/>
                                 <Route path="/expenses" element={<Expense/>}/>
                                 <Route path="*" element={<> not found</>}/>

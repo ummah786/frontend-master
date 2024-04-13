@@ -306,6 +306,7 @@ const ExampleWithProviders = () => (
     <QueryClientProvider client={queryClient}>
         <Example/>
     </QueryClientProvider>
+
 );
 
 export default ExampleWithProviders;
