@@ -43,9 +43,14 @@ export const ADD_KEY_WAREHOUSE = 'ADD_KEY_HOUSE';
 export const ADD_KEY_CATEGORY = 'ADD_KEY_CATEGORY';
 export const DELETE_KEY_CATEGORY = 'DELETE_KEY_CATEGORY';
 export const ADD_EXPENSE = 'ADD_EXPENSE';
+export const REMOVE_EXPENSE = 'REMOVE_EXPENSE';
 export const addExpense = (expenseUser) => ({
     type: ADD_EXPENSE,
     payload: expenseUser
+});
+export const removeExpense  = (id) => ({
+    type: REMOVE_EXPENSE,
+    payload: id
 });
 
 export const addKeyCompany = (keyCompany) => ({

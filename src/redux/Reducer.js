@@ -2,7 +2,8 @@ import {
     ADD_BUSINESS_USER,
     ADD_EXISTING_BUSINESS_USER,
     ADD_EXISTING_MANAGE_USER,
-    ADD_EXISTING_PARTY, ADD_EXPENSE,
+    ADD_EXISTING_PARTY,
+    ADD_EXPENSE,
     ADD_GODOWN,
     ADD_KEY_BUSINESS,
     ADD_KEY_CATEGORY,
@@ -17,6 +18,7 @@ import {
     GET_MANAGE_USER,
     GET_PARTY,
     REMOVE_BUSINESS_USER,
+    REMOVE_EXPENSE,
     REMOVE_GODOWN,
     REMOVE_MANAGE_USER,
     REMOVE_PARTY,
@@ -26,7 +28,8 @@ import {
     UPDATE_PARTY
 } from './Action';
 import {
-    businessAccountDataModel, expenseDataModel,
+    businessAccountDataModel,
+    expenseDataModel,
     godownDataModel,
     manageUserDataModel,
     partnerDataModel,
@@ -34,10 +37,15 @@ import {
 } from "../datamodel/ManageUserDataModel";
 
 
-export const expenseReducer = (state = {expenseData: expenseDataModel}, action) => {
+export const expenseReducer = (state = {expenseData: [expenseDataModel]}, action) => {
     switch (action.type) {
         case ADD_EXPENSE:
             return action.payload;
+        case REMOVE_EXPENSE:
+            return {
+                ...state,
+                expenseData: state.filter(manageUser => manageUser.id !== action.payload)
+            };
         default:
             return state;
     }
@@ -61,7 +69,7 @@ export const godownReducer = (state = {godownUser: [godownDataModel]}, action) =
         case REMOVE_GODOWN:
             return {
                 ...state,
-                godownUser: state.godownUser.filter(manageUser => manageUser.id !== action.payload)
+                godownUser: state.filter(manageUser => manageUser.id !== action.payload)
             };
         case UPDATE_GODOWN:
             return {

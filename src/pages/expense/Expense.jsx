@@ -17,7 +17,7 @@ import MenuItem from "@mui/material/MenuItem";
 import {expenseDataModel} from "../../datamodel/ManageUserDataModel";
 import {useDispatch, useSelector} from "react-redux";
 import axios from "axios";
-import {addExpense, removeManageUser, updateManageUser} from "../../redux/Action";
+import {addExpense, removeExpense, updateManageUser} from "../../redux/Action";
 import {Input} from "@mui/joy";
 
 export const Expense = () => {
@@ -27,7 +27,7 @@ export const Expense = () => {
     const dispatch = useDispatch();
     const [filter, setFilter] = useState('');
     const [filteredEmployees, setFilteredEmployees] = useState([]);
-    const {expenseData} = useSelector(state => state.expenseReducerValue);
+    const expenseData = useSelector(state => state.expenseReducerValue);
     const [fetchBusiness, setFetchBusiness] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [selectedOption, setSelectedOption] = useState(null);
@@ -74,7 +74,7 @@ export const Expense = () => {
 
 
     useEffect(() => {
-        if (mangUser.length > 0) {
+        if (filter !== "" && mangUser.length > 0) {
             const filteredData = mangUser.filter(employee => {
                 return (
                     employee.id.includes(filter) ||
@@ -117,13 +117,13 @@ export const Expense = () => {
     };
 
     const addObjectOnTop = (newObject) => {
-        const existingIndex = manageUsers.findIndex(item => item.id === newObject.id);
+        const existingIndex = expenseData.findIndex(item => item.id === newObject.id);
         if (existingIndex === -1) {
-            setFilteredEmployees([newObject, ...manageUsers]);
-            setMangUser([newObject, ...manageUsers]);
-            dispatch(addExpense([newObject, ...manageUsers]));
+            setFilteredEmployees([newObject, ...expenseData]);
+            setMangUser([newObject, ...expenseData]);
+            dispatch(addExpense([newObject, ...expenseData]));
         } else {
-            const updatedArray = [...manageUsers];
+            const updatedArray = [...expenseData];
             updatedArray[existingIndex] = newObject;
             setFilteredEmployees(updatedArray);
             setMangUser(updatedArray);
@@ -134,9 +134,9 @@ export const Expense = () => {
     async function handleDelete(id, event) {
         const response = await axios.post(`http://localhost:8700/hesabbook/expense/delete/${id}`);
         console.log('Submit delete Response :--    ', response.data);
-        dispatch(removeManageUser(id));
+        dispatch(removeExpense(id));
         //   fetchAllManageUserData();
-        setFilteredEmployees(manageUsers);
+        setFilteredEmployees(expenseData);
     }
 
     function handleEdit(id, data) {
@@ -161,7 +161,7 @@ export const Expense = () => {
                 const response = await axios.get(`http://localhost:8700/hesabbook/expense/all/${loginData.primary_user_id}`);
                 console.log(response.data.response);
                 setMangUser(response.data.response);
-                dispatch(addEx(mangUser))
+                dispatch(addExpense(mangUser))
                 {
                     mangUser.map((mangus) => (
                         dispatch(addExpense({mangus}))
@@ -175,33 +175,21 @@ export const Expense = () => {
     }
 
     useEffect(() => {
-        if (manageUsers.length > 1 && !(manageUsers[0].id === '')) {
+        if (expenseData?.id !== '' && expenseData?.length > 1 && !(expenseData[0]?.id === '')) {
             console.log("done your job")
-            setFilteredEmployees(manageUsers);
+            setFilteredEmployees(expenseData);
         }
-    }, [manageUsers]);
+    }, [expenseData]);
 
 
     useEffect(() => {
-        if (manageUsers.length > 1 && !(manageUsers[0].id === '')) {
+        if (expenseData?.id !== '' && expenseData?.length > 1 && !(expenseData[0]?.id === '')) {
             console.log("done your job")
-            setFilteredEmployees(manageUsers);
+            setFilteredEmployees(expenseData);
         } else {
             fetchData();
         }
     }, [setMangUser]);
-
-    /*    const getProductKeyValuePair = async () => {
-            const response = await axios.get(`http://localhost:8700/hesabbook/product/key/value/get/business/${loginData.primary_user_id}`);
-            console.log('Submit delete Response :--    ', response.data.response);
-            let responseData = [];
-            responseData = response.data.response;
-            //  responseData.push('Create a business');
-            console.log('response Date after resp', responseData)
-            setFetchBusiness(responseData);
-        }
-
-      */
     useEffect(() => {
         console.log("Business Name ", KeyBusinessData);
         setFetchBusiness(KeyBusinessData);
@@ -209,7 +197,7 @@ export const Expense = () => {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get(`http://localhost:8700/hesabbook/manageuser/all/${loginData.primary_user_id}`);
+            const response = await axios.get(`http://localhost:8700/hesabbook/expense/all/${loginData.primary_user_id}`);
             setMangUser(response.data.response);
             localStorage.setItem('mangeUser', mangUser);
             dispatch(addExpense(response.data.response));
@@ -304,17 +292,14 @@ export const Expense = () => {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {/* //    {mangUser*/}
-
-
                                         {filteredEmployees.map((row) => (
                                             <StyledTableRow key={row.id}>
                                                 <StyledTableCell align="center">{row.id}</StyledTableCell>
                                                 <StyledTableCell
-                                                    align="center">{row.accountBusinessName}</StyledTableCell>
-                                                <StyledTableCell align="center">{row.name}</StyledTableCell>
-                                                <StyledTableCell align="center">{row.mobileNumber}</StyledTableCell>
-                                                <StyledTableCell align="center">{row.role}</StyledTableCell>
+                                                    align="center">{row.totalAmount}</StyledTableCell>
+                                                <StyledTableCell align="center">{row.expenseType}</StyledTableCell>
+                                                <StyledTableCell align="center">{row.note}</StyledTableCell>
+                                                <StyledTableCell align="center">{row.expenseDate}</StyledTableCell>
                                                 <StyledTableCell>
                                                     <IconButton aria-label="edit"
                                                                 onClick={() => handleEdit(row.id, row)}>
