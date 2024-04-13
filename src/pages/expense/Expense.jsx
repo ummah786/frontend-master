@@ -14,7 +14,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UserRole from "../../jsonfile/Role.json";
 import MenuItem from "@mui/material/MenuItem";
-import {manageUserDataModel} from "../../datamodel/ManageUserDataModel";
+import {expenseDataModel} from "../../datamodel/ManageUserDataModel";
 import {useDispatch, useSelector} from "react-redux";
 import axios from "axios";
 import {addManageUser, removeManageUser, updateManageUser} from "../../redux/Action";
@@ -22,7 +22,7 @@ import {Input} from "@mui/joy";
 
 export const Expense = () => {
     const [enable, setEnable] = useState(true);
-    const [manageUserObj, setManageUserObj] = useState(manageUserDataModel);
+    const [manageUserObj, setManageUserObj] = useState(expenseDataModel);
     const [mangUser, setMangUser] = useState([]);
     const dispatch = useDispatch();
     const [filter, setFilter] = useState('');
@@ -41,7 +41,7 @@ export const Expense = () => {
 
     const addRow = () => {
         //     const newEmployee = {id: employees.length + 1, item: '', quantity: 0, rate: 0, total: 0};
-        const newEmployee = {id: employees.length + 1, item: ''};
+        const newEmployee = {id: employees.length + 1};
         setEmployees([...employees, newEmployee]);
     };
 
@@ -65,38 +65,7 @@ export const Expense = () => {
             }
             return employee;
         });
-
         setEmployees(updatedEmployees);
-        console.log("Employee  ", employees)
-    };
-
-
-    const handleChange = (e) => {
-        const {name, value} = e.target;
-        setFormData({...formData, [name]: value});
-    };
-
-    const handleSubmitModal = (e) => {
-        console.log('', formData);
-        handleCloseModal()
-    };
-
-    const handleOptionClick = (option) => {
-        if (option === 'Create a business') {
-            console.log("option a ", option)
-            setOpenModal(true);
-        } else {
-            console.log("option ab ", option)
-            setSelectedOption(option);
-            setManageUserObj({
-                ...manageUserObj,
-                ['accountBusinessName']: option,
-            });
-        }
-    };
-
-    const handleCloseModal = () => {
-        setOpenModal(false);
     };
 
     const handleFilterChange = event => {
@@ -107,8 +76,8 @@ export const Expense = () => {
     useEffect(() => {
         if (mangUser.length > 0) {
             const filteredData = mangUser.filter(employee => {
-                return (employee.name.toLowerCase().includes(filter.toLowerCase()) ||
-                    employee.accountBusinessName.toLowerCase().includes(filter.toLowerCase()) ||
+                return (employee.name.includes(filter) ||
+                    employee.accountBusinessName.includes(filter) ||
                     employee.mobileNumber.includes(filter));
             });
             setFilteredEmployees(filteredData);
@@ -116,7 +85,7 @@ export const Expense = () => {
     }, [filter, mangUser]);
 
     const handleBooleanChange = () => {
-        setManageUserObj(manageUserDataModel);
+        setManageUserObj(expenseDataModel);
         setEnable(prevState => !prevState);
     };
     const handleTextFieldChange = (event, field) => {
@@ -129,10 +98,18 @@ export const Expense = () => {
         event.preventDefault();
         manageUserObj['primary_user_id'] = loginData.primary_user_id;
         manageUserObj['secondary_user_id'] = loginData.secondary_user_id;
-        /*  const response = await axios.post('http://localhost:8700/hesabbook/manageuser/save', manageUserObj);
+        let totalSalary = 0;
+        employees.forEach(employee => {
+            if (!isNaN(employee.total)) {
+                totalSalary += employee.total;
+            }
+        });
 
-          addObjectOnTop(response.data.response)
-          setManageUserObj(manageUserDataModel);*/
+        manageUserObj['totalAmount'] = totalSalary;
+        manageUserObj['expenseItemsList'] = JSON.stringify(employees);
+        const response = await axios.post('http://localhost:8700/hesabbook/expense/save', manageUserObj);
+        addObjectOnTop(response.data.response)
+        setManageUserObj(expenseDataModel);
         setEnable(prevState => !prevState);
 
 
@@ -377,9 +354,8 @@ export const Expense = () => {
                                         <TextField
                                             fullWidth
                                             select
-
-                                            value={manageUserObj.role}
-                                            onChange={(event) => handleTextFieldChange(event, 'role')}
+                                            value={manageUserObj.expenseType}
+                                            onChange={(event) => handleTextFieldChange(event, 'expenseType')}
                                             label="Select Expense Type"
                                             variant="outlined"
                                             margin="normal"
@@ -394,8 +370,8 @@ export const Expense = () => {
                                         <TextField
                                             fullWidth
                                             select
-                                            value={manageUserObj.role}
-                                            onChange={(event) => handleTextFieldChange(event, 'role')}
+                                            value={manageUserObj.paymentMode}
+                                            onChange={(event) => handleTextFieldChange(event, 'paymentMode')}
                                             label="Select Payment Mode"
                                             variant="outlined"
                                             margin="normal"
@@ -410,12 +386,12 @@ export const Expense = () => {
                                     </Box>
                                     <Box sx={{width: '50%'}}>
                                         <TextField id="outlined-basic" label="Notes" variant="outlined"
-                                                   fullWidth value={manageUserObj.mobileNumber}
-                                                   onChange={(event) => handleTextFieldChange(event, 'mobileNumber')}/>
+                                                   fullWidth value={manageUserObj.note}
+                                                   onChange={(event) => handleTextFieldChange(event, 'note')}/>
                                         <Input
                                             type="date"
-                                            value={manageUserObj.dob}
-                                            onChange={(event) => handleTextFieldChange(event, 'dob')}
+                                            value={manageUserObj.expenseDate}
+                                            onChange={(event) => handleTextFieldChange(event, 'expenseDate')}
                                         />
                                     </Box>
                                 </Box>
@@ -438,8 +414,8 @@ export const Expense = () => {
                                                     <TableRow key={employee.id}>
                                                         <StyledTableCell align="center">
                                                             <TextField
-                                                                value={employee.item}
-                                                                onChange={(e) => handleInputChange(employee.id, 'item', e.target.value)}
+                                                                value={employee.itemName}
+                                                                onChange={(e) => handleInputChange(employee.id, 'itemName', e.target.value)}
                                                             />
                                                         </StyledTableCell>
                                                         <StyledTableCell align="center">

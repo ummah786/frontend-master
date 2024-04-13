@@ -133,3 +133,18 @@ export const productKeyValueModel = {
     secondary_user_id: '',
     value: ''
 }
+
+
+export const expenseDataModel = {
+    id: '',
+    expenseId: '',
+    expenseDate: '',
+    lastModifiedDate: '',
+    paymentMode: '',
+    expenseType: '',
+    note: '',
+    totalAmount: '',
+    expenseItemsList: '',
+    primary_user_id: '',
+    secondary_user_id: ''
+}
