@@ -182,9 +182,9 @@ export const SalesInvoiceCreate = () => {
                     </Box>
                     <Box sx={{width: '50%'}}>
                         <Box>
-                            <Typography>+ Add Additional Charges</Typography>
-                            <Typography> Taxable Amount</Typography>
-                            <Typography>+ Add Discount</Typography>
+                            <Typography>+Add Additional Charges</Typography>
+                            <Typography>Taxable Amount</Typography>
+                            <Typography>+Add Discount</Typography>
                         </Box>
                         <Box>
                             <Typography>Auto Round Off</Typography>
