@@ -9,15 +9,56 @@ import {StyledTableCell} from "../../commonStyle";
 import TableBody from "@mui/material/TableBody";
 import * as React from "react";
 import {useState} from "react";
-
+import {Close} from '@mui/icons-material';
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from '@mui/icons-material/Close';
 export const SalesInvoiceCreate = () => {
+    const [showBoxes, setShowBoxes] = useState(false);
+    const [textFields, setTextFields] = useState(['']);
+    const [boxes, setBoxes] = useState([]);
+    const [fields, setFields] = useState([]);
     const [employees, setEmployees] = useState([]);
+    const [openNotes, setOpenNotes] = useState(false);
+    const [openTermCondition, setOpenTermCondition] = useState(false);
+    const addField = () => {
+        setFields([...fields, { key: '', value: '' }]);
+    };
+    const removeField = (index) => {
+        const updatedFields = [...fields];
+        updatedFields.splice(index, 1);
+        setFields(updatedFields);
+    };
+    const handleInputChangess = (index, keyOrValue, e) => {
+        const updatedFields = [...fields];
+        updatedFields[index][keyOrValue] = e.target.value;
+        setFields(updatedFields);
+        console.log(fields)
+    };
+    const handleAddBox = () => {
+        setBoxes([...boxes, { id: Date.now() }]);
+    };
+    const handleCloseBox = (id) => {
+        setBoxes(boxes.filter(box => box.id !== id));
+    };
+    const handleToggleNotes = () => {
+        setOpenNotes(!openNotes);
+    };
+    const handleToggleTermCondition = () => {
+        setOpenTermCondition(!openTermCondition);
+    };
+    const addTextField = () => {
+        setTextFields([...textFields, '']);
+    };
+    const disableTextField = (index) => {
+        const updatedTextFields = [...textFields];
+        updatedTextFields[index] = 'Disabled';
+        setTextFields(updatedTextFields);
+    };
     const addRow = () => {
         //     const newEmployee = {id: employees.length + 1, item: '', quantity: 0, rate: 0, total: 0};
         const newEmployee = {id: employees.length + 1};
         setEmployees([...employees, newEmployee]);
     };
-
     const deleteRow = (id) => {
         const updatedEmployees = employees.filter(employee => employee.id !== id);
         setEmployees(updatedEmployees);
@@ -41,7 +82,7 @@ export const SalesInvoiceCreate = () => {
     };
     return (
         <>
-            <Box>
+            <Box sx={{maxHeight: 300}}>
                 <Box border={1} borderColor="primary.main" borderRadius={1}>
                     <Typography>Add Logo</Typography>
                     <Typography>Ummah Hub</Typography>
@@ -58,7 +99,7 @@ export const SalesInvoiceCreate = () => {
                     </Box>
                 </Box>
                 <Box>
-                    <TableContainer component={Paper} sx={{maxHeight: 280}}>
+                    <TableContainer component={Paper}>
                         <Table sx={{minWidth: 1250}} aria-label="customized table" stickyHeader>
                             <TableHead>
                                 <TableRow>
@@ -171,20 +212,85 @@ export const SalesInvoiceCreate = () => {
                 </Box>
                 <Box sx={{display: 'flex'}}>
                     <Box sx={{width: '50%'}}>
-                        <Typography>+Add Notes</Typography>
-                        <Box>
-                            <Typography>Terms and Conditions</Typography>
-                            <Typography>1. Goods once sold will not be taken back or exchanged </Typography>
-                            <Typography>2. All disputes are subject to [ENTER_YOUR_CITY_NAME] jurisdiction
-                                only</Typography>
+                        <Box sx={{padding: '10px'}}>
+                            <Button onClick={handleToggleNotes} variant="contained" color="primary">
+                                +Add Notes
+                            </Button>
+                            {openNotes && (
+                                <Box sx={{display: 'flex', padding: '10px'}}>
+                                    <TextField label="Enter Notes" variant="outlined" fullWidth={true}/>
+                                    <IconButton onClick={handleToggleNotes}>
+                                        <Close/>
+                                    </IconButton>
+                                </Box>
+                            )}
                         </Box>
-                        <Typography>+Add New Account</Typography>
+                        <Box sx={{padding: '10px'}}>
+                            <Button onClick={handleToggleTermCondition} variant="contained" color="primary">
+                                +Terms and Conditions
+                            </Button>
+                            {openTermCondition && (
+                                <Box sx={{display: 'flex', padding: '10px'}}>
+                                    <TextField label="Enter Terms & Conditions" variant="outlined" fullWidth={true}/>
+                                    <IconButton onClick={handleToggleTermCondition}>
+                                        <Close/>
+                                    </IconButton>
+                                </Box>
+                            )
+                            }{
+                            !openTermCondition && (
+                                <Box sx={{padding: '10px'}}>
+                                    <Typography>1. Goods once sold will not be taken back or exchanged </Typography>
+                                    <Typography>2. All disputes are subject to [ENTER_YOUR_CITY_NAME] jurisdiction
+                                        only</Typography>
+                                </Box>
+                            )
+                        }
+                        </Box>
                     </Box>
                     <Box sx={{width: '50%'}}>
                         <Box>
-                            <Typography>+Add Additional Charges</Typography>
+                            <Button variant="contained" onClick={handleAddBox}>
+                                Add Additional Charges
+                            </Button>
+                            {boxes.map((box, index) => (
+                                <Box key={box.id} mt={2} p={2} border={1} display="flex" alignItems="center">
+                                    <TextField label="Enter Text" fullWidth />
+                                    <IconButton onClick={() => handleCloseBox(box.id)}>
+                                        <CloseIcon />
+                                    </IconButton>
+                                </Box>
+                            ))}
+                        </Box>
+                        <Box>
+
+                            <div>
+                                <button onClick={addField}>Add Box</button>
+                                {fields.map((field, index) => (
+                                    <Box key={index} sx={{ marginTop: 2, display: 'flex', alignItems: 'center' }}>
+                                        <TextField
+                                            label="Key"
+                                            value={field.key}
+                                            onChange={(e) => handleInputChangess(index, 'key', e)}
+                                            disabled={field.disabled}
+                                            sx={{ marginRight: 1 }}
+                                        />
+                                        <TextField
+                                            label="Value"
+                                            value={field.value}
+                                            onChange={(e) => handleInputChangess(index, 'value', e)}
+                                            disabled={field.disabled}
+                                            sx={{ marginRight: 1 }}
+                                        />
+                                        <IconButton onClick={() => removeField(index)} disabled={field.disabled}>
+                                            <CloseIcon />
+                                        </IconButton>
+                                    </Box>
+                                ))}
+                                {fields.length === 0 && <Typography>No boxes added yet.</Typography>}
+                            </div>
                             <Typography>Taxable Amount</Typography>
-                            <Typography>+Add Discount</Typography>
+                            <Typography>+ Add Discount</Typography>
                         </Box>
                         <Box>
                             <Typography>Auto Round Off</Typography>
