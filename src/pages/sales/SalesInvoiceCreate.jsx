@@ -12,6 +12,7 @@ import {useState} from "react";
 import {Close} from '@mui/icons-material';
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from '@mui/icons-material/Close';
+
 export const SalesInvoiceCreate = () => {
     const [showBoxes, setShowBoxes] = useState(false);
     const [textFields, setTextFields] = useState(['']);
@@ -21,7 +22,7 @@ export const SalesInvoiceCreate = () => {
     const [openNotes, setOpenNotes] = useState(false);
     const [openTermCondition, setOpenTermCondition] = useState(false);
     const addField = () => {
-        setFields([...fields, { key: '', value: '' }]);
+        setFields([...fields, {key: '', value: ''}]);
     };
     const removeField = (index) => {
         const updatedFields = [...fields];
@@ -35,7 +36,7 @@ export const SalesInvoiceCreate = () => {
         console.log(fields)
     };
     const handleAddBox = () => {
-        setBoxes([...boxes, { id: Date.now() }]);
+        setBoxes([...boxes, {id: Date.now()}]);
     };
     const handleCloseBox = (id) => {
         setBoxes(boxes.filter(box => box.id !== id));
@@ -255,40 +256,40 @@ export const SalesInvoiceCreate = () => {
                             </Button>
                             {boxes.map((box, index) => (
                                 <Box key={box.id} mt={2} p={2} border={1} display="flex" alignItems="center">
-                                    <TextField label="Enter Text" fullWidth />
+                                    <TextField label="Enter Text" fullWidth/>
                                     <IconButton onClick={() => handleCloseBox(box.id)}>
-                                        <CloseIcon />
+                                        <CloseIcon/>
                                     </IconButton>
                                 </Box>
                             ))}
                         </Box>
                         <Box>
-
-                            <div>
-                                <button onClick={addField}>Add Box</button>
+                            <Box>
+                                <Button variant="contained" onClick={addField}> Add Additional Charges</Button>
                                 {fields.map((field, index) => (
-                                    <Box key={index} sx={{ marginTop: 2, display: 'flex', alignItems: 'center' }}>
+                                    <Box key={index} sx={{marginTop: 2, display: 'flex', alignItems: 'center'}}>
                                         <TextField
-                                            label="Key"
+                                            label="Enter Charges (ex.Transport Charge)"
                                             value={field.key}
                                             onChange={(e) => handleInputChangess(index, 'key', e)}
                                             disabled={field.disabled}
-                                            sx={{ marginRight: 1 }}
+                                            sx={{marginRight: 1}}
                                         />
                                         <TextField
-                                            label="Value"
+                                            label=" ₹ "
                                             value={field.value}
                                             onChange={(e) => handleInputChangess(index, 'value', e)}
                                             disabled={field.disabled}
-                                            sx={{ marginRight: 1 }}
+                                            inputProps={{inputMode: 'decimal', pattern: '[0-9]*[.,]?[0-9]*'}}
+                                            sx={{marginRight: 1}}
                                         />
                                         <IconButton onClick={() => removeField(index)} disabled={field.disabled}>
-                                            <CloseIcon />
+                                            <CloseIcon/>
                                         </IconButton>
                                     </Box>
                                 ))}
                                 {fields.length === 0 && <Typography>No boxes added yet.</Typography>}
-                            </div>
+                            </Box>
                             <Typography>Taxable Amount</Typography>
                             <Typography>+ Add Discount</Typography>
                         </Box>
