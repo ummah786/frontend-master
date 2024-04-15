@@ -12,6 +12,10 @@ import {useState} from "react";
 import {Close} from '@mui/icons-material';
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from '@mui/icons-material/Close';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import UserRole from "../../jsonfile/Role.json";
+import MenuItem from "@mui/material/MenuItem";
 
 export const SalesInvoiceCreate = () => {
     const [showBoxes, setShowBoxes] = useState(false);
@@ -21,6 +25,15 @@ export const SalesInvoiceCreate = () => {
     const [employees, setEmployees] = useState([]);
     const [openNotes, setOpenNotes] = useState(false);
     const [openTermCondition, setOpenTermCondition] = useState(false);
+    const [textValue, setTextValue] = useState('');
+    const [showAddDiscount, setShowAddDiscount] = useState(false);
+
+    const [checked, setChecked] = useState(false);
+
+    const handleChangeChecked = (event) => {
+        setChecked(event.target.checked);
+    };
+
     const addField = () => {
         setFields([...fields, {key: '', value: ''}]);
     };
@@ -35,7 +48,7 @@ export const SalesInvoiceCreate = () => {
         setFields(updatedFields);
         console.log(fields)
     };
-    const handleAddBox = () => {
+    const handleAddDiscount = () => {
         setBoxes([...boxes, {id: Date.now()}]);
     };
     const handleCloseBox = (id) => {
@@ -250,8 +263,8 @@ export const SalesInvoiceCreate = () => {
                         </Box>
                     </Box>
                     <Box sx={{width: '50%'}}>
-                        <Box>
-                            <Button variant="contained" onClick={handleAddBox}>
+                        {/*                        <Box>
+                            <Button variant="contained" onClick={handleAddDiscount}>
                                 Add Additional Charges
                             </Button>
                             {boxes.map((box, index) => (
@@ -262,48 +275,173 @@ export const SalesInvoiceCreate = () => {
                                     </IconButton>
                                 </Box>
                             ))}
-                        </Box>
+                        </Box>*/}
                         <Box>
-                            <Box>
+                            <Box sx={{padding: '10px'}}>
                                 <Button variant="contained" onClick={addField}> Add Additional Charges</Button>
                                 {fields.map((field, index) => (
                                     <Box key={index} sx={{marginTop: 2, display: 'flex', alignItems: 'center'}}>
-                                        <TextField
-                                            label="Enter Charges (ex.Transport Charge)"
-                                            value={field.key}
-                                            onChange={(e) => handleInputChangess(index, 'key', e)}
-                                            disabled={field.disabled}
-                                            sx={{marginRight: 1}}
-                                        />
+                                        <Box sx={{width: '65%'}}>
+                                            <TextField
+                                                label="Enter Charges (ex.Transport Charge)"
+                                                value={field.key}
+                                                onChange={(e) => handleInputChangess(index, 'key', e)}
+                                                disabled={field.disabled}
+                                                sx={{marginRight: 1}}
+                                            />
+                                        </Box> <Box sx={{width: '25%'}}>
                                         <TextField
                                             label=" ₹ "
                                             value={field.value}
                                             onChange={(e) => handleInputChangess(index, 'value', e)}
                                             disabled={field.disabled}
                                             inputProps={{inputMode: 'decimal', pattern: '[0-9]*[.,]?[0-9]*'}}
+                                            type="number"
                                             sx={{marginRight: 1}}
-                                        />
+                                        /> </Box> <Box sx={{width: '10%'}}>
                                         <IconButton onClick={() => removeField(index)} disabled={field.disabled}>
                                             <CloseIcon/>
                                         </IconButton>
                                     </Box>
+                                    </Box>
                                 ))}
-                                {fields.length === 0 && <Typography>No boxes added yet.</Typography>}
+                                {fields.length === 0}
                             </Box>
-                            <Typography>Taxable Amount</Typography>
-                            <Typography>+ Add Discount</Typography>
+                            <Box sx={{padding: '10px', display: 'flex'}}>
+                                <Box sx={{width: '65%'}}>
+                                    <Typography>Taxable Amount</Typography>
+                                </Box> <Box sx={{width: '25%'}}>
+                                <TextField
+                                    label=" ₹ "
+                                    inputProps={{inputMode: 'decimal', pattern: '[0-9]*[.,]?[0-9]*'}}
+                                    type="number"
+                                    sx={{marginRight: 1}}
+                                />
+                            </Box>
+                            </Box>
+                            <Box sx={{padding: '10px'}}>
+                                <Button variant="contained" onClick={() => setShowAddDiscount(!showAddDiscount)}>+ Add
+                                    Discount</Button>
+                                {showAddDiscount ? (
+                                    <Box sx={{marginTop: 2, display: 'flex', alignItems: 'center'}}>
+                                        <Box sx={{width: '65%'}}>
+                                            <TextField
+                                                label="Taxable Amount"
+                                                value="Taxable Amount"
+                                                sx={{marginRight: 1}}
+                                            />
+                                        </Box>
+                                        <Box sx={{width: '25%'}}>
+                                            <TextField
+                                                label=" ₹ "
+                                                value={textValue}
+                                                onChange={(e) => setTextValue(e.target.value)}
+                                                inputProps={{inputMode: 'decimal', pattern: '[0-9]*[.,]?[0-9]*'}}
+                                                type="number"
+                                                sx={{marginRight: 1}}
+                                            /></Box>
+                                        <Box sx={{width: '10%'}}>
+                                            <IconButton onClick={() => {
+                                                setShowAddDiscount(!showAddDiscount);
+                                                setTextValue(0);
+                                            }}>
+                                                <CloseIcon/>
+                                            </IconButton>
+                                        </Box>
+                                    </Box>
+                                ) : (
+                                    <Box></Box>
+                                )}
+                            </Box>
+
                         </Box>
                         <Box>
-                            <Typography>Auto Round Off</Typography>
-                            <Typography>Total Amount</Typography>
+                            <Box sx={{padding: '10px', display: 'flex'}}>
+                                <Box sx={{width: '65%'}}>
+                                    <FormControlLabel
+                                        control={<Checkbox checked={checked} onChange={handleChangeChecked}/>}
+                                        label="Auto Round Off"
+                                    />
+                                </Box>
+                                <Box sx={{width: '25%'}}>
+                                    <TextField
+                                        label=" ₹ "
+                                        inputProps={{inputMode: 'decimal', pattern: '[0-9]*[.,]?[0-9]*'}}
+                                        type="number"
+                                        sx={{marginRight: 1}}
+                                    />
+                                </Box>
+                            </Box>
+                            <Box sx={{padding: '10px', display: 'flex'}}>
+                                <Box sx={{width: '65%'}}>
+                                    <Typography>Total Amount</Typography>
+                                </Box>
+                                <Box sx={{width: '25%'}}>
+                                    <TextField
+                                        label=" Enter Payment Amount "
+                                        inputProps={{inputMode: 'decimal', pattern: '[0-9]*[.,]?[0-9]*'}}
+                                        type="number"
+                                        sx={{marginRight: 1}}
+                                    />
+                                </Box>
+                            </Box>
                         </Box>
 
                         <Box>
-                            <Typography>Marked As Fully Paid</Typography>
-                            <Typography>Amount Received</Typography>
+
+                            <Box sx={{padding: '10px', display: 'flex'}}>
+                                <Box sx={{width: '65%'}}>
+                                    <FormControlLabel
+                                        control={<Checkbox checked={checked} onChange={handleChangeChecked}/>}
+                                        label="Marked As Fully Paid"
+                                    />
+                                </Box>
+                                <Box sx={{width: '25%'}}>
+                                </Box>
+                            </Box>
+                            <Box sx={{padding: '10px', display: 'flex'}}>
+                                <Box sx={{width: '65%'}}>
+                                    <Typography>Amount Received</Typography>
+                                </Box>
+                                <Box sx={{width: '35%', display: 'flex'}}>
+                                    <TextField
+                                        label=" ₹  "
+                                        inputProps={{inputMode: 'decimal', pattern: '[0-9]*[.,]?[0-9]*'}}
+                                        type="number"
+                                        sx={{marginRight: 1}}
+                                    />
+                                    <TextField
+                                        fullWidth
+                                        select
+                                        label="Mode"
+                                        variant="outlined"
+                                        sx={{marginRight: 1}}
+                                    >
+                                        {
+                                            UserRole.paymentMode.map(userrole => (
+                                                <MenuItem key={userrole.name}
+                                                          value={userrole.name}>{userrole.name}</MenuItem>
+                                            ))
+                                        }
+                                    </TextField>
+                                </Box>
+                            </Box>
+
                         </Box>
                         <Box>
-                            <Typography>Balance Amount</Typography>
+                            <Box sx={{padding: '10px', display: 'flex'}}>
+                                <Box sx={{width: '65%'}}>
+                                    <Typography>Balance Amount</Typography>
+                                </Box>
+                                <Box sx={{width: '25%'}}>
+                                    <TextField
+                                        label=" ₹  "
+                                        inputProps={{inputMode: 'decimal', pattern: '[0-9]*[.,]?[0-9]*'}}
+                                        type="number"
+                                        sx={{marginRight: 1}}
+                                    />
+                                </Box>
+                            </Box>
                         </Box>
                         <Box>
                             <Typography>Authorized signatory for ummah</Typography>
