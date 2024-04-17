@@ -16,6 +16,8 @@ import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import UserRole from "../../jsonfile/Role.json";
 import MenuItem from "@mui/material/MenuItem";
+import Card from "@mui/material/Card";
+import CardMedia from "@mui/material/CardMedia";
 
 export const SalesInvoiceCreate = () => {
     const [showBoxes, setShowBoxes] = useState(false);
@@ -29,6 +31,21 @@ export const SalesInvoiceCreate = () => {
     const [showAddDiscount, setShowAddDiscount] = useState(false);
 
     const [checked, setChecked] = useState(false);
+
+
+    const [image1, setImage1] = useState('');
+    const [image2, setImage2] = useState('');
+
+    const handleImageUpload = (event, setImage) => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setImage(reader.result);
+        };
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    };
 
     const handleChangeChecked = (event) => {
         setChecked(event.target.checked);
@@ -97,15 +114,61 @@ export const SalesInvoiceCreate = () => {
     return (
         <>
             <Box sx={{maxHeight: 300}}>
-                <Box border={1} borderColor="primary.main" borderRadius={1}>
-                    <Typography>Add Logo</Typography>
+                <Box>
+                    <Card variant="outlined">
+                        <Box sx={{height: '100px', width: '100px'}}>
+                            {
+                                image1 ? (
+                                    <Box sx={{display: 'flex'}}>
+                                        <CardMedia
+                                            sx={{height: '90px', width: '90px', margin: '10px', paddingTop: '56.25%'}}
+                                            image={image1}
+                                            alt="Add Company Logo"
+                                        />
+                                        <IconButton sx={{
+                                            position: 'absolute',
+                                            top: '8px',
+                                            right: '8px',
+                                            backgroundColor: 'white',
+                                            zIndex: 1,
+                                        }} onClick={() => setImage1(null)}>
+                                            <CloseIcon/>
+                                        </IconButton>
+                                    </Box>
+                                ) : (
+                                    <label htmlFor="image-upload-1">
+                                        <Button variant="plain" sx={{
+                                            borderStyle: 'dashed',
+                                            borderWidth: '2px', textAlign: 'center'
+                                        }}
+                                                component="span">
+                                            Add Company Logo
+                                        </Button>
+                                    </label>
+                                )
+                            }
+                        </Box>
+                        <input
+                            accept="image/*"
+                            style={{display: 'none'}}
+                            id="image-upload-1"
+                            type="file"
+                            onChange={(event) => handleImageUpload(event, setImage1)}
+                        />
+                    </Card>
                     <Typography>Ummah Hub</Typography>
                 </Box>
-                <Box sx={{display: 'flex'}} border={1} borderColor="primary.main" borderRadius={1}>
-                    <Box sx={{width: '70%'}} border={1} borderColor="primary.main" borderRadius={1}>
+                <Box sx={{display: 'flex'}}>
+                    <Box sx={{
+                        width: '70%', borderStyle: 'dashed',
+                        borderWidth: '2px'
+                    }}>
                         <Typography>Bill To</Typography>
                     </Box>
-                    <Box sx={{width: '30%'}} border={1} borderColor="primary.main" borderRadius={1}>
+                    <Box sx={{
+                        width: '30%', borderStyle: 'dashed',
+                        borderWidth: '2px'
+                    }}>
                         <Typography>Sales Invoice No: </Typography>
                         <Typography>Sales Invoice Date: </Typography>
                         <Typography>Payment Terms: </Typography>
@@ -202,7 +265,10 @@ export const SalesInvoiceCreate = () => {
                                 ))}
                             </TableBody>
                         </Table>
-                        <Button onClick={addRow}>Add Row</Button>
+                        <Button onClick={addRow} sx={{
+                            borderStyle: 'dashed',
+                            borderWidth: '2px'
+                        }}>Add Row</Button>
                         <Table sx={{minWidth: 1250}} aria-label="customized table" stickyHeader>
                             <TableHead>
                                 <TableRow>
@@ -372,7 +438,7 @@ export const SalesInvoiceCreate = () => {
                                     />
                                 </Box>
                             </Box>
-                            <Box sx={{padding: '10px', display: 'flex'}}>
+                            <Box sx={{padding: '10px', display: 'flex'}} variant="outlined">
                                 <Box sx={{width: '65%'}}>
                                     <Typography>Total Amount</Typography>
                                 </Box>
@@ -399,7 +465,10 @@ export const SalesInvoiceCreate = () => {
                                 <Box sx={{width: '25%'}}>
                                 </Box>
                             </Box>
-                            <Box sx={{padding: '10px', display: 'flex'}}>
+                            <Box sx={{
+                                padding: '10px', display: 'flex', borderStyle: 'dashed',
+                                borderWidth: '2px'
+                            }}>
                                 <Box sx={{width: '65%'}}>
                                     <Typography>Amount Received</Typography>
                                 </Box>
@@ -445,8 +514,42 @@ export const SalesInvoiceCreate = () => {
                             </Box>
                         </Box>
                         <Box>
-                            <Typography>Authorized signatory for ummah</Typography>
-                            <input></input>
+                            <Card variant="outlined">
+                                <Box
+                                >
+                                    {
+                                        image2 ? (
+                                            <Box sx={{display: 'flex'}}>
+                                                <CardMedia
+                                                    sx={{height: '90px', width: '90px', margin: '10px'}}
+                                                    image={image2}
+                                                    alt="Upload Signature"
+                                                />
+                                                <IconButton onClick={() => setImage2('')}>
+                                                    <CloseIcon/>
+                                                </IconButton>
+                                            </Box>
+
+                                        ) : (
+                                            <label htmlFor="image-upload-2">
+                                                <Button variant="plain" component="span" sx={{
+                                                    borderStyle: 'dashed',
+                                                    borderWidth: '2px'
+                                                }}>
+                                                    Upload Signature
+                                                </Button>
+                                            </label>
+                                        )
+                                    }
+                                </Box>
+                                <input
+                                    accept="image/*"
+                                    style={{display: 'none'}}
+                                    id="image-upload-2"
+                                    type="file"
+                                    onChange={(event) => handleImageUpload(event, setImage2)}
+                                />
+                            </Card>
                         </Box>
                     </Box>
                 </Box>
