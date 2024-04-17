@@ -126,20 +126,24 @@ export const SalesInvoiceCreate = () => {
                         <Box sx={{height: '100px', width: '100px'}}>
                             {
                                 image1 ? (
-                                    <Box sx={{display: 'flex'}}>
+                                    <Box sx={{display: 'flex', position: 'relative'}}>
                                         <CardMedia
-                                            sx={{height: '90px', width: '90px', margin: '10px', paddingTop: '56.25%'}}
+                                            sx={{
+                                                height: '90px',
+                                                width: '90px',
+                                                margin: '10px',
+                                                borderStyle: 'dashed',
+                                                borderWidth: '2px'
+                                            }}
                                             image={image1}
                                             alt="Add Company Logo"
                                         />
                                         <IconButton sx={{
-                                            position: 'absolute',
-                                            top: '8px',
-                                            right: '8px',
-                                            backgroundColor: 'white',
-                                            zIndex: 1,
+                                            opacity: '0.9',
+                                            top: '-1px', color: 'black', backgroundColor: 'white',
+                                            marginLeft: '70px', position: 'absolute'
                                         }} onClick={() => setImage1(null)}>
-                                            <CloseIcon/>
+                                            <CloseIcon fontSize="small"/>
                                         </IconButton>
                                     </Box>
                                 ) : (
@@ -170,7 +174,56 @@ export const SalesInvoiceCreate = () => {
                         width: '60%', borderStyle: 'dashed',
                         borderWidth: '2px'
                     }}>
-                        <Typography>Bill To</Typography>
+                        <Box sx={{
+                            borderStyle: 'dashed',
+                            borderWidth: '2px', display: 'flex'
+                        }}>
+                            <Box sx={{
+                                width: '50%', borderStyle: 'dashed',
+                                borderWidth: '2px', display: 'flex', justifyContent: 'space-between'
+                            }}>
+                                <Typography sx={{margin: '10px'}}>Bill To</Typography>
+                                <TextField
+                                    select
+                                    sx={{margin: '10px'}}
+                                    label="Bill To"
+                                    variant="outlined"
+                                    margin="normal"
+                                >
+                                    {
+                                        UserRole.india.map(indi => (
+                                            <MenuItem key={indi.name}
+                                                      value={indi.name}>{indi.name}</MenuItem>))
+                                    }
+                                </TextField>
+                            </Box>
+                            <Box sx={{
+                                width: '50%', borderStyle: 'dashed',
+                                borderWidth: '2px', display: 'flex', justifyContent: 'space-between'
+                            }}>
+                                <Typography sx={{margin: '10px'}}>Ship To</Typography>
+                                <TextField
+                                    select
+                                    fullWidth={true}
+                                    sx={{margin: '10px', width: '50px'}}
+                                    label="Ship To"
+                                    variant="outlined"
+                                    margin="normal"
+                                >
+                                    {
+                                        UserRole.india.map(indi => (
+                                            <MenuItem key={indi.name}
+                                                      value={indi.name}>{indi.name}</MenuItem>))
+                                    }
+                                </TextField>
+                            </Box>
+                        </Box>
+                        <Box sx={{
+                            borderStyle: 'dashed',
+                            borderWidth: '5px'
+                        }}>
+                            <Typography>Samosa chatni</Typography>
+                        </Box>
                     </Box>
                     <Box sx={{
                         width: '40%', borderStyle: 'dashed',
@@ -562,13 +615,23 @@ export const SalesInvoiceCreate = () => {
                                 >
                                     {
                                         image2 ? (
-                                            <Box sx={{display: 'flex'}}>
+                                            <Box sx={{display: 'flex', position: 'relative'}}>
                                                 <CardMedia
-                                                    sx={{height: '90px', width: '90px', margin: '10px'}}
+                                                    sx={{
+                                                        height: '90px',
+                                                        width: '90px',
+                                                        margin: '10px',
+                                                        borderStyle: 'dashed',
+                                                        borderWidth: '2px'
+                                                    }}
                                                     image={image2}
                                                     alt="Upload Signature"
                                                 />
-                                                <IconButton onClick={() => setImage2('')}>
+                                                <IconButton onClick={() => setImage2('')} sx={{
+                                                    opacity: '0.8',
+                                                    top: '0px', color: 'black', backgroundColor: 'white',
+                                                    marginLeft: '75px', position: 'absolute'
+                                                }}>
                                                     <CloseIcon/>
                                                 </IconButton>
                                             </Box>
