@@ -182,7 +182,6 @@ export const SalesInvoiceCreate = () => {
                                 width: '50%', borderStyle: 'dashed',
                                 borderWidth: '2px', display: 'flex', justifyContent: 'space-between'
                             }}>
-                                <Typography sx={{margin: '10px'}}>Bill To</Typography>
                                 <TextField
                                     select
                                     fullWidth={true}
@@ -202,7 +201,6 @@ export const SalesInvoiceCreate = () => {
                                 width: '50%', borderStyle: 'dashed',
                                 borderWidth: '2px', display: 'flex', justifyContent: 'space-between'
                             }}>
-                                <Typography sx={{margin: '10px'}}>Ship To</Typography>
                                 <TextField
                                     select
                                     fullWidth={true}
