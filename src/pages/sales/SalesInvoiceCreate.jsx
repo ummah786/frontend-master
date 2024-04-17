@@ -185,6 +185,7 @@ export const SalesInvoiceCreate = () => {
                                 <Typography sx={{margin: '10px'}}>Bill To</Typography>
                                 <TextField
                                     select
+                                    fullWidth={true}
                                     sx={{margin: '10px'}}
                                     label="Bill To"
                                     variant="outlined"
@@ -205,7 +206,7 @@ export const SalesInvoiceCreate = () => {
                                 <TextField
                                     select
                                     fullWidth={true}
-                                    sx={{margin: '10px', width: '50px'}}
+                                    sx={{margin: '10px'}}
                                     label="Ship To"
                                     variant="outlined"
                                     margin="normal"
