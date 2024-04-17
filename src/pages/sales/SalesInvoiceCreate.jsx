@@ -18,6 +18,11 @@ import UserRole from "../../jsonfile/Role.json";
 import MenuItem from "@mui/material/MenuItem";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
+import dayjs from 'dayjs';
+import {DemoContainer} from '@mui/x-date-pickers/internals/demo';
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
+import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
+import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 
 export const SalesInvoiceCreate = () => {
     const [showBoxes, setShowBoxes] = useState(false);
@@ -32,6 +37,8 @@ export const SalesInvoiceCreate = () => {
 
     const [checked, setChecked] = useState(false);
 
+    const [saleInvoiceDate, setSaleInvoiceDate] = React.useState(dayjs('2024-01-01'));
+    const [dueDate, setDueDate] = React.useState(dayjs('2024-01-01'));
 
     const [image1, setImage1] = useState('');
     const [image2, setImage2] = useState('');
@@ -160,19 +167,55 @@ export const SalesInvoiceCreate = () => {
                 </Box>
                 <Box sx={{display: 'flex'}}>
                     <Box sx={{
-                        width: '70%', borderStyle: 'dashed',
+                        width: '60%', borderStyle: 'dashed',
                         borderWidth: '2px'
                     }}>
                         <Typography>Bill To</Typography>
                     </Box>
                     <Box sx={{
-                        width: '30%', borderStyle: 'dashed',
+                        width: '40%', borderStyle: 'dashed',
                         borderWidth: '2px'
                     }}>
-                        <Typography>Sales Invoice No: </Typography>
-                        <Typography>Sales Invoice Date: </Typography>
-                        <Typography>Payment Terms: </Typography>
-                        <Typography>Due Date: </Typography>
+                        <Box sx={{display: 'flex'}}>
+                            <Box sx={{width: '50%', margin: '20px'}}>
+                                <TextField
+                                    label="Sales Invoice No: "
+                                    /*       value={employee.itemName}
+                                           onChange={(e) => handleInputChange(employee.id, 'itemName', e.target.value)}*/
+                                />
+                            </Box>
+                            <Box sx={{width: '50%', margin: '20px'}}>
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DemoContainer components={['DatePicker', 'DatePicker']}>
+                                        <DatePicker
+                                            label="Sales Invoice Date:"
+                                            value={saleInvoiceDate}
+                                            onChange={(newValue) => setSaleInvoiceDate(newValue)}
+                                        />
+                                    </DemoContainer>
+                                </LocalizationProvider>
+                            </Box>
+                        </Box>
+                        <Box sx={{display: 'flex'}}>
+                            <Box sx={{width: '50%', margin: '20px'}}>
+                                <TextField
+                                    label="Payment Terms: "
+                                    /* value={employee.itemName}
+                                     onChange={(e) => handleInputChange(employee.id, 'itemName', e.target.value)}*/
+                                />
+                            </Box>
+                            <Box sx={{width: '50%', margin: '20px'}}>
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DemoContainer components={['DatePicker', 'DatePicker']}>
+                                        <DatePicker
+                                            label="Due Date:"
+                                            value={dueDate}
+                                            onChange={(newValue) => setDueDate(newValue)}
+                                        />
+                                    </DemoContainer>
+                                </LocalizationProvider>
+                            </Box>
+                        </Box>
                     </Box>
                 </Box>
                 <Box>
