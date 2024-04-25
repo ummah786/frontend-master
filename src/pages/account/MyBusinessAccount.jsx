@@ -244,7 +244,6 @@ export const MyBusinessAccount = () => {
                                 <Card sx={{maxWidth: 305}}>
                                     <CardMedia
                                         sx={{height: 100, width: 100}}
-                                        sx={{height: 140}}
                                         image={image1}
                                         alt="Card 1 Image"
                                         title="avatar"
