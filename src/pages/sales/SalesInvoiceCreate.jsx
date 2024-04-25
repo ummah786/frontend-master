@@ -1,15 +1,15 @@
-import {Box, Button, TextField} from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 import Typography from "@mui/joy/Typography";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import {StyledTableCell} from "../../commonStyle";
+import { StyledTableCell } from "../../commonStyle";
 import TableBody from "@mui/material/TableBody";
 import * as React from "react";
-import {useState} from "react";
-import {Close} from '@mui/icons-material';
+import { useState } from "react";
+import { Close } from '@mui/icons-material';
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from '@mui/icons-material/Close';
 import Checkbox from '@mui/material/Checkbox';
@@ -19,10 +19,11 @@ import MenuItem from "@mui/material/MenuItem";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import dayjs from 'dayjs';
-import {DemoContainer} from '@mui/x-date-pickers/internals/demo';
-import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
-import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
-import {DatePicker} from '@mui/x-date-pickers/DatePicker';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { useDispatch, useSelector } from 'react-redux';
 
 export const SalesInvoiceCreate = () => {
     const [showBoxes, setShowBoxes] = useState(false);
@@ -43,6 +44,21 @@ export const SalesInvoiceCreate = () => {
     const [image1, setImage1] = useState('');
     const [image2, setImage2] = useState('');
 
+
+    const { partyUser } = useSelector(state => state.partyReducerValue);
+
+
+    const [value1, setValue1] = useState('resg');
+    const [value2, setValue2] = useState('sdsds');
+
+
+    const handleBilltoSHipToo = (event) => {
+        setValue2(event.target.value);
+    };
+
+
+    console.log('value     2    ', value2);
+
     const handleImageUpload = (event, setImage) => {
         const file = event.target.files[0];
         const reader = new FileReader();
@@ -59,7 +75,7 @@ export const SalesInvoiceCreate = () => {
     };
 
     const addField = () => {
-        setFields([...fields, {key: '', value: ''}]);
+        setFields([...fields, { key: '', value: '' }]);
     };
     const removeField = (index) => {
         const updatedFields = [...fields];
@@ -73,7 +89,7 @@ export const SalesInvoiceCreate = () => {
         console.log(fields)
     };
     const handleAddDiscount = () => {
-        setBoxes([...boxes, {id: Date.now()}]);
+        setBoxes([...boxes, { id: Date.now() }]);
     };
     const handleCloseBox = (id) => {
         setBoxes(boxes.filter(box => box.id !== id));
@@ -94,7 +110,7 @@ export const SalesInvoiceCreate = () => {
     };
     const addRow = () => {
         //     const newEmployee = {id: employees.length + 1, item: '', quantity: 0, rate: 0, total: 0};
-        const newEmployee = {id: employees.length + 1};
+        const newEmployee = { id: employees.length + 1 };
         setEmployees([...employees, newEmployee]);
     };
     const deleteRow = (id) => {
@@ -106,12 +122,12 @@ export const SalesInvoiceCreate = () => {
             if (employee.id === id) {
                 if (key === 'quantity') {
                     employee.total = value * employee.rate;
-                    return {...employee, [key]: value};
+                    return { ...employee, [key]: value };
                 } else if (key === 'rate') {
                     employee.total = value * employee.quantity;
-                    return {...employee, [key]: value};
+                    return { ...employee, [key]: value };
                 } else {
-                    return {...employee, [key]: value};
+                    return { ...employee, [key]: value };
                 }
             }
             return employee;
@@ -120,13 +136,13 @@ export const SalesInvoiceCreate = () => {
     };
     return (
         <>
-            <Box sx={{maxHeight: 300}}>
+            <Box sx={{ maxHeight: 300 }}>
                 <Box>
                     <Card variant="outlined">
-                        <Box sx={{height: '100px', width: '100px'}}>
+                        <Box sx={{ height: '100px', width: '100px' }}>
                             {
                                 image1 ? (
-                                    <Box sx={{display: 'flex', position: 'relative'}}>
+                                    <Box sx={{ display: 'flex', position: 'relative' }}>
                                         <CardMedia
                                             sx={{
                                                 height: '90px',
@@ -143,7 +159,7 @@ export const SalesInvoiceCreate = () => {
                                             top: '-1px', color: 'black', backgroundColor: 'white',
                                             marginLeft: '70px', position: 'absolute'
                                         }} onClick={() => setImage1(null)}>
-                                            <CloseIcon fontSize="small"/>
+                                            <CloseIcon fontSize="small" />
                                         </IconButton>
                                     </Box>
                                 ) : (
@@ -152,7 +168,7 @@ export const SalesInvoiceCreate = () => {
                                             borderStyle: 'dashed',
                                             borderWidth: '2px', textAlign: 'center'
                                         }}
-                                                component="span">
+                                            component="span">
                                             Add Company Logo
                                         </Button>
                                     </label>
@@ -161,7 +177,7 @@ export const SalesInvoiceCreate = () => {
                         </Box>
                         <input
                             accept="image/*"
-                            style={{display: 'none'}}
+                            style={{ display: 'none' }}
                             id="image-upload-1"
                             type="file"
                             onChange={(event) => handleImageUpload(event, setImage1)}
@@ -169,74 +185,87 @@ export const SalesInvoiceCreate = () => {
                     </Card>
                     <Typography>Ummah Hub</Typography>
                 </Box>
-                <Box sx={{display: 'flex'}}>
+                <Box sx={{ display: 'flex' }}>
                     <Box sx={{
                         width: '60%', borderStyle: 'dashed',
-                        borderWidth: '2px'
+                        borderWidth: '1px'
                     }}>
                         <Box sx={{
-                            borderStyle: 'dashed',
-                            borderWidth: '2px', display: 'flex'
+                            display: 'flex'
                         }}>
                             <Box sx={{
-                                width: '50%', borderStyle: 'dashed',
-                                borderWidth: '2px', display: 'flex', justifyContent: 'space-between'
+                                width: '50%', display: 'flex', justifyContent: 'space-between'
                             }}>
                                 <TextField
                                     select
                                     fullWidth={true}
-                                    sx={{margin: '10px'}}
+                                    sx={{ margin: '10px' }}
                                     label="Bill To"
                                     variant="outlined"
                                     margin="normal"
+                                    onChange={(event) => handleBilltoSHipToo(event)}
                                 >
                                     {
-                                        UserRole.india.map(indi => (
-                                            <MenuItem key={indi.name}
-                                                      value={indi.name}>{indi.name}</MenuItem>))
+                                        partyUser.map(indi => (
+                                            <MenuItem key={indi.id}
+                                                value={indi}>{indi.pname}  - {indi.company}</MenuItem>))
                                     }
                                 </TextField>
                             </Box>
                             <Box sx={{
-                                width: '50%', borderStyle: 'dashed',
-                                borderWidth: '2px', display: 'flex', justifyContent: 'space-between'
+                                width: '50%', display: 'flex', justifyContent: 'space-between'
                             }}>
                                 <TextField
                                     select
                                     fullWidth={true}
-                                    sx={{margin: '10px'}}
+                                    sx={{ margin: '10px' }}
                                     label="Ship To"
                                     variant="outlined"
                                     margin="normal"
+                                    onChange={(event) => handleBilltoSHipToo(event)}
                                 >
                                     {
-                                        UserRole.india.map(indi => (
-                                            <MenuItem key={indi.name}
-                                                      value={indi.name}>{indi.name}</MenuItem>))
+                                        partyUser.map(indi => (
+                                            <MenuItem key={indi.id}
+                                                value={indi}>{indi.pname}  - {indi.company}</MenuItem>))
                                     }
                                 </TextField>
                             </Box>
                         </Box>
-                        <Box sx={{
-                            borderStyle: 'dashed',
-                            borderWidth: '5px'
-                        }}>
-                            <Typography>Samosa chatni</Typography>
+                        <Box sx={{ display: 'flex' }}>
+                            <Box sx={{
+                                width: '50%'
+                            }}>
+                                <Box sx={{ margin: '10px' }}>
+                                    <label> <strong>{value2.billingAddress}</strong></label>
+                                </Box> <Box sx={{ margin: '10px' }}>
+                                    <label>Phone :-  {value2.mobileNumber}</label>
+                                </Box>
+                            </Box>
+                            <Box sx={{
+                                width: '50%'
+                            }}>
+                                <Box sx={{ margin: '10px' }}>
+                                    <label> <strong>{value2.shippingAddress}</strong></label>
+                                </Box> <Box sx={{ margin: '10px' }}>
+                                    <label>Phone :-  {value2.mobileNumber}</label>
+                                </Box>
+                            </Box>
                         </Box>
                     </Box>
                     <Box sx={{
                         width: '40%', borderStyle: 'dashed',
                         borderWidth: '2px'
                     }}>
-                        <Box sx={{display: 'flex'}}>
-                            <Box sx={{width: '50%', margin: '20px'}}>
+                        <Box sx={{ display: 'flex' }}>
+                            <Box sx={{ width: '50%', margin: '10px' }}>
                                 <TextField
                                     label="Sales Invoice No: "
-                                    /*       value={employee.itemName}
-                                           onChange={(e) => handleInputChange(employee.id, 'itemName', e.target.value)}*/
+                                /*       value={employee.itemName}
+                                       onChange={(e) => handleInputChange(employee.id, 'itemName', e.target.value)}*/
                                 />
                             </Box>
-                            <Box sx={{width: '50%', margin: '20px'}}>
+                            <Box sx={{ width: '50%', margin: '10px' }}>
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DemoContainer components={['DatePicker', 'DatePicker']}>
                                         <DatePicker
@@ -248,15 +277,15 @@ export const SalesInvoiceCreate = () => {
                                 </LocalizationProvider>
                             </Box>
                         </Box>
-                        <Box sx={{display: 'flex'}}>
-                            <Box sx={{width: '50%', margin: '20px'}}>
+                        <Box sx={{ display: 'flex' }}>
+                            <Box sx={{ width: '50%', margin: '10px' }}>
                                 <TextField
                                     label="Payment Terms: "
-                                    /* value={employee.itemName}
-                                     onChange={(e) => handleInputChange(employee.id, 'itemName', e.target.value)}*/
+                                /* value={employee.itemName}
+                                 onChange={(e) => handleInputChange(employee.id, 'itemName', e.target.value)}*/
                                 />
                             </Box>
-                            <Box sx={{width: '50%', margin: '20px'}}>
+                            <Box sx={{ width: '50%', margin: '10px' }}>
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DemoContainer components={['DatePicker', 'DatePicker']}>
                                         <DatePicker
@@ -272,7 +301,7 @@ export const SalesInvoiceCreate = () => {
                 </Box>
                 <Box>
                     <TableContainer component={Paper}>
-                        <Table sx={{minWidth: 1250}} aria-label="customized table" stickyHeader>
+                        <Table sx={{ minWidth: 1250 }} aria-label="customized table" stickyHeader>
                             <TableHead>
                                 <TableRow>
                                     <StyledTableCell align="center">NO</StyledTableCell>
@@ -297,26 +326,26 @@ export const SalesInvoiceCreate = () => {
                                             onChange={(e) => handleInputChange(employee.id, 'itemName', e.target.value)}
                                         />
                                     </StyledTableCell><StyledTableCell align="center">
-                                        <TextField
-                                            value={employee.itemName}
-                                            onChange={(e) => handleInputChange(employee.id, 'itemName', e.target.value)}
-                                        />
-                                    </StyledTableCell><StyledTableCell align="center">
-                                        <TextField
-                                            value={employee.itemName}
-                                            onChange={(e) => handleInputChange(employee.id, 'itemName', e.target.value)}
-                                        />
-                                    </StyledTableCell><StyledTableCell align="center">
-                                        <TextField
-                                            value={employee.itemName}
-                                            onChange={(e) => handleInputChange(employee.id, 'itemName', e.target.value)}
-                                        />
-                                    </StyledTableCell><StyledTableCell align="center">
-                                        <TextField
-                                            value={employee.itemName}
-                                            onChange={(e) => handleInputChange(employee.id, 'itemName', e.target.value)}
-                                        />
-                                    </StyledTableCell>
+                                            <TextField
+                                                value={employee.itemName}
+                                                onChange={(e) => handleInputChange(employee.id, 'itemName', e.target.value)}
+                                            />
+                                        </StyledTableCell><StyledTableCell align="center">
+                                            <TextField
+                                                value={employee.itemName}
+                                                onChange={(e) => handleInputChange(employee.id, 'itemName', e.target.value)}
+                                            />
+                                        </StyledTableCell><StyledTableCell align="center">
+                                            <TextField
+                                                value={employee.itemName}
+                                                onChange={(e) => handleInputChange(employee.id, 'itemName', e.target.value)}
+                                            />
+                                        </StyledTableCell><StyledTableCell align="center">
+                                            <TextField
+                                                value={employee.itemName}
+                                                onChange={(e) => handleInputChange(employee.id, 'itemName', e.target.value)}
+                                            />
+                                        </StyledTableCell>
                                         <StyledTableCell align="center">
                                             <TextField
                                                 value={employee.itemName}
@@ -350,7 +379,7 @@ export const SalesInvoiceCreate = () => {
                                         <StyledTableCell align="center">
                                             <TextField
                                                 value={employee.total}
-                                                //   onChange={(e) => handleInputChange(employee.id, 'total', employee.quantity * employee.rate)}
+                                            //   onChange={(e) => handleInputChange(employee.id, 'total', employee.quantity * employee.rate)}
                                             />
                                         </StyledTableCell>
                                         <StyledTableCell align="center">
@@ -364,66 +393,66 @@ export const SalesInvoiceCreate = () => {
                             borderStyle: 'dashed',
                             borderWidth: '2px'
                         }}>Add Row</Button>
-                        <Table sx={{minWidth: 1250}} aria-label="customized table" stickyHeader>
+                        <Table sx={{ minWidth: 1250 }} aria-label="customized table" stickyHeader>
                             <TableHead>
                                 <TableRow>
-                                    <StyledTableCell align="center" style={{color: 'black'}}>1</StyledTableCell>
-                                    <StyledTableCell align="center" style={{color: 'black'}}>1</StyledTableCell>
-                                    <StyledTableCell align="center" style={{color: 'black'}}>1</StyledTableCell>
-                                    <StyledTableCell align="center" style={{color: 'black'}}>1</StyledTableCell>
-                                    <StyledTableCell align="center" style={{color: 'black'}}>1</StyledTableCell>
-                                    <StyledTableCell align="center" style={{color: 'black'}}>1</StyledTableCell>
-                                    <StyledTableCell align="center" style={{color: 'black'}}>1</StyledTableCell>
-                                    <StyledTableCell align="center" style={{color: 'black'}}>1</StyledTableCell>
+                                    <StyledTableCell align="center" style={{ color: 'black' }}>1</StyledTableCell>
+                                    <StyledTableCell align="center" style={{ color: 'black' }}>1</StyledTableCell>
+                                    <StyledTableCell align="center" style={{ color: 'black' }}>1</StyledTableCell>
+                                    <StyledTableCell align="center" style={{ color: 'black' }}>1</StyledTableCell>
+                                    <StyledTableCell align="center" style={{ color: 'black' }}>1</StyledTableCell>
+                                    <StyledTableCell align="center" style={{ color: 'black' }}>1</StyledTableCell>
+                                    <StyledTableCell align="center" style={{ color: 'black' }}>1</StyledTableCell>
+                                    <StyledTableCell align="center" style={{ color: 'black' }}>1</StyledTableCell>
                                     <StyledTableCell align="center">SUBTOTAL</StyledTableCell>
                                     <StyledTableCell align="center">(₹)</StyledTableCell>
                                     <StyledTableCell align="center">(₹)</StyledTableCell>
                                     <StyledTableCell align="center">(₹)</StyledTableCell>
-                                    <StyledTableCell align="center" style={{color: 'black'}}>1</StyledTableCell>
+                                    <StyledTableCell align="center" style={{ color: 'black' }}>1</StyledTableCell>
                                 </TableRow>
                             </TableHead>
                         </Table>
                     </TableContainer>
                 </Box>
-                <Box sx={{display: 'flex'}}>
-                    <Box sx={{width: '50%'}}>
-                        <Box sx={{padding: '10px'}}>
+                <Box sx={{ display: 'flex' }}>
+                    <Box sx={{ width: '50%' }}>
+                        <Box sx={{ padding: '10px' }}>
                             <Button onClick={handleToggleNotes} variant="contained" color="primary">
                                 +Add Notes
                             </Button>
                             {openNotes && (
-                                <Box sx={{display: 'flex', padding: '10px'}}>
-                                    <TextField label="Enter Notes" variant="outlined" fullWidth={true}/>
+                                <Box sx={{ display: 'flex', padding: '10px' }}>
+                                    <TextField label="Enter Notes" variant="outlined" fullWidth={true} />
                                     <IconButton onClick={handleToggleNotes}>
-                                        <Close/>
+                                        <Close />
                                     </IconButton>
                                 </Box>
                             )}
                         </Box>
-                        <Box sx={{padding: '10px'}}>
+                        <Box sx={{ padding: '10px' }}>
                             <Button onClick={handleToggleTermCondition} variant="contained" color="primary">
                                 +Terms and Conditions
                             </Button>
                             {openTermCondition && (
-                                <Box sx={{display: 'flex', padding: '10px'}}>
-                                    <TextField label="Enter Terms & Conditions" variant="outlined" fullWidth={true}/>
+                                <Box sx={{ display: 'flex', padding: '10px' }}>
+                                    <TextField label="Enter Terms & Conditions" variant="outlined" fullWidth={true} />
                                     <IconButton onClick={handleToggleTermCondition}>
-                                        <Close/>
+                                        <Close />
                                     </IconButton>
                                 </Box>
                             )
                             }{
-                            !openTermCondition && (
-                                <Box sx={{padding: '10px'}}>
-                                    <Typography>1. Goods once sold will not be taken back or exchanged </Typography>
-                                    <Typography>2. All disputes are subject to [ENTER_YOUR_CITY_NAME] jurisdiction
-                                        only</Typography>
-                                </Box>
-                            )
-                        }
+                                !openTermCondition && (
+                                    <Box sx={{ padding: '10px' }}>
+                                        <Typography>1. Goods once sold will not be taken back or exchanged </Typography>
+                                        <Typography>2. All disputes are subject to [ENTER_YOUR_CITY_NAME] jurisdiction
+                                            only</Typography>
+                                    </Box>
+                                )
+                            }
                         </Box>
                     </Box>
-                    <Box sx={{width: '50%'}}>
+                    <Box sx={{ width: '50%' }}>
                         {/*                        <Box>
                             <Button variant="contained" onClick={handleAddDiscount}>
                                 Add Additional Charges
@@ -438,75 +467,75 @@ export const SalesInvoiceCreate = () => {
                             ))}
                         </Box>*/}
                         <Box>
-                            <Box sx={{padding: '10px'}}>
+                            <Box sx={{ padding: '10px' }}>
                                 <Button variant="contained" onClick={addField}> Add Additional Charges</Button>
                                 {fields.map((field, index) => (
-                                    <Box key={index} sx={{marginTop: 2, display: 'flex', alignItems: 'center'}}>
-                                        <Box sx={{width: '65%'}}>
+                                    <Box key={index} sx={{ marginTop: 2, display: 'flex', alignItems: 'center' }}>
+                                        <Box sx={{ width: '65%' }}>
                                             <TextField
                                                 label="Enter Charges (ex.Transport Charge)"
                                                 value={field.key}
                                                 onChange={(e) => handleInputChangess(index, 'key', e)}
                                                 disabled={field.disabled}
-                                                sx={{marginRight: 1}}
+                                                sx={{ marginRight: 1 }}
                                             />
-                                        </Box> <Box sx={{width: '25%'}}>
-                                        <TextField
-                                            label=" ₹ "
-                                            value={field.value}
-                                            onChange={(e) => handleInputChangess(index, 'value', e)}
-                                            disabled={field.disabled}
-                                            inputProps={{inputMode: 'decimal', pattern: '[0-9]*[.,]?[0-9]*'}}
-                                            type="number"
-                                            sx={{marginRight: 1}}
-                                        /> </Box> <Box sx={{width: '10%'}}>
-                                        <IconButton onClick={() => removeField(index)} disabled={field.disabled}>
-                                            <CloseIcon/>
-                                        </IconButton>
-                                    </Box>
+                                        </Box> <Box sx={{ width: '25%' }}>
+                                            <TextField
+                                                label=" ₹ "
+                                                value={field.value}
+                                                onChange={(e) => handleInputChangess(index, 'value', e)}
+                                                disabled={field.disabled}
+                                                inputProps={{ inputMode: 'decimal', pattern: '[0-9]*[.,]?[0-9]*' }}
+                                                type="number"
+                                                sx={{ marginRight: 1 }}
+                                            /> </Box> <Box sx={{ width: '10%' }}>
+                                            <IconButton onClick={() => removeField(index)} disabled={field.disabled}>
+                                                <CloseIcon />
+                                            </IconButton>
+                                        </Box>
                                     </Box>
                                 ))}
                                 {fields.length === 0}
                             </Box>
-                            <Box sx={{padding: '10px', display: 'flex'}}>
-                                <Box sx={{width: '65%'}}>
+                            <Box sx={{ padding: '10px', display: 'flex' }}>
+                                <Box sx={{ width: '65%' }}>
                                     <Typography>Taxable Amount</Typography>
-                                </Box> <Box sx={{width: '25%'}}>
-                                <TextField
-                                    label=" ₹ "
-                                    inputProps={{inputMode: 'decimal', pattern: '[0-9]*[.,]?[0-9]*'}}
-                                    type="number"
-                                    sx={{marginRight: 1}}
-                                />
+                                </Box> <Box sx={{ width: '25%' }}>
+                                    <TextField
+                                        label=" ₹ "
+                                        inputProps={{ inputMode: 'decimal', pattern: '[0-9]*[.,]?[0-9]*' }}
+                                        type="number"
+                                        sx={{ marginRight: 1 }}
+                                    />
+                                </Box>
                             </Box>
-                            </Box>
-                            <Box sx={{padding: '10px'}}>
+                            <Box sx={{ padding: '10px' }}>
                                 <Button variant="contained" onClick={() => setShowAddDiscount(!showAddDiscount)}>+ Add
                                     Discount</Button>
                                 {showAddDiscount ? (
-                                    <Box sx={{marginTop: 2, display: 'flex', alignItems: 'center'}}>
-                                        <Box sx={{width: '65%'}}>
+                                    <Box sx={{ marginTop: 2, display: 'flex', alignItems: 'center' }}>
+                                        <Box sx={{ width: '65%' }}>
                                             <TextField
                                                 label="Taxable Amount"
                                                 value="Taxable Amount"
-                                                sx={{marginRight: 1}}
+                                                sx={{ marginRight: 1 }}
                                             />
                                         </Box>
-                                        <Box sx={{width: '25%'}}>
+                                        <Box sx={{ width: '25%' }}>
                                             <TextField
                                                 label=" ₹ "
                                                 value={textValue}
                                                 onChange={(e) => setTextValue(e.target.value)}
-                                                inputProps={{inputMode: 'decimal', pattern: '[0-9]*[.,]?[0-9]*'}}
+                                                inputProps={{ inputMode: 'decimal', pattern: '[0-9]*[.,]?[0-9]*' }}
                                                 type="number"
-                                                sx={{marginRight: 1}}
+                                                sx={{ marginRight: 1 }}
                                             /></Box>
-                                        <Box sx={{width: '10%'}}>
+                                        <Box sx={{ width: '10%' }}>
                                             <IconButton onClick={() => {
                                                 setShowAddDiscount(!showAddDiscount);
                                                 setTextValue(0);
                                             }}>
-                                                <CloseIcon/>
+                                                <CloseIcon />
                                             </IconButton>
                                         </Box>
                                     </Box>
@@ -517,32 +546,32 @@ export const SalesInvoiceCreate = () => {
 
                         </Box>
                         <Box>
-                            <Box sx={{padding: '10px', display: 'flex'}}>
-                                <Box sx={{width: '65%'}}>
+                            <Box sx={{ padding: '10px', display: 'flex' }}>
+                                <Box sx={{ width: '65%' }}>
                                     <FormControlLabel
-                                        control={<Checkbox checked={checked} onChange={handleChangeChecked}/>}
+                                        control={<Checkbox checked={checked} onChange={handleChangeChecked} />}
                                         label="Auto Round Off"
                                     />
                                 </Box>
-                                <Box sx={{width: '25%'}}>
+                                <Box sx={{ width: '25%' }}>
                                     <TextField
                                         label=" ₹ "
-                                        inputProps={{inputMode: 'decimal', pattern: '[0-9]*[.,]?[0-9]*'}}
+                                        inputProps={{ inputMode: 'decimal', pattern: '[0-9]*[.,]?[0-9]*' }}
                                         type="number"
-                                        sx={{marginRight: 1}}
+                                        sx={{ marginRight: 1 }}
                                     />
                                 </Box>
                             </Box>
-                            <Box sx={{padding: '10px', display: 'flex'}} variant="outlined">
-                                <Box sx={{width: '65%'}}>
+                            <Box sx={{ padding: '10px', display: 'flex' }} variant="outlined">
+                                <Box sx={{ width: '65%' }}>
                                     <Typography>Total Amount</Typography>
                                 </Box>
-                                <Box sx={{width: '25%'}}>
+                                <Box sx={{ width: '25%' }}>
                                     <TextField
                                         label=" Enter Payment Amount "
-                                        inputProps={{inputMode: 'decimal', pattern: '[0-9]*[.,]?[0-9]*'}}
+                                        inputProps={{ inputMode: 'decimal', pattern: '[0-9]*[.,]?[0-9]*' }}
                                         type="number"
-                                        sx={{marginRight: 1}}
+                                        sx={{ marginRight: 1 }}
                                     />
                                 </Box>
                             </Box>
@@ -550,41 +579,41 @@ export const SalesInvoiceCreate = () => {
 
                         <Box>
 
-                            <Box sx={{padding: '10px', display: 'flex'}}>
-                                <Box sx={{width: '65%'}}>
+                            <Box sx={{ padding: '10px', display: 'flex' }}>
+                                <Box sx={{ width: '65%' }}>
                                     <FormControlLabel
-                                        control={<Checkbox checked={checked} onChange={handleChangeChecked}/>}
+                                        control={<Checkbox checked={checked} onChange={handleChangeChecked} />}
                                         label="Marked As Fully Paid"
                                     />
                                 </Box>
-                                <Box sx={{width: '25%'}}>
+                                <Box sx={{ width: '25%' }}>
                                 </Box>
                             </Box>
                             <Box sx={{
                                 padding: '10px', display: 'flex', borderStyle: 'dashed',
                                 borderWidth: '2px'
                             }}>
-                                <Box sx={{width: '65%'}}>
+                                <Box sx={{ width: '65%' }}>
                                     <Typography>Amount Received</Typography>
                                 </Box>
-                                <Box sx={{width: '35%', display: 'flex'}}>
+                                <Box sx={{ width: '35%', display: 'flex' }}>
                                     <TextField
                                         label=" ₹  "
-                                        inputProps={{inputMode: 'decimal', pattern: '[0-9]*[.,]?[0-9]*'}}
+                                        inputProps={{ inputMode: 'decimal', pattern: '[0-9]*[.,]?[0-9]*' }}
                                         type="number"
-                                        sx={{marginRight: 1}}
+                                        sx={{ marginRight: 1 }}
                                     />
                                     <TextField
                                         fullWidth
                                         select
                                         label="Mode"
                                         variant="outlined"
-                                        sx={{marginRight: 1}}
+                                        sx={{ marginRight: 1 }}
                                     >
                                         {
                                             UserRole.paymentMode.map(userrole => (
                                                 <MenuItem key={userrole.name}
-                                                          value={userrole.name}>{userrole.name}</MenuItem>
+                                                    value={userrole.name}>{userrole.name}</MenuItem>
                                             ))
                                         }
                                     </TextField>
@@ -594,16 +623,16 @@ export const SalesInvoiceCreate = () => {
 
                         </Box>
                         <Box>
-                            <Box sx={{padding: '10px', display: 'flex'}}>
-                                <Box sx={{width: '65%'}}>
+                            <Box sx={{ padding: '10px', display: 'flex' }}>
+                                <Box sx={{ width: '65%' }}>
                                     <Typography>Balance Amount</Typography>
                                 </Box>
-                                <Box sx={{width: '25%'}}>
+                                <Box sx={{ width: '25%' }}>
                                     <TextField
                                         label=" ₹  "
-                                        inputProps={{inputMode: 'decimal', pattern: '[0-9]*[.,]?[0-9]*'}}
+                                        inputProps={{ inputMode: 'decimal', pattern: '[0-9]*[.,]?[0-9]*' }}
                                         type="number"
-                                        sx={{marginRight: 1}}
+                                        sx={{ marginRight: 1 }}
                                     />
                                 </Box>
                             </Box>
@@ -614,7 +643,7 @@ export const SalesInvoiceCreate = () => {
                                 >
                                     {
                                         image2 ? (
-                                            <Box sx={{display: 'flex', position: 'relative'}}>
+                                            <Box sx={{ display: 'flex', position: 'relative' }}>
                                                 <CardMedia
                                                     sx={{
                                                         height: '90px',
@@ -631,7 +660,7 @@ export const SalesInvoiceCreate = () => {
                                                     top: '0px', color: 'black', backgroundColor: 'white',
                                                     marginLeft: '75px', position: 'absolute'
                                                 }}>
-                                                    <CloseIcon/>
+                                                    <CloseIcon />
                                                 </IconButton>
                                             </Box>
 
@@ -649,7 +678,7 @@ export const SalesInvoiceCreate = () => {
                                 </Box>
                                 <input
                                     accept="image/*"
-                                    style={{display: 'none'}}
+                                    style={{ display: 'none' }}
                                     id="image-upload-2"
                                     type="file"
                                     onChange={(event) => handleImageUpload(event, setImage2)}
