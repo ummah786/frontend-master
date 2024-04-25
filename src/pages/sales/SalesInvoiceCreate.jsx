@@ -16,6 +16,9 @@ import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import UserRole from "../../jsonfile/Role.json";
 import MenuItem from "@mui/material/MenuItem";
+import Modal from "@mui/joy/Modal";
+import ModalClose from "@mui/joy/ModalClose";
+import {Transition} from "react-transition-group";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import dayjs from 'dayjs';
@@ -25,7 +28,20 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useDispatch, useSelector } from 'react-redux';
 
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
+
 export const SalesInvoiceCreate = () => {
+    const [openCategory, setOpenCategory] = React.useState(false);
     const [showBoxes, setShowBoxes] = useState(false);
     const [textFields, setTextFields] = useState(['']);
     const [boxes, setBoxes] = useState([]);
@@ -48,16 +64,18 @@ export const SalesInvoiceCreate = () => {
     const { partyUser } = useSelector(state => state.partyReducerValue);
 
 
-    const [value1, setValue1] = useState('resg');
-    const [value2, setValue2] = useState('sdsds');
+    const [billTo, setBillTo] = useState('');
+    const [shipTo, setShipTo] = useState('');
 
 
     const handleBilltoSHipToo = (event) => {
-        setValue2(event.target.value);
+        setShipTo(event.target.value);
+        setBillTo(event.target.value);
     };
 
-
-    console.log('value     2    ', value2);
+    const handleSHipToo = (event) => {
+        setShipTo(event.target.value);
+    };
 
     const handleImageUpload = (event, setImage) => {
         const file = event.target.files[0];
@@ -222,8 +240,9 @@ export const SalesInvoiceCreate = () => {
                                     label="Ship To"
                                     variant="outlined"
                                     margin="normal"
-                                    onChange={(event) => handleBilltoSHipToo(event)}
+                                    onChange={(event) => handleSHipToo(event)}
                                 >
+                                     <MenuItem onClick={() => setOpenCategory(true)}>Change Shipping Address</MenuItem>
                                     {
                                         partyUser.map(indi => (
                                             <MenuItem key={indi.id}
@@ -231,24 +250,72 @@ export const SalesInvoiceCreate = () => {
                                     }
                                 </TextField>
                             </Box>
+                            <Transition in={openCategory} timeout={400}>
+                                        <Modal
+                                            open={openCategory}
+                                            onClose={() => setOpenCategory(false)}
+                                            aria-labelledby="modal-modal-title"
+                                            aria-describedby="modal-modal-description"
+                                            sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+                                        >
+                                            <Box sx={style}>
+                                                <Box
+                                                    sx={{
+                                                        marginTop: 8,
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        alignItems: 'center',
+                                                    }}
+                                                >
+                                                    <ModalClose variant="plain" sx={{m: 1}}/>
+                                                    <Typography component="h1" variant="h5">
+                                                        Save Into Category
+                                                    </Typography>
+                                                    <Box component="form"  noValidate sx={{mt: 1}}>
+                                                        <TextField
+                                                            margin="normal"
+                                                            required
+                                                            fullWidth
+                                                            id="Category"
+                                                            label="Categroy"
+                                                            name="Category"
+                                                            autoComplete="Category"
+                                                            autoFocus
+                                                        />
+                                                        <Button
+                                                            type="submit"
+                                                            fullWidth
+                                                            variant="contained"
+                                                            sx={{mt: 3, mb: 2, color: "whitesmoke", background: '#212121'}}
+                                                        >
+                                                            Submit
+                                                        </Button>
+                                                    </Box>
+                                                </Box>
+                                            </Box>
+                                        </Modal>
+                                    </Transition>
                         </Box>
                         <Box sx={{ display: 'flex' }}>
                             <Box sx={{
                                 width: '50%'
                             }}>
-                                <Box sx={{ margin: '10px' }}>
-                                    <label> <strong>{value2.billingAddress}</strong></label>
-                                </Box> <Box sx={{ margin: '10px' }}>
-                                    <label>Phone :-  {value2.mobileNumber}</label>
+                                <Box sx={{ margin: '5px' }}>
+                                    <label style={{ fontSize: '12px' }}>Address :- <strong>{billTo.billingAddress}</strong></label>
+                                </Box> <Box sx={{ margin: '5px' }}>
+                                    <label style={{ fontSize: '12px' }}>Phone :-  {billTo.mobileNumber}</label>
+                                </Box>
+                                <Box sx={{ margin: '5px' }}>
+                                    <label style={{ fontSize: '12px' }}>GST :-  {billTo.gstNumber}</label>
                                 </Box>
                             </Box>
                             <Box sx={{
                                 width: '50%'
                             }}>
                                 <Box sx={{ margin: '10px' }}>
-                                    <label> <strong>{value2.shippingAddress}</strong></label>
+                                    <label style={{ fontSize: '12px' }}>Address :- <strong>{shipTo.shippingAddress}</strong></label>
                                 </Box> <Box sx={{ margin: '10px' }}>
-                                    <label>Phone :-  {value2.mobileNumber}</label>
+                                    <label style={{ fontSize: '12px' }}>Phone :- {shipTo.mobileNumber}</label>
                                 </Box>
                             </Box>
                         </Box>
