@@ -18,7 +18,7 @@ import UserRole from "../../jsonfile/Role.json";
 import MenuItem from "@mui/material/MenuItem";
 import Modal from "@mui/joy/Modal";
 import ModalClose from "@mui/joy/ModalClose";
-import {Transition} from "react-transition-group";
+import { Transition } from "react-transition-group";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import dayjs from 'dayjs';
@@ -33,7 +33,7 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 500,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -41,8 +41,9 @@ const style = {
 };
 
 export const SalesInvoiceCreate = () => {
+    const [labelBillTO, setLabelBillTO] = useState('Select Party');
+    const [shipToFlag, setShipToFlag] = React.useState(true);
     const [openCategory, setOpenCategory] = React.useState(false);
-    const [showBoxes, setShowBoxes] = useState(false);
     const [textFields, setTextFields] = useState(['']);
     const [boxes, setBoxes] = useState([]);
     const [fields, setFields] = useState([]);
@@ -51,26 +52,21 @@ export const SalesInvoiceCreate = () => {
     const [openTermCondition, setOpenTermCondition] = useState(false);
     const [textValue, setTextValue] = useState('');
     const [showAddDiscount, setShowAddDiscount] = useState(false);
-
     const [checked, setChecked] = useState(false);
-
     const [saleInvoiceDate, setSaleInvoiceDate] = React.useState(dayjs('2024-01-01'));
     const [dueDate, setDueDate] = React.useState(dayjs('2024-01-01'));
-
+    const [billTo, setBillTo] = useState('');
+    const [shipTo, setShipTo] = useState('');
     const [image1, setImage1] = useState('');
     const [image2, setImage2] = useState('');
 
-
     const { partyUser } = useSelector(state => state.partyReducerValue);
-
-
-    const [billTo, setBillTo] = useState('');
-    const [shipTo, setShipTo] = useState('');
-
 
     const handleBilltoSHipToo = (event) => {
         setShipTo(event.target.value);
         setBillTo(event.target.value);
+        setShipToFlag(false);
+        setLabelBillTO("Bill To")
     };
 
     const handleSHipToo = (event) => {
@@ -218,7 +214,7 @@ export const SalesInvoiceCreate = () => {
                                     select
                                     fullWidth={true}
                                     sx={{ margin: '10px' }}
-                                    label="Bill To"
+                                    label={labelBillTO}
                                     variant="outlined"
                                     margin="normal"
                                     onChange={(event) => handleBilltoSHipToo(event)}
@@ -240,9 +236,10 @@ export const SalesInvoiceCreate = () => {
                                     label="Ship To"
                                     variant="outlined"
                                     margin="normal"
+                                    disabled={shipToFlag}
                                     onChange={(event) => handleSHipToo(event)}
                                 >
-                                     <MenuItem onClick={() => setOpenCategory(true)}>Change Shipping Address</MenuItem>
+                                    <MenuItem onClick={() => setOpenCategory(true)}>Change Shipping Address</MenuItem>
                                     {
                                         partyUser.map(indi => (
                                             <MenuItem key={indi.id}
@@ -251,50 +248,92 @@ export const SalesInvoiceCreate = () => {
                                 </TextField>
                             </Box>
                             <Transition in={openCategory} timeout={400}>
-                                        <Modal
-                                            open={openCategory}
-                                            onClose={() => setOpenCategory(false)}
-                                            aria-labelledby="modal-modal-title"
-                                            aria-describedby="modal-modal-description"
-                                            sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+                                <Modal
+                                    open={openCategory}
+                                    onClose={() => setOpenCategory(false)}
+                                    aria-labelledby="modal-modal-title"
+                                    aria-describedby="modal-modal-description"
+                                    sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                                >
+                                    <Box sx={style}>
+                                        <Box
+                                            sx={{
+                                                marginTop: 8,
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                alignItems: 'center',
+                                            }}
                                         >
-                                            <Box sx={style}>
-                                                <Box
-                                                    sx={{
-                                                        marginTop: 8,
-                                                        display: 'flex',
-                                                        flexDirection: 'column',
-                                                        alignItems: 'center',
-                                                    }}
-                                                >
-                                                    <ModalClose variant="plain" sx={{m: 1}}/>
-                                                    <Typography component="h1" variant="h5">
-                                                        Save Into Category
-                                                    </Typography>
-                                                    <Box component="form"  noValidate sx={{mt: 1}}>
-                                                        <TextField
-                                                            margin="normal"
-                                                            required
-                                                            fullWidth
-                                                            id="Category"
-                                                            label="Categroy"
-                                                            name="Category"
-                                                            autoComplete="Category"
-                                                            autoFocus
-                                                        />
-                                                        <Button
-                                                            type="submit"
-                                                            fullWidth
-                                                            variant="contained"
-                                                            sx={{mt: 3, mb: 2, color: "whitesmoke", background: '#212121'}}
-                                                        >
-                                                            Submit
-                                                        </Button>
-                                                    </Box>
-                                                </Box>
+                                            <Box sx={{ display: 'flex' }}>
+                                                <Typography component="h1" variant="h5">
+                                                    Edit Shipping Address
+                                                </Typography>
+                                                <ModalClose variant="plain" sx={{ m: 1 }} />
                                             </Box>
-                                        </Modal>
-                                    </Transition>
+                                            <Box component="form" noValidate sx={{ mt: 1 }}>
+                                                <Box>
+                                                    <TextField
+                                                        margin="normal"
+                                                        required
+                                                        fullWidth
+                                                        id="Street Address *"
+                                                        label="Street Address *"
+                                                        name="Street Address *"
+                                                        autoComplete="Street Address *"
+                                                        autoFocus
+                                                    />
+                                                </Box>
+                                                <Box sx={{ display: 'flex' }}>
+                                                    <TextField
+                                                        select
+                                                        fullWidth={true}
+                                                        sx={{ margin: '10px' }}
+                                                        label="State"
+                                                        variant="outlined"
+                                                        margin="normal"
+                                                        onChange={(event) => handleBilltoSHipToo(event)}
+                                                    >
+                                                        {
+                                                            UserRole.india.map(indi => (
+                                                                <MenuItem key={indi.name}
+                                                                    value={indi.name}>{indi.name}</MenuItem>))
+                                                        }
+                                                    </TextField>
+                                                    <TextField
+                                                        margin="normal"
+                                                        required
+                                                        id="Pin Code *"
+                                                        label="Pin Code *"
+                                                        name="Pin Code *"
+                                                        autoComplete="Pin Code *"
+                                                        autoFocus
+                                                    />
+                                                </Box>
+                                                <Box>
+                                                    <TextField
+                                                        margin="normal"
+                                                        required
+                                                        fullWidth
+                                                        id="City*"
+                                                        label="City*"
+                                                        name="City*"
+                                                        autoComplete="City*"
+                                                        autoFocus
+                                                    />
+                                                </Box>
+                                                <Button
+                                                    type="submit"
+                                                    fullWidth
+                                                    variant="contained"
+                                                    sx={{ mt: 3, mb: 2, color: "whitesmoke", background: '#212121' }}
+                                                >
+                                                    Submit
+                                                </Button>
+                                            </Box>
+                                        </Box>
+                                    </Box>
+                                </Modal>
+                            </Transition>
                         </Box>
                         <Box sx={{ display: 'flex' }}>
                             <Box sx={{
