@@ -5,7 +5,6 @@ import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { StyledTableCell } from "../../commonStyle";
 import TableBody from "@mui/material/TableBody";
 import * as React from "react";
 import { useState } from "react";
@@ -26,8 +25,10 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import { useDispatch, useSelector } from 'react-redux';
-
+import { Search, SearchIconWrapper, StyledInputBase, StyledTableCell, StyledTableRow } from "../../commonStyle";
 const style = {
     position: 'absolute',
     top: '50%',
@@ -37,7 +38,7 @@ const style = {
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
-    p: 4,
+    p: 1,
 };
 
 export const SalesInvoiceCreate = () => {
@@ -61,6 +62,22 @@ export const SalesInvoiceCreate = () => {
     const [image2, setImage2] = useState('');
 
     const { partyUser } = useSelector(state => state.partyReducerValue);
+
+
+    function handleEdit(id, data) {
+        handleBooleanChange();
+        findObjectById(id);
+        // fetchAllManageUserData();
+       // dispatch(updateBusinessUser(data));
+    }
+    async function handleDelete(id, event) {}
+    const handleBooleanChange = () => {
+    };
+
+    const findObjectById = (id) => {
+
+
+    };
 
     const handleBilltoSHipToo = (event) => {
         setShipTo(event.target.value);
@@ -256,81 +273,36 @@ export const SalesInvoiceCreate = () => {
                                     sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
                                 >
                                     <Box sx={style}>
-                                        <Box
-                                            sx={{
-                                                marginTop: 8,
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                alignItems: 'center',
-                                            }}
-                                        >
-                                            <Box sx={{ display: 'flex' }}>
-                                                <Typography component="h1" variant="h5">
-                                                    Edit Shipping Address
-                                                </Typography>
-                                                <ModalClose variant="plain" sx={{ m: 1 }} />
-                                            </Box>
-                                            <Box component="form" noValidate sx={{ mt: 1 }}>
-                                                <Box>
-                                                    <TextField
-                                                        margin="normal"
-                                                        required
-                                                        fullWidth
-                                                        id="Street Address *"
-                                                        label="Street Address *"
-                                                        name="Street Address *"
-                                                        autoComplete="Street Address *"
-                                                        autoFocus
-                                                    />
-                                                </Box>
-                                                <Box sx={{ display: 'flex' }}>
-                                                    <TextField
-                                                        select
-                                                        fullWidth={true}
-                                                        sx={{ margin: '10px' }}
-                                                        label="State"
-                                                        variant="outlined"
-                                                        margin="normal"
-                                                        onChange={(event) => handleBilltoSHipToo(event)}
-                                                    >
-                                                        {
-                                                            UserRole.india.map(indi => (
-                                                                <MenuItem key={indi.name}
-                                                                    value={indi.name}>{indi.name}</MenuItem>))
-                                                        }
-                                                    </TextField>
-                                                    <TextField
-                                                        margin="normal"
-                                                        required
-                                                        id="Pin Code *"
-                                                        label="Pin Code *"
-                                                        name="Pin Code *"
-                                                        autoComplete="Pin Code *"
-                                                        autoFocus
-                                                    />
-                                                </Box>
-                                                <Box>
-                                                    <TextField
-                                                        margin="normal"
-                                                        required
-                                                        fullWidth
-                                                        id="City*"
-                                                        label="City*"
-                                                        name="City*"
-                                                        autoComplete="City*"
-                                                        autoFocus
-                                                    />
-                                                </Box>
-                                                <Button
-                                                    type="submit"
-                                                    fullWidth
-                                                    variant="contained"
-                                                    sx={{ mt: 3, mb: 2, color: "whitesmoke", background: '#212121' }}
-                                                >
-                                                    Submit
-                                                </Button>
-                                            </Box>
+                                        <Typography>Change Shipping Address</Typography>
+                                        <Box>
+                                            <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
+                                                <Table sx={{ minWidth: 1250 }} aria-label="customized table" stickyHeader>
+                                                    <TableHead>
+                                                        <TableRow>
+                                                            <StyledTableCell align="center">Address</StyledTableCell>
+                                                            <StyledTableCell>Actions</StyledTableCell>
+                                                        </TableRow>
+                                                    </TableHead>
+                                                    <TableBody>
+                                                        <StyledTableRow key="1">
+                                                            <StyledTableCell align="center">"@"</StyledTableCell>
+                                                            <StyledTableCell>
+                                                                <IconButton aria-label="edit"
+                                                                    onClick={() => handleEdit("@", "@")}>
+                                                                    <EditIcon />
+                                                                </IconButton>
+                                                                <IconButton aria-label="delete"
+                                                                    onClick={() => handleDelete("@")}>
+                                                                    <DeleteIcon />
+                                                                </IconButton>
+                                                            </StyledTableCell>
+                                                        </StyledTableRow>
+
+                                                    </TableBody>
+                                                </Table>
+                                            </TableContainer>
                                         </Box>
+                                        <ChildModal />
                                     </Box>
                                 </Modal>
                             </Transition>
@@ -797,4 +769,109 @@ export const SalesInvoiceCreate = () => {
             </Box>
         </>
     )
+}
+
+function ChildModal() {
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => {
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    return (
+        <React.Fragment>
+            <Button onClick={handleOpen}>Open Child Modal</Button>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="child-modal-title"
+                aria-describedby="child-modal-description"
+            >
+                <Box sx={{ ...style, width: 200 }}>
+                    <Box sx={style}>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <Box sx={{
+                                display: 'flex', borderStyle: 'dashed',
+                                borderWidth: '2px'
+                            }}>
+                                <Typography component="h1" variant="h5">
+                                    Edit Shipping Address
+                                </Typography>
+                                <ModalClose variant="plain" sx={{
+                                    m: 1, borderStyle: 'dashed',
+                                    borderWidth: '2px'
+                                }} />
+                            </Box>
+                            <Box component="form">
+                                <Box>
+                                    <TextField
+                                        sx={{ width: '100%' }}
+                                        margin="normal"
+                                        label="Street Address*"
+                                        fullWidth={true}
+                                    />
+                                </Box>
+                                <Box sx={{ display: 'flex' }}>
+                                    <TextField
+                                        select
+                                        fullWidth={true}
+                                        sx={{ margin: '10px' }}
+                                        label="State"
+                                        variant="outlined"
+                                        margin="normal"
+                                    >
+                                        {
+                                            UserRole.india.map(indi => (
+                                                <MenuItem key={indi.name}
+                                                    value={indi.name}>{indi.name}</MenuItem>))
+                                        }
+                                    </TextField>
+                                </Box>
+                                <Box>
+                                    <TextField
+                                        margin="normal"
+                                        required
+                                        id="Pin Code *"
+                                        label="Pin Code *"
+                                        name="Pin Code *"
+                                        autoComplete="Pin Code *"
+                                        fullWidth={true}
+                                    />
+                                </Box>
+                                <Box>
+                                    <TextField
+                                        margin="normal"
+                                        required
+                                        fullWidth
+                                        id="City*"
+                                        label="City*"
+                                        name="City*"
+                                        autoComplete="City*"
+                                        autoFocus
+                                    />
+                                </Box>
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                    sx={{ mt: 3, mb: 2, color: "whitesmoke", background: '#212121' }}
+                                >
+                                    Submit
+                                </Button>
+
+                            </Box>
+                        </Box>
+                    </Box>
+                </Box>
+            </Modal>
+        </React.Fragment>
+    );
 }
