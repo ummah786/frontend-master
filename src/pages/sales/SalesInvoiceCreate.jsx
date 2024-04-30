@@ -29,12 +29,17 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { useDispatch, useSelector } from 'react-redux';
 import { Search, SearchIconWrapper, StyledInputBase, StyledTableCell, StyledTableRow } from "../../commonStyle";
+import axios from "axios";
+import { SAVE_ADDRESS } from "../apiendpoint/APIEndPoint";
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControl from '@material-ui/core/FormControl';
 const style = {
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 500,
+    width: 700,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -68,15 +73,21 @@ export const SalesInvoiceCreate = () => {
         handleBooleanChange();
         findObjectById(id);
         // fetchAllManageUserData();
-       // dispatch(updateBusinessUser(data));
+        // dispatch(updateBusinessUser(data));
     }
-    async function handleDelete(id, event) {}
+    async function handleDelete(id, event) { }
     const handleBooleanChange = () => {
     };
 
     const findObjectById = (id) => {
 
 
+    };
+
+    const [value, setValue] = React.useState('female');
+
+    const handleChange = (event) => {
+        setValue(event.target.value);
     };
 
     const handleBilltoSHipToo = (event) => {
@@ -257,11 +268,6 @@ export const SalesInvoiceCreate = () => {
                                     onChange={(event) => handleSHipToo(event)}
                                 >
                                     <MenuItem onClick={() => setOpenCategory(true)}>Change Shipping Address</MenuItem>
-                                    {
-                                        partyUser.map(indi => (
-                                            <MenuItem key={indi.id}
-                                                value={indi}>{indi.pname}  - {indi.company}</MenuItem>))
-                                    }
                                 </TextField>
                             </Box>
                             <Transition in={openCategory} timeout={400}>
@@ -273,36 +279,61 @@ export const SalesInvoiceCreate = () => {
                                     sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
                                 >
                                     <Box sx={style}>
-                                        <Typography>Change Shipping Address</Typography>
-                                        <Box>
+                                        <Typography variant="h2" sx={{ marginLeft: '10px' }}>Change Shipping Address</Typography>
+                                        <ModalClose variant="plain" sx={{
+                                            borderStyle: 'dashed',
+                                            borderWidth: '1px'
+                                        }} />
+                                        <Box sx={{ margin: '5px' }}>
                                             <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
-                                                <Table sx={{ minWidth: 1250 }} aria-label="customized table" stickyHeader>
+                                                <Table sx={{ minWidth: 350 }} aria-label="customized table" stickyHeader>
                                                     <TableHead>
                                                         <TableRow>
                                                             <StyledTableCell align="center">Address</StyledTableCell>
-                                                            <StyledTableCell>Actions</StyledTableCell>
+                                                            <StyledTableCell align="center">Actions</StyledTableCell>
+                                                            <StyledTableCell align="center">Select</StyledTableCell>
                                                         </TableRow>
                                                     </TableHead>
                                                     <TableBody>
                                                         <StyledTableRow key="1">
-                                                            <StyledTableCell align="center">"@"</StyledTableCell>
+                                                            <StyledTableCell align="center">{shipTo.shippingAddress}</StyledTableCell>
+                                                            <StyledTableCell>NA </StyledTableCell>
+
                                                             <StyledTableCell>
-                                                                <IconButton aria-label="edit"
-                                                                    onClick={() => handleEdit("@", "@")}>
-                                                                    <EditIcon />
-                                                                </IconButton>
-                                                                <IconButton aria-label="delete"
-                                                                    onClick={() => handleDelete("@")}>
-                                                                    <DeleteIcon />
-                                                                </IconButton>
+                                                                <FormControl component="fieldset">
+                                                                    <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
+                                                                        <FormControlLabel value="female" control={<Radio />} />
+                                                                    </RadioGroup>
+                                                                </FormControl>
                                                             </StyledTableCell>
                                                         </StyledTableRow>
-
+                                                        {shipTo && shipTo.multipleShippingAddress && shipTo.multipleShippingAddress.map(shipIn => (
+                                                            <StyledTableRow key={shipIn.id}>
+                                                                <StyledTableCell align="center">{shipIn.address},{shipIn.city},{shipIn.state},{shipIn.zip}</StyledTableCell>
+                                                                <StyledTableCell>
+                                                                    <IconButton aria-label="edit"
+                                                                        onClick={() => handleEdit("@", "@")}>
+                                                                        <EditIcon />
+                                                                    </IconButton>
+                                                                    <IconButton aria-label="delete"
+                                                                        onClick={() => handleDelete("@")}>
+                                                                        <DeleteIcon />
+                                                                    </IconButton>
+                                                                </StyledTableCell>
+                                                                <StyledTableCell>
+                                                                    <FormControl component="fieldset">
+                                                                        <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
+                                                                            <FormControlLabel value="female" control={<Radio />} />
+                                                                        </RadioGroup>
+                                                                    </FormControl>
+                                                                </StyledTableCell>
+                                                            </StyledTableRow>
+                                                        ))}
                                                     </TableBody>
                                                 </Table>
                                             </TableContainer>
                                         </Box>
-                                        <ChildModal />
+                                        <ChildModal value={shipTo.id} />
                                     </Box>
                                 </Modal>
                             </Transition>
@@ -771,8 +802,22 @@ export const SalesInvoiceCreate = () => {
     )
 }
 
-function ChildModal() {
+const ChildModal = (props) => {
     const [open, setOpen] = React.useState(false);
+    const [city, setCity] = useState('');
+    const [address, setAddress] = useState('');
+    const [stateLoc, setStateLoc] = useState('');
+    const [zip, setZip] = useState('');
+
+    console.log("PROPS   ", props.value);
+
+
+    let axiosConfig = {
+        headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+            "Access-Control-Allow-Origin": "*",
+        }
+    };
     const handleOpen = () => {
         setOpen(true);
     };
@@ -780,9 +825,37 @@ function ChildModal() {
         setOpen(false);
     };
 
+    const handleClick = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post(SAVE_ADDRESS, {
+                id: props.value,
+                multipleShippingAddress: [
+                    {
+                        address: address,
+                        city: city,
+                        state: stateLoc,
+                        zip: zip
+                    }
+                ]
+            }, axiosConfig);
+            console.log(response.data); // Handle response data
+            if (response.data.code === 200) {
+                console.log("hesab response if ", response.data.response);
+                //  dispatch(addLogin(response.data.response));
+                // onBooleanChange();
+            } else {
+                console.log("hesab response else ", response.data.response);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+        handleClose();
+    };
+
     return (
         <React.Fragment>
-            <Button onClick={handleOpen}>Open Child Modal</Button>
+            <Button variant="outlined" color="primary" onClick={handleOpen} sx={{ margin: '10px' }}>Add New Shipping Address</Button>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -810,13 +883,23 @@ function ChildModal() {
                                     borderWidth: '2px'
                                 }} />
                             </Box>
-                            <Box component="form">
+                            <Box component="form" onSubmit={handleClick}>
                                 <Box>
                                     <TextField
                                         sx={{ width: '100%' }}
                                         margin="normal"
                                         label="Street Address*"
+                                        onChange={(e) => setAddress(e.target.value)}
                                         fullWidth={true}
+                                    />
+                                </Box>
+                                <Box>
+                                    <TextField
+                                        margin="normal"
+                                        required
+                                        fullWidth
+                                        label="City*"
+                                        onChange={(e) => setCity(e.target.value)}
                                     />
                                 </Box>
                                 <Box sx={{ display: 'flex' }}>
@@ -827,6 +910,7 @@ function ChildModal() {
                                         label="State"
                                         variant="outlined"
                                         margin="normal"
+                                        onChange={(event) => setStateLoc(event.target.value)}
                                     >
                                         {
                                             UserRole.india.map(indi => (
@@ -839,11 +923,9 @@ function ChildModal() {
                                     <TextField
                                         margin="normal"
                                         required
-                                        id="Pin Code *"
                                         label="Pin Code *"
-                                        name="Pin Code *"
-                                        autoComplete="Pin Code *"
                                         fullWidth={true}
+                                        onChange={(e) => setZip(e.target.value)}
                                     />
                                 </Box>
                                 <Box>
@@ -851,17 +933,16 @@ function ChildModal() {
                                         margin="normal"
                                         required
                                         fullWidth
-                                        id="City*"
                                         label="City*"
-                                        name="City*"
-                                        autoComplete="City*"
                                         autoFocus
+                                        onChange={(e) => setCity(e.target.value)}
                                     />
                                 </Box>
                                 <Button
                                     type="submit"
                                     fullWidth
                                     variant="contained"
+                                    onClick={handleClick}
                                     sx={{ mt: 3, mb: 2, color: "whitesmoke", background: '#212121' }}
                                 >
                                     Submit
