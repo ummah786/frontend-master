@@ -76,7 +76,11 @@ export const SalesInvoiceCreate = () => {
         // fetchAllManageUserData();
         // dispatch(updateBusinessUser(data));
     }
-    async function handleDelete(id, event) { }
+    async function handleDelete(id, event) {
+        console.log("DELETE ID " + id)
+        const response = await axios.post(`http://localhost:8700/hesabbook/partner/address/delete/${id}`);
+        //  fetchAllManageUserData();
+    }
     const handleBooleanChange = () => {
     };
 
@@ -93,6 +97,7 @@ export const SalesInvoiceCreate = () => {
     const handleChange = (event) => {
         setOnSelectOfShipTo(event);
         console.log("radio button =>>", event);
+        setOpenCategory(false);
     };
 
     useEffect(() => {
@@ -309,8 +314,8 @@ export const SalesInvoiceCreate = () => {
                                                     <TableBody>
                                                         <StyledTableRow key="1">
                                                             <StyledTableCell align="center">{shipTo.shippingAddress}</StyledTableCell>
-                                                            <StyledTableCell>NA </StyledTableCell>
-                                                            <StyledTableCell>
+                                                            <StyledTableCell align="center">NA </StyledTableCell>
+                                                            <StyledTableCell align="center">
                                                                 <Button variant="outlined" color="primary" sx={{ margin: '10px' }}
                                                                     onClick={() => handleChange(shipTo.shippingAddress)}>Select</Button>
                                                             </StyledTableCell>
@@ -318,20 +323,20 @@ export const SalesInvoiceCreate = () => {
                                                         {shipTo && shipTo.multipleShippingAddress && shipTo.multipleShippingAddress.map(shipIn => (
                                                             <StyledTableRow key={shipIn.id}>
                                                                 <StyledTableCell align="center">{shipIn.address},{shipIn.city},{shipIn.state},{shipIn.zip}</StyledTableCell>
-                                                                <StyledTableCell>
+                                                                <StyledTableCell align="center">
                                                                     <IconButton aria-label="edit"
-                                                                        onClick={() => handleEdit("@", "@")}>
+                                                                        onClick={() => handleEdit(shipIn.id, shipIn)}>
                                                                         <EditIcon />
                                                                     </IconButton>
                                                                     <IconButton aria-label="delete"
-                                                                        onClick={() => handleDelete("@")}>
+                                                                        onClick={() => handleDelete(shipIn.id)}>
                                                                         <DeleteIcon />
                                                                     </IconButton>
                                                                 </StyledTableCell>
-                                                                <StyledTableCell>
+                                                                <StyledTableCell align="center">
                                                                     {shipIn && (
                                                                         <Button variant="outlined" color="primary" sx={{ margin: '10px' }}
-                                                                            onClick={() => handleButtonClick(shipIn)}>Select</Button>
+                                                                            onClick={() => handleChange((shipIn.address) + ' ' + (shipIn.city) + ' ' + (shipIn.state) + ' ' + (shipIn.zip))}>Select</Button>
                                                                     )}
                                                                 </StyledTableCell>
                                                             </StyledTableRow>
