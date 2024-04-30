@@ -1,4 +1,4 @@
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, TextField, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import Typography from "@mui/joy/Typography";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
@@ -31,9 +31,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Search, SearchIconWrapper, StyledInputBase, StyledTableCell, StyledTableRow } from "../../commonStyle";
 import axios from "axios";
 import { SAVE_ADDRESS } from "../apiendpoint/APIEndPoint";
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControl from '@material-ui/core/FormControl';
+import Radio from '@mui/joy/Radio';
+import { useEffect } from "react";
 const style = {
     position: 'absolute',
     top: '50%',
@@ -47,6 +46,8 @@ const style = {
 };
 
 export const SalesInvoiceCreate = () => {
+    const [onSelectOfShipTo, setOnSelectOfShipTo] = React.useState(null);
+    const [shipToAddress, setShipToAddress] = useState('');
     const [labelBillTO, setLabelBillTO] = useState('Select Party');
     const [shipToFlag, setShipToFlag] = React.useState(true);
     const [openCategory, setOpenCategory] = React.useState(false);
@@ -83,16 +84,27 @@ export const SalesInvoiceCreate = () => {
 
 
     };
+    const handleButtonClick = (shipIn) => {
+        const { address, city, state, zip } = shipIn;
+        handleChange({ address, city, state, zip });
+    };
 
-    const [value, setValue] = React.useState('female');
 
     const handleChange = (event) => {
-        setValue(event.target.value);
+        setOnSelectOfShipTo(event);
+        console.log("radio button =>>", event);
     };
+
+    useEffect(() => {
+        setShipToAddress(onSelectOfShipTo)
+    }, [onSelectOfShipTo]);
+
+
 
     const handleBilltoSHipToo = (event) => {
         setShipTo(event.target.value);
         setBillTo(event.target.value);
+        setShipToAddress(event.target.value.shippingAddress)
         setShipToFlag(false);
         setLabelBillTO("Bill To")
     };
@@ -298,13 +310,9 @@ export const SalesInvoiceCreate = () => {
                                                         <StyledTableRow key="1">
                                                             <StyledTableCell align="center">{shipTo.shippingAddress}</StyledTableCell>
                                                             <StyledTableCell>NA </StyledTableCell>
-
                                                             <StyledTableCell>
-                                                                <FormControl component="fieldset">
-                                                                    <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
-                                                                        <FormControlLabel value="female" control={<Radio />} />
-                                                                    </RadioGroup>
-                                                                </FormControl>
+                                                                <Button variant="outlined" color="primary" sx={{ margin: '10px' }}
+                                                                    onClick={() => handleChange(shipTo.shippingAddress)}>Select</Button>
                                                             </StyledTableCell>
                                                         </StyledTableRow>
                                                         {shipTo && shipTo.multipleShippingAddress && shipTo.multipleShippingAddress.map(shipIn => (
@@ -321,11 +329,10 @@ export const SalesInvoiceCreate = () => {
                                                                     </IconButton>
                                                                 </StyledTableCell>
                                                                 <StyledTableCell>
-                                                                    <FormControl component="fieldset">
-                                                                        <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
-                                                                            <FormControlLabel value="female" control={<Radio />} />
-                                                                        </RadioGroup>
-                                                                    </FormControl>
+                                                                    {shipIn && (
+                                                                        <Button variant="outlined" color="primary" sx={{ margin: '10px' }}
+                                                                            onClick={() => handleButtonClick(shipIn)}>Select</Button>
+                                                                    )}
                                                                 </StyledTableCell>
                                                             </StyledTableRow>
                                                         ))}
@@ -355,7 +362,7 @@ export const SalesInvoiceCreate = () => {
                                 width: '50%'
                             }}>
                                 <Box sx={{ margin: '10px' }}>
-                                    <label style={{ fontSize: '12px' }}>Address :- <strong>{shipTo.shippingAddress}</strong></label>
+                                    <label style={{ fontSize: '12px' }}>Address :- <strong>{shipToAddress}</strong></label>
                                 </Box> <Box sx={{ margin: '10px' }}>
                                     <label style={{ fontSize: '12px' }}>Phone :- {shipTo.mobileNumber}</label>
                                 </Box>
@@ -808,10 +815,6 @@ const ChildModal = (props) => {
     const [address, setAddress] = useState('');
     const [stateLoc, setStateLoc] = useState('');
     const [zip, setZip] = useState('');
-
-    console.log("PROPS   ", props.value);
-
-
     let axiosConfig = {
         headers: {
             'Content-Type': 'application/json;charset=UTF-8',
@@ -863,7 +866,17 @@ const ChildModal = (props) => {
                 aria-describedby="child-modal-description"
             >
                 <Box sx={{ ...style, width: 200 }}>
-                    <Box sx={style}>
+                    <Box sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: 500,
+                        bgcolor: 'background.paper',
+                        border: '2px solid #000',
+                        boxShadow: 24,
+                        p: 1,
+                    }}>
                         <Box
                             sx={{
                                 display: 'flex',
@@ -953,6 +966,6 @@ const ChildModal = (props) => {
                     </Box>
                 </Box>
             </Modal>
-        </React.Fragment>
+        </React.Fragment >
     );
 }
