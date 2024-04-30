@@ -946,16 +946,7 @@ const ChildModal = (props) => {
                                         onChange={(e) => setZip(e.target.value)}
                                     />
                                 </Box>
-                                <Box>
-                                    <TextField
-                                        margin="normal"
-                                        required
-                                        fullWidth
-                                        label="City*"
-                                        autoFocus
-                                        onChange={(e) => setCity(e.target.value)}
-                                    />
-                                </Box>
+
                                 <Button
                                     type="submit"
                                     fullWidth
