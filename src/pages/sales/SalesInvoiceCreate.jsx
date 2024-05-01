@@ -45,8 +45,11 @@ const style = {
     p: 1,
 };
 
+
+
 export const SalesInvoiceCreate = () => {
     const [onSelectOfShipTo, setOnSelectOfShipTo] = React.useState(null);
+    const [editOpen, setEditOpen] = React.useState(false);
     const [shipToAddress, setShipToAddress] = useState('');
     const [labelBillTO, setLabelBillTO] = useState('Select Party');
     const [shipToFlag, setShipToFlag] = React.useState(true);
@@ -70,9 +73,74 @@ export const SalesInvoiceCreate = () => {
     const { partyUser } = useSelector(state => state.partyReducerValue);
 
 
-    function handleEdit(id, data) {
+    const [shipId, setShipId] = useState('');
+    const [editId, setEditId] = React.useState('');
+    const [city, setCity] = useState('');
+    const [address, setAddress] = useState('');
+    const [stateLoc, setStateLoc] = useState('');
+    const [zip, setZip] = useState('');
+    let axiosConfig = {
+        headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+            "Access-Control-Allow-Origin": "*",
+        }
+    };
+
+
+    const handleClick = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post(SAVE_ADDRESS + '/' + `${editId}`, {
+                id: shipId,
+                multipleShippingAddress: [
+                    {
+                        id: editId,
+                        address: address,
+                        city: city,
+                        state: stateLoc,
+                        zip: zip
+                    }
+                ]
+            }, axiosConfig);
+            console.log(response.data); // Handle response data
+            if (response.data.code === 200) {
+                console.log("hesab response if ", response.data.response);
+                //  dispatch(addLogin(response.data.response));
+                // onBooleanChange();
+            } else {
+                console.log("hesab response else ", response.data.response);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }closeEditOpenFlag();
+       
+    };
+    function closeEditOpenFlag(){
+        setEditOpen(false);
+        setShipId('');
+        setEditId('');
+        setAddress('');
+        setCity('');
+        setStateLoc('');
+        setZip('');
+    }
+
+
+    function handleEdit(id, data, shipToId) {
         handleBooleanChange();
         findObjectById(id);
+        console.log("ID >> ", id);
+        console.log("Edit Data ", data);
+        // Call the function with parameters
+        setShipId(shipToId);
+        setEditId(id);
+        setAddress(data.address);
+        setCity(data.city);
+        setStateLoc(data.state);
+        setZip(data.zip);
+        console.log("Edit Data ", data.address, data.city);
+        setEditOpen(true)
+
         // fetchAllManageUserData();
         // dispatch(updateBusinessUser(data));
     }
@@ -325,7 +393,7 @@ export const SalesInvoiceCreate = () => {
                                                                 <StyledTableCell align="center">{shipIn.address},{shipIn.city},{shipIn.state},{shipIn.zip}</StyledTableCell>
                                                                 <StyledTableCell align="center">
                                                                     <IconButton aria-label="edit"
-                                                                        onClick={() => handleEdit(shipIn.id, shipIn)}>
+                                                                        onClick={() => handleEdit(shipIn.id, shipIn, shipTo.id)}>
                                                                         <EditIcon />
                                                                     </IconButton>
                                                                     <IconButton aria-label="delete"
@@ -343,6 +411,108 @@ export const SalesInvoiceCreate = () => {
                                                         ))}
                                                     </TableBody>
                                                 </Table>
+                                                <Modal
+                                                    open={editOpen}
+                                                    onClose={() => setEditOpen(false)}
+                                                    aria-labelledby="child-modal-title"
+                                                    aria-describedby="child-modal-description"
+                                                >
+                                                    <Box sx={{ ...style, width: 200 }}>
+                                                        <Box sx={{
+                                                            position: 'absolute',
+                                                            top: '50%',
+                                                            left: '50%',
+                                                            transform: 'translate(-50%, -50%)',
+                                                            width: 500,
+                                                            bgcolor: 'background.paper',
+                                                            border: '2px solid #000',
+                                                            boxShadow: 24,
+                                                            p: 1,
+                                                        }}>
+                                                            <Box
+                                                                sx={{
+                                                                    display: 'flex',
+                                                                    flexDirection: 'column',
+                                                                    alignItems: 'center',
+                                                                }}
+                                                            >
+                                                                <Box sx={{
+                                                                    display: 'flex', borderStyle: 'dashed',
+                                                                    borderWidth: '2px'
+                                                                }}>
+                                                                    <Typography component="h1" variant="h5">
+                                                                        Edit Shipping Address
+                                                                    </Typography>
+                                                                    <ModalClose variant="plain" sx={{
+                                                                        m: 1, borderStyle: 'dashed',
+                                                                        borderWidth: '2px'
+                                                                    }} />
+                                                                </Box>
+                                                                <Box component="form" onSubmit={handleClick}>
+                                                                    <Box>
+                                                                        <TextField
+                                                                            sx={{ width: '100%' }}
+                                                                            margin="normal"
+                                                                            value={address}
+                                                                            label="Street Address*"
+                                                                            onChange={(e) => setAddress(e.target.value)}
+                                                                            fullWidth={true}
+                                                                        />
+                                                                    </Box>
+                                                                    <Box>
+                                                                        <TextField
+                                                                            margin="normal"
+                                                                            required
+                                                                            fullWidth
+                                                                            value={city}
+                                                                            label="City*"
+                                                                            onChange={(e) => setCity(e.target.value)}
+                                                                        />
+                                                                    </Box>
+                                                                    <Box sx={{ display: 'flex' }}>
+                                                                        <TextField
+                                                                            select
+                                                                            fullWidth={true}
+                                                                            sx={{ margin: '10px' }}
+                                                                            label="State"
+                                                                            value={stateLoc}
+                                                                            variant="outlined"
+                                                                            margin="normal"
+                                                                            onChange={(event) => setStateLoc(event.target.value)}
+                                                                        >
+                                                                            {
+                                                                                UserRole.india.map(indi => (
+                                                                                    <MenuItem key={indi.name}
+                                                                                        value={indi.name}>{indi.name}</MenuItem>))
+                                                                            }
+                                                                        </TextField>
+                                                                    </Box>
+                                                                    <Box>
+                                                                        <TextField
+                                                                            margin="normal"
+                                                                            required
+                                                                            value={zip}
+                                                                            label="Pin Code *"
+                                                                            fullWidth={true}
+                                                                            onChange={(e) => setZip(e.target.value)}
+                                                                        />
+                                                                    </Box>
+
+                                                                    <Button
+                                                                        type="submit"
+                                                                        fullWidth
+                                                                        variant="contained"
+                                                                        onClick={handleClick}
+                                                                        sx={{ mt: 3, mb: 2, color: "whitesmoke", background: '#212121' }}
+                                                                    >
+                                                                        Submit
+                                                                    </Button>
+
+                                                                </Box>
+                                                            </Box>
+                                                        </Box>
+                                                    </Box>
+                                                </Modal>
                                             </TableContainer>
                                         </Box>
                                         <ChildModal value={shipTo.id} />
@@ -808,10 +978,170 @@ export const SalesInvoiceCreate = () => {
                         </Box>
                     </Box>
                 </Box>
-
             </Box>
         </>
     )
+}
+
+function myFunction(param1, param2, param3) {
+    console.log("Function called with parameters:", param1, param2, param3);
+    // Add your function logic here
+}
+
+function ChildModalEdit(param1, param2, param3) {
+
+    console.log("param1  ", param1);
+    console.log("param2  ", param2);
+    console.log("param3  ", param3);
+    const [open, setOpen] = React.useState(false);
+    const [city, setCity] = useState('');
+    const [address, setAddress] = useState('');
+    const [stateLoc, setStateLoc] = useState('');
+    const [zip, setZip] = useState('');
+    let axiosConfig = {
+        headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+            "Access-Control-Allow-Origin": "*",
+        }
+    };
+    const handleOpen = () => {
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleClick = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post(SAVE_ADDRESS, {
+                id: param1,
+                multipleShippingAddress: [
+                    {
+                        address: address,
+                        city: city,
+                        state: stateLoc,
+                        zip: zip
+                    }
+                ]
+            }, axiosConfig);
+            console.log(response.data); // Handle response data
+            if (response.data.code === 200) {
+                console.log("hesab response if ", response.data.response);
+                //  dispatch(addLogin(response.data.response));
+                // onBooleanChange();
+            } else {
+                console.log("hesab response else ", response.data.response);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+        handleClose();
+    };
+
+    return (
+        <React.Fragment>
+
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="child-modal-title"
+                aria-describedby="child-modal-description"
+            >
+                <Box sx={{ ...style, width: 200 }}>
+                    <Box sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: 500,
+                        bgcolor: 'background.paper',
+                        border: '2px solid #000',
+                        boxShadow: 24,
+                        p: 1,
+                    }}>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <Box sx={{
+                                display: 'flex', borderStyle: 'dashed',
+                                borderWidth: '2px'
+                            }}>
+                                <Typography component="h1" variant="h5">
+                                    Edit Shipping Address
+                                </Typography>
+                                <ModalClose variant="plain" sx={{
+                                    m: 1, borderStyle: 'dashed',
+                                    borderWidth: '2px'
+                                }} />
+                            </Box>
+                            <Box component="form" onSubmit={handleClick}>
+                                <Box>
+                                    <TextField
+                                        sx={{ width: '100%' }}
+                                        margin="normal"
+                                        label="Street Address*"
+                                        onChange={(e) => setAddress(e.target.value)}
+                                        fullWidth={true}
+                                    />
+                                </Box>
+                                <Box>
+                                    <TextField
+                                        margin="normal"
+                                        required
+                                        fullWidth
+                                        label="City*"
+                                        onChange={(e) => setCity(e.target.value)}
+                                    />
+                                </Box>
+                                <Box sx={{ display: 'flex' }}>
+                                    <TextField
+                                        select
+                                        fullWidth={true}
+                                        sx={{ margin: '10px' }}
+                                        label="State"
+                                        variant="outlined"
+                                        margin="normal"
+                                        onChange={(event) => setStateLoc(event.target.value)}
+                                    >
+                                        {
+                                            UserRole.india.map(indi => (
+                                                <MenuItem key={indi.name}
+                                                    value={indi.name}>{indi.name}</MenuItem>))
+                                        }
+                                    </TextField>
+                                </Box>
+                                <Box>
+                                    <TextField
+                                        margin="normal"
+                                        required
+                                        label="Pin Code *"
+                                        fullWidth={true}
+                                        onChange={(e) => setZip(e.target.value)}
+                                    />
+                                </Box>
+
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                    onClick={handleClick}
+                                    sx={{ mt: 3, mb: 2, color: "whitesmoke", background: '#212121' }}
+                                >
+                                    Submit
+                                </Button>
+
+                            </Box>
+                        </Box>
+                    </Box>
+                </Box>
+            </Modal>
+        </React.Fragment >
+    );
 }
 
 const ChildModal = (props) => {
