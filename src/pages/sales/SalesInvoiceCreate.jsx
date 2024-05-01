@@ -63,6 +63,7 @@ export const SalesInvoiceCreate = () => {
     const [textValue, setTextValue] = useState('');
     const [showAddDiscount, setShowAddDiscount] = useState(false);
     const [checked, setChecked] = useState(false);
+    const [checkedMark, setCheckedMark] = useState(false);
     const [saleInvoiceDate, setSaleInvoiceDate] = React.useState(dayjs('2024-01-01'));
     const [dueDate, setDueDate] = React.useState(dayjs('2024-01-01'));
     const [billTo, setBillTo] = useState('');
@@ -199,6 +200,10 @@ export const SalesInvoiceCreate = () => {
 
     const handleChangeChecked = (event) => {
         setChecked(event.target.checked);
+    };
+
+    const handleChangeCheckedMarkAsFUll = (event) => {
+        setCheckedMark(event.target.checked);
     };
 
     const addField = () => {
@@ -873,7 +878,7 @@ export const SalesInvoiceCreate = () => {
                             <Box sx={{ padding: '10px', display: 'flex' }}>
                                 <Box sx={{ width: '65%' }}>
                                     <FormControlLabel
-                                        control={<Checkbox checked={checked} onChange={handleChangeChecked} />}
+                                        control={<Checkbox checked={checkedMark} onChange={handleChangeCheckedMarkAsFUll} />}
                                         label="Marked As Fully Paid"
                                     />
                                 </Box>
