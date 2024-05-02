@@ -11,6 +11,7 @@ import { useState } from "react";
 import { Close } from '@mui/icons-material';
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from '@mui/icons-material/Close';
+import SearchIcon from '@material-ui/icons/Search';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import UserRole from "../../jsonfile/Role.json";
@@ -25,13 +26,14 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import TableCell from '@mui/material/TableCell';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { useDispatch, useSelector } from 'react-redux';
 import { Search, SearchIconWrapper, StyledInputBase, StyledTableCell, StyledTableRow } from "../../commonStyle";
 import axios from "axios";
 import { SAVE_ADDRESS } from "../apiendpoint/APIEndPoint";
-import Radio from '@mui/joy/Radio';
+import ButtonGroup from '@mui/material/ButtonGroup';
 import { useEffect } from "react";
 const style = {
     position: 'absolute',
@@ -46,8 +48,21 @@ const style = {
 };
 
 
+function createData(id, name, calories, fat, carbs, protein) {
+    return { id, name, calories, fat, carbs, protein };
+}
+
+const rows = [
+    createData(1, 'Frozen yoghurt', 159, 6.0, 24, 4.0),
+    createData(2, 'Ice cream sandwich', 237, 9.0, 37, 4.3),
+    createData(3, 'Eclair', 262, 16.0, 24, 6.0),
+    createData(4, 'Cupcake', 305, 3.7, 67, 4.3),
+    createData(5, 'Gingerbread', 356, 16.0, 49, 3.9),
+
+];
 
 export const SalesInvoiceCreate = () => {
+    const [openItemModal, setOpenItemModal] = React.useState(false);
     const [onSelectOfShipTo, setOnSelectOfShipTo] = React.useState(null);
     const [editOpen, setEditOpen] = React.useState(false);
     const [shipToAddress, setShipToAddress] = useState('');
@@ -72,7 +87,48 @@ export const SalesInvoiceCreate = () => {
     const [image2, setImage2] = useState('');
 
     const { partyUser } = useSelector(state => state.partyReducerValue);
+    const [count, setCount] = useState(0);
 
+    const increment = () => {
+        setCount(count + 1);
+    };
+
+    const decrement = () => {
+        if (count > 0) {
+            setCount(count - 1);
+        }
+    };
+    const initialRows = [
+        { id: 1, name: 'Item 1' },
+        { id: 2, name: 'Item 2' },
+        { id: 3, name: 'Item 3' },
+    ];
+
+    const [selectedRows, setSelectedRows] = useState([]);
+
+    const handleCheckboxClick = (id) => {
+        const selectedIndex = selectedRows.indexOf(id);
+        let newSelected = [];
+
+        if (selectedIndex === -1) {
+            newSelected = newSelected.concat(selectedRows, id);
+        } else if (selectedIndex === 0) {
+            newSelected = newSelected.concat(selectedRows.slice(1));
+        } else if (selectedIndex === selectedRows.length - 1) {
+            newSelected = newSelected.concat(selectedRows.slice(0, -1));
+        } else if (selectedIndex > 0) {
+            newSelected = newSelected.concat(
+                selectedRows.slice(0, selectedIndex),
+                selectedRows.slice(selectedIndex + 1)
+            );
+        }
+
+        setSelectedRows(newSelected);
+        
+    };
+    useEffect(() => {
+        console.log('selected Rows ',selectedRows);
+    }, [selectedRows]);
 
     const [shipId, setShipId] = useState('');
     const [editId, setEditId] = React.useState('');
@@ -113,10 +169,10 @@ export const SalesInvoiceCreate = () => {
             }
         } catch (error) {
             console.error('Error:', error);
-        }closeEditOpenFlag();
-       
+        } closeEditOpenFlag();
+
     };
-    function closeEditOpenFlag(){
+    function closeEditOpenFlag() {
         setEditOpen(false);
         setShipId('');
         setEditId('');
@@ -144,11 +200,6 @@ export const SalesInvoiceCreate = () => {
 
         // fetchAllManageUserData();
         // dispatch(updateBusinessUser(data));
-    }
-    async function handleDelete(id, event) {
-        console.log("DELETE ID " + id)
-        const response = await axios.post(`http://localhost:8700/hesabbook/partner/address/delete/${id}`);
-        //  fetchAllManageUserData();
     }
     const handleBooleanChange = () => {
     };
@@ -241,6 +292,7 @@ export const SalesInvoiceCreate = () => {
         setTextFields(updatedTextFields);
     };
     const addRow = () => {
+        setOpenItemModal(true);
         //     const newEmployee = {id: employees.length + 1, item: '', quantity: 0, rate: 0, total: 0};
         const newEmployee = { id: employees.length + 1 };
         setEmployees([...employees, newEmployee]);
@@ -387,7 +439,7 @@ export const SalesInvoiceCreate = () => {
                                                     <TableBody>
                                                         <StyledTableRow key="1">
                                                             <StyledTableCell align="center">{shipTo.shippingAddress}</StyledTableCell>
-                                                            <StyledTableCell align="center">NA </StyledTableCell>
+                                                            <StyledTableCell align="center"> NA </StyledTableCell>
                                                             <StyledTableCell align="center">
                                                                 <Button variant="outlined" color="primary" sx={{ margin: '10px' }}
                                                                     onClick={() => handleChange(shipTo.shippingAddress)}>Select</Button>
@@ -400,10 +452,6 @@ export const SalesInvoiceCreate = () => {
                                                                     <IconButton aria-label="edit"
                                                                         onClick={() => handleEdit(shipIn.id, shipIn, shipTo.id)}>
                                                                         <EditIcon />
-                                                                    </IconButton>
-                                                                    <IconButton aria-label="delete"
-                                                                        onClick={() => handleDelete(shipIn.id)}>
-                                                                        <DeleteIcon />
                                                                     </IconButton>
                                                                 </StyledTableCell>
                                                                 <StyledTableCell align="center">
@@ -689,6 +737,161 @@ export const SalesInvoiceCreate = () => {
                             borderStyle: 'dashed',
                             borderWidth: '2px'
                         }}>Add Row</Button>
+                        <Modal
+                            open={openItemModal}
+                            onClose={() => setOpenItemModal(false)}
+                            aria-labelledby="child-modal-title"
+                            aria-describedby="child-modal-description"
+                        >
+                            <Box sx={{ ...style, width: 200 }}>
+                                <Box sx={{
+                                    position: 'absolute',
+                                    top: '50%',
+                                    left: '50%',
+                                    transform: 'translate(-50%, -50%)',
+                                    width: 1000,
+                                    bgcolor: 'background.paper',
+                                    border: '2px solid #000',
+                                    boxShadow: 24,
+                                    p: 1,
+                                }}>
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            alignItems: 'center',
+                                        }}
+                                    >
+                                        <Box>
+                                            <Typography component="h1" variant="h3">
+                                                Add Items
+                                            </Typography>
+                                            <ModalClose variant="plain" sx={{
+                                                borderStyle: 'dashed',
+                                                borderWidth: '1px'
+                                            }} />
+                                        </Box>
+                                        <Box component="form" onSubmit={handleClick} sx={{ width: '100%' }}>
+                                            <Box sx={{
+                                                display: 'flex'
+                                                , margin: '5px',
+                                                borderStyle: 'dashed',
+                                                borderWidth: '2px'
+                                            }}>
+                                                <Box sx={{ width: '35%', margin: '5px' }}>
+                                                    <TextField
+                                                        fullWidth
+                                                        placeholder="Search Items"
+                                                        variant="outlined"
+                                                        InputProps={{
+                                                            startAdornment: (
+                                                                <SearchIcon sx={{ marginRight: 1, color: 'action.active' }} />
+                                                            ),
+                                                        }}
+                                                    />
+                                                </Box>
+                                                <Box sx={{ width: '35%', margin: '5px' }}>
+                                                    <TextField
+                                                        fullWidth
+                                                        select
+                                                        //   value={manageUserObj.state}
+                                                        // onChange={(event) => handleTextFieldChange(event, 'state')}
+                                                        label="Select Category"
+                                                        variant="outlined">
+                                                        {
+                                                            UserRole.india.map(indi => (
+                                                                <MenuItem key={indi.name}
+                                                                    value={indi.name}>{indi.name}</MenuItem>))
+                                                        }
+                                                    </TextField>
+                                                </Box>
+                                                <Box sx={{ width: '30%', margin: '5px' }}>
+                                                    <Button variant="outlined" color="secondary"> +Add New Items</Button>
+                                                </Box>
+                                            </Box>
+                                            <Box sx={{
+                                                margin: '5px', borderStyle: 'dashed',
+                                                borderWidth: '1px'
+                                            }}>
+                                                <TableContainer component={Paper} sx={{ maxHeight: 350 }}>
+                                                    <Table sx={{ minWidth: 650 }} aria-label="simple table" stickyHeader>
+                                                        <TableHead>
+                                                            <TableRow>
+                                                                <TableCell padding="checkbox">
+                                                                    <Checkbox
+                                                                        indeterminate={
+                                                                            selectedRows.length > 0 && selectedRows.length < rows.length
+                                                                        }
+                                                                        checked={selectedRows.length === rows.length}
+                                                                        onChange={() =>
+                                                                            setSelectedRows(
+                                                                                selectedRows.length === rows.length ? [] : rows.map((row) => row.id)
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                </TableCell>
+                                                                <TableCell>ITEM NAME</TableCell>
+                                                                <TableCell align="center">ITEM CODE</TableCell>
+                                                                <TableCell align="center">SALES PRICE</TableCell>
+                                                                <TableCell align="center">PURCHASE PRICE</TableCell>
+                                                                <TableCell align="center">CURRENT STOCK</TableCell>
+                                                                <TableCell align="center">QUANTITY</TableCell>
+                                                            </TableRow>
+                                                        </TableHead>
+                                                        <TableBody>
+                                                            {rows.map((row) => (
+                                                                <TableRow
+                                                                    key={row.name}
+                                                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                                                >
+                                                                    <TableCell padding="checkbox">
+                                                                        <Checkbox
+                                                                            checked={selectedRows.indexOf(row.id) !== -1}
+                                                                            onClick={() => handleCheckboxClick(row.id)}
+                                                                        />
+                                                                    </TableCell>
+                                                                    <TableCell component="th" scope="row">
+                                                                        {row.name}
+                                                                    </TableCell>
+                                                                    <TableCell align="center">{row.calories}</TableCell>
+                                                                    <TableCell align="center">{row.fat}</TableCell>
+                                                                    <TableCell align="center">{row.carbs}</TableCell>
+                                                                    <TableCell align="center">{row.protein}</TableCell>
+                                                                    <TableCell align="right">
+                                                                        <Box >
+
+                                                                            <ButtonGroup size="small" aria-label="small outlined button group">
+                                                                                <Button onClick={decrement}>-</Button>
+                                                                                <Button disabled>{count}</Button>
+                                                                                <Button onClick={increment}>+</Button>
+                                                                            </ButtonGroup>
+                                                                        </Box>
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                            ))}
+                                                        </TableBody>
+                                                    </Table>
+                                                </TableContainer>
+
+                                            </Box>
+
+
+                                            <Button
+                                                type="submit"
+                                                fullWidth
+                                                variant="contained"
+                                                onClick={handleClick}
+                                                sx={{ mt: 3, mb: 2, color: "whitesmoke", background: '#212121' }}
+                                            >
+                                                Submit
+                                            </Button>
+                                        </Box>
+                                    </Box>
+                                </Box>
+                            </Box>
+                        </Modal>
+
+
                         <Table sx={{ minWidth: 1250 }} aria-label="customized table" stickyHeader>
                             <TableHead>
                                 <TableRow>
@@ -987,168 +1190,6 @@ export const SalesInvoiceCreate = () => {
         </>
     )
 }
-
-function myFunction(param1, param2, param3) {
-    console.log("Function called with parameters:", param1, param2, param3);
-    // Add your function logic here
-}
-
-function ChildModalEdit(param1, param2, param3) {
-
-    console.log("param1  ", param1);
-    console.log("param2  ", param2);
-    console.log("param3  ", param3);
-    const [open, setOpen] = React.useState(false);
-    const [city, setCity] = useState('');
-    const [address, setAddress] = useState('');
-    const [stateLoc, setStateLoc] = useState('');
-    const [zip, setZip] = useState('');
-    let axiosConfig = {
-        headers: {
-            'Content-Type': 'application/json;charset=UTF-8',
-            "Access-Control-Allow-Origin": "*",
-        }
-    };
-    const handleOpen = () => {
-        setOpen(true);
-    };
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-    const handleClick = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await axios.post(SAVE_ADDRESS, {
-                id: param1,
-                multipleShippingAddress: [
-                    {
-                        address: address,
-                        city: city,
-                        state: stateLoc,
-                        zip: zip
-                    }
-                ]
-            }, axiosConfig);
-            console.log(response.data); // Handle response data
-            if (response.data.code === 200) {
-                console.log("hesab response if ", response.data.response);
-                //  dispatch(addLogin(response.data.response));
-                // onBooleanChange();
-            } else {
-                console.log("hesab response else ", response.data.response);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-        handleClose();
-    };
-
-    return (
-        <React.Fragment>
-
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="child-modal-title"
-                aria-describedby="child-modal-description"
-            >
-                <Box sx={{ ...style, width: 200 }}>
-                    <Box sx={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        width: 500,
-                        bgcolor: 'background.paper',
-                        border: '2px solid #000',
-                        boxShadow: 24,
-                        p: 1,
-                    }}>
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <Box sx={{
-                                display: 'flex', borderStyle: 'dashed',
-                                borderWidth: '2px'
-                            }}>
-                                <Typography component="h1" variant="h5">
-                                    Edit Shipping Address
-                                </Typography>
-                                <ModalClose variant="plain" sx={{
-                                    m: 1, borderStyle: 'dashed',
-                                    borderWidth: '2px'
-                                }} />
-                            </Box>
-                            <Box component="form" onSubmit={handleClick}>
-                                <Box>
-                                    <TextField
-                                        sx={{ width: '100%' }}
-                                        margin="normal"
-                                        label="Street Address*"
-                                        onChange={(e) => setAddress(e.target.value)}
-                                        fullWidth={true}
-                                    />
-                                </Box>
-                                <Box>
-                                    <TextField
-                                        margin="normal"
-                                        required
-                                        fullWidth
-                                        label="City*"
-                                        onChange={(e) => setCity(e.target.value)}
-                                    />
-                                </Box>
-                                <Box sx={{ display: 'flex' }}>
-                                    <TextField
-                                        select
-                                        fullWidth={true}
-                                        sx={{ margin: '10px' }}
-                                        label="State"
-                                        variant="outlined"
-                                        margin="normal"
-                                        onChange={(event) => setStateLoc(event.target.value)}
-                                    >
-                                        {
-                                            UserRole.india.map(indi => (
-                                                <MenuItem key={indi.name}
-                                                    value={indi.name}>{indi.name}</MenuItem>))
-                                        }
-                                    </TextField>
-                                </Box>
-                                <Box>
-                                    <TextField
-                                        margin="normal"
-                                        required
-                                        label="Pin Code *"
-                                        fullWidth={true}
-                                        onChange={(e) => setZip(e.target.value)}
-                                    />
-                                </Box>
-
-                                <Button
-                                    type="submit"
-                                    fullWidth
-                                    variant="contained"
-                                    onClick={handleClick}
-                                    sx={{ mt: 3, mb: 2, color: "whitesmoke", background: '#212121' }}
-                                >
-                                    Submit
-                                </Button>
-
-                            </Box>
-                        </Box>
-                    </Box>
-                </Box>
-            </Modal>
-        </React.Fragment >
-    );
-}
-
 const ChildModal = (props) => {
     const [open, setOpen] = React.useState(false);
     const [city, setCity] = useState('');
