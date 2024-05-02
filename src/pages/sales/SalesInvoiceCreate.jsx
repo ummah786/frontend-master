@@ -129,7 +129,8 @@ export const SalesInvoiceCreate = () => {
 
     const handleSubmitForItemSelect = (e) => {
         e.preventDefault();
-        setEmployees(selectedRows.map(item => findMatchingObject(item, rows)), ...employees);
+        
+        setEmployees(selectedRows.map(item => findMatchingObject(item, rows)));
         console.log("employee  " + employees)
         setSelectedRows([]);
         setOpenItemModal(false);
