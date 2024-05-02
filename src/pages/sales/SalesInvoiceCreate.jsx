@@ -62,6 +62,7 @@ const rows = [
 ];
 
 export const SalesInvoiceCreate = () => {
+
     const [openItemModal, setOpenItemModal] = React.useState(false);
     const [onSelectOfShipTo, setOnSelectOfShipTo] = React.useState(null);
     const [editOpen, setEditOpen] = React.useState(false);
@@ -98,11 +99,7 @@ export const SalesInvoiceCreate = () => {
             setCount(count - 1);
         }
     };
-    const initialRows = [
-        { id: 1, name: 'Item 1' },
-        { id: 2, name: 'Item 2' },
-        { id: 3, name: 'Item 3' },
-    ];
+
 
     const [selectedRows, setSelectedRows] = useState([]);
 
@@ -124,11 +121,24 @@ export const SalesInvoiceCreate = () => {
         }
 
         setSelectedRows(newSelected);
-        
+
     };
     useEffect(() => {
-        console.log('selected Rows ',selectedRows);
+        console.log('selected Rows ', selectedRows);
     }, [selectedRows]);
+
+    const handleSubmitForItemSelect = (e) => {
+        e.preventDefault();
+        setEmployees(selectedRows.map(item => findMatchingObject(item, rows)), ...employees);
+        console.log("employee  " + employees)
+        setSelectedRows([]);
+        setOpenItemModal(false);
+    }
+
+
+    const findMatchingObject = (id, list) => {
+        return list.find(item => item.id === id);
+    };
 
     const [shipId, setShipId] = useState('');
     const [editId, setEditId] = React.useState('');
@@ -208,15 +218,10 @@ export const SalesInvoiceCreate = () => {
 
 
     };
-    const handleButtonClick = (shipIn) => {
-        const { address, city, state, zip } = shipIn;
-        handleChange({ address, city, state, zip });
-    };
 
 
     const handleChange = (event) => {
         setOnSelectOfShipTo(event);
-        console.log("radio button =>>", event);
         setOpenCategory(false);
     };
 
@@ -666,17 +671,17 @@ export const SalesInvoiceCreate = () => {
                                 {employees.map(employee => (
                                     <TableRow key={employee.id}><StyledTableCell align="center">
                                         <TextField
-                                            value={employee.itemName}
+                                            value={employee.id}
                                             onChange={(e) => handleInputChange(employee.id, 'itemName', e.target.value)}
                                         />
                                     </StyledTableCell><StyledTableCell align="center">
                                             <TextField
-                                                value={employee.itemName}
+                                                value={employee.name}
                                                 onChange={(e) => handleInputChange(employee.id, 'itemName', e.target.value)}
                                             />
                                         </StyledTableCell><StyledTableCell align="center">
                                             <TextField
-                                                value={employee.itemName}
+                                                value={employee.fat}
                                                 onChange={(e) => handleInputChange(employee.id, 'itemName', e.target.value)}
                                             />
                                         </StyledTableCell><StyledTableCell align="center">
@@ -771,7 +776,7 @@ export const SalesInvoiceCreate = () => {
                                                 borderWidth: '1px'
                                             }} />
                                         </Box>
-                                        <Box component="form" onSubmit={handleClick} sx={{ width: '100%' }}>
+                                        <Box component="form" onSubmit={handleSubmitForItemSelect} sx={{ width: '100%' }}>
                                             <Box sx={{
                                                 display: 'flex'
                                                 , margin: '5px',
@@ -880,7 +885,7 @@ export const SalesInvoiceCreate = () => {
                                                 type="submit"
                                                 fullWidth
                                                 variant="contained"
-                                                onClick={handleClick}
+                                                onClick={handleSubmitForItemSelect}
                                                 sx={{ mt: 3, mb: 2, color: "whitesmoke", background: '#212121' }}
                                             >
                                                 Submit
