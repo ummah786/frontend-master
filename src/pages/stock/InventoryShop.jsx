@@ -1,4 +1,4 @@
-import {Box, ButtonGroup, Checkbox, FormControlLabel, TextField} from "@mui/material";
+import { Box, ButtonGroup, Checkbox, FormControlLabel, TextField } from "@mui/material";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
@@ -8,26 +8,26 @@ import Paper from '@mui/material/Paper';
 import SearchIcon from '@mui/icons-material/Search';
 import Button from "@mui/material/Button";
 import * as React from "react";
-import {useEffect, useState} from "react";
-import {InventoryDataModel} from "../../datamodel/ManageUserDataModel";
+import { useEffect, useState } from "react";
+import { InventoryDataModel } from "../../datamodel/ManageUserDataModel";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from "@mui/material/IconButton";
 import axios from "axios";
 import UserRole from '../../jsonfile/Role';
 import MenuItem from "@mui/material/MenuItem";
-import {useDispatch} from 'react-redux';
-import {addExistingMangeUser, addManageUser, updateManageUser} from "../../redux/Action";
+import { useDispatch, useSelector } from 'react-redux';
+import { addExistingInventory, addExistingMangeUser, addInventory, addManageUser, updateInventory, updateManageUser } from "../../redux/Action";
 import ArticleIcon from '@mui/icons-material/Article';
 import * as XLSX from 'xlsx';
-import {DataGrid} from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import Modal from '@mui/joy/Modal';
 import ModalClose from '@mui/joy/ModalClose';
 import Typography from '@mui/joy/Typography';
 import Sheet from '@mui/joy/Sheet';
 
-import {Search, SearchIconWrapper, StyledInputBase, StyledTableCell, StyledTableRow} from "../../commonStyle";
-import {Input} from "@mui/joy";
+import { Search, SearchIconWrapper, StyledInputBase, StyledTableCell, StyledTableRow } from "../../commonStyle";
+import { Input } from "@mui/joy";
 
 export const InventoryShop = () => {
     const [enable, setEnable] = useState(true);
@@ -37,6 +37,8 @@ export const InventoryShop = () => {
     const [excelData, setExcelData] = useState([]);
     const [columns, setColumns] = useState([]);
     const [files, setFiles] = useState([]);
+    const dispatch = useDispatch();
+    const loginData = useSelector(state => state.loginReducerValue);
 
     const [checked, setChecked] = useState(true);
     const [inputValue, setInputValue] = useState('');
@@ -48,12 +50,11 @@ export const InventoryShop = () => {
 
 
     const handleCheckboxChange = (event) => {
-        setInventoryObject({...inventoryObject, lowStockCheckBox: event.target.checked});
+        setInventoryObject({ ...inventoryObject, lowStockCheckBox: event.target.checked });
     };
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
     };
-    const dispatch = useDispatch();
     const handleBooleanChange = () => {
         setInventoryObject(InventoryDataModel);
         setEnable(false);
@@ -82,10 +83,12 @@ export const InventoryShop = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        inventoryObject['primary_user_id'] = loginData.primary_user_id;
+        inventoryObject['secondary_user_id'] = loginData.secondary_user_id;
         const response = await axios.post('http://localhost:8700/hesabbook/inventory/save', inventoryObject);
         console.log('Submit Response :--    ', response.data);
         console.log('on Submit :-->', inventoryObject);
-        dispatch(addExistingMangeUser(response.data));
+        dispatch(addExistingInventory(response.data));
         setInventoryObject(InventoryDataModel);
         setEnable(prevState => !prevState);
     };
@@ -101,7 +104,7 @@ export const InventoryShop = () => {
         handleBooleanChange();
         findObjectById(id);
         fetchAllManageUserData();
-        dispatch(updateManageUser(data));
+        dispatch(updateInventory(data));
     }
 
     const findObjectById = (id) => {
@@ -116,11 +119,10 @@ export const InventoryShop = () => {
     function fetchAllManageUserData() {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8700/hesabbook/inventory/all');
-                console.log(response.data);
-                setInventory(response.data);
-                localStorage.setItem('mangeUser', inventory);
-                dispatch(addManageUser(response.data));
+                const response = await axios.get(`http://localhost:8700/hesabbook/inventory/all/${loginData.primary_user_id}`);
+                console.log(response.data.response);
+                setInventory(response.data.response);
+                dispatch(addInventory(response.data.response));
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -131,11 +133,11 @@ export const InventoryShop = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8700/hesabbook/inventory/all');
+                const response = await axios.get(`http://localhost:8700/hesabbook/inventory/all/${loginData.primary_user_id}`);
                 console.log('Party Response ', response.data.response);
                 if (response.data.code === 200) {
                     setInventory(response.data.response);
-                    localStorage.setItem('Party-details', response.data.response);
+                    dispatch(addInventory(response.data.response));
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -155,10 +157,10 @@ export const InventoryShop = () => {
         const reader = new FileReader();
         reader.onload = (event) => {
             const binaryString = event.target.result;
-            const workbook = XLSX.read(binaryString, {type: 'binary'});
+            const workbook = XLSX.read(binaryString, { type: 'binary' });
             const sheetName = workbook.SheetNames[0];
             const sheet = workbook.Sheets[sheetName];
-            const data = XLSX.utils.sheet_to_json(sheet, {header: 1});
+            const data = XLSX.utils.sheet_to_json(sheet, { header: 1 });
             const headers = data.shift();
             const columns = headers.map((header, index) => ({
                 field: 'col' + index,
@@ -180,14 +182,14 @@ export const InventoryShop = () => {
     };
 
 
-    function FileUpload({onFileChange}) {
+    function FileUpload({ onFileChange }) {
         const handleFileChange = (e) => {
             const file = e.target.files[0];
             onFileChange(file);
         };
         return (
             <div>
-                <input type="file" accept=".xls, .xlsx" onChange={handleFileChange}/>
+                <input type="file" accept=".xls, .xlsx" onChange={handleFileChange} />
             </div>
         );
     }
@@ -208,7 +210,7 @@ export const InventoryShop = () => {
                 <Box>
                     <Box>
                         <Button variant="contained">Inventory</Button>
-                        <Box sx={{right: '0', float: 'right'}}>
+                        <Box sx={{ right: '0', float: 'right' }}>
                             <ButtonGroup variant="contained" aria-label="Basic button group">
                                 <Button onClick={handleBooleanChange}>Create Inventory</Button>
                                 <Button onClick={handleBulkChange}>Create Bulk Inventory</Button>
@@ -216,19 +218,19 @@ export const InventoryShop = () => {
                         </Box>
                     </Box>
                     <Box>
-                        <Box sx={{display: 'flex', width: '100%'}}>
-                            <Box sx={{width: '50%'}}>
+                        <Box sx={{ display: 'flex', width: '100%' }}>
+                            <Box sx={{ width: '50%' }}>
                                 <Search>
                                     <SearchIconWrapper>
-                                        <SearchIcon/>
+                                        <SearchIcon />
                                     </SearchIconWrapper>
                                     <StyledInputBase
                                         placeholder="Search by Item or Item Code or Batch No or Challan No"
-                                        inputProps={{'aria-label': 'search'}}
+                                        inputProps={{ 'aria-label': 'search' }}
                                     />
                                 </Search>
                             </Box>
-                            <Box sx={{width: '50%'}}>
+                            <Box sx={{ width: '50%' }}>
                                 <ButtonGroup>
                                     <Button>Show Low Stock</Button>
                                     <Button>Item Expiring in 30 Days</Button>
@@ -237,8 +239,8 @@ export const InventoryShop = () => {
                             </Box>
                         </Box>
                         <Box>
-                            <TableContainer component={Paper} sx={{maxHeight: 500}}>
-                                <Table sx={{minWidth: 1250}} aria-label="customized table" stickyHeader>
+                            <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
+                                <Table sx={{ minWidth: 1250 }} aria-label="customized table" stickyHeader>
                                     <TableHead>
                                         <TableRow>
                                             <StyledTableCell align="center">Item</StyledTableCell>
@@ -252,7 +254,7 @@ export const InventoryShop = () => {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {inventory.map((row) => (
+                                        {inventory && inventory.map((row) => (
                                             <StyledTableRow key={row.id}>
                                                 <StyledTableCell align="center">{row.item}</StyledTableCell>
                                                 <StyledTableCell
@@ -263,18 +265,18 @@ export const InventoryShop = () => {
                                                 <StyledTableCell align="center">{row.purchasePrice}</StyledTableCell>
                                                 <StyledTableCell align="center">
                                                     <IconButton aria-label="edit"
-                                                                onClick={() => handleEdit(row.id, row)}>
-                                                        <EditIcon/>
+                                                        onClick={() => handleEdit(row.id, row)}>
+                                                        <EditIcon />
                                                     </IconButton>
                                                     <IconButton aria-label="delete"
-                                                                onClick={() => handleDelete(row.id)}>
-                                                        <DeleteIcon/>
+                                                        onClick={() => handleDelete(row.id)}>
+                                                        <DeleteIcon />
                                                     </IconButton>
                                                 </StyledTableCell>
                                                 <StyledTableCell align="center">
                                                     <IconButton aria-label="edit"
-                                                                onClick={() => handleView(row.id, row)}>
-                                                        <ArticleIcon/>
+                                                        onClick={() => handleView(row.id, row)}>
+                                                        <ArticleIcon />
                                                     </IconButton>
                                                 </StyledTableCell>
                                             </StyledTableRow>
@@ -289,47 +291,47 @@ export const InventoryShop = () => {
             {
                 !enable && (
                     <Box>
-                        <Box sx={{display: 'flex'}}>
+                        <Box sx={{ display: 'flex' }}>
                             <Box>
                                 <Button size="small" variant="contained">Create Partner</Button>
                             </Box>
-                            <Box sx={{float: 'right', alignItems: 'center', marginLeft: "50px"}}>
+                            <Box sx={{ float: 'right', alignItems: 'center', marginLeft: "50px" }}>
                                 <Button size="small" variant="contained" onClick={handleBooleanCancelChange}>Cancel</Button>
                                 <Button size="small" variant="contained" onClick={handleBooleanCancelChange}>Save</Button>
                             </Box>
                         </Box>
                         <form onSubmit={handleSubmit}>
-                            <Box sx={{width: '100%', display: 'flex'}}>
+                            <Box sx={{ width: '100%', display: 'flex' }}>
                                 <Box sx={{
                                     width: '25%',
                                     display: 'flex',
                                     flexDirection: 'column',
                                     margin: "10px",
                                 }}>
-                                    <TextField id="outlined-basic" label="Item" variant="outlined" sx={{margin: '10px'}}
-                                               value={inventoryObject.item}
-                                               onChange={(event) => handleTextFieldChange(event, 'item')}/>
+                                    <TextField id="outlined-basic" label="Item" variant="outlined" sx={{ margin: '10px' }}
+                                        value={inventoryObject.item}
+                                        onChange={(event) => handleTextFieldChange(event, 'item')} />
                                     <TextField id="outlined-basic" label="Item Code" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.itemCode}
-                                               onChange={(event) => handleTextFieldChange(event, 'itemCode')}/>
+                                        sx={{ margin: '10px' }} value={inventoryObject.itemCode}
+                                        onChange={(event) => handleTextFieldChange(event, 'itemCode')} />
                                     <TextField id="outlined-basic" label="Bar Code" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.barCodeValue}
-                                               onChange={(event) => handleTextFieldChange(event, 'barCodeValue')}/>
+                                        sx={{ margin: '10px' }} value={inventoryObject.barCodeValue}
+                                        onChange={(event) => handleTextFieldChange(event, 'barCodeValue')} />
                                     <TextField id="outlined-basic" label="Item Description" variant="outlined"
-                                               sx={{margin: '10px'}}
-                                               value={inventoryObject.itemDescription}
-                                               onChange={(event) => handleTextFieldChange(event, 'itemDescription')}/>
+                                        sx={{ margin: '10px' }}
+                                        value={inventoryObject.itemDescription}
+                                        onChange={(event) => handleTextFieldChange(event, 'itemDescription')} />
                                     <TextField id="outlined-basic" label="MRP" variant="outlined"
-                                               sx={{margin: '10px'}}
-                                               value={inventoryObject.mrp}
-                                               onChange={(event) => handleTextFieldChange(event, 'mrp')}/>
-                                    <Box sx={{display: 'flex'}}>
+                                        sx={{ margin: '10px' }}
+                                        value={inventoryObject.mrp}
+                                        onChange={(event) => handleTextFieldChange(event, 'mrp')} />
+                                    <Box sx={{ display: 'flex' }}>
                                         <TextField id="outlined-basic" label="Sale Price" variant="outlined"
-                                                   sx={{margin: '10px', width: '60%'}}
-                                                   value={inventoryObject.salePrice}
-                                                   onChange={(event) => handleTextFieldChange(event, 'salePrice')}/>
+                                            sx={{ margin: '10px', width: '60%' }}
+                                            value={inventoryObject.salePrice}
+                                            onChange={(event) => handleTextFieldChange(event, 'salePrice')} />
                                         <TextField
-                                            sx={{margin: '10px', width: '60%'}}
+                                            sx={{ margin: '10px', width: '60%' }}
                                             select
                                             value={inventoryObject.salePriceTax}
                                             onChange={(event) => handleTextFieldChange(event, 'salePriceTax')}
@@ -340,32 +342,32 @@ export const InventoryShop = () => {
                                             {
                                                 UserRole.taxType.map(userrole => (
                                                     <MenuItem key={userrole.name}
-                                                              value={userrole.name}>{userrole.name}</MenuItem>
+                                                        value={userrole.name}>{userrole.name}</MenuItem>
                                                 ))
                                             }
                                         </TextField>
-                                    </Box><Box sx={{display: 'flex'}}>
-                                    <TextField id="outlined-basic" label="Purchase Price" variant="outlined"
-                                               sx={{margin: '10px', width: '60%'}}
-                                               value={inventoryObject.purchasePrice}
-                                               onChange={(event) => handleTextFieldChange(event, 'purchasePrice')}/>
-                                    <TextField
-                                        select
-                                        value={inventoryObject.purchasePriceTax}
-                                        onChange={(event) => handleTextFieldChange(event, 'purchasePriceTax')}
-                                        label="Tax"
-                                        variant="outlined"
-                                        margin="normal"
-                                        sx={{margin: '10px', width: '60%'}}
-                                    >
-                                        {
-                                            UserRole.taxType.map(userrole => (
-                                                <MenuItem key={userrole.name}
-                                                          value={userrole.name}>{userrole.name}</MenuItem>
-                                            ))
-                                        }
-                                    </TextField>
-                                </Box>
+                                    </Box><Box sx={{ display: 'flex' }}>
+                                        <TextField id="outlined-basic" label="Purchase Price" variant="outlined"
+                                            sx={{ margin: '10px', width: '60%' }}
+                                            value={inventoryObject.purchasePrice}
+                                            onChange={(event) => handleTextFieldChange(event, 'purchasePrice')} />
+                                        <TextField
+                                            select
+                                            value={inventoryObject.purchasePriceTax}
+                                            onChange={(event) => handleTextFieldChange(event, 'purchasePriceTax')}
+                                            label="Tax"
+                                            variant="outlined"
+                                            margin="normal"
+                                            sx={{ margin: '10px', width: '60%' }}
+                                        >
+                                            {
+                                                UserRole.taxType.map(userrole => (
+                                                    <MenuItem key={userrole.name}
+                                                        value={userrole.name}>{userrole.name}</MenuItem>
+                                                ))
+                                            }
+                                        </TextField>
+                                    </Box>
                                 </Box>
                                 <Box sx={{
                                     width: '25%',
@@ -386,25 +388,25 @@ export const InventoryShop = () => {
                                         {
                                             UserRole.GST.map(userrole => (
                                                 <MenuItem key={userrole.name}
-                                                          value={userrole.name}>{userrole.name}</MenuItem>
+                                                    value={userrole.name}>{userrole.name}</MenuItem>
                                             ))
                                         }
                                     </TextField>
                                     <TextField id="outlined-basic" label="CGST" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.cgst}
-                                               onChange={(event) => handleTextFieldChange(event, 'cgst')}/>
+                                        sx={{ margin: '10px' }} value={inventoryObject.cgst}
+                                        onChange={(event) => handleTextFieldChange(event, 'cgst')} />
                                     <TextField id="outlined-basic" label="IGST" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.igst}
-                                               onChange={(event) => handleTextFieldChange(event, 'igst')}/>
+                                        sx={{ margin: '10px' }} value={inventoryObject.igst}
+                                        onChange={(event) => handleTextFieldChange(event, 'igst')} />
                                     <TextField id="outlined-basic" label="SGST" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.sgst}
-                                               onChange={(event) => handleTextFieldChange(event, 'sgst')}/>
+                                        sx={{ margin: '10px' }} value={inventoryObject.sgst}
+                                        onChange={(event) => handleTextFieldChange(event, 'sgst')} />
                                     <TextField id="outlined-basic" label="UTGST" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.utgst}
-                                               onChange={(event) => handleTextFieldChange(event, 'utgst')}/>
+                                        sx={{ margin: '10px' }} value={inventoryObject.utgst}
+                                        onChange={(event) => handleTextFieldChange(event, 'utgst')} />
                                     <TextField id="outlined-basic" label="Cess" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.compensationCess}
-                                               onChange={(event) => handleTextFieldChange(event, 'compensationCess')}/>
+                                        sx={{ margin: '10px' }} value={inventoryObject.compensationCess}
+                                        onChange={(event) => handleTextFieldChange(event, 'compensationCess')} />
                                     <TextField
                                         fullWidth
                                         select
@@ -417,7 +419,7 @@ export const InventoryShop = () => {
                                         {
                                             UserRole.GST.map(userrole => (
                                                 <MenuItem key={userrole.name}
-                                                          value={userrole.name}>{userrole.name}</MenuItem>
+                                                    value={userrole.name}>{userrole.name}</MenuItem>
                                             ))
                                         }
 
@@ -444,7 +446,7 @@ export const InventoryShop = () => {
                                         {
                                             UserRole.GST.map(userrole => (
                                                 <MenuItem key={userrole.name}
-                                                          value={userrole.name}>{userrole.name}</MenuItem>
+                                                    value={userrole.name}>{userrole.name}</MenuItem>
                                             ))
                                         }
 
@@ -454,7 +456,7 @@ export const InventoryShop = () => {
                                         aria-describedby="modal-desc"
                                         open={openRack}
                                         onClose={() => setOpenRack(false)}
-                                        sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+                                        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
                                     >
                                         <Sheet
                                             variant="outlined"
@@ -465,7 +467,7 @@ export const InventoryShop = () => {
                                                 boxShadow: 'lg',
                                             }}
                                         >
-                                            <ModalClose variant="plain" sx={{m: 1}}/>
+                                            <ModalClose variant="plain" sx={{ m: 1 }} />
                                             <Typography
                                                 component="h2"
                                                 id="modal-title"
@@ -495,7 +497,7 @@ export const InventoryShop = () => {
                                         {
                                             UserRole.GST.map(userrole => (
                                                 <MenuItem key={userrole.name}
-                                                          value={userrole.name}>{userrole.name}</MenuItem>
+                                                    value={userrole.name}>{userrole.name}</MenuItem>
                                             ))
                                         }
 
@@ -505,7 +507,7 @@ export const InventoryShop = () => {
                                         aria-describedby="modal-desc"
                                         open={openCategory}
                                         onClose={() => setOpenCategory(false)}
-                                        sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+                                        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
                                     >
                                         <Sheet
                                             variant="outlined"
@@ -516,7 +518,7 @@ export const InventoryShop = () => {
                                                 boxShadow: 'lg',
                                             }}
                                         >
-                                            <ModalClose variant="plain" sx={{m: 1}}/>
+                                            <ModalClose variant="plain" sx={{ m: 1 }} />
                                             <Typography
                                                 component="h2"
                                                 id="modal-title"
@@ -546,7 +548,7 @@ export const InventoryShop = () => {
                                         {
                                             UserRole.GST.map(userrole => (
                                                 <MenuItem key={userrole.name}
-                                                          value={userrole.name}>{userrole.name}</MenuItem>
+                                                    value={userrole.name}>{userrole.name}</MenuItem>
                                             ))
                                         }
 
@@ -556,7 +558,7 @@ export const InventoryShop = () => {
                                         aria-describedby="modal-desc"
                                         open={openWarehouse}
                                         onClose={() => setOpenWarehouse(false)}
-                                        sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+                                        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
                                     >
                                         <Sheet
                                             variant="outlined"
@@ -567,7 +569,7 @@ export const InventoryShop = () => {
                                                 boxShadow: 'lg',
                                             }}
                                         >
-                                            <ModalClose variant="plain" sx={{m: 1}}/>
+                                            <ModalClose variant="plain" sx={{ m: 1 }} />
                                             <Typography
                                                 component="h2"
                                                 id="modal-title"
@@ -597,7 +599,7 @@ export const InventoryShop = () => {
                                         {
                                             UserRole.GST.map(userrole => (
                                                 <MenuItem key={userrole.name}
-                                                          value={userrole.name}>{userrole.name}</MenuItem>
+                                                    value={userrole.name}>{userrole.name}</MenuItem>
                                             ))
                                         }
 
@@ -607,7 +609,7 @@ export const InventoryShop = () => {
                                         aria-describedby="modal-desc"
                                         open={openCompany}
                                         onClose={() => setOpenCompany(false)}
-                                        sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+                                        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
                                     >
                                         <Sheet
                                             variant="outlined"
@@ -618,7 +620,7 @@ export const InventoryShop = () => {
                                                 boxShadow: 'lg',
                                             }}
                                         >
-                                            <ModalClose variant="plain" sx={{m: 1}}/>
+                                            <ModalClose variant="plain" sx={{ m: 1 }} />
                                             <Typography
                                                 component="h2"
                                                 id="modal-title"
@@ -637,15 +639,15 @@ export const InventoryShop = () => {
                                     </Modal>
 
                                     <TextField id="outlined-basic" label="HSN Code" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.hsn}
-                                               onChange={(event) => handleTextFieldChange(event, 'hsn')}/>
+                                        sx={{ margin: '10px' }} value={inventoryObject.hsn}
+                                        onChange={(event) => handleTextFieldChange(event, 'hsn')} />
                                     <TextField id="outlined-basic" label="Batch No" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.batchNo}
-                                               onChange={(event) => handleTextFieldChange(event, 'batchNo')}/>
+                                        sx={{ margin: '10px' }} value={inventoryObject.batchNo}
+                                        onChange={(event) => handleTextFieldChange(event, 'batchNo')} />
 
                                     <FormControlLabel
                                         control={<Checkbox checked={inventoryObject.lowStockCheckBox}
-                                                           onChange={handleCheckboxChange}/>}
+                                            onChange={handleCheckboxChange} />}
                                         label="Enable Low Stock"
                                     />
                                     {inventoryObject.lowStockCheckBox && (
@@ -655,7 +657,7 @@ export const InventoryShop = () => {
                                             onChange={(event) => handleTextFieldChange(event, 'lowStock')}
                                             fullWidth
                                             variant="outlined"
-                                            style={{marginTop: '10px'}}
+                                            style={{ marginTop: '10px' }}
                                         />
                                     )}
                                 </Box>
@@ -679,20 +681,20 @@ export const InventoryShop = () => {
                                         onChange={(event) => handleTextFieldChange(event, 'expireDate')}
                                     />
                                     <TextField id="outlined-basic" label="Salt" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.salt}
-                                               onChange={(event) => handleTextFieldChange(event, 'salt')}/>
+                                        sx={{ margin: '10px' }} value={inventoryObject.salt}
+                                        onChange={(event) => handleTextFieldChange(event, 'salt')} />
                                     <TextField id="outlined-basic" label="Package Items" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.packageItems}
-                                               onChange={(event) => handleTextFieldChange(event, 'packageItems')}/>
+                                        sx={{ margin: '10px' }} value={inventoryObject.packageItems}
+                                        onChange={(event) => handleTextFieldChange(event, 'packageItems')} />
                                     <TextField id="outlined-basic" label="Total Stock" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.totalStock}
-                                               onChange={(event) => handleTextFieldChange(event, 'totalStock')}/>
+                                        sx={{ margin: '10px' }} value={inventoryObject.totalStock}
+                                        onChange={(event) => handleTextFieldChange(event, 'totalStock')} />
                                     <TextField id="outlined-basic" label="Unit" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.unitNo}
-                                               onChange={(event) => handleTextFieldChange(event, 'unitNo')}/>
+                                        sx={{ margin: '10px' }} value={inventoryObject.unitNo}
+                                        onChange={(event) => handleTextFieldChange(event, 'unitNo')} />
                                     <TextField id="outlined-basic" label="Challan No" variant="outlined"
-                                               sx={{margin: '10px'}} value={inventoryObject.challanNo}
-                                               onChange={(event) => handleTextFieldChange(event, 'challanNo')}/>
+                                        sx={{ margin: '10px' }} value={inventoryObject.challanNo}
+                                        onChange={(event) => handleTextFieldChange(event, 'challanNo')} />
                                     <Box>
                                         <Button type="submit" variant="contained" color="primary">SUBMIT</Button>
                                     </Box>
@@ -704,11 +706,11 @@ export const InventoryShop = () => {
             }
             {!enableBulk && (
                 <Box>
-                    <Box sx={{display: 'flex'}}>
+                    <Box sx={{ display: 'flex' }}>
                         <Box>
                             <Button size="small" variant="contained">Create Bulk Inventory</Button>
                         </Box>
-                        <Box sx={{float: 'right', alignItems: 'center', marginLeft: "50px", display: 'flex'}}>
+                        <Box sx={{ float: 'right', alignItems: 'center', marginLeft: "50px", display: 'flex' }}>
                             <Box>
                                 <a
                                     href={require('../../file/ProductSample.xlsx')}
@@ -720,7 +722,7 @@ export const InventoryShop = () => {
                                         type="submit"
                                         variant="contained"
                                         /// onClick={handleClick}
-                                        sx={{mt: 3, mb: 2, color: "whitesmoke", background: '#212121'}}
+                                        sx={{ mt: 3, mb: 2, color: "whitesmoke", background: '#212121' }}
                                     >
                                         Download the sample file
                                     </Button>
@@ -730,7 +732,7 @@ export const InventoryShop = () => {
                             <Button size="small" variant="contained" onClick={handleBooleanCancelChange}>Save</Button>
                         </Box>
                     </Box>
-                    <input type="file" onChange={handleFileUpload}/>
+                    <input type="file" onChange={handleFileUpload} />
                     {
                         excelData.length > 0 && (
                             <Box

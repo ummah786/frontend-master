@@ -48,16 +48,16 @@ const style = {
 };
 
 
-function createData(id, name, calories, fat, carbs, protein) {
-    return { id, name, calories, fat, carbs, protein };
+function createData(id, name, calories, fat, carbs, protein, quantity) {
+    return { id, name, calories, fat, carbs, protein, quantity };
 }
 
 const rows = [
-    createData(1, 'Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData(2, 'Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData(3, 'Eclair', 262, 16.0, 24, 6.0),
-    createData(4, 'Cupcake', 305, 3.7, 67, 4.3),
-    createData(5, 'Gingerbread', 356, 16.0, 49, 3.9),
+    createData(1, 'Frozen yoghurt', 159, 6.0, 24, 4.0, 1),
+    createData(2, 'Ice cream sandwich', 237, 9.0, 37, 4.3, 1),
+    createData(3, 'Eclair', 262, 16.0, 24, 6.0, 1),
+    createData(4, 'Cupcake', 305, 3.7, 67, 4.3, 1),
+    createData(5, 'Gingerbread', 356, 16.0, 49, 3.9, 1),
 
 ];
 
@@ -101,6 +101,26 @@ export const SalesInvoiceCreate = () => {
     };
 
 
+    const increaseSalary = (id) => {
+        const updatedEmployees = rows.map(emp => {
+            if (emp.id === id) {
+                return { ...emp, quantity: emp.quantity + 1 };
+            }
+            return emp;
+        });
+        setEmployees(updatedEmployees);
+    };
+
+    const decreaseSalary = (id) => {
+        const updatedEmployees = rows.map(emp => {
+            if (emp.id === id) {
+                return { ...emp, quantity: emp.quantity - 1 };
+            }
+            return emp;
+        });
+        setEmployees(updatedEmployees);
+    };
+
     const [selectedRows, setSelectedRows] = useState([]);
 
     const handleCheckboxClick = (id) => {
@@ -128,8 +148,8 @@ export const SalesInvoiceCreate = () => {
     }, [selectedRows]);
 
     const handleSubmitForItemSelect = (e) => {
+        //handle for Item select from modal
         e.preventDefault();
-        
         setEmployees(selectedRows.map(item => findMatchingObject(item, rows)));
         console.log("employee  " + employees)
         setSelectedRows([]);
@@ -867,9 +887,9 @@ export const SalesInvoiceCreate = () => {
                                                                         <Box >
 
                                                                             <ButtonGroup size="small" aria-label="small outlined button group">
-                                                                                <Button onClick={decrement}>-</Button>
-                                                                                <Button disabled>{count}</Button>
-                                                                                <Button onClick={increment}>+</Button>
+                                                                                <Button onClick={() => decreaseSalary(row.id)}>-</Button>
+                                                                                <Button disabled>{row.quantity}</Button>
+                                                                                <Button onClick={() => increaseSalary(row.id)}>+</Button>
                                                                             </ButtonGroup>
                                                                         </Box>
                                                                     </TableCell>

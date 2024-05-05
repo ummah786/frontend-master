@@ -1,10 +1,12 @@
 import {
     ADD_BUSINESS_USER,
     ADD_EXISTING_BUSINESS_USER,
+    ADD_EXISTING_INVENTORY,
     ADD_EXISTING_MANAGE_USER,
     ADD_EXISTING_PARTY,
     ADD_EXPENSE,
     ADD_GODOWN,
+    ADD_INVENTORY,
     ADD_KEY_BUSINESS,
     ADD_KEY_CATEGORY,
     ADD_KEY_COMPANY,
@@ -15,19 +17,23 @@ import {
     ADD_PARTY,
     DELETE_KEY_CATEGORY,
     GET_BUSINESS_USER,
+    GET_INVENTORY,
     GET_MANAGE_USER,
     GET_PARTY,
     REMOVE_BUSINESS_USER,
     REMOVE_EXPENSE,
     REMOVE_GODOWN,
+    REMOVE_INVENTORY,
     REMOVE_MANAGE_USER,
     REMOVE_PARTY,
     UPDATE_BUSINESS_USER,
     UPDATE_GODOWN,
+    UPDATE_INVENTORY,
     UPDATE_MANAGE_USER,
     UPDATE_PARTY
 } from './Action';
 import {
+    InventoryDataModel,
     businessAccountDataModel,
     expenseDataModel,
     godownDataModel,
@@ -36,6 +42,40 @@ import {
     userDetailModel
 } from "../datamodel/ManageUserDataModel";
 
+
+export const inventoryReducer = (state = {inventoryUser: [InventoryDataModel]}, action) => {
+    switch (action.type) {
+        case ADD_EXISTING_INVENTORY:
+            return {
+                ...state,
+                inventoryUser: [action.payload, ...state.inventoryUser]
+            };
+        case ADD_INVENTORY:
+            return {
+                ...state,
+                inventoryUser: action.payload
+            };
+        case REMOVE_INVENTORY:
+            return {
+                ...state,
+                inventoryUser: state.inventoryUser.filter(manageUser => manageUser.id !== action.payload)
+            };
+        case UPDATE_INVENTORY:
+            return {
+                ...state,
+                inventoryUser: state.inventoryUser.map(manageUser =>
+                    manageUser.id === action.payload.id ? action.payload : manageUser
+                )
+            };
+        case GET_INVENTORY:
+            return {
+                ...state,
+                party: state.inventoryUser
+            }
+        default:
+            return state;
+    }
+};
 
 export const expenseReducer = (state = {expenseUser: [expenseDataModel]}, action) => {
     switch (action.type) {
@@ -231,5 +271,5 @@ export const keyCategoryReducer = (state = {KeyCategoryData: []}, action) => {
 }
 export default {
     manageUserReducer, LoginReducer, businessUserReducer, partyReducer, keyCompanyReducer,
-    keyBusinessReducer, keyRackReducer, keyWarehouseReducer, keyCategoryReducer
+    keyBusinessReducer, keyRackReducer, keyWarehouseReducer, keyCategoryReducer,inventoryReducer
 };
