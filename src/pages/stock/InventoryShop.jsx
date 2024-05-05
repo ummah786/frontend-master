@@ -52,9 +52,6 @@ export const InventoryShop = () => {
     const handleCheckboxChange = (event) => {
         setInventoryObject({ ...inventoryObject, lowStockCheckBox: event.target.checked });
     };
-    const handleInputChange = (event) => {
-        setInputValue(event.target.value);
-    };
     const handleBooleanChange = () => {
         setInventoryObject(InventoryDataModel);
         setEnable(false);

@@ -82,7 +82,7 @@ export const SalesInvoiceCreate = () => {
     useEffect(() => {
         setInventorys(inventoryUser.map((inventory) => {
             return {
-                ...inventory, quantity: 1
+                ...inventory, quantity: 1, discount: 0
             }
         }));
         console.log("Inventory >>  " + inventorys)
@@ -127,23 +127,34 @@ export const SalesInvoiceCreate = () => {
                 selectedRows.slice(selectedIndex + 1)
             );
         }
-
         setSelectedRows(newSelected);
-
     };
-    useEffect(() => {
-        console.log('selected Rows ', selectedRows);
-    }, [selectedRows]);
 
     const handleSubmitForItemSelect = (e) => {
         //handle for Item select from modal
         e.preventDefault();
-        setEmployees(selectedRows.map(item => findMatchingObject(item, inventorys)));
+        const selectedRowsValues = selectedRows.map(item => findMatchingObject(item, inventorys));
+        updateTotal(selectedRowsValues);
         console.log("employee  " + employees)
         setSelectedRows([]);
         setOpenItemModal(false);
     }
 
+
+    // Function to calculate total salary based on rate
+    const calculateTotal = (item) => {
+        return item.quantity * item.salePrice - item.discount - item.quantity * item.salePrice * item.gst / 100;
+    };
+
+    // Function to update total salary for a specific employee
+    const updateTotal = (employees) => {
+        const updatedEmployees = employees.map((employee) => {
+
+            return { ...employee, total: calculateTotal(employee) };
+
+        });
+        setEmployees(updatedEmployees);
+    };
 
     const findMatchingObject = (id, list) => {
         return list.find(item => item.id === id);
@@ -319,12 +330,19 @@ export const SalesInvoiceCreate = () => {
         const updatedEmployees = employees.map(employee => {
             if (employee.id === id) {
                 if (key === 'quantity') {
-                    employee.total = value * employee.rate;
+                    employee.total = value * employee.salePrice - employee.gst / 100 * value * employee.salePrice - employee.discount;
+                    employee.total = value * employee.salePrice;
                     return { ...employee, [key]: value };
-                } else if (key === 'rate') {
-                    employee.total = value * employee.quantity;
+                } else if (key === 'discount') {
+                    employee.total = employee.salePrice * employee.quantity - employee.gst / 100 * employee.salePrice * employee.quantity;
+                    employee.total = employee.total - value;
                     return { ...employee, [key]: value };
-                } else {
+                } else if (key === 'gst') {
+                    employee.total = employee.salePrice * employee.quantity - employee.discount;
+                    employee.total = employee.total - value / 100 * employee.total;
+                    return { ...employee, [key]: value };
+                }
+                else {
                     return { ...employee, [key]: value };
                 }
             }
@@ -665,14 +683,11 @@ export const SalesInvoiceCreate = () => {
                                     <StyledTableCell align="center">NO</StyledTableCell>
                                     <StyledTableCell align="center">ITEMS</StyledTableCell>
                                     <StyledTableCell align="center">HSN</StyledTableCell>
-                                    <StyledTableCell align="center">BATCH NO.</StyledTableCell>
-                                    <StyledTableCell align="center">EXP. DATE</StyledTableCell>
-                                    <StyledTableCell align="center"> MFG DATE</StyledTableCell>
-                                    <StyledTableCell align="center"> QTY</StyledTableCell>
-                                    <StyledTableCell align="center"> PRICE/ITEM (₹)</StyledTableCell>
-                                    <StyledTableCell align="center"> DISCOUNT</StyledTableCell>
-                                    <StyledTableCell align="center"> TAX</StyledTableCell>
-                                    <StyledTableCell align="center"> AMOUNT (₹)</StyledTableCell>
+                                    <StyledTableCell align="center">PRICE/ITEM (₹)</StyledTableCell>
+                                    <StyledTableCell align="center">QTY</StyledTableCell>
+                                    <StyledTableCell align="center">DISCOUNT</StyledTableCell>
+                                    <StyledTableCell align="center">TAX</StyledTableCell>
+                                    <StyledTableCell align="center">AMOUNT (₹)</StyledTableCell>
                                     <StyledTableCell align="center">Actions</StyledTableCell>
                                 </TableRow>
                             </TableHead>
@@ -681,33 +696,28 @@ export const SalesInvoiceCreate = () => {
                                     <TableRow key={employee.id}><StyledTableCell align="center">
                                         <TextField
                                             value={employee.id}
-                                            onChange={(e) => handleInputChange(employee.id, 'itemName', e.target.value)}
+                                            disabled={true}
+                                            onChange={(e) => handleInputChange(employee.id, 'id', e.target.value)}
                                         />
                                     </StyledTableCell><StyledTableCell align="center">
                                             <TextField
-                                                value={employee.name}
-                                                onChange={(e) => handleInputChange(employee.id, 'itemName', e.target.value)}
-                                            />
-                                        </StyledTableCell><StyledTableCell align="center">
-                                            <TextField
-                                                value={employee.fat}
-                                                onChange={(e) => handleInputChange(employee.id, 'itemName', e.target.value)}
-                                            />
-                                        </StyledTableCell><StyledTableCell align="center">
-                                            <TextField
-                                                value={employee.itemName}
-                                                onChange={(e) => handleInputChange(employee.id, 'itemName', e.target.value)}
-                                            />
-                                        </StyledTableCell><StyledTableCell align="center">
-                                            <TextField
-                                                value={employee.itemName}
-                                                onChange={(e) => handleInputChange(employee.id, 'itemName', e.target.value)}
+                                                value={employee.item}
+                                                disabled={true}
+                                                onChange={(e) => handleInputChange(employee.item, 'item', e.target.value)}
                                             />
                                         </StyledTableCell>
                                         <StyledTableCell align="center">
                                             <TextField
-                                                value={employee.itemName}
-                                                onChange={(e) => handleInputChange(employee.id, 'itemName', e.target.value)}
+                                                value={employee.hsn}
+                                                disabled={true}
+                                                onChange={(e) => handleInputChange(employee.id, 'hsn', e.target.value)}
+                                            />
+                                        </StyledTableCell>
+                                        <StyledTableCell align="center">
+                                            <TextField
+                                                disabled={true}
+                                                value={employee.salePrice}
+                                                onChange={(e) => handleInputChange(employee.salePrice, 'salePrice', e.target.value)}
                                             />
                                         </StyledTableCell>
                                         <StyledTableCell align="center">
@@ -718,20 +728,14 @@ export const SalesInvoiceCreate = () => {
                                         </StyledTableCell>
                                         <StyledTableCell align="center">
                                             <TextField
-                                                value={employee.rate}
-                                                onChange={(e) => handleInputChange(employee.id, 'rate', e.target.value)}
+                                                value={employee.discount}
+                                                onChange={(e) => handleInputChange(employee.id, 'discount', e.target.value)}
                                             />
                                         </StyledTableCell>
                                         <StyledTableCell align="center">
                                             <TextField
-                                                value={employee.rate}
-                                                onChange={(e) => handleInputChange(employee.id, 'rate', e.target.value)}
-                                            />
-                                        </StyledTableCell>
-                                        <StyledTableCell align="center">
-                                            <TextField
-                                                value={employee.rate}
-                                                onChange={(e) => handleInputChange(employee.id, 'rate', e.target.value)}
+                                                value={employee.gst}
+                                                onChange={(e) => handleInputChange(employee.id, 'gst', e.target.value)}
                                             />
                                         </StyledTableCell>
                                         <StyledTableCell align="center">
