@@ -88,6 +88,8 @@ export const SalesInvoiceCreate = () => {
     const [image2, setImage2] = useState('');
 
     const { partyUser } = useSelector(state => state.partyReducerValue);
+    const { inventoryUser } = useSelector(state => state.inventoryReducerValue);
+    const loginData = useSelector(state => state.loginReducerValue);
     const [count, setCount] = useState(0);
 
     const increment = () => {
@@ -865,7 +867,7 @@ export const SalesInvoiceCreate = () => {
                                                             </TableRow>
                                                         </TableHead>
                                                         <TableBody>
-                                                            {rows.map((row) => (
+                                                            {inventoryUser && inventoryUser.map((row) => (
                                                                 <TableRow
                                                                     key={row.name}
                                                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -877,12 +879,12 @@ export const SalesInvoiceCreate = () => {
                                                                         />
                                                                     </TableCell>
                                                                     <TableCell component="th" scope="row">
-                                                                        {row.name}
+                                                                        {row.item}
                                                                     </TableCell>
-                                                                    <TableCell align="center">{row.calories}</TableCell>
-                                                                    <TableCell align="center">{row.fat}</TableCell>
-                                                                    <TableCell align="center">{row.carbs}</TableCell>
-                                                                    <TableCell align="center">{row.protein}</TableCell>
+                                                                    <TableCell align="center">{row.itemCode}</TableCell>
+                                                                    <TableCell align="center">{row.salePrice}</TableCell>
+                                                                    <TableCell align="center">{row.purchasePrice}</TableCell>
+                                                                    <TableCell align="center">{row.totalStock}</TableCell>
                                                                     <TableCell align="right">
                                                                         <Box >
 
