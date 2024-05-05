@@ -47,20 +47,6 @@ const style = {
     p: 1,
 };
 
-
-function createData(id, name, calories, fat, carbs, protein, quantity) {
-    return { id, name, calories, fat, carbs, protein, quantity };
-}
-
-const rows = [
-    createData(1, 'Frozen yoghurt', 159, 6.0, 24, 4.0, 1),
-    createData(2, 'Ice cream sandwich', 237, 9.0, 37, 4.3, 1),
-    createData(3, 'Eclair', 262, 16.0, 24, 6.0, 1),
-    createData(4, 'Cupcake', 305, 3.7, 67, 4.3, 1),
-    createData(5, 'Gingerbread', 356, 16.0, 49, 3.9, 1),
-
-];
-
 export const SalesInvoiceCreate = () => {
 
     const [openItemModal, setOpenItemModal] = React.useState(false);
@@ -91,36 +77,36 @@ export const SalesInvoiceCreate = () => {
     const { inventoryUser } = useSelector(state => state.inventoryReducerValue);
     const loginData = useSelector(state => state.loginReducerValue);
     const [count, setCount] = useState(0);
+    const [inventorys, setInventorys] = useState([]);
 
-    const increment = () => {
-        setCount(count + 1);
-    };
+    useEffect(() => {
+        setInventorys(inventoryUser.map((inventory) => {
+            return {
+                ...inventory, quantity: 1
+            }
+        }));
+        console.log("Inventory >>  " + inventorys)
 
-    const decrement = () => {
-        if (count > 0) {
-            setCount(count - 1);
-        }
-    };
-
+    }, [inventoryUser])
 
     const increaseSalary = (id) => {
-        const updatedEmployees = rows.map(emp => {
+        const updatedEmployees = inventorys.map(emp => {
             if (emp.id === id) {
                 return { ...emp, quantity: emp.quantity + 1 };
             }
             return emp;
         });
-        setEmployees(updatedEmployees);
+        setInventorys(updatedEmployees);
     };
 
     const decreaseSalary = (id) => {
-        const updatedEmployees = rows.map(emp => {
+        const updatedEmployees = inventorys.map(emp => {
             if (emp.id === id) {
                 return { ...emp, quantity: emp.quantity - 1 };
             }
             return emp;
         });
-        setEmployees(updatedEmployees);
+        setInventorys(updatedEmployees);
     };
 
     const [selectedRows, setSelectedRows] = useState([]);
@@ -152,7 +138,7 @@ export const SalesInvoiceCreate = () => {
     const handleSubmitForItemSelect = (e) => {
         //handle for Item select from modal
         e.preventDefault();
-        setEmployees(selectedRows.map(item => findMatchingObject(item, rows)));
+        setEmployees(selectedRows.map(item => findMatchingObject(item, inventorys)));
         console.log("employee  " + employees)
         setSelectedRows([]);
         setOpenItemModal(false);
@@ -848,12 +834,12 @@ export const SalesInvoiceCreate = () => {
                                                                 <TableCell padding="checkbox">
                                                                     <Checkbox
                                                                         indeterminate={
-                                                                            selectedRows.length > 0 && selectedRows.length < rows.length
+                                                                            selectedRows.length > 0 && selectedRows.length < inventorys.length
                                                                         }
-                                                                        checked={selectedRows.length === rows.length}
+                                                                        checked={selectedRows.length === inventorys.length}
                                                                         onChange={() =>
                                                                             setSelectedRows(
-                                                                                selectedRows.length === rows.length ? [] : rows.map((row) => row.id)
+                                                                                selectedRows.length === inventorys.length ? [] : inventorys.map((row) => row.id)
                                                                             )
                                                                         }
                                                                     />
@@ -867,7 +853,7 @@ export const SalesInvoiceCreate = () => {
                                                             </TableRow>
                                                         </TableHead>
                                                         <TableBody>
-                                                            {inventoryUser && inventoryUser.map((row) => (
+                                                            {inventorys && inventorys.map((row) => (
                                                                 <TableRow
                                                                     key={row.name}
                                                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
