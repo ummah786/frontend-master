@@ -315,8 +315,8 @@ export const SalesInvoiceCreate = () => {
     const addRow = () => {
         setOpenItemModal(true);
         //     const newEmployee = {id: employees.length + 1, item: '', quantity: 0, rate: 0, total: 0};
-   //     const newEmployee = { id: employees.length + 1 };
-      //  setEmployees([...employees, newEmployee]);
+        //     const newEmployee = { id: employees.length + 1 };
+        //  setEmployees([...employees, newEmployee]);
     };
     const deleteRow = (id) => {
         const updatedEmployees = employees.filter(employee => employee.id !== id);
@@ -730,9 +730,16 @@ export const SalesInvoiceCreate = () => {
                                         </StyledTableCell>
                                         <StyledTableCell align="center">
                                             <TextField
+                                                select
                                                 value={employee.gst}
                                                 onChange={(e) => handleInputChange(employee.id, 'gst', e.target.value)}
-                                            />
+                                            >
+                                                {
+                                                    UserRole.GST.map(indi => (
+                                                        <MenuItem key={indi.name}
+                                                            value={indi.name}>{indi.name}</MenuItem>))
+                                                }
+                                            </TextField>
                                         </StyledTableCell>
                                         <StyledTableCell align="center">
                                             <TextField
