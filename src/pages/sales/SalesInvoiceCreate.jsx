@@ -72,6 +72,7 @@ export const SalesInvoiceCreate = () => {
     const [shipTo, setShipTo] = useState('');
     const [image1, setImage1] = useState('');
     const [image2, setImage2] = useState('');
+    const [selectedRows, setSelectedRows] = useState([]);
 
     const { partyUser } = useSelector(state => state.partyReducerValue);
     const { inventoryUser } = useSelector(state => state.inventoryReducerValue);
@@ -108,13 +109,11 @@ export const SalesInvoiceCreate = () => {
         setInventorys(updatedEmployees);
     };
 
-    const [selectedRows, setSelectedRows] = useState([]);
+
 
     const handleCheckboxClick = (id) => {
-        console.log("Selected Rows  >>>   " + selectedRows);
         const selectedIndex = selectedRows.indexOf(id);
         let newSelected = [];
-
         if (selectedIndex === -1) {
             newSelected = newSelected.concat(selectedRows, id);
         } else if (selectedIndex === 0) {
@@ -135,7 +134,6 @@ export const SalesInvoiceCreate = () => {
         e.preventDefault();
         const selectedRowsValues = selectedRows.map(item => findMatchingObject(item, inventorys));
         updateTotal(selectedRowsValues);
-        console.log("employee  " + employees)
         setOpenItemModal(false);
     }
 
