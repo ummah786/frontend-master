@@ -287,7 +287,7 @@ export const Party = () => {
         console.log("data sheet ", columns);
         const formData = new FormData();
         formData.append('file', files);
-        const response = await axios.post('http://localhost:8700/hesabbook/partner/upload', excelData);
+        const response = await axios.post(`http://localhost:8700/hesabbook/partner/upload/${loginData.primary_user_id}/${loginData.secondary_user_id}`, excelData);
         console.log("response from handleSave ", response.data)
 
     };

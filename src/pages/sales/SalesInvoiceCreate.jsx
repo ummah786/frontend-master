@@ -921,9 +921,6 @@ export const SalesInvoiceCreate = () => {
                                     <StyledTableCell align="center" style={{ color: 'black' }}>1</StyledTableCell>
                                     <StyledTableCell align="center" style={{ color: 'black' }}>1</StyledTableCell>
                                     <StyledTableCell align="center" style={{ color: 'black' }}>1</StyledTableCell>
-                                    <StyledTableCell align="center" style={{ color: 'black' }}>1</StyledTableCell>
-                                    <StyledTableCell align="center" style={{ color: 'black' }}>1</StyledTableCell>
-                                    <StyledTableCell align="center" style={{ color: 'black' }}>1</StyledTableCell>
                                     <StyledTableCell align="center">SUBTOTAL</StyledTableCell>
                                     <StyledTableCell align="center">(₹)</StyledTableCell>
                                     <StyledTableCell align="center">(₹)</StyledTableCell>
