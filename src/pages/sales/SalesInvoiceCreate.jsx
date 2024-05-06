@@ -76,7 +76,6 @@ export const SalesInvoiceCreate = () => {
     const { partyUser } = useSelector(state => state.partyReducerValue);
     const { inventoryUser } = useSelector(state => state.inventoryReducerValue);
     const loginData = useSelector(state => state.loginReducerValue);
-    const [count, setCount] = useState(0);
     const [inventorys, setInventorys] = useState([]);
 
     useEffect(() => {
@@ -112,6 +111,7 @@ export const SalesInvoiceCreate = () => {
     const [selectedRows, setSelectedRows] = useState([]);
 
     const handleCheckboxClick = (id) => {
+        console.log("Selected Rows  >>>   " + selectedRows);
         const selectedIndex = selectedRows.indexOf(id);
         let newSelected = [];
 
@@ -136,7 +136,6 @@ export const SalesInvoiceCreate = () => {
         const selectedRowsValues = selectedRows.map(item => findMatchingObject(item, inventorys));
         updateTotal(selectedRowsValues);
         console.log("employee  " + employees)
-        setSelectedRows([]);
         setOpenItemModal(false);
     }
 
@@ -147,11 +146,10 @@ export const SalesInvoiceCreate = () => {
     };
 
     // Function to update total salary for a specific employee
-    const updateTotal = (employees) => {
-        const updatedEmployees = employees.map((employee) => {
-
+    const updateTotal = (employeess) => {
+        console.log("Employee     " + employees);
+        const updatedEmployees = employeess.map((employee) => {
             return { ...employee, total: calculateTotal(employee) };
-
         });
         setEmployees(updatedEmployees);
     };
@@ -319,8 +317,8 @@ export const SalesInvoiceCreate = () => {
     const addRow = () => {
         setOpenItemModal(true);
         //     const newEmployee = {id: employees.length + 1, item: '', quantity: 0, rate: 0, total: 0};
-        const newEmployee = { id: employees.length + 1 };
-        setEmployees([...employees, newEmployee]);
+   //     const newEmployee = { id: employees.length + 1 };
+      //  setEmployees([...employees, newEmployee]);
     };
     const deleteRow = (id) => {
         const updatedEmployees = employees.filter(employee => employee.id !== id);
