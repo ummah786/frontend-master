@@ -35,6 +35,7 @@ import axios from "axios";
 import { SAVE_ADDRESS } from "../apiendpoint/APIEndPoint";
 import ButtonGroup from '@mui/material/ButtonGroup';
 import { useEffect } from "react";
+import { salePurchaseModel } from "../../datamodel/ManageUserDataModel";
 const style = {
     position: 'absolute',
     top: '50%',
@@ -48,6 +49,7 @@ const style = {
 };
 
 export const SalesInvoiceCreate = () => {
+    const [salePurchaseObject, setSalePurchaseObject] = useState(salePurchaseModel);
 
     const [openItemModal, setOpenItemModal] = React.useState(false);
     const [onSelectOfShipTo, setOnSelectOfShipTo] = React.useState(null);
@@ -70,14 +72,29 @@ export const SalesInvoiceCreate = () => {
     const [dueDate, setDueDate] = React.useState(dayjs('2024-01-01'));
     const [billTo, setBillTo] = useState('');
     const [shipTo, setShipTo] = useState('');
-    const [image1, setImage1] = useState('');
-    const [image2, setImage2] = useState('');
+    const [logoImage, setLogoImage] = useState('');
+    const [uploadImage, setUploadImage] = useState('');
+
     const [selectedRows, setSelectedRows] = useState([]);
 
     const { partyUser } = useSelector(state => state.partyReducerValue);
     const { inventoryUser } = useSelector(state => state.inventoryReducerValue);
     const loginData = useSelector(state => state.loginReducerValue);
     const [inventorys, setInventorys] = useState([]);
+
+
+
+
+
+
+
+    const handleTextFieldChange = (event, field) => {
+        setSalePurchaseObject({
+            ...salePurchaseObject,
+            [field]: event.target.value,
+        });
+        console.log("sale Purchase",salePurchaseObject)
+    };
 
     useEffect(() => {
         setInventorys(inventoryUser.map((inventory) => {
@@ -137,13 +154,10 @@ export const SalesInvoiceCreate = () => {
         setOpenItemModal(false);
     }
 
-
-    // Function to calculate total salary based on rate
     const calculateTotal = (item) => {
         return item.quantity * item.salePrice - item.discount - item.quantity * item.salePrice * item.gst / 100;
     };
 
-    // Function to update total salary for a specific employee
     const updateTotal = (employeess) => {
         console.log("Employee     " + employees);
         const updatedEmployees = employeess.map((employee) => {
@@ -168,7 +182,6 @@ export const SalesInvoiceCreate = () => {
             "Access-Control-Allow-Origin": "*",
         }
     };
-
 
     const handleClick = async (e) => {
         e.preventDefault();
@@ -210,31 +223,14 @@ export const SalesInvoiceCreate = () => {
 
 
     function handleEdit(id, data, shipToId) {
-        handleBooleanChange();
-        findObjectById(id);
-        console.log("ID >> ", id);
-        console.log("Edit Data ", data);
-        // Call the function with parameters
         setShipId(shipToId);
         setEditId(id);
         setAddress(data.address);
         setCity(data.city);
         setStateLoc(data.state);
         setZip(data.zip);
-        console.log("Edit Data ", data.address, data.city);
         setEditOpen(true)
-
-        // fetchAllManageUserData();
-        // dispatch(updateBusinessUser(data));
     }
-    const handleBooleanChange = () => {
-    };
-
-    const findObjectById = (id) => {
-
-
-    };
-
 
     const handleChange = (event) => {
         setOnSelectOfShipTo(event);
@@ -243,6 +239,8 @@ export const SalesInvoiceCreate = () => {
 
     useEffect(() => {
         setShipToAddress(onSelectOfShipTo)
+        const updatedObject = { ...salePurchaseObject, shipAddress: onSelectOfShipTo };
+        setSalePurchaseObject(updatedObject);
     }, [onSelectOfShipTo]);
 
 
@@ -253,6 +251,15 @@ export const SalesInvoiceCreate = () => {
         setShipToAddress(event.target.value.shippingAddress)
         setShipToFlag(false);
         setLabelBillTO("Bill To")
+
+        const updatedObject = {
+            ...salePurchaseObject,
+            billAddress: event.target.value.billingAddress,
+            phone: event.target.value.mobileNumber,
+            gst: event.target.value.gstNumber,
+            shipAddress: event.target.value.shippingAddress
+        };
+        setSalePurchaseObject(updatedObject);
     };
 
     const handleSHipToo = (event) => {
@@ -353,7 +360,7 @@ export const SalesInvoiceCreate = () => {
                     <Card variant="outlined">
                         <Box sx={{ height: '100px', width: '100px' }}>
                             {
-                                image1 ? (
+                                logoImage ? (
                                     <Box sx={{ display: 'flex', position: 'relative' }}>
                                         <CardMedia
                                             sx={{
@@ -363,14 +370,14 @@ export const SalesInvoiceCreate = () => {
                                                 borderStyle: 'dashed',
                                                 borderWidth: '2px'
                                             }}
-                                            image={image1}
+                                            image={logoImage}
                                             alt="Add Company Logo"
                                         />
                                         <IconButton sx={{
                                             opacity: '0.9',
                                             top: '-1px', color: 'black', backgroundColor: 'white',
                                             marginLeft: '70px', position: 'absolute'
-                                        }} onClick={() => setImage1(null)}>
+                                        }} onClick={() => setLogoImage(null)}>
                                             <CloseIcon fontSize="small" />
                                         </IconButton>
                                     </Box>
@@ -392,7 +399,7 @@ export const SalesInvoiceCreate = () => {
                             style={{ display: 'none' }}
                             id="image-upload-1"
                             type="file"
-                            onChange={(event) => handleImageUpload(event, setImage1)}
+                            onChange={(event) => handleImageUpload(event, setLogoImage)}
                         />
                     </Card>
                     <Typography>Ummah Hub</Typography>
@@ -633,8 +640,8 @@ export const SalesInvoiceCreate = () => {
                             <Box sx={{ width: '50%', margin: '10px' }}>
                                 <TextField
                                     label="Sales Invoice No: "
-                                /*       value={employee.itemName}
-                                       onChange={(e) => handleInputChange(employee.id, 'itemName', e.target.value)}*/
+                                    onChange={(event) => handleTextFieldChange(event, 'termAndCondition')}
+                                    value={salePurchaseObject.itemName}
                                 />
                             </Box>
                             <Box sx={{ width: '50%', margin: '10px' }}>
@@ -653,9 +660,8 @@ export const SalesInvoiceCreate = () => {
                             <Box sx={{ width: '50%', margin: '10px' }}>
                                 <TextField
                                     label="Payment Terms: "
-                                /* value={employee.itemName}
-                                 onChange={(e) => handleInputChange(employee.id, 'itemName', e.target.value)}*/
-                                />
+                                    value={salePurchaseObject.itemName}
+                                    onChange={(event) => handleTextFieldChange(event, 'termAndCondition')} />
                             </Box>
                             <Box sx={{ width: '50%', margin: '10px' }}>
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -939,7 +945,8 @@ export const SalesInvoiceCreate = () => {
                             </Button>
                             {openNotes && (
                                 <Box sx={{ display: 'flex', padding: '10px' }}>
-                                    <TextField label="Enter Notes" variant="outlined" fullWidth={true} />
+                                    <TextField label="Enter Notes" variant="outlined" fullWidth={true}
+                                        onChange={(event) => handleTextFieldChange(event, 'note')} />
                                     <IconButton onClick={handleToggleNotes}>
                                         <Close />
                                     </IconButton>
@@ -952,7 +959,8 @@ export const SalesInvoiceCreate = () => {
                             </Button>
                             {openTermCondition && (
                                 <Box sx={{ display: 'flex', padding: '10px' }}>
-                                    <TextField label="Enter Terms & Conditions" variant="outlined" fullWidth={true} />
+                                    <TextField label="Enter Terms & Conditions" variant="outlined" fullWidth={true}
+                                        onChange={(event) => handleTextFieldChange(event, 'termAndCondition')} />
                                     <IconButton onClick={handleToggleTermCondition}>
                                         <Close />
                                     </IconButton>
@@ -1159,7 +1167,7 @@ export const SalesInvoiceCreate = () => {
                                 <Box
                                 >
                                     {
-                                        image2 ? (
+                                        uploadImage ? (
                                             <Box sx={{ display: 'flex', position: 'relative' }}>
                                                 <CardMedia
                                                     sx={{
@@ -1169,10 +1177,10 @@ export const SalesInvoiceCreate = () => {
                                                         borderStyle: 'dashed',
                                                         borderWidth: '2px'
                                                     }}
-                                                    image={image2}
+                                                    image={uploadImage}
                                                     alt="Upload Signature"
                                                 />
-                                                <IconButton onClick={() => setImage2('')} sx={{
+                                                <IconButton onClick={() => setUploadImage('')} sx={{
                                                     opacity: '0.8',
                                                     top: '0px', color: 'black', backgroundColor: 'white',
                                                     marginLeft: '75px', position: 'absolute'
@@ -1198,7 +1206,7 @@ export const SalesInvoiceCreate = () => {
                                     style={{ display: 'none' }}
                                     id="image-upload-2"
                                     type="file"
-                                    onChange={(event) => handleImageUpload(event, setImage2)}
+                                    onChange={(event) => handleImageUpload(event, setUploadImage)}
                                 />
                             </Card>
                         </Box>

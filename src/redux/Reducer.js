@@ -4,6 +4,7 @@ import {
     ADD_EXISTING_INVENTORY,
     ADD_EXISTING_MANAGE_USER,
     ADD_EXISTING_PARTY,
+    ADD_EXISTING_SALEPURCHASE,
     ADD_EXPENSE,
     ADD_GODOWN,
     ADD_INVENTORY,
@@ -15,22 +16,26 @@ import {
     ADD_LOGIN_USER,
     ADD_MANAGE_USER,
     ADD_PARTY,
+    ADD_SALEPURCHASE,
     DELETE_KEY_CATEGORY,
     GET_BUSINESS_USER,
     GET_INVENTORY,
     GET_MANAGE_USER,
     GET_PARTY,
+    GET_SALEPURCHASE,
     REMOVE_BUSINESS_USER,
     REMOVE_EXPENSE,
     REMOVE_GODOWN,
     REMOVE_INVENTORY,
     REMOVE_MANAGE_USER,
     REMOVE_PARTY,
+    REMOVE_SALEPURCHASE,
     UPDATE_BUSINESS_USER,
     UPDATE_GODOWN,
     UPDATE_INVENTORY,
     UPDATE_MANAGE_USER,
-    UPDATE_PARTY
+    UPDATE_PARTY,
+    UPDATE_SALEPURCHASE
 } from './Action';
 import {
     InventoryDataModel,
@@ -39,6 +44,7 @@ import {
     godownDataModel,
     manageUserDataModel,
     partnerDataModel,
+    salePurchaseModel,
     userDetailModel
 } from "../datamodel/ManageUserDataModel";
 
@@ -269,7 +275,44 @@ export const keyCategoryReducer = (state = {KeyCategoryData: []}, action) => {
             return state;
     }
 }
+
+
+export const salePurchaseReducer = (state = {salePurchaseUser: [salePurchaseModel]}, action) => {
+    switch (action.type) {
+        case ADD_EXISTING_SALEPURCHASE:
+            return {
+                ...state,
+                salePurchaseUser: [action.payload, ...state.salePurchaseUser]
+            };
+        case ADD_SALEPURCHASE:
+            return {
+                ...state,
+                salePurchaseUser: action.payload
+            };
+        case REMOVE_SALEPURCHASE:
+            return {
+                ...state,
+                salePurchaseUser: state.salePurchaseUser.filter(manageUser => manageUser.id !== action.payload)
+            };
+        case UPDATE_SALEPURCHASE:
+            return {
+                ...state,
+                salePurchaseUser: state.salePurchaseUser.map(manageUser =>
+                    manageUser.id === action.payload.id ? action.payload : manageUser
+                )
+            };
+        case GET_SALEPURCHASE:
+            return {
+                ...state,
+                party: state.salePurchaseUser
+            }
+        default:
+            return state;
+    }
+};
+
 export default {
     manageUserReducer, LoginReducer, businessUserReducer, partyReducer, keyCompanyReducer,
-    keyBusinessReducer, keyRackReducer, keyWarehouseReducer, keyCategoryReducer,inventoryReducer
+    keyBusinessReducer, keyRackReducer, keyWarehouseReducer, keyCategoryReducer,inventoryReducer,
+    salePurchaseReducer
 };

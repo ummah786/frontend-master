@@ -47,6 +47,41 @@ export const ADD_KEY_CATEGORY = 'ADD_KEY_CATEGORY';
 export const DELETE_KEY_CATEGORY = 'DELETE_KEY_CATEGORY';
 export const ADD_EXPENSE = 'ADD_EXPENSE';
 export const REMOVE_EXPENSE = 'REMOVE_EXPENSE';
+
+
+
+export const ADD_SALEPURCHASE = 'ADD_SALEPURCHASE';
+export const ADD_EXISTING_SALEPURCHASE = 'ADD_EXISTING_SALEPURCHASE';
+export const REMOVE_SALEPURCHASE = 'REMOVE_SALEPURCHASE';
+export const UPDATE_SALEPURCHASE = 'UPDATE_SALEPURCHASE';
+export const GET_SALEPURCHASE = 'GET_SALEPURCHASE';
+
+export const addSalePurchase = (salePurchaseUser) => ({
+    type: ADD_SALEPURCHASE,
+    payload: salePurchaseUser
+});
+export const addExistingSalePurchase = (salePurchaseUser) => ({
+    type: ADD_EXISTING_SALEPURCHASE,
+    payload: salePurchaseUser
+})
+
+export const removeSalePurchase = (id) => ({
+    type: REMOVE_SALEPURCHASE,
+    payload: id
+});
+
+export const updateSalePurchase = (salePurchaseUser) => ({
+    type: UPDATE_SALEPURCHASE,
+    payload: salePurchaseUser
+});
+
+export const getSalePurchase = () => ({
+    type: GET_SALEPURCHASE
+})
+
+
+
+
 export const addExpense = (expenseUser) => ({
     type: ADD_EXPENSE,
     payload: expenseUser
