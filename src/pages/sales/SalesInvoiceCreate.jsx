@@ -989,11 +989,14 @@ export const SalesInvoiceCreate = () => {
             <Button
               onClick={addRow}
               sx={{
+                width: "100%",
                 borderStyle: "dashed",
                 borderWidth: "2px",
+                textAlign:'center',
+                alignItems:'center'
               }}
             >
-              Add Row
+              Add Items
             </Button>
             <Modal
               open={openItemModal}
