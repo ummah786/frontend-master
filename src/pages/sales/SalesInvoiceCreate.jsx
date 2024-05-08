@@ -45,14 +45,25 @@ import {
   StyledTableRow,
 } from "../../commonStyle";
 import axios from "axios";
-import { SAVE_ADDRESS } from "../apiendpoint/APIEndPoint";
+import {
+  DELETE_KEY_VALUE,
+  SAVE_ADDRESS,
+  SAVE_KEY_VALUE,
+} from "../apiendpoint/APIEndPoint";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import { useEffect } from "react";
+import { List, ListItem, ListItemButton } from "@mui/joy";
 import {
   InventoryDataModel,
+  partnerDataModel,
   salePurchaseModel,
 } from "../../datamodel/ManageUserDataModel";
-import { addExistingInventory } from "../../redux/Action";
+import {
+  addExistingInventory,
+  addKeyCategory,
+  addParty,
+} from "../../redux/Action";
+import Delete from "@mui/icons-material/Delete";
 const style = {
   position: "absolute",
   top: "50%",
@@ -71,6 +82,8 @@ export const SalesInvoiceCreate = () => {
   const [inventoryObject, setInventoryObject] = useState(InventoryDataModel);
 
   const [openCompany, setOpenCompany] = React.useState(false);
+  const [openPartyModal, setOpenPartyModal] = React.useState(false);
+  const [openCategoryParty, setOpenCategoryParty] = React.useState(false);
 
   const [openItemModal, setOpenItemModal] = React.useState(false);
   const [onSelectOfShipTo, setOnSelectOfShipTo] = React.useState(null);
@@ -89,6 +102,7 @@ export const SalesInvoiceCreate = () => {
   const [showAddDiscount, setShowAddDiscount] = useState(false);
   const [checked, setChecked] = useState(false);
   const [checkedMark, setCheckedMark] = useState(false);
+  const [manageUserObj, setManageUserObj] = useState(partnerDataModel);
   const [saleInvoiceDate, setSaleInvoiceDate] = React.useState(
     dayjs("2024-01-01")
   );
@@ -108,6 +122,77 @@ export const SalesInvoiceCreate = () => {
 
   const dispatch = useDispatch();
 
+  const keyCategoryData = useSelector((state) => state.keyCategoryReducerValue);
+
+  const [addCategory, setAddCategory] = React.useState([]);
+  const [categoryApi, setCategoryApi] = useState();
+
+  async function deleteCategory(id, value) {
+    try {
+      const response = await axios.get(DELETE_KEY_VALUE + `/${id}`);
+      console.log("DELETE CATEGORY  ", response.data.response);
+      //add logic for remove from
+      // dispatch(removeKeyCategory(value));
+      setAddCategory((prevItems) => prevItems.filter((item) => item.id !== id));
+      console.log("Add Category ", addCategory);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
+  const handleClickForCategory = (e) => {
+    e.preventDefault();
+    handleSubmitToKeyValuePairForCategory();
+    setCategoryApi("");
+  };
+  const handleSubmitToKeyValuePairForCategory = async () => {
+    try {
+      const response = await axios.post(
+        SAVE_KEY_VALUE,
+        {
+          kes: "category",
+          value: categoryApi,
+          primary_user_id: loginData.primary_user_id,
+        },
+        axiosConfig
+      );
+      console.log("save Categroy response ", response.data.response.value);
+      dispatch(
+        addKeyCategory([response.data.response.value, ...keyCategoryData])
+      );
+      setAddCategory([...addCategory, response.data.response]);
+      console.log("Add Category ", addCategory);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const handleSubmitForParty = async (event) => {
+    event.preventDefault();
+    manageUserObj["primary_user_id"] = loginData.primary_user_id;
+    manageUserObj["secondary_user_id"] = loginData.secondary_user_id;
+    const response = await axios.post(
+      "http://localhost:8700/hesabbook/partner/save",
+      manageUserObj
+    );
+    console.log("Submit Response :--    ", response.data);
+    console.log("on Submit :-->", manageUserObj);
+    addObjectOnTop(response.data.response);
+    setManageUserObj(partnerDataModel);
+  };
+  const addObjectOnTop = (newObject) => {
+    const existingIndex = partyUser.findIndex(
+      (item) => item.id === newObject.id
+    );
+    if (existingIndex === -1) {
+      dispatch(addParty([newObject, ...partyUser]));
+    } else {
+      const updatedArray = [...partyUser];
+      updatedArray[existingIndex] = newObject;
+      dispatch(addParty(updatedArray));
+    }
+  };
+
   const handleAddNewItems = () => {
     setAddNewItemsFlagModal(true);
   };
@@ -117,6 +202,14 @@ export const SalesInvoiceCreate = () => {
       [field]: event.target.value,
     });
     console.log("Inventory ", inventoryObject);
+  };
+
+  const handleTextFieldChangeParty = (event, field) => {
+    setManageUserObj({
+      ...manageUserObj,
+      [field]: event.target.value,
+    });
+    console.log("sale Purchase", manageUserObj);
   };
 
   const handleTextFieldChange = (event, field) => {
@@ -302,22 +395,36 @@ export const SalesInvoiceCreate = () => {
     setSalePurchaseObject(updatedObject);
   }, [onSelectOfShipTo]);
 
-  const handleBilltoSHipToo = (event) => {
-    setShipTo(event.target.value);
-    setBillTo(event.target.value);
-    setShipToAddress(event.target.value.shippingAddress);
-    setShipToFlag(false);
-    setLabelBillTO("Bill To");
-
-    const updatedObject = {
-      ...salePurchaseObject,
-      billAddress: event.target.value.billingAddress,
-      phone: event.target.value.mobileNumber,
-      gst: event.target.value.gstNumber,
-      shipAddress: event.target.value.shippingAddress,
-    };
-    setSalePurchaseObject(updatedObject);
+  const openModalPartyValue = () => {
+    setOpenPartyModal(true);
   };
+  const handleBilltoSHipToo = (event) => {
+   // Check if event.target.value is defined
+  if (event.target.value) {
+    // Assuming event.target.value is an object with a shippingAddress property
+    const shippingAddress = event.target.value.shippingAddress;
+    if (shippingAddress) {
+      setShipTo(event.target.value);
+      setBillTo(event.target.value);
+      setShipToAddress(shippingAddress);
+      setShipToFlag(false);
+      setLabelBillTO("Bill To");
+
+      const updatedObject = {
+        ...salePurchaseObject,
+        billAddress: event.target.value.billingAddress,
+        phone: event.target.value.mobileNumber,
+        gst: event.target.value.gstNumber,
+        shipAddress: shippingAddress, // Use shippingAddress here
+      }; 
+      setSalePurchaseObject(updatedObject);
+    } else {
+      console.error("Shipping address is undefined");
+    }
+  } else {
+    console.error("Event target value is undefined");
+  }
+};
 
   const handleSHipToo = (event) => {
     setShipTo(event.target.value);
@@ -503,12 +610,305 @@ export const SalesInvoiceCreate = () => {
                   margin="normal"
                   onChange={(event) => handleBilltoSHipToo(event)}
                 >
+                  <MenuItem onClick={openModalPartyValue}>
+                    Create a New Party
+                  </MenuItem>
                   {partyUser.map((indi) => (
                     <MenuItem key={indi.id} value={indi}>
                       {indi.pname} - {indi.company}
                     </MenuItem>
                   ))}
                 </TextField>
+                <Modal
+                  open={openPartyModal}
+                  onClose={() => setOpenPartyModal(false)}
+                  aria-labelledby="child-modal-title"
+                  aria-describedby="child-modal-description"
+                >
+                  <Box sx={{ ...style, width: 200 }}>
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        width: 1000,
+                        bgcolor: "background.paper",
+                        border: "2px solid #000",
+                        boxShadow: 24,
+                        p: 1,
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: "flex",
+                            borderStyle: "dashed",
+                            borderWidth: "2px",
+                          }}
+                        >
+                          <Typography component="h1" variant="h5">
+                            Add New Party
+                          </Typography>
+                          <ModalClose
+                            variant="plain"
+                            sx={{
+                              m: 1,
+                              borderStyle: "dashed",
+                              borderWidth: "2px",
+                            }}
+                          />
+                        </Box>
+                        <Box component="form" onSubmit={handleSubmitForParty}>
+                          <Box>
+                            <TextField
+                              id="outlined-basic"
+                              label="Name"
+                              variant="outlined"
+                              sx={{ margin: "10px" }}
+                              value={manageUserObj.pname}
+                              onChange={(event) =>
+                                handleTextFieldChangeParty(event, "pname")
+                              }
+                            />
+
+                            <TextField
+                              id="outlined-basic"
+                              label="Phone Number"
+                              variant="outlined"
+                              sx={{ margin: "10px" }}
+                              value={manageUserObj.mobileNumber}
+                              onChange={(event) =>
+                                handleTextFieldChangeParty(
+                                  event,
+                                  "mobileNumber"
+                                )
+                              }
+                            />
+                            <TextField
+                              id="outlined-basic"
+                              label="Email Address"
+                              variant="outlined"
+                              sx={{ margin: "10px" }}
+                              value={manageUserObj.email}
+                              onChange={(event) =>
+                                handleTextFieldChangeParty(event, "email")
+                              }
+                            />
+                            <TextField
+                              id="outlined-basic"
+                              label="Billing Address"
+                              variant="outlined"
+                              sx={{ margin: "10px" }}
+                              value={manageUserObj.billingAddress}
+                              onChange={(event) =>
+                                handleTextFieldChangeParty(
+                                  event,
+                                  "billingAddress"
+                                )
+                              }
+                            />
+                            <TextField
+                              id="outlined-basic"
+                              label="Shipping Address"
+                              variant="outlined"
+                              sx={{ margin: "10px" }}
+                              value={manageUserObj.shippingAddress}
+                              onChange={(event) =>
+                                handleTextFieldChangeParty(
+                                  event,
+                                  "shippingAddress"
+                                )
+                              }
+                            />
+                            <TextField
+                              id="outlined-basic"
+                              label="Company Name"
+                              variant="outlined"
+                              sx={{ margin: "10px" }}
+                              value={manageUserObj.company}
+                              onChange={(event) =>
+                                handleTextFieldChangeParty(event, "company")
+                              }
+                            />
+                            <TextField
+                              fullWidth
+                              select
+                              value={manageUserObj.partyType}
+                              onChange={(event) =>
+                                handleTextFieldChangeParty(event, "partyType")
+                              }
+                              label="Party Type"
+                              variant="outlined"
+                              margin="normal"
+                            >
+                              {UserRole.PartyType.map((userrole) => (
+                                <MenuItem
+                                  key={userrole.name}
+                                  value={userrole.name}
+                                >
+                                  {userrole.name}
+                                </MenuItem>
+                              ))}
+                            </TextField>
+                            <TextField
+                              id="outlined-basic"
+                              label="GST Number"
+                              variant="outlined"
+                              sx={{ margin: "10px" }}
+                              value={manageUserObj.gstNumber}
+                              onChange={(event) =>
+                                handleTextFieldChangeParty(event, "gstNumber")
+                              }
+                            />
+
+                            <TextField
+                              fullWidth
+                              select
+                              value={manageUserObj.partyCategory}
+                              onChange={(event) =>
+                                handleTextFieldChangeParty(
+                                  event,
+                                  "partyCategory"
+                                )
+                              }
+                              label="Category"
+                              variant="outlined"
+                              margin="normal"
+                            >
+                              <MenuItem
+                                onClick={() => setOpenCategoryParty(true)}
+                              >
+                                Create a New Category
+                              </MenuItem>
+                              {Array.isArray(keyCategoryData) &&
+                                keyCategoryData.map((userrole) => (
+                                  <MenuItem key={userrole} value={userrole}>
+                                    {userrole}
+                                  </MenuItem>
+                                ))}
+                            </TextField>
+                            <Transition in={openCategoryParty} timeout={400}>
+                              <Modal
+                                open={openCategoryParty}
+                                onClose={() => setOpenCategoryParty(false)}
+                                aria-labelledby="modal-modal-title"
+                                aria-describedby="modal-modal-description"
+                                sx={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <Box sx={style}>
+                                  <Box
+                                    sx={{
+                                      marginTop: 8,
+                                      display: "flex",
+                                      flexDirection: "column",
+                                      alignItems: "center",
+                                    }}
+                                  >
+                                    <ModalClose variant="plain" sx={{ m: 1 }} />
+                                    <Typography component="h1" variant="h5">
+                                      Save Into Category
+                                    </Typography>
+                                    <Box
+                                      component="form"
+                                      onSubmit={handleClickForCategory}
+                                      noValidate
+                                      sx={{ mt: 1 }}
+                                    >
+                                      <TextField
+                                        margin="normal"
+                                        required
+                                        fullWidth
+                                        id="Category"
+                                        label="Categroy"
+                                        name="Category"
+                                        autoComplete="Category"
+                                        value={categoryApi}
+                                        onChange={(e) =>
+                                          setCategoryApi(e.target.value)
+                                        }
+                                        autoFocus
+                                      />
+                                      <Button
+                                        type="submit"
+                                        fullWidth
+                                        variant="contained"
+                                        onClick={handleClickForCategory}
+                                        sx={{
+                                          mt: 3,
+                                          mb: 2,
+                                          color: "whitesmoke",
+                                          background: "#212121",
+                                        }}
+                                      >
+                                        Submit
+                                      </Button>
+                                      <List sx={{ maxWidth: 300 }}>
+                                        {addCategory.length > 0 ? (
+                                          addCategory.map((item, index) => (
+                                            <ListItem
+                                              endAction={
+                                                <IconButton
+                                                  aria-label="Delete"
+                                                  size="sm"
+                                                  color="danger"
+                                                >
+                                                  <Delete
+                                                    onClick={() =>
+                                                      deleteCategory(
+                                                        item.id,
+                                                        item.value
+                                                      )
+                                                    }
+                                                  />
+                                                </IconButton>
+                                              }
+                                            >
+                                              <ListItemButton key={index}>
+                                                {item.value}
+                                              </ListItemButton>
+                                            </ListItem>
+                                          ))
+                                        ) : (
+                                          <p>Add New Category</p>
+                                        )}
+                                      </List>
+                                    </Box>
+                                  </Box>
+                                </Box>
+                              </Modal>
+                            </Transition>
+                          </Box>
+
+                          <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            onClick={handleSubmitForParty}
+                            sx={{
+                              mt: 3,
+                              mb: 2,
+                              color: "whitesmoke",
+                              background: "#212121",
+                            }}
+                          >
+                            Submit
+                          </Button>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Box>
+                </Modal>
               </Box>
               <Box
                 sx={{
@@ -992,8 +1392,8 @@ export const SalesInvoiceCreate = () => {
                 width: "100%",
                 borderStyle: "dashed",
                 borderWidth: "2px",
-                textAlign:'center',
-                alignItems:'center'
+                textAlign: "center",
+                alignItems: "center",
               }}
             >
               Add Items
