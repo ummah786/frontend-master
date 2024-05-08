@@ -8,6 +8,7 @@ import {
     ADD_EXPENSE,
     ADD_GODOWN,
     ADD_INVENTORY,
+    ADD_INV_KEY_COMPANY,
     ADD_KEY_BUSINESS,
     ADD_KEY_CATEGORY,
     ADD_KEY_COMPANY,
@@ -233,6 +234,15 @@ export const businessUserReducer = (state = {businessUser: [businessAccountDataM
 export const keyCompanyReducer = (state = {keyCompanyData: []}, action) => {
     switch (action.type) {
         case ADD_KEY_COMPANY:
+            return action.payload;
+        default:
+            return state;
+    }
+}
+
+export const keyInvCompanyReducer = (state = {keyInvCompanyData: []}, action) => {
+    switch (action.type) {
+        case ADD_INV_KEY_COMPANY:
             return action.payload;
         default:
             return state;

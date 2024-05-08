@@ -38,7 +38,7 @@ export const UPDATE_INVENTORY = 'UPDATE_INVENTORY';
 export const GET_INVENTORY = 'GET_INVENTORY';
 
 
-
+export const ADD_INV_KEY_COMPANY='ADD_INV_KEY_COMPANY'
 export const ADD_KEY_COMPANY = 'ADD_KEY_COMPANY';
 export const ADD_KEY_BUSINESS = 'ADD_KEY_BUSINESS';
 export const ADD_KEY_RACK = 'ADD_KEY_RACK';
@@ -94,6 +94,12 @@ export const removeExpense  = (id) => ({
 export const addKeyCompany = (keyCompany) => ({
     type: ADD_KEY_COMPANY,
     payload: keyCompany
+});
+
+
+export const addInvKeyCompany = (keyInvCompany) => ({
+    type: ADD_INV_KEY_COMPANY,
+    payload: keyInvCompany
 });
 export const addKeyBusiness = (KeyBusiness) => ({
     type: ADD_KEY_BUSINESS,

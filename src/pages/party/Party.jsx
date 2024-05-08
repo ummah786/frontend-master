@@ -34,7 +34,7 @@ import Modal from "@mui/joy/Modal";
 import ModalClose from "@mui/joy/ModalClose";
 import Typography from "@mui/joy/Typography";
 import {Transition} from "react-transition-group";
-import {DELETE_CATEGORY, SAVE_CATEGORY} from "../apiendpoint/APIEndPoint";
+import {DELETE_KEY_VALUE, SAVE_KEY_VALUE} from "../apiendpoint/APIEndPoint";
 import {List, ListItem, ListItemButton} from "@mui/joy";
 
 
@@ -318,7 +318,7 @@ export const Party = () => {
 
     const handleSubmitToApi = async () => {
         try {
-            const response = await axios.post(SAVE_CATEGORY, {
+            const response = await axios.post(SAVE_KEY_VALUE, {
                 kes: 'category',
                 value: categoryApi,
                 primary_user_id: loginData.primary_user_id
@@ -337,7 +337,7 @@ export const Party = () => {
 
     async function deleteCategory(id, value) {
         try {
-            const response = await axios.get(DELETE_CATEGORY + `/${id}`);
+            const response = await axios.get(DELETE_KEY_VALUE + `/${id}`);
             console.log("DELETE CATEGORY  ", response.data.response);
             //add logic for remove from
            // dispatch(removeKeyCategory(value));
