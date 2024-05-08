@@ -71,6 +71,7 @@ export const InventoryShop = () => {
   const [files, setFiles] = useState([]);
   const dispatch = useDispatch();
   const loginData = useSelector((state) => state.loginReducerValue);
+  const { partyUser } = useSelector((state) => state.partyReducerValue);
   const [openRack, setOpenRack] = React.useState(false);
   const [openCategory, setOpenCategory] = React.useState(false);
   const [openWarehouse, setOpenWarehouse] = React.useState(false);
@@ -278,7 +279,7 @@ export const InventoryShop = () => {
     setOpenCategory(false);
     setAddCategory([]);
   };
- 
+
   let axiosConfig = {
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
@@ -329,9 +330,7 @@ export const InventoryShop = () => {
         axiosConfig
       );
       console.log("save rack response ", response.data.response.value);
-      dispatch(
-        addKeyRack([response.data.response.value, ...KeyRackData])
-      );
+      dispatch(addKeyRack([response.data.response.value, ...KeyRackData]));
       setAddCategory([...addCategory, response.data.response]);
       console.log("Add rack ", addCategory);
     } catch (error) {
@@ -738,11 +737,15 @@ export const InventoryShop = () => {
                   variant="outlined"
                   margin="normal"
                 >
-                  {UserRole.GST.map((userrole) => (
-                    <MenuItem key={userrole.name} value={userrole.name}>
-                      {userrole.name}
-                    </MenuItem>
-                  ))}
+                  {Array.isArray(partyUser) &&
+                    partyUser.map((userrole) =>
+                      // Check if userrole.partyType is equal to 'supplier'
+                      userrole.partyType === "Supplier" ? (
+                        <MenuItem key={userrole.id} value={userrole.pname}>
+                          {userrole.pname}
+                        </MenuItem>
+                      ) : null // Render null if partyType is not 'supplier'
+                    )}
                 </TextField>
               </Box>
               <Box
