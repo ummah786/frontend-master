@@ -122,7 +122,7 @@ export const SalesInvoiceCreate = () => {
   const [inventorys, setInventorys] = useState([]);
   const [addNewItemsFlagModal, setAddNewItemsFlagModal] = useState(false);
 
-  useEffect(() => {}, [partyUser]);
+  useEffect(() => {}, [partyUser,billTo]);
 
   const dispatch = useDispatch();
 
@@ -386,7 +386,9 @@ export const SalesInvoiceCreate = () => {
     setEditOpen(true);
   }
 
-  const handleChange = (event) => {
+  const handleChange = (event,shipvalue) => {
+    console.log("Ship Value ",shipvalue)
+    console.log("bill TO ",billTo);
     setOnSelectOfShipTo(event);
     setOpenCategory(false);
   };
@@ -996,7 +998,7 @@ export const SalesInvoiceCreate = () => {
                                   color="primary"
                                   sx={{ margin: "10px" }}
                                   onClick={() =>
-                                    handleChange(shipTo.shippingAddress)
+                                    handleChange(shipTo.shippingAddress,shipTo)
                                   }
                                 >
                                   Select
@@ -1035,7 +1037,7 @@ export const SalesInvoiceCreate = () => {
                                               " " +
                                               shipIn.state +
                                               " " +
-                                              shipIn.zip
+                                              shipIn.zip,shipIn
                                           )
                                         }
                                       >
@@ -1109,7 +1111,6 @@ export const SalesInvoiceCreate = () => {
                                   <Box>
                                     <TextField
                                       margin="normal"
-                                      required
                                       fullWidth
                                       value={city}
                                       label="City*"
@@ -1171,7 +1172,11 @@ export const SalesInvoiceCreate = () => {
                         </Modal>
                       </TableContainer>
                     </Box>
-                    <ChildModal shipId={shipTo.id} setShipTo={setShipTo} />
+                    <ChildModal
+                      shipId={shipTo.id}
+                      setShipTo={setShipTo}
+                      setBillTo={setBillTo}
+                    />
                   </Box>
                 </Modal>
               </Transition>
@@ -2429,7 +2434,7 @@ export const SalesInvoiceCreate = () => {
     </>
   );
 };
-const ChildModal = ({ shipId, setShipTo }) => {
+const ChildModal = ({ shipId, setShipTo, setBillTo }) => {
   const [open, setOpen] = React.useState(false);
   const [city, setCity] = useState("");
   const [address, setAddress] = useState("");
@@ -2473,6 +2478,7 @@ const ChildModal = ({ shipId, setShipTo }) => {
         addObjectOnTop(response.data.response);
         console.log("hesab response if ", response.data.response);
         setShipTo(response.data.response);
+        setBillTo(response.data.response);
         //  dispatch(addLogin(response.data.response));
         // onBooleanChange();
       } else {
@@ -2566,7 +2572,6 @@ const ChildModal = ({ shipId, setShipTo }) => {
                 <Box>
                   <TextField
                     margin="normal"
-                    required
                     fullWidth
                     label="City*"
                     onChange={(e) => setCity(e.target.value)}
