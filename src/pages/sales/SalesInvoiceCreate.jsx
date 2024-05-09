@@ -1,4 +1,5 @@
 import {
+  Autocomplete,
   Box,
   Button,
   TextField,
@@ -61,6 +62,7 @@ import {
 import {
   addExistingInventory,
   addKeyCategory,
+  addKeyCompany,
   addParty,
 } from "../../redux/Action";
 import Delete from "@mui/icons-material/Delete";
@@ -119,17 +121,49 @@ export const SalesInvoiceCreate = () => {
   const { partyUser } = useSelector((state) => state.partyReducerValue);
   const { inventoryUser } = useSelector((state) => state.inventoryReducerValue);
   const loginData = useSelector((state) => state.loginReducerValue);
+  const [filter, setFilter] = useState("");
+  const [filterCategory, setFilterCategory] = useState("");
   const [inventorys, setInventorys] = useState([]);
+  const [filteredEmployees, setFilteredEmployees] = useState([]);
   const [addNewItemsFlagModal, setAddNewItemsFlagModal] = useState(false);
 
-  useEffect(() => {}, [partyUser,billTo]);
+  useEffect(() => {}, [partyUser, billTo]);
 
   const dispatch = useDispatch();
 
   const keyCategoryData = useSelector((state) => state.keyCategoryReducerValue);
-
+  const keyCompanyData = useSelector((state) => state.keyCompanyReducerValue);
   const [addCategory, setAddCategory] = React.useState([]);
   const [categoryApi, setCategoryApi] = useState();
+
+  const handleChangeForFilterCategory = (event, newValue) => {
+    setFilterCategory(newValue);
+  };
+  useEffect(() => {
+    if (Array.isArray(inventorys)) {
+      if (
+        filterCategory === "" ||
+        filterCategory === undefined ||
+        filterCategory === null
+      ) {
+        setFilteredEmployees(inventorys); // Set filteredEmployees to the original inventorys data
+      } else {
+        const filteredData = inventorys.filter((employee) => {
+          return employee.category.includes(filterCategory);
+        });
+        setFilteredEmployees(filteredData);
+      }
+    }
+  }, [filterCategory, inventorys]);
+
+  useEffect(() => {
+    if (Array.isArray(inventorys)) {
+      const filteredData = inventorys.filter((employee) => {
+        return employee.item.toLowerCase().includes(filter.toLowerCase());
+      });
+      setFilteredEmployees(filteredData);
+    }
+  }, [filter, inventorys]);
 
   async function deleteCategory(id, value) {
     try {
@@ -143,7 +177,32 @@ export const SalesInvoiceCreate = () => {
       console.error("Error:", error);
     }
   }
-
+  const handleClickForCompany = (e) => {
+    e.preventDefault();
+    handleSubmitToKeyValuePairForCompany();
+    setCategoryApi("");
+  };
+  const handleSubmitToKeyValuePairForCompany = async () => {
+    try {
+      const response = await axios.post(
+        SAVE_KEY_VALUE,
+        {
+          kes: "company",
+          value: categoryApi,
+          primary_user_id: loginData.primary_user_id,
+        },
+        axiosConfig
+      );
+      console.log("save company response ", response.data.response.value);
+      dispatch(
+        addKeyCompany([response.data.response.value, ...keyCompanyData])
+      );
+      setAddCategory([...addCategory, response.data.response]);
+      console.log("Add company ", addCategory);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
   const handleClickForCategory = (e) => {
     e.preventDefault();
     handleSubmitToKeyValuePairForCategory();
@@ -386,9 +445,9 @@ export const SalesInvoiceCreate = () => {
     setEditOpen(true);
   }
 
-  const handleChange = (event,shipvalue) => {
-    console.log("Ship Value ",shipvalue)
-    console.log("bill TO ",billTo);
+  const handleChange = (event, shipvalue) => {
+    console.log("Ship Value ", shipvalue);
+    console.log("bill TO ", billTo);
     setOnSelectOfShipTo(event);
     setOpenCategory(false);
   };
@@ -998,7 +1057,7 @@ export const SalesInvoiceCreate = () => {
                                   color="primary"
                                   sx={{ margin: "10px" }}
                                   onClick={() =>
-                                    handleChange(shipTo.shippingAddress,shipTo)
+                                    handleChange(shipTo.shippingAddress, shipTo)
                                   }
                                 >
                                   Select
@@ -1037,7 +1096,8 @@ export const SalesInvoiceCreate = () => {
                                               " " +
                                               shipIn.state +
                                               " " +
-                                              shipIn.zip,shipIn
+                                              shipIn.zip,
+                                            shipIn
                                           )
                                         }
                                       >
@@ -1464,6 +1524,8 @@ export const SalesInvoiceCreate = () => {
                             fullWidth
                             placeholder="Search Items"
                             variant="outlined"
+                            value={filter}
+                            onChange={(e) => setFilter(e.target.value)}
                             InputProps={{
                               startAdornment: (
                                 <SearchIcon
@@ -1477,21 +1539,18 @@ export const SalesInvoiceCreate = () => {
                           />
                         </Box>
                         <Box sx={{ width: "35%", margin: "5px" }}>
-                          <TextField
-                            fullWidth
-                            select
-                            //   value={manageUserObj.state}
-                            // onChange={(event) => handleTextFieldChange(event, 'state')}
-                            label="Select Category"
-                            variant="outlined"
-                          >
-                            {Array.isArray(keyCategoryData) &&
-                              keyCategoryData.map((userrole) => (
-                                <MenuItem key={userrole} value={userrole}>
-                                  {userrole}
-                                </MenuItem>
-                              ))}
-                          </TextField>
+                          <Autocomplete
+                            value={filterCategory}
+                            onChange={handleChangeForFilterCategory}
+                            options={keyCategoryData}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                label="Select Category"
+                                variant="outlined"
+                              />
+                            )}
+                          />
                         </Box>
                         <Box sx={{ width: "30%", margin: "5px" }}>
                           <Button
@@ -1712,7 +1771,7 @@ export const SalesInvoiceCreate = () => {
                                         select
                                         value={inventoryObject.category}
                                         onChange={(event) =>
-                                          handleTextFieldChange(
+                                          handleTextFieldChangeForInventory(
                                             event,
                                             "category"
                                           )
@@ -1726,14 +1785,15 @@ export const SalesInvoiceCreate = () => {
                                         >
                                           Create a New Category
                                         </MenuItem>
-                                        {UserRole.GST.map((userrole) => (
-                                          <MenuItem
-                                            key={userrole.name}
-                                            value={userrole.name}
-                                          >
-                                            {userrole.name}
-                                          </MenuItem>
-                                        ))}
+                                        {Array.isArray(keyCategoryData) &&
+                                          keyCategoryData.map((userrole) => (
+                                            <MenuItem
+                                              key={userrole}
+                                              value={userrole}
+                                            >
+                                              {userrole}
+                                            </MenuItem>
+                                          ))}
                                       </TextField>
                                       <Modal
                                         aria-labelledby="modal-title"
@@ -1746,40 +1806,104 @@ export const SalesInvoiceCreate = () => {
                                           alignItems: "center",
                                         }}
                                       >
-                                        <Sheet
-                                          variant="outlined"
-                                          sx={{
-                                            maxWidth: 500,
-                                            borderRadius: "md",
-                                            p: 3,
-                                            boxShadow: "lg",
-                                          }}
-                                        >
-                                          <ModalClose
-                                            variant="plain"
-                                            sx={{ m: 1 }}
-                                          />
-                                          <Typography
-                                            component="h2"
-                                            id="modal-title"
-                                            level="h4"
-                                            textColor="inherit"
-                                            fontWeight="lg"
-                                            mb={1}
-                                          >
-                                            Category
-                                          </Typography>
-                                          <Typography
-                                            id="modal-desc"
-                                            textColor="text.tertiary"
-                                          >
-                                            Make sure to use{" "}
-                                            <code>aria-labelledby</code> on the
-                                            modal dialog with an optional{" "}
-                                            <code>aria-describedby</code>{" "}
-                                            attribute.
-                                          </Typography>
-                                        </Sheet>
+                                        <Box>
+                                          <Box sx={style}>
+                                            <Box
+                                              sx={{
+                                                marginTop: 8,
+                                                display: "flex",
+                                                flexDirection: "column",
+                                                alignItems: "center",
+                                              }}
+                                            >
+                                              <ModalClose
+                                                variant="plain"
+                                                sx={{ m: 1 }}
+                                              />
+                                              <Typography
+                                                component="h1"
+                                                variant="h5"
+                                              >
+                                                Save Into Category
+                                              </Typography>
+                                              <Box
+                                                component="form"
+                                                onSubmit={
+                                                  handleClickForCategory
+                                                }
+                                                noValidate
+                                                sx={{ mt: 1 }}
+                                              >
+                                                <TextField
+                                                  margin="normal"
+                                                  required
+                                                  fullWidth
+                                                  id="Category"
+                                                  label="Categroy"
+                                                  name="Category"
+                                                  autoComplete="Category"
+                                                  value={categoryApi}
+                                                  onChange={(e) =>
+                                                    setCategoryApi(
+                                                      e.target.value
+                                                    )
+                                                  }
+                                                  autoFocus
+                                                />
+                                                <Button
+                                                  type="submit"
+                                                  fullWidth
+                                                  variant="contained"
+                                                  onClick={
+                                                    handleClickForCategory
+                                                  }
+                                                  sx={{
+                                                    mt: 3,
+                                                    mb: 2,
+                                                    color: "whitesmoke",
+                                                    background: "#212121",
+                                                  }}
+                                                >
+                                                  Submit
+                                                </Button>
+                                                <List sx={{ maxWidth: 300 }}>
+                                                  {addCategory.length > 0 ? (
+                                                    addCategory.map(
+                                                      (item, index) => (
+                                                        <ListItem
+                                                          endAction={
+                                                            <IconButton
+                                                              aria-label="Delete"
+                                                              size="sm"
+                                                              color="danger"
+                                                            >
+                                                              <Delete
+                                                                onClick={() =>
+                                                                  deleteCategory(
+                                                                    item.id,
+                                                                    item.value
+                                                                  )
+                                                                }
+                                                              />
+                                                            </IconButton>
+                                                          }
+                                                        >
+                                                          <ListItemButton
+                                                            key={index}
+                                                          >
+                                                            {item.value}
+                                                          </ListItemButton>
+                                                        </ListItem>
+                                                      )
+                                                    )
+                                                  ) : (
+                                                    <p>Add New Category</p>
+                                                  )}
+                                                </List>
+                                              </Box>
+                                            </Box>
+                                          </Box>
+                                        </Box>
                                       </Modal>
                                       <TextField
                                         fullWidth
@@ -1800,14 +1924,15 @@ export const SalesInvoiceCreate = () => {
                                         >
                                           Create a New Company
                                         </MenuItem>
-                                        {UserRole.GST.map((userrole) => (
-                                          <MenuItem
-                                            key={userrole.name}
-                                            value={userrole.name}
-                                          >
-                                            {userrole.name}
-                                          </MenuItem>
-                                        ))}
+                                        {Array.isArray(keyCompanyData) &&
+                                          keyCompanyData.map((userrole) => (
+                                            <MenuItem
+                                              key={userrole}
+                                              value={userrole}
+                                            >
+                                              {userrole}
+                                            </MenuItem>
+                                          ))}
                                       </TextField>
                                       <Modal
                                         aria-labelledby="modal-title"
@@ -1820,40 +1945,102 @@ export const SalesInvoiceCreate = () => {
                                           alignItems: "center",
                                         }}
                                       >
-                                        <Sheet
-                                          variant="outlined"
-                                          sx={{
-                                            maxWidth: 500,
-                                            borderRadius: "md",
-                                            p: 3,
-                                            boxShadow: "lg",
-                                          }}
-                                        >
-                                          <ModalClose
-                                            variant="plain"
-                                            sx={{ m: 1 }}
-                                          />
-                                          <Typography
-                                            component="h2"
-                                            id="modal-title"
-                                            level="h4"
-                                            textColor="inherit"
-                                            fontWeight="lg"
-                                            mb={1}
-                                          >
-                                            Company
-                                          </Typography>
-                                          <Typography
-                                            id="modal-desc"
-                                            textColor="text.tertiary"
-                                          >
-                                            Make sure to use{" "}
-                                            <code>aria-labelledby</code> on the
-                                            modal dialog with an optional{" "}
-                                            <code>aria-describedby</code>{" "}
-                                            attribute.
-                                          </Typography>
-                                        </Sheet>
+                                        <Box>
+                                          <Box sx={style}>
+                                            <Box
+                                              sx={{
+                                                marginTop: 8,
+                                                display: "flex",
+                                                flexDirection: "column",
+                                                alignItems: "center",
+                                              }}
+                                            >
+                                              <ModalClose
+                                                variant="plain"
+                                                sx={{ m: 1 }}
+                                              />
+                                              <Typography
+                                                component="h1"
+                                                variant="h5"
+                                              >
+                                                Save Into Category
+                                              </Typography>
+                                              <Box
+                                                component="form"
+                                                onSubmit={handleClickForCompany}
+                                                noValidate
+                                                sx={{ mt: 1 }}
+                                              >
+                                                <TextField
+                                                  margin="normal"
+                                                  required
+                                                  fullWidth
+                                                  id="Category"
+                                                  label="Categroy"
+                                                  name="Category"
+                                                  autoComplete="Category"
+                                                  value={categoryApi}
+                                                  onChange={(e) =>
+                                                    setCategoryApi(
+                                                      e.target.value
+                                                    )
+                                                  }
+                                                  autoFocus
+                                                />
+                                                <Button
+                                                  type="submit"
+                                                  fullWidth
+                                                  variant="contained"
+                                                  onClick={
+                                                    handleClickForCompany
+                                                  }
+                                                  sx={{
+                                                    mt: 3,
+                                                    mb: 2,
+                                                    color: "whitesmoke",
+                                                    background: "#212121",
+                                                  }}
+                                                >
+                                                  Submit
+                                                </Button>
+                                                <List sx={{ maxWidth: 300 }}>
+                                                  {addCategory.length > 0 ? (
+                                                    addCategory.map(
+                                                      (item, index) => (
+                                                        <ListItem
+                                                          endAction={
+                                                            <IconButton
+                                                              aria-label="Delete"
+                                                              size="sm"
+                                                              color="danger"
+                                                            >
+                                                              <Delete
+                                                                onClick={() =>
+                                                                  deleteCategory(
+                                                                    item.id,
+                                                                    item.value
+                                                                  )
+                                                                }
+                                                              />
+                                                            </IconButton>
+                                                          }
+                                                        >
+                                                          <ListItemButton
+                                                            key={index}
+                                                          >
+                                                            {item.value}
+                                                          </ListItemButton>
+                                                        </ListItem>
+                                                      )
+                                                    )
+                                                  ) : (
+                                                    <p>Add New Company</p>
+                                                  )}
+                                                </List>
+                                              </Box>
+                                            </Box>
+                                          </Box>
+                                        </Box>
                                       </Modal>
                                       <TextField
                                         id="outlined-basic"
@@ -1913,7 +2100,7 @@ export const SalesInvoiceCreate = () => {
                       >
                         <TableContainer
                           component={Paper}
-                          sx={{ maxHeight: 350 }}
+                          sx={{ maxHeight: 350, minHeight: 350 }}
                         >
                           <Table
                             sx={{ minWidth: 650 }}
@@ -1956,8 +2143,8 @@ export const SalesInvoiceCreate = () => {
                               </TableRow>
                             </TableHead>
                             <TableBody>
-                              {inventorys &&
-                                inventorys.map((row) => (
+                              {Array.isArray(filteredEmployees) &&
+                                filteredEmployees.map((row) => (
                                   <TableRow
                                     key={row.name}
                                     sx={{
