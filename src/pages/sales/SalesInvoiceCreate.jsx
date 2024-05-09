@@ -77,6 +77,8 @@ const style = {
 };
 
 export const SalesInvoiceCreate = () => {
+  const [filteredParty, setFilteredParty] = useState([]);
+
   const [salePurchaseObject, setSalePurchaseObject] =
     useState(salePurchaseModel);
   const [inventoryObject, setInventoryObject] = useState(InventoryDataModel);
@@ -119,6 +121,8 @@ export const SalesInvoiceCreate = () => {
   const loginData = useSelector((state) => state.loginReducerValue);
   const [inventorys, setInventorys] = useState([]);
   const [addNewItemsFlagModal, setAddNewItemsFlagModal] = useState(false);
+
+  useEffect(() => {}, [partyUser]);
 
   const dispatch = useDispatch();
 
@@ -351,6 +355,7 @@ export const SalesInvoiceCreate = () => {
       console.log(response.data); // Handle response data
       if (response.data.code === 200) {
         console.log("hesab response if ", response.data.response);
+        setShipTo(response.data.response);
         //  dispatch(addLogin(response.data.response));
         // onBooleanChange();
       } else {
@@ -399,32 +404,32 @@ export const SalesInvoiceCreate = () => {
     setOpenPartyModal(true);
   };
   const handleBilltoSHipToo = (event) => {
-   // Check if event.target.value is defined
-  if (event.target.value) {
-    // Assuming event.target.value is an object with a shippingAddress property
-    const shippingAddress = event.target.value.shippingAddress;
-    if (shippingAddress) {
-      setShipTo(event.target.value);
-      setBillTo(event.target.value);
-      setShipToAddress(shippingAddress);
-      setShipToFlag(false);
-      setLabelBillTO("Bill To");
+    // Check if event.target.value is defined
+    if (event.target.value) {
+      // Assuming event.target.value is an object with a shippingAddress property
+      const shippingAddress = event.target.value.shippingAddress;
+      if (shippingAddress) {
+        setShipTo(event.target.value);
+        setBillTo(event.target.value);
+        setShipToAddress(shippingAddress);
+        setShipToFlag(false);
+        setLabelBillTO("Bill To");
 
-      const updatedObject = {
-        ...salePurchaseObject,
-        billAddress: event.target.value.billingAddress,
-        phone: event.target.value.mobileNumber,
-        gst: event.target.value.gstNumber,
-        shipAddress: shippingAddress, // Use shippingAddress here
-      }; 
-      setSalePurchaseObject(updatedObject);
+        const updatedObject = {
+          ...salePurchaseObject,
+          billAddress: event.target.value.billingAddress,
+          phone: event.target.value.mobileNumber,
+          gst: event.target.value.gstNumber,
+          shipAddress: shippingAddress, // Use shippingAddress here
+        };
+        setSalePurchaseObject(updatedObject);
+      } else {
+        console.error("Shipping address is undefined");
+      }
     } else {
-      console.error("Shipping address is undefined");
+      console.error("Event target value is undefined");
     }
-  } else {
-    console.error("Event target value is undefined");
-  }
-};
+  };
 
   const handleSHipToo = (event) => {
     setShipTo(event.target.value);
@@ -608,6 +613,7 @@ export const SalesInvoiceCreate = () => {
                   label={labelBillTO}
                   variant="outlined"
                   margin="normal"
+                  value={billTo.pname}
                   onChange={(event) => handleBilltoSHipToo(event)}
                 >
                   <MenuItem onClick={openModalPartyValue}>
@@ -1165,7 +1171,7 @@ export const SalesInvoiceCreate = () => {
                         </Modal>
                       </TableContainer>
                     </Box>
-                    <ChildModal value={shipTo.id} />
+                    <ChildModal shipId={shipTo.id} setShipTo={setShipTo} />
                   </Box>
                 </Modal>
               </Transition>
@@ -1446,8 +1452,6 @@ export const SalesInvoiceCreate = () => {
                         sx={{
                           display: "flex",
                           margin: "5px",
-                          borderStyle: "dashed",
-                          borderWidth: "2px",
                         }}
                       >
                         <Box sx={{ width: "35%", margin: "5px" }}>
@@ -1476,20 +1480,21 @@ export const SalesInvoiceCreate = () => {
                             label="Select Category"
                             variant="outlined"
                           >
-                            {UserRole.india.map((indi) => (
-                              <MenuItem key={indi.name} value={indi.name}>
-                                {indi.name}
-                              </MenuItem>
-                            ))}
+                            {Array.isArray(keyCategoryData) &&
+                              keyCategoryData.map((userrole) => (
+                                <MenuItem key={userrole} value={userrole}>
+                                  {userrole}
+                                </MenuItem>
+                              ))}
                           </TextField>
                         </Box>
                         <Box sx={{ width: "30%", margin: "5px" }}>
                           <Button
                             variant="outlined"
                             color="secondary"
+                            sx={{ width: "275px", height: "55px" }}
                             onClick={handleAddNewItems}
                           >
-                            {" "}
                             +Add New Items
                           </Button>
 
@@ -2424,12 +2429,14 @@ export const SalesInvoiceCreate = () => {
     </>
   );
 };
-const ChildModal = (props) => {
+const ChildModal = ({ shipId, setShipTo }) => {
   const [open, setOpen] = React.useState(false);
   const [city, setCity] = useState("");
   const [address, setAddress] = useState("");
   const [stateLoc, setStateLoc] = useState("");
   const [zip, setZip] = useState("");
+  const { partyUser } = useSelector((state) => state.partyReducerValue);
+  const dispatch = useDispatch();
   let axiosConfig = {
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
@@ -2449,7 +2456,7 @@ const ChildModal = (props) => {
       const response = await axios.post(
         SAVE_ADDRESS,
         {
-          id: props.value,
+          id: shipId,
           multipleShippingAddress: [
             {
               address: address,
@@ -2463,7 +2470,9 @@ const ChildModal = (props) => {
       );
       console.log(response.data); // Handle response data
       if (response.data.code === 200) {
+        addObjectOnTop(response.data.response);
         console.log("hesab response if ", response.data.response);
+        setShipTo(response.data.response);
         //  dispatch(addLogin(response.data.response));
         // onBooleanChange();
       } else {
@@ -2473,6 +2482,19 @@ const ChildModal = (props) => {
       console.error("Error:", error);
     }
     handleClose();
+  };
+
+  const addObjectOnTop = (newObject) => {
+    const existingIndex = partyUser.findIndex(
+      (item) => item.id === newObject.id
+    );
+    if (existingIndex === -1) {
+      dispatch(addParty([newObject, ...partyUser]));
+    } else {
+      const updatedArray = [...partyUser];
+      updatedArray[existingIndex] = newObject;
+      dispatch(addParty(updatedArray));
+    }
   };
 
   return (
