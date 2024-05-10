@@ -100,6 +100,7 @@ export const SalesInvoiceCreate = () => {
   const [boxes, setBoxes] = useState([]);
   const [fields, setFields] = useState([]);
   const [employees, setEmployees] = useState([]);
+
   const [openNotes, setOpenNotes] = useState(false);
   const [openTermCondition, setOpenTermCondition] = useState(false);
   const [textValue, setTextValue] = useState("");
@@ -135,6 +136,37 @@ export const SalesInvoiceCreate = () => {
   const keyCompanyData = useSelector((state) => state.keyCompanyReducerValue);
   const [addCategory, setAddCategory] = React.useState([]);
   const [categoryApi, setCategoryApi] = useState();
+
+  const [totalTaxTable, setTotalTaxTable] = useState("");
+  const [totalDiscountTable, setTotalDiscountTable] = useState("");
+  const [totalAmountTable, setTotalAmountTable] = useState("");
+
+  useEffect(() => {
+    const totalTaxTableValue = employees.reduce((accumulator, employee) => {
+      const rateIncrement = parseFloat(employee.gst);
+      if (!isNaN(rateIncrement)) {
+        return accumulator + parseFloat(employee.gst);
+      }
+      return accumulator;
+    }, 0);
+    const totalDiscountTableValue = employees.reduce(
+      (acc, emp) => acc + parseFloat(emp.discount),
+      0
+    );
+    const totalAmountTableValue = employees.reduce(
+      (acc, emp) => acc + emp.total,
+      0
+    );
+    setTotalAmountTable(totalAmountTableValue);
+    setTotalDiscountTable(totalDiscountTableValue);
+    setTotalTaxTable(totalTaxTableValue);
+    console.log(
+      "Total tax,disoucnt,amount  ",
+      totalTaxTableValue,
+      totalDiscountTableValue,
+      totalAmountTableValue
+    );
+  }, [employees]);
 
   const handleChangeForFilterCategory = (event, newValue) => {
     setFilterCategory(newValue);
@@ -2254,9 +2286,15 @@ export const SalesInvoiceCreate = () => {
                     1
                   </StyledTableCell>
                   <StyledTableCell align="center">SUBTOTAL</StyledTableCell>
-                  <StyledTableCell align="center">(₹)</StyledTableCell>
-                  <StyledTableCell align="center">(₹)</StyledTableCell>
-                  <StyledTableCell align="center">(₹)</StyledTableCell>
+                  <StyledTableCell align="center">
+                    (₹){totalDiscountTable}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    (₹){totalTaxTable}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    (₹){totalAmountTable}
+                  </StyledTableCell>
                   <StyledTableCell align="center" style={{ color: "black" }}>
                     1
                   </StyledTableCell>
