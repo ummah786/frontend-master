@@ -4,20 +4,14 @@ import SockJS from "sockjs-client";
 
 export const Chat = () => {
   const [messages, setMessages] = useState([]);
-  const [messageInput, setMessageInput] = useState('');
+  const [messageInput, setMessageInput] = useState("");
   const [stompClient, setStompClient] = useState(null);
 
   useEffect(() => {
-    const socket = new SockJS('http://localhost:8700/websocket-example');
-    const stomp = Stomp.over(socket);
-
-    stomp.connect({}, () => {
-      console.log('Connected to WebSocket');
-      setStompClient(stomp);
-      stomp.subscribe('/topic/greetings', (message) => {
-        const newMessage = JSON.parse(message.body);
-        setMessages((prevMessages) => [...prevMessages, newMessage]);
-      });
+    const socket = new SockJS("http://localhost:8700/websocket-example");
+    const client = Stomp.over(socket);
+    client.connect({}, () => {
+      setStompClient(client);
     });
 
     return () => {
@@ -25,17 +19,33 @@ export const Chat = () => {
         stompClient.disconnect();
       }
     };
+  }, []);
+
+  useEffect(() => {
+    if (stompClient) {
+      const subscription = stompClient.subscribe(
+        "/topic/greetings",
+        (response) => {
+          const receivedMessage = JSON.parse(response.body);
+          setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+        }
+      );
+
+      return () => {
+        subscription.unsubscribe(); // Clean up subscription
+      };
+    }
   }, [stompClient]);
 
   const sendMessage = () => {
-    if (messageInput.trim() !== '' && stompClient) {
+    if (messageInput.trim() !== "" && stompClient) {
       const message = {
-        text: messageInput.trim(),
-        sender: 'Me',
-        timestamp: new Date().toISOString(),
+        sender: "Sender", // Replace with sender's name
+        receiver: "Receiver", // Replace with receiver's name
+        content: messageInput.trim(),
       };
-      stompClient.send('/app/hello', {}, JSON.stringify(message));
-      setMessageInput('');
+      stompClient.send("/app/hello", {}, JSON.stringify(message));
+      setMessageInput("");
     }
   };
 
@@ -43,13 +53,6 @@ export const Chat = () => {
     <div className="App">
       <h1>Real-time Chat</h1>
       <div className="chat-container">
-        <div className="messages">
-          {messages.map((msg, index) => (
-            <div key={index} className="message">
-              <span className="sender">{msg.sender}</span>: {msg.text}
-            </div>
-          ))}
-        </div>
         <div className="input-container">
           <input
             type="text"
@@ -59,7 +62,14 @@ export const Chat = () => {
           />
           <button onClick={sendMessage}>Send</button>
         </div>
+        <div className="messages">
+          {messages.map((msg, index) => (
+            <div key={index} className="message">
+              <span className="sender">{msg.sender}</span>: {msg.content}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
-}
+};
