@@ -1,53 +1,65 @@
-import React, { useState, useEffect } from 'react';
-import Stomp from 'stompjs';
-import SockJS from 'sockjs-client';
+import React, { useState, useEffect } from "react";
+import Stomp from "stompjs";
+import SockJS from "sockjs-client";
 
 export const Chat = () => {
-    const [stompClient, setStompClient] = useState(null);
-    const [messages, setMessages] = useState([]);
-    
-    useEffect(() => {
-        const socket = new SockJS('/ws');
-        const stomp = Stomp.over(socket);
-        stomp.connect({}, () => {
-            setStompClient(stomp);
-            stomp.subscribe('/topic/messages', (message) => {
-                setMessages([...messages, JSON.parse(message.body)]);
-            });
-        });
-        return () => {
-            if (stompClient) {
-                stompClient.disconnect();
-            }
-        };
-    }, [messages]);
+  const [messages, setMessages] = useState([]);
+  const [messageInput, setMessageInput] = useState('');
+  const [stompClient, setStompClient] = useState(null);
 
-    const sendMessage = (content, sender) => {
-        stompClient.send('/app/chat', {}, JSON.stringify({ content, sender }));
+  useEffect(() => {
+    const socket = new SockJS('http://localhost:8700/websocket-example');
+    const stomp = Stomp.over(socket);
+
+    stomp.connect({}, () => {
+      console.log('Connected to WebSocket');
+      setStompClient(stomp);
+      stomp.subscribe('/topic/greetings', (message) => {
+        const newMessage = JSON.parse(message.body);
+        setMessages((prevMessages) => [...prevMessages, newMessage]);
+      });
+    });
+
+    return () => {
+      if (stompClient) {
+        stompClient.disconnect();
+      }
     };
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const content = event.target.elements.content.value;
-    const sender = event.target.elements.sender.value;
-    sendMessage(content, sender);
-    event.target.elements.content.value = "";
+  }, [stompClient]);
+
+  const sendMessage = () => {
+    if (messageInput.trim() !== '' && stompClient) {
+      const message = {
+        text: messageInput.trim(),
+        sender: 'Me',
+        timestamp: new Date().toISOString(),
+      };
+      stompClient.send('/app/hello', {}, JSON.stringify(message));
+      setMessageInput('');
+    }
   };
 
   return (
-    <div>
-      <h1>Chat App</h1>
-      <div>
-        {messages.map((message, index) => (
-          <div key={index}>
-            <strong>{message.sender}:</strong> {message.content}
-          </div>
-        ))}
+    <div className="App">
+      <h1>Real-time Chat</h1>
+      <div className="chat-container">
+        <div className="messages">
+          {messages.map((msg, index) => (
+            <div key={index} className="message">
+              <span className="sender">{msg.sender}</span>: {msg.text}
+            </div>
+          ))}
+        </div>
+        <div className="input-container">
+          <input
+            type="text"
+            value={messageInput}
+            onChange={(e) => setMessageInput(e.target.value)}
+            placeholder="Type your message..."
+          />
+          <button onClick={sendMessage}>Send</button>
+        </div>
       </div>
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="content" placeholder="Message" />
-        <input type="text" name="sender" placeholder="Your Name" />
-        <button type="submit">Send</button>
-      </form>
     </div>
   );
-};
+}

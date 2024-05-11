@@ -147,7 +147,7 @@ export const SalesInvoiceCreate = () => {
   useEffect(() => {
     employees.forEach((employee) => updateRValuesAndRates(employee));
     const totalAmountWithOutTaxReturn = employees.reduce(
-      (acc, emp) => acc + parseFloat(emp.quantity)* parseFloat(emp.salePrice),
+      (acc, emp) => acc + parseFloat(emp.quantity) * parseFloat(emp.salePrice),
       0
     );
     setTotalAmountWithOutTax(totalAmountWithOutTaxReturn);
@@ -170,7 +170,6 @@ export const SalesInvoiceCreate = () => {
     setTotalDiscountTable(totalDiscountTableValue);
     setTotalTaxTable(totalTaxTableValue);
   }, [employees]);
-
 
   const updateRValuesAndRates = (employee) => {
     if (employee.gst) {
@@ -655,6 +654,16 @@ export const SalesInvoiceCreate = () => {
   return (
     <>
       <Box sx={{ maxHeight: 300 }}>
+        <Box>
+          <Button variant="contained">Sale Invoice</Button>
+          <Box sx={{ right: "0", float: "right",justifyContent:"space-around" }}>
+            <ButtonGroup variant="contained" aria-label="Basic button group" sx={{justifyContent:"space-around"}}>
+              <Button>Cancel</Button>
+              <Button>Save</Button>
+            </ButtonGroup>
+          </Box>
+        </Box>
+
         <Box>
           <Card variant="outlined">
             <Box sx={{ height: "100px", width: "100px" }}>

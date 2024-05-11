@@ -6,7 +6,6 @@ export const SalesInvoice = () => {
     return (
         <>
             <Box>
-                <Typography>Sales Invoice</Typography>
                 <SalesInvoiceCreate/>
             </Box>
         </>
