@@ -140,8 +140,17 @@ export const SalesInvoiceCreate = () => {
   const [totalTaxTable, setTotalTaxTable] = useState("");
   const [totalDiscountTable, setTotalDiscountTable] = useState("");
   const [totalAmountTable, setTotalAmountTable] = useState("");
+  const [totalAmountWithOutTax, setTotalAmountWithOutTax] = useState("");
+  const [rValues, setRValues] = useState([]);
+  const [rRates, setRRates] = useState([]);
 
   useEffect(() => {
+    employees.forEach((employee) => updateRValuesAndRates(employee));
+    const totalAmountWithOutTaxReturn = employees.reduce(
+      (acc, emp) => acc + parseFloat(emp.quantity)* parseFloat(emp.salePrice),
+      0
+    );
+    setTotalAmountWithOutTax(totalAmountWithOutTaxReturn);
     const totalTaxTableValue = employees.reduce((accumulator, employee) => {
       const rateIncrement = parseFloat(employee.gst);
       if (!isNaN(rateIncrement)) {
@@ -160,13 +169,50 @@ export const SalesInvoiceCreate = () => {
     setTotalAmountTable(totalAmountTableValue);
     setTotalDiscountTable(totalDiscountTableValue);
     setTotalTaxTable(totalTaxTableValue);
-    console.log(
-      "Total tax,disoucnt,amount  ",
-      totalTaxTableValue,
-      totalDiscountTableValue,
-      totalAmountTableValue
-    );
   }, [employees]);
+
+
+  const updateRValuesAndRates = (employee) => {
+    if (employee.gst) {
+      const calculatedRValue =
+        (employee.salePrice * employee.quantity * employee.gst) / 200;
+      const calculatedRRate = employee.gst / 2;
+      const index = employees.findIndex((emp) => emp.id === employee.id); // Find index of current employee
+
+      // Update or push new values
+      if (index !== -1) {
+        setRValues((prevRValues) => {
+          const updatedValues = [...prevRValues];
+          updatedValues[index] = calculatedRValue;
+          return updatedValues;
+        });
+        setRRates((prevRRates) => {
+          const updatedRates = [...prevRRates];
+          updatedRates[index] = calculatedRRate;
+          return updatedRates;
+        });
+      } else {
+        setRValues((prevRValues) => [...prevRValues, calculatedRValue]);
+        setRRates((prevRRates) => [...prevRRates, calculatedRRate]);
+      }
+    } else {
+      const index = employees.findIndex((emp) => emp.id === employee.id); // Find index of current employee
+
+      // Clear values if employee no longer has gst property
+      if (index !== -1) {
+        setRValues((prevRValues) => {
+          const updatedValues = [...prevRValues];
+          updatedValues.splice(index, 1);
+          return updatedValues;
+        });
+        setRRates((prevRRates) => {
+          const updatedRates = [...prevRRates];
+          updatedRates.splice(index, 1);
+          return updatedRates;
+        });
+      }
+    }
+  };
 
   const handleChangeForFilterCategory = (event, newValue) => {
     setFilterCategory(newValue);
@@ -379,7 +425,7 @@ export const SalesInvoiceCreate = () => {
   const calculateTotal = (item) => {
     return (
       item.quantity * item.salePrice -
-      item.discount -
+      item.discount +
       (item.quantity * item.salePrice * item.gst) / 100
     );
   };
@@ -561,35 +607,21 @@ export const SalesInvoiceCreate = () => {
     setFields(updatedFields);
     console.log(fields);
   };
-  const handleAddDiscount = () => {
-    setBoxes([...boxes, { id: Date.now() }]);
-  };
-  const handleCloseBox = (id) => {
-    setBoxes(boxes.filter((box) => box.id !== id));
-  };
+
   const handleToggleNotes = () => {
     setOpenNotes(!openNotes);
   };
   const handleToggleTermCondition = () => {
     setOpenTermCondition(!openTermCondition);
   };
-  const addTextField = () => {
-    setTextFields([...textFields, ""]);
-  };
-  const disableTextField = (index) => {
-    const updatedTextFields = [...textFields];
-    updatedTextFields[index] = "Disabled";
-    setTextFields(updatedTextFields);
-  };
   const addRow = () => {
     setOpenItemModal(true);
-    //     const newEmployee = {id: employees.length + 1, item: '', quantity: 0, rate: 0, total: 0};
-    //     const newEmployee = { id: employees.length + 1 };
-    //  setEmployees([...employees, newEmployee]);
   };
   const deleteRow = (id) => {
     const updatedEmployees = employees.filter((employee) => employee.id !== id);
     setEmployees(updatedEmployees);
+    setRRates([]);
+    setRValues([]);
   };
   const handleInputChange = (id, key, value) => {
     const updatedEmployees = employees.map((employee) => {
@@ -603,14 +635,14 @@ export const SalesInvoiceCreate = () => {
           return { ...employee, [key]: value };
         } else if (key === "discount") {
           employee.total =
-            employee.salePrice * employee.quantity -
+            employee.salePrice * employee.quantity +
             (employee.gst / 100) * employee.salePrice * employee.quantity;
           employee.total = employee.total - value;
           return { ...employee, [key]: value };
         } else if (key === "gst") {
           employee.total =
             employee.salePrice * employee.quantity - employee.discount;
-          employee.total = employee.total - (value / 100) * employee.total;
+          employee.total = employee.total + (value / 100) * employee.total;
           return { ...employee, [key]: value };
         } else {
           return { ...employee, [key]: value };
@@ -2287,13 +2319,13 @@ export const SalesInvoiceCreate = () => {
                   </StyledTableCell>
                   <StyledTableCell align="center">SUBTOTAL</StyledTableCell>
                   <StyledTableCell align="center">
-                    (₹){totalDiscountTable}
+                    (₹) {totalDiscountTable}
                   </StyledTableCell>
                   <StyledTableCell align="center">
-                    (₹){totalTaxTable}
+                    (₹) {totalTaxTable}
                   </StyledTableCell>
                   <StyledTableCell align="center">
-                    (₹){totalAmountTable}
+                    (₹) {totalAmountTable}
                   </StyledTableCell>
                   <StyledTableCell align="center" style={{ color: "black" }}>
                     1
@@ -2428,15 +2460,25 @@ export const SalesInvoiceCreate = () => {
                   <Typography>Taxable Amount</Typography>
                 </Box>{" "}
                 <Box sx={{ width: "25%" }}>
-                  <TextField
-                    label=" ₹ "
-                    inputProps={{
-                      inputMode: "decimal",
-                      pattern: "[0-9]*[.,]?[0-9]*",
-                    }}
-                    type="number"
-                    sx={{ marginRight: 1 }}
-                  />
+                  <h4>{totalAmountWithOutTax}</h4>
+                </Box>
+              </Box>
+              <Box sx={{ padding: "10px", display: "flex" }}>
+                <Box sx={{ width: "65%" }}>
+                  {rRates.map((rats) => (
+                    <>
+                      <Typography>SGST@{rats}</Typography>
+                      <Typography>CGST@{rats}</Typography>
+                    </>
+                  ))}
+                </Box>{" "}
+                <Box sx={{ width: "25%" }}>
+                  {rValues.map((rats) => (
+                    <>
+                      <Typography>(₹){rats}</Typography>
+                      <Typography>(₹){rats}</Typography>
+                    </>
+                  ))}
                 </Box>
               </Box>
               <Box sx={{ padding: "10px" }}>
