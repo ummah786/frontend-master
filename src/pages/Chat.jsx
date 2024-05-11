@@ -6,7 +6,9 @@ export const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState("");
   const [stompClient, setStompClient] = useState(null);
+  const mobileNumber = localStorage.getItem("username");
 
+  console.log('Mobile Number  ',mobileNumber);
   useEffect(() => {
     const socket = new SockJS("http://localhost:8700/websocket-example");
     const client = Stomp.over(socket);
@@ -24,13 +26,12 @@ export const Chat = () => {
   useEffect(() => {
     if (stompClient) {
       const subscription = stompClient.subscribe(
-        "/topic/greetings",
+        `/topic/greetings/${mobileNumber}`,
         (response) => {
           const receivedMessage = JSON.parse(response.body);
           setMessages((prevMessages) => [...prevMessages, receivedMessage]);
         }
       );
-
       return () => {
         subscription.unsubscribe(); // Clean up subscription
       };
@@ -40,8 +41,8 @@ export const Chat = () => {
   const sendMessage = () => {
     if (messageInput.trim() !== "" && stompClient) {
       const message = {
-        sender: "Sender", // Replace with sender's name
-        receiver: "Receiver", // Replace with receiver's name
+        sender: mobileNumber, // Replace with sender's name
+        receiver: "5454545", // Replace with receiver's name
         content: messageInput.trim(),
       };
       stompClient.send("/app/hello", {}, JSON.stringify(message));

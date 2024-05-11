@@ -63,6 +63,8 @@ export const Header = ({onBooleanChange}) => {
             }, axiosConfig);
             console.log(response.data); // Handle response data
             if (response.data.code === 200) {
+                localStorage.setItem("username",response.data.response.mobileNumber);
+                
                 console.log("hesab response if ", response.data.response);
                 dispatch(addLogin(response.data.response));
                 onBooleanChange();
