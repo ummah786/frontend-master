@@ -96,8 +96,6 @@ export const SalesInvoiceCreate = () => {
   const [labelBillTO, setLabelBillTO] = useState("Select Party");
   const [shipToFlag, setShipToFlag] = React.useState(true);
   const [openCategory, setOpenCategory] = React.useState(false);
-  const [textFields, setTextFields] = useState([""]);
-  const [boxes, setBoxes] = useState([]);
   const [fields, setFields] = useState([]);
   const [employees, setEmployees] = useState([]);
 
@@ -108,17 +106,11 @@ export const SalesInvoiceCreate = () => {
   const [checked, setChecked] = useState(false);
   const [checkedMark, setCheckedMark] = useState(false);
   const [manageUserObj, setManageUserObj] = useState(partnerDataModel);
-  const [saleInvoiceDate, setSaleInvoiceDate] = React.useState(
-    dayjs("2024-01-01")
-  );
-  const [dueDate, setDueDate] = React.useState(dayjs("2024-01-01"));
   const [billTo, setBillTo] = useState("");
   const [shipTo, setShipTo] = useState("");
   const [logoImage, setLogoImage] = useState("");
   const [uploadImage, setUploadImage] = useState("");
-
   const [selectedRows, setSelectedRows] = useState([]);
-
   const { partyUser } = useSelector((state) => state.partyReducerValue);
   const { inventoryUser } = useSelector((state) => state.inventoryReducerValue);
   const loginData = useSelector((state) => state.loginReducerValue);
@@ -127,23 +119,28 @@ export const SalesInvoiceCreate = () => {
   const [inventorys, setInventorys] = useState([]);
   const [filteredEmployees, setFilteredEmployees] = useState([]);
   const [addNewItemsFlagModal, setAddNewItemsFlagModal] = useState(false);
-
-  useEffect(() => {}, [partyUser, billTo]);
-
-  const dispatch = useDispatch();
-
   const keyCategoryData = useSelector((state) => state.keyCategoryReducerValue);
   const keyCompanyData = useSelector((state) => state.keyCompanyReducerValue);
   const [addCategory, setAddCategory] = React.useState([]);
   const [categoryApi, setCategoryApi] = useState();
-
   const [totalTaxTable, setTotalTaxTable] = useState("");
   const [totalDiscountTable, setTotalDiscountTable] = useState("");
-  const [totalAmountTable, setTotalAmountTable] = useState("");
+  const [totalAmountTable, setTotalAmountTable] = useState(0);
+  const [totalAmountTableOperation, setTotalAmountTableOperation] = useState(0);
+  const [autoRoundOffValue, setAutoRoundOffValue] = useState(0);
+  const [taxableAmount, setTaxableAmount] = useState(0);
+  const [amountRecieved, setAmountRecieved] = useState(0);
+  const [balanceAmount, setBalanceAmount] = useState(0);
   const [totalAmountWithOutTax, setTotalAmountWithOutTax] = useState("");
   const [rValues, setRValues] = useState([]);
   const [rRates, setRRates] = useState([]);
+  const dispatch = useDispatch();
+  const [saleInvoiceDate, setSaleInvoiceDate] = React.useState(
+    dayjs("2024-01-01")
+  );
+  const [dueDate, setDueDate] = React.useState(dayjs("2024-01-01"));
 
+  useEffect(() => {}, [partyUser, billTo]);
   useEffect(() => {
     employees.forEach((employee) => updateRValuesAndRates(employee));
     const totalAmountWithOutTaxReturn = employees.reduce(
@@ -166,7 +163,10 @@ export const SalesInvoiceCreate = () => {
       (acc, emp) => acc + emp.total,
       0
     );
-    setTotalAmountTable(totalAmountTableValue);
+    const formattedValue = totalAmountTableValue.toFixed(2);
+    console.log(formattedValue); // Output: "101.71"
+    setTotalAmountTable(formattedValue);
+    setTotalAmountTableOperation(formattedValue);
     setTotalDiscountTable(totalDiscountTableValue);
     setTotalTaxTable(totalTaxTableValue);
   }, [employees]);
@@ -588,6 +588,64 @@ export const SalesInvoiceCreate = () => {
     setChecked(event.target.checked);
   };
 
+  useEffect(() => {
+    const addAdditionalCharge = fields.reduce((acc, emp) => {
+      const parsedValue = parseFloat(emp.value);
+      if (isNaN(parsedValue)) {
+        return acc;
+      }
+      return acc + parsedValue;
+    }, 0);
+    let totalAmount = parseFloat(totalAmountTable);
+    let roundOff = parseFloat(autoRoundOffValue);
+    let taxable = parseFloat(taxableAmount);
+    let additionalCharge = parseFloat(addAdditionalCharge);
+    if (isNaN(totalAmount)) {
+      console.error("Invalid total amount:", totalAmountTable);
+      totalAmount = 0;
+    }
+    if (isNaN(roundOff)) {
+      console.error("Invalid auto round off value:", autoRoundOffValue);
+      roundOff = 0;
+    }
+    if (isNaN(taxable)) {
+      console.error("Invalid taxable amount:", taxableAmount);
+      taxable = 0;
+    }
+    if (isNaN(additionalCharge)) {
+      console.error("Invalid additional charge value:", addAdditionalCharge);
+      additionalCharge = 0;
+    }
+    const newValue = totalAmount + roundOff - taxable + additionalCharge;
+    if (!checked) {
+      setTotalAmountTableOperation(newValue);
+    } else {
+      const roundedNumber = Math.round(newValue);
+      setTotalAmountTableOperation(roundedNumber);
+    }
+    if (!checkedMark) {
+      const updatedValue = Math.max(
+        totalAmountTableOperation - amountRecieved,
+        0
+      );
+      // Update the balance amount state
+      setBalanceAmount(updatedValue);
+      // setBalanceAmount();
+    } else {
+      setBalanceAmount(0);
+      setAmountRecieved(totalAmountTableOperation);
+    }
+  }, [
+    autoRoundOffValue,
+    fields,
+    taxableAmount,
+    totalAmountTable,
+    checked,
+    amountRecieved,
+    balanceAmount,
+    checkedMark,
+  ]);
+
   const handleChangeCheckedMarkAsFUll = (event) => {
     setCheckedMark(event.target.checked);
   };
@@ -604,7 +662,7 @@ export const SalesInvoiceCreate = () => {
     const updatedFields = [...fields];
     updatedFields[index][keyOrValue] = e.target.value;
     setFields(updatedFields);
-    console.log(fields);
+    console.log("Fields >>   ", fields);
   };
 
   const handleToggleNotes = () => {
@@ -651,15 +709,45 @@ export const SalesInvoiceCreate = () => {
     });
     setEmployees(updatedEmployees);
   };
+
+  const handleSubmitSaleInvoiceCreate = async (e) => {
+    e.preventDefault();
+    salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
+    salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
+    salePurchaseObject["salesInvoiceDate"] = saleInvoiceDate;
+    salePurchaseObject["salesDueDate"] = dueDate;
+    salePurchaseObject["addAdditionalCharge"] = JSON.stringify({ fields });
+    //const [saleInvoiceDate, setSaleInvoiceDate] = React.useState(dayjs("2024-01-01") );
+    //const [dueDate, setDueDate] = React.useState(dayjs("2024-01-01"));
+    console.log("Sale Purchase Object ", salePurchaseObject);
+    const response = await axios.post(
+      "http://localhost:8700/hesabbook/sale/purchase/save",
+      salePurchaseObject
+    );
+    console.log("Response   ", response);
+  };
   return (
-    <>
+    <Box component="form" onSubmit={handleSubmitSaleInvoiceCreate}>
       <Box sx={{ maxHeight: 300 }}>
         <Box>
           <Button variant="contained">Sale Invoice</Button>
-          <Box sx={{ right: "0", float: "right",justifyContent:"space-around" }}>
-            <ButtonGroup variant="contained" aria-label="Basic button group" sx={{justifyContent:"space-around"}}>
+          <Box
+            sx={{ right: "0", float: "right", justifyContent: "space-around" }}
+          >
+            <ButtonGroup
+              variant="contained"
+              aria-label="Basic button group"
+              sx={{ justifyContent: "space-around" }}
+            >
               <Button>Cancel</Button>
-              <Button>Save</Button>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                onClick={handleSubmitSaleInvoiceCreate}
+              >
+                Save
+              </Button>
             </ButtonGroup>
           </Box>
         </Box>
@@ -1366,9 +1454,9 @@ export const SalesInvoiceCreate = () => {
                 <TextField
                   label="Sales Invoice No: "
                   onChange={(event) =>
-                    handleTextFieldChange(event, "termAndCondition")
+                    handleTextFieldChange(event, "salesInvoiceNo")
                   }
-                  value={salePurchaseObject.itemName}
+                  value={salePurchaseObject.salesInvoiceNo}
                 />
               </Box>
               <Box sx={{ width: "50%", margin: "10px" }}>
@@ -1387,9 +1475,9 @@ export const SalesInvoiceCreate = () => {
               <Box sx={{ width: "50%", margin: "10px" }}>
                 <TextField
                   label="Payment Terms: "
-                  value={salePurchaseObject.itemName}
+                  value={salePurchaseObject.paymentTerms}
                   onChange={(event) =>
-                    handleTextFieldChange(event, "termAndCondition")
+                    handleTextFieldChange(event, "paymentTerms")
                   }
                 />
               </Box>
@@ -1634,7 +1722,6 @@ export const SalesInvoiceCreate = () => {
                           >
                             +Add New Items
                           </Button>
-
                           <Modal
                             open={addNewItemsFlagModal}
                             onClose={() => setAddNewItemsFlagModal(false)}
@@ -2360,6 +2447,7 @@ export const SalesInvoiceCreate = () => {
                     label="Enter Notes"
                     variant="outlined"
                     fullWidth={true}
+                    value={salePurchaseObject.note}
                     onChange={(event) => handleTextFieldChange(event, "note")}
                   />
                   <IconButton onClick={handleToggleNotes}>
@@ -2382,6 +2470,7 @@ export const SalesInvoiceCreate = () => {
                     label="Enter Terms & Conditions"
                     variant="outlined"
                     fullWidth={true}
+                    value={salePurchaseObject.termAndCondition}
                     onChange={(event) =>
                       handleTextFieldChange(event, "termAndCondition")
                     }
@@ -2421,7 +2510,6 @@ export const SalesInvoiceCreate = () => {
             <Box>
               <Box sx={{ padding: "10px" }}>
                 <Button variant="contained" onClick={addField}>
-                  {" "}
                   Add Additional Charges
                 </Button>
                 {fields.map((field, index) => (
@@ -2503,16 +2591,19 @@ export const SalesInvoiceCreate = () => {
                   >
                     <Box sx={{ width: "65%" }}>
                       <TextField
-                        label="Taxable Amount"
-                        value="Taxable Amount"
+                        label="Add Discount"
+                        value="Add Discount"
+                        disabled={true}
                         sx={{ marginRight: 1 }}
                       />
                     </Box>
                     <Box sx={{ width: "25%" }}>
                       <TextField
                         label=" ₹ "
-                        value={textValue}
-                        onChange={(e) => setTextValue(e.target.value)}
+                        onChange={(event) =>
+                          setTaxableAmount(event.target.value)
+                        }
+                        value={taxableAmount}
                         inputProps={{
                           inputMode: "decimal",
                           pattern: "[0-9]*[.,]?[0-9]*",
@@ -2553,6 +2644,8 @@ export const SalesInvoiceCreate = () => {
                 <Box sx={{ width: "25%" }}>
                   <TextField
                     label=" ₹ "
+                    value={autoRoundOffValue}
+                    onChange={(e) => setAutoRoundOffValue(e.target.value)}
                     inputProps={{
                       inputMode: "decimal",
                       pattern: "[0-9]*[.,]?[0-9]*",
@@ -2567,15 +2660,7 @@ export const SalesInvoiceCreate = () => {
                   <Typography>Total Amount</Typography>
                 </Box>
                 <Box sx={{ width: "25%" }}>
-                  <TextField
-                    label=" Enter Payment Amount "
-                    inputProps={{
-                      inputMode: "decimal",
-                      pattern: "[0-9]*[.,]?[0-9]*",
-                    }}
-                    type="number"
-                    sx={{ marginRight: 1 }}
-                  />
+                  <Typography> ₹ {totalAmountTableOperation}</Typography>
                 </Box>
               </Box>
             </Box>
@@ -2609,6 +2694,8 @@ export const SalesInvoiceCreate = () => {
                 <Box sx={{ width: "35%", display: "flex" }}>
                   <TextField
                     label=" ₹  "
+                    value={amountRecieved}
+                    onChange={(e) => setAmountRecieved(e.target.value)}
                     inputProps={{
                       inputMode: "decimal",
                       pattern: "[0-9]*[.,]?[0-9]*",
@@ -2638,15 +2725,7 @@ export const SalesInvoiceCreate = () => {
                   <Typography>Balance Amount</Typography>
                 </Box>
                 <Box sx={{ width: "25%" }}>
-                  <TextField
-                    label=" ₹  "
-                    inputProps={{
-                      inputMode: "decimal",
-                      pattern: "[0-9]*[.,]?[0-9]*",
-                    }}
-                    type="number"
-                    sx={{ marginRight: 1 }}
-                  />
+                  <Typography> ₹ {balanceAmount}</Typography>
                 </Box>
               </Box>
             </Box>
@@ -2707,7 +2786,7 @@ export const SalesInvoiceCreate = () => {
           </Box>
         </Box>
       </Box>
-    </>
+    </Box>
   );
 };
 const ChildModal = ({ shipId, setShipTo, setBillTo }) => {

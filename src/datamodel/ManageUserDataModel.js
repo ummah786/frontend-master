@@ -165,7 +165,6 @@ export const salePurchaseModel = {
   billType: "",
   billingAddress: "",
   shippingAddress: "",
-  addAdditionalCharge: "",
   addDiscount: "",
   totalDiscount: "",
   totalTax: "",
@@ -208,7 +207,7 @@ export const salePurchaseModel = {
   paymentNote: "",
   gson: "",
   salesPurchase: "",
-  salesPurchaseLists: "",
+  salesPurchaseList: "",
   ledgerBalance: "",
   partyAmount: "",
   partyAmountType: "",
@@ -220,4 +219,6 @@ export const salePurchaseModel = {
   shipAddress: "",
   phone: "",
   gst: "",
+  extraTaxableAmount:"",
+  addAdditionalCharge: "",
 };
