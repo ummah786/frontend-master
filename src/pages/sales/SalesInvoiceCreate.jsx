@@ -78,7 +78,7 @@ const style = {
   p: 1,
 };
 
-export const SalesInvoiceCreate = () => {
+export const SalesInvoiceCreate = ({  onBooleanChange}) => {
   const [filteredParty, setFilteredParty] = useState([]);
 
   const [salePurchaseObject, setSalePurchaseObject] =
@@ -712,19 +712,35 @@ export const SalesInvoiceCreate = () => {
 
   const handleSubmitSaleInvoiceCreate = async (e) => {
     e.preventDefault();
+    //  const [totalTaxTable, setTotalTaxTable] = useState("");
+  //  const [totalDiscountTable, setTotalDiscountTable] = useState("");
+ //   const [totalAmountTable, setTotalAmountTable] = useState(0);
+ //   const [totalAmountTableOperation, setTotalAmountTableOperation] = useState(0);
+ //   const [autoRoundOffValue, setAutoRoundOffValue] = useState(0);
+ //   const [taxableAmount, setTaxableAmount] = useState(0);
+  //  const [amountRecieved, setAmountRecieved] = useState(0);
+ //   const [balanceAmount, setBalanceAmount] = useState(0);
+ //   const [totalAmountWithOutTax, setTotalAmountWithOutTax] = useState("");
     salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
     salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
     salePurchaseObject["salesInvoiceDate"] = saleInvoiceDate;
     salePurchaseObject["salesDueDate"] = dueDate;
     salePurchaseObject["addAdditionalCharge"] = JSON.stringify({ fields });
-    //const [saleInvoiceDate, setSaleInvoiceDate] = React.useState(dayjs("2024-01-01") );
-    //const [dueDate, setDueDate] = React.useState(dayjs("2024-01-01"));
+
+
+    salePurchaseObject["amountRecieved"] = amountRecieved;
+    salePurchaseObject["balanceAmount"] = balanceAmount;
+    salePurchaseObject["totalAmountWithOutTax"] = totalAmountWithOutTax;
+    salePurchaseObject["taxableAmount"] = taxableAmount;
+    salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
+
     console.log("Sale Purchase Object ", salePurchaseObject);
     const response = await axios.post(
       "http://localhost:8700/hesabbook/sale/purchase/save",
       salePurchaseObject
     );
     console.log("Response   ", response);
+    onBooleanChange();
   };
   return (
     <Box component="form" onSubmit={handleSubmitSaleInvoiceCreate}>
