@@ -725,7 +725,7 @@ export const SalesInvoiceCreate = ({  onBooleanChange}) => {
     salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
     salePurchaseObject["salesInvoiceDate"] = saleInvoiceDate;
     salePurchaseObject["salesDueDate"] = dueDate;
-    salePurchaseObject["addAdditionalCharge"] = JSON.stringify({ fields });
+    salePurchaseObject["addAdditionalCharge"] = JSON.stringify(fields);
 
 
     salePurchaseObject["amountRecieved"] = amountRecieved;
@@ -733,6 +733,7 @@ export const SalesInvoiceCreate = ({  onBooleanChange}) => {
     salePurchaseObject["totalAmountWithOutTax"] = totalAmountWithOutTax;
     salePurchaseObject["taxableAmount"] = taxableAmount;
     salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
+    salePurchaseObject["items"] = JSON.stringify(employees);
 
     console.log("Sale Purchase Object ", salePurchaseObject);
     const response = await axios.post(
