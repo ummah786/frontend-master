@@ -1,21 +1,179 @@
-import React, { useState } from "react";
+import { Box, ButtonGroup, TextField } from "@mui/material";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import SearchIcon from "@mui/icons-material/Search";
 import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import Typography from "@mui/joy/Typography";
+import * as React from "react";
+import {
+  Search,
+  SearchIconWrapper,
+  StyledInputBase,
+  StyledTableCell,
+  StyledTableRow,
+} from "../../commonStyle";
+import { useEffect, useState } from "react";
+import ArticleIcon from "@mui/icons-material/Article";
+import IconButton from "@mui/material/IconButton";
+import axios from "axios";
 import { SalesInvoiceCreate } from "./SalesInvoiceCreate";
-
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import {useDispatch, useSelector} from 'react-redux';
 export const SalesInvoice = () => {
+  const loginData = useSelector(state => state.loginReducerValue);
+  const dispatch = useDispatch();
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+
+  const handleStartDateChange = (newStartDate) => {
+    setStartDate(newStartDate);
+  };
+
+  const handleEndDateChange = (newEndDate) => {
+    setEndDate(newEndDate);
+  };
+  const [filterSalePurchase, setFilterSalePurchase] = useState([]);
+  const [filter, setFilter] = useState("");
   const [flag, setFlag] = useState(true);
   const handleBooleanChange = () => {
     setFlag((prevState) => !prevState);
   };
+
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8700/hesabbook/sale/purchase/all/${loginData.primary_user_id}`);
+            console.log('Party Response ', response.data.response);
+            if (response.data.code === 200) {
+              //  setMangUser(response.data.response);
+              //  localStorage.setItem('Party-details', response.data.response);
+              //  dispatch(addParty(response.data.response));
+                setFilterSalePurchase(response.data.response);
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+    fetchData();
+}, []);
+
   return (
     <>
       {flag ? (
-        <Typography>
-          Text to display when flag is true
-          <Button onClick={handleBooleanChange}>Button</Button>
-        </Typography>
+        <Box>
+          <Box>
+            <Button variant="contained">Party</Button>
+            <Box sx={{ right: "0", float: "right" }}>
+              <ButtonGroup variant="contained" aria-label="Basic button group">
+                <Button onClick={handleBooleanChange}>
+                  Create Sales Invoice
+                </Button>
+              </ButtonGroup>
+            </Box>
+          </Box>
+          <Box>
+            <Box sx={{ display: "flex", width: "100%" }}>
+              <Box sx={{ width: "50%" }}>
+                <Search>
+                  <SearchIconWrapper>
+                    <SearchIcon />
+                  </SearchIconWrapper>
+                  <StyledInputBase
+                    value={filter}
+                    onChange={handleFilterChange}
+                    placeholder="Search Sale Invoice"
+                    inputProps={{ "aria-label": "search" }}
+                  />
+                </Search>
+              </Box>
+              <Box>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={["DatePicker", "DatePicker"]}>
+                    <DatePicker
+                      label="Start Date:"
+                      value={startDate}
+                      onChange={handleStartDateChange}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                    <DatePicker
+                      label="End Date:"
+                      value={endDate}
+                      onChange={handleEndDateChange}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  </DemoContainer>
+                </LocalizationProvider>
+              </Box>
+            </Box>
+            <Box>
+              <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
+                <Table
+                  sx={{ minWidth: 1250 }}
+                  aria-label="customized table"
+                  stickyHeader
+                >
+                  <TableHead>
+                    <TableRow>
+                      <StyledTableCell align="center">Date</StyledTableCell>
+                      <StyledTableCell align="center">
+                        Invoice Number
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        Party Name
+                      </StyledTableCell>
+                      <StyledTableCell align="center">Due In</StyledTableCell>
+                      <StyledTableCell align="center">Amount</StyledTableCell>
+                      <StyledTableCell align="center">Status</StyledTableCell>
+                      <StyledTableCell align="center">View</StyledTableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {filterSalePurchase.map((row) => (
+                      <StyledTableRow key={row.salesInvoiceDate}>
+                        <StyledTableCell align="center">
+                          {row.id}
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          {row.company}
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          {row.salesDueDate}
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          {row.gstNumber}
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          {row.mobileNumber}
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          {row.mobileNumber}
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          <IconButton
+                            aria-label="edit"
+                            //     onClick={() => handleView(row.id, row)}
+                          >
+                            <ArticleIcon />
+                          </IconButton>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Box>
+          </Box>
+        </Box>
       ) : (
         <SalesInvoiceCreate onBooleanChange={handleBooleanChange} />
       )}
