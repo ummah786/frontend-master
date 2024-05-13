@@ -71,13 +71,13 @@ export const MyUserDetails = () => {
             <Box>
                 {myUser != null && (
                     <Box>
-                        <Box sx={{display: 'flex'}}>
+                        <Box sx={{position: 'relative', top: '20px'}}>
                             <Box>
-                                <Button size="small" variant="contained">Edit/View User Details</Button>
+                                <Button sx={{marginLeft: '60px'}} size="small" variant="contained">Edit/View User Details</Button>
                             </Box>
-                            <Box sx={{float: 'right', alignItems: 'center', marginLeft: "50px"}}>
-                                <Button size="small" variant="contained" onClick={handleBooleanChange}>Cancel</Button>
-                                <Button size="small" variant="contained" onClick={handleBooleanChange}>Save</Button>
+                            <Box sx={{float: 'right', marginX: "60px", marginY: "-30px"}}>
+                                <Button sx={{marginX: "20px"}} size="small" variant="contained" onClick={handleBooleanChange}>Cancel</Button>
+                                <Button sx={{marginX: "3px"}} size="small" variant="contained" onClick={handleBooleanChange}>Save</Button>
                             </Box>
                         </Box>
                         <form onSubmit={handleSubmit}>
@@ -86,8 +86,8 @@ export const MyUserDetails = () => {
                                     width: '50%',
                                     display: 'flex',
                                     flexDirection: 'column',
-                                    margin: "10px",
-                                    marginLeft: '200px'
+                                    margin: '30px',
+                                    marginLeft: '50px'
                                 }}>
                                     <TextField id="outlined-basic" label="Id" variant="outlined" disabled={true}
                                                sx={{margin: '10px'}} value={myUser.id}
@@ -102,6 +102,7 @@ export const MyUserDetails = () => {
                                                onChange={(event) => handleTextFieldChange(event, 'lastName')}/>
                                     <Input
                                         type="date"
+                                        sx={{margin: '9px', height: '55px'}}
                                         value={myUser.dob}
                                         onChange={(event) => handleTextFieldChange(event, 'dob')}
                                     />
@@ -116,9 +117,9 @@ export const MyUserDetails = () => {
                                     />
                                     </MuiPickersUtilsProvider>*/}
                                     <TextField
-                                        fullWidth
                                         select
                                         value={myUser.role}
+                                        sx={{margin: '10px', height: '55px', width: '97%'}}
                                         onChange={(event) => handleTextFieldChange(event, 'role')}
                                         label="Role"
                                         variant="outlined"
@@ -132,10 +133,10 @@ export const MyUserDetails = () => {
                                         }
                                     </TextField>
                                     <TextField id="outlined-basic" label="Email Address" variant="outlined"
-                                               sx={{margin: '10px'}} value={myUser.email}
+                                               sx={{margin: '10px', width: '97%'}} value={myUser.email}
                                                onChange={(event) => handleTextFieldChange(event, 'email')}/>
                                 </Box>
-                                <Box sx={{width: '50%', display: 'flex', flexDirection: 'column', margin: "10px"}}>
+                                <Box sx={{width: '50%', display: 'flex', flexDirection: 'column', margin: "30px", marginRight: '50px'}}>
 
                                     <TextField id="outlined-basic" label="Password" variant="outlined"
                                                sx={{margin: '10px'}} value={myUser.password}
@@ -158,9 +159,9 @@ export const MyUserDetails = () => {
                                                onChange={(event) => handleTextFieldChange(event, 'secondary_user_id')}/>
 
                                     <TextField
-                                        fullWidth
                                         select
                                         value={myUser.gender}
+                                        sx={{margin: '10px', width: '97%'}}
                                         onChange={(event) => handleTextFieldChange(event, 'gender')}
                                         label="Gender"
                                         variant="outlined"
@@ -174,7 +175,7 @@ export const MyUserDetails = () => {
                                         }
                                     </TextField>
                                     <Box>
-                                        <Button type="submit">SUBMIT</Button>
+                                        <Button sx={{marginX: "8px", float: 'right'}} size="small" variant="contained" type="submit">SUBMIT</Button>
                                     </Box>
                                 </Box>
                             </Box>
