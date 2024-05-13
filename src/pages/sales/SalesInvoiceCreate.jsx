@@ -78,7 +78,7 @@ const style = {
   p: 1,
 };
 
-export const SalesInvoiceCreate = ({  onBooleanChange}) => {
+export const SalesInvoiceCreate = ({ onBooleanChange }) => {
   const [filteredParty, setFilteredParty] = useState([]);
 
   const [salePurchaseObject, setSalePurchaseObject] =
@@ -128,7 +128,7 @@ export const SalesInvoiceCreate = ({  onBooleanChange}) => {
   const [totalAmountTable, setTotalAmountTable] = useState(0);
   const [totalAmountTableOperation, setTotalAmountTableOperation] = useState(0);
   const [autoRoundOffValue, setAutoRoundOffValue] = useState(0);
-  const [taxableAmount, setTaxableAmount] = useState(0);
+  const [addDiscount, setAddDiscount] = useState(0);
   const [amountRecieved, setAmountRecieved] = useState(0);
   const [balanceAmount, setBalanceAmount] = useState(0);
   const [totalAmountWithOutTax, setTotalAmountWithOutTax] = useState("");
@@ -598,7 +598,7 @@ export const SalesInvoiceCreate = ({  onBooleanChange}) => {
     }, 0);
     let totalAmount = parseFloat(totalAmountTable);
     let roundOff = parseFloat(autoRoundOffValue);
-    let taxable = parseFloat(taxableAmount);
+    let taxable = parseFloat(addDiscount);
     let additionalCharge = parseFloat(addAdditionalCharge);
     if (isNaN(totalAmount)) {
       console.error("Invalid total amount:", totalAmountTable);
@@ -609,7 +609,7 @@ export const SalesInvoiceCreate = ({  onBooleanChange}) => {
       roundOff = 0;
     }
     if (isNaN(taxable)) {
-      console.error("Invalid taxable amount:", taxableAmount);
+      console.error("Invalid taxable amount:", addDiscount);
       taxable = 0;
     }
     if (isNaN(additionalCharge)) {
@@ -638,7 +638,7 @@ export const SalesInvoiceCreate = ({  onBooleanChange}) => {
   }, [
     autoRoundOffValue,
     fields,
-    taxableAmount,
+    addDiscount,
     totalAmountTable,
     checked,
     amountRecieved,
@@ -713,27 +713,33 @@ export const SalesInvoiceCreate = ({  onBooleanChange}) => {
   const handleSubmitSaleInvoiceCreate = async (e) => {
     e.preventDefault();
     //  const [totalTaxTable, setTotalTaxTable] = useState("");
-  //  const [totalDiscountTable, setTotalDiscountTable] = useState("");
- //   const [totalAmountTable, setTotalAmountTable] = useState(0);
- //   const [totalAmountTableOperation, setTotalAmountTableOperation] = useState(0);
- //   const [autoRoundOffValue, setAutoRoundOffValue] = useState(0);
- //   const [taxableAmount, setTaxableAmount] = useState(0);
-  //  const [amountRecieved, setAmountRecieved] = useState(0);
- //   const [balanceAmount, setBalanceAmount] = useState(0);
- //   const [totalAmountWithOutTax, setTotalAmountWithOutTax] = useState("");
+    //  const [totalDiscountTable, setTotalDiscountTable] = useState("");
+    //   const [totalAmountTable, setTotalAmountTable] = useState(0);
+    //   const [totalAmountTableOperation, setTotalAmountTableOperation] = useState(0);
+    //   const [autoRoundOffValue, setAutoRoundOffValue] = useState(0);
+    //   const [taxableAmount, setTaxableAmount] = useState(0);
+    //  const [amountRecieved, setAmountRecieved] = useState(0);
+    //   const [balanceAmount, setBalanceAmount] = useState(0);
+    //   const [totalAmountWithOutTax, setTotalAmountWithOutTax] = useState("");
     salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
     salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
     salePurchaseObject["salesInvoiceDate"] = saleInvoiceDate;
     salePurchaseObject["salesDueDate"] = dueDate;
-    salePurchaseObject["addAdditionalCharge"] = JSON.stringify(fields);
+    salePurchaseObject["addAdditionalCharges"] = JSON.stringify(fields);
 
-
-    salePurchaseObject["amountRecieved"] = amountRecieved;
+    salePurchaseObject["amountReceived"] = amountRecieved;
     salePurchaseObject["balanceAmount"] = balanceAmount;
-    salePurchaseObject["totalAmountWithOutTax"] = totalAmountWithOutTax;
-    salePurchaseObject["taxableAmount"] = taxableAmount;
+    salePurchaseObject["addDiscount"] = addDiscount;
     salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
     salePurchaseObject["items"] = JSON.stringify(employees);
+
+    //party Information
+    salePurchaseObject["partyId"] = billTo.id;
+    salePurchaseObject["partyName"] = billTo.pname;
+    salePurchaseObject["partyPhone"] = billTo.mobileNumber;
+    salePurchaseObject["partyBillingAddress"] = billTo.billingAddress;
+    salePurchaseObject["partyShippingAddress"] = shipToAddress;
+    salePurchaseObject["partyGst"] = billTo.gstNumber;
 
     console.log("Sale Purchase Object ", salePurchaseObject);
     const response = await axios.post(
@@ -2618,9 +2624,9 @@ export const SalesInvoiceCreate = ({  onBooleanChange}) => {
                       <TextField
                         label=" ₹ "
                         onChange={(event) =>
-                          setTaxableAmount(event.target.value)
+                          setAddDiscount(event.target.value)
                         }
-                        value={taxableAmount}
+                        value={addDiscount}
                         inputProps={{
                           inputMode: "decimal",
                           pattern: "[0-9]*[.,]?[0-9]*",

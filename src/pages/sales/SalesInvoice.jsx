@@ -139,12 +139,12 @@ export const SalesInvoice = () => {
                   </TableHead>
                   <TableBody>
                     {filterSalePurchase.map((row) => (
-                      <StyledTableRow key={row.salesInvoiceDate}>
+                      <StyledTableRow key={row.id}>
                         <StyledTableCell align="center">
-                          {row.id}
+                          {row.salesInvoiceDate}
                         </StyledTableCell>
                         <StyledTableCell align="center">
-                          {row.company}
+                          {row.id}
                         </StyledTableCell>
                         <StyledTableCell align="center">
                           {row.salesDueDate}
