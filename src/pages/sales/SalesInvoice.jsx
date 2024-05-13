@@ -33,7 +33,9 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useDispatch, useSelector } from "react-redux";
 import { addSalePurchase } from "../../redux/Action";
+
 export const SalesInvoice = () => {
+
   const loginData = useSelector((state) => state.loginReducerValue);
   const { salePurchaseUser } = useSelector(
     (state) => state.salePurchaseReducerValue
@@ -61,20 +63,28 @@ export const SalesInvoice = () => {
     setFilter(event.target.value);
   };
 
-  useEffect(() => {
+ useEffect(() => {
     if (Array.isArray(salePurchaseUser)) {
+        let filteredData = salePurchaseUser;
 
-    let filteredData = salePurchaseUser;
-    if (filter && filter.trim() !== "") {
-        // Filter the salePurchaseUser array only if filter is not empty or null
-        filteredData = salePurchaseUser.filter((employee) => {
-            return String(employee.id).includes(filter);
-        });
+        if (startDate && endDate) {
+            // Filter based on the date range
+            filteredData = salePurchaseUser.filter((employee) => {
+                const employeeDate = new Date(employee.salesInvoiceDate); // Assuming employee.date is the date to filter
+                return employeeDate >= startDate && employeeDate <= endDate;
+            });
+        }
+
+        // Filter further based on other criteria (if any)
+        if (filter && filter.trim() !== "") {
+            filteredData = filteredData.filter((employee) => {
+                return String(employee.id).includes(filter);
+            });
+        }
+
+        setFilterSalePurchase(filteredData);
     }
-    // Update the state variable filterSalePurchase with the filtered data
-    setFilterSalePurchase(filteredData);
-  }
-  }, [filter, salePurchaseUser]);
+}, [filter, salePurchaseUser, startDate, endDate]);
   const handleCheckboxClick = (id) => {
     const selectedIndex = selectedRows.indexOf(id);
     let newSelected = [];
