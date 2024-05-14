@@ -33,9 +33,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useDispatch, useSelector } from "react-redux";
 import { addSalePurchase } from "../../redux/Action";
-
 export const SalesInvoice = () => {
-
   const loginData = useSelector((state) => state.loginReducerValue);
   const { salePurchaseUser } = useSelector(
     (state) => state.salePurchaseReducerValue
@@ -63,28 +61,35 @@ export const SalesInvoice = () => {
     setFilter(event.target.value);
   };
 
- useEffect(() => {
+  useEffect(() => {
     if (Array.isArray(salePurchaseUser)) {
-        let filteredData = salePurchaseUser;
-
-        if (startDate && endDate) {
-            // Filter based on the date range
-            filteredData = salePurchaseUser.filter((employee) => {
-                const employeeDate = new Date(employee.salesInvoiceDate); // Assuming employee.date is the date to filter
-                return employeeDate >= startDate && employeeDate <= endDate;
-            });
-        }
-
-        // Filter further based on other criteria (if any)
-        if (filter && filter.trim() !== "") {
-            filteredData = filteredData.filter((employee) => {
-                return String(employee.id).includes(filter);
-            });
-        }
-
-        setFilterSalePurchase(filteredData);
+      let filteredData = salePurchaseUser;
+      if (startDate && endDate) {
+        // Filter based on the date range
+        filteredData = salePurchaseUser.filter((employee) => {
+          return (
+            formatDate(employee.salesInvoiceDate) >= formatDate(startDate) &&
+            formatDate(employee.salesInvoiceDate) <= formatDate(endDate)
+          );
+        });
+      } else if (startDate) {
+        filteredData = salePurchaseUser.filter((employee) => {
+          return formatDate(employee.salesInvoiceDate) >= formatDate(startDate);
+        });
+      } else if (endDate) {
+        // Filter based on the date range
+        filteredData = salePurchaseUser.filter((employee) => {
+          return formatDate(employee.salesInvoiceDate) <= formatDate(endDate);
+        });
+      }
+      if (filter && filter.trim() !== "") {
+        filteredData = filteredData.filter((employee) => {
+          return String(employee.id).includes(filter);
+        });
+      }
+      setFilterSalePurchase(filteredData);
     }
-}, [filter, salePurchaseUser, startDate, endDate]);
+  }, [filter, salePurchaseUser, startDate, endDate]);
   const handleCheckboxClick = (id) => {
     const selectedIndex = selectedRows.indexOf(id);
     let newSelected = [];
@@ -121,6 +126,18 @@ export const SalesInvoice = () => {
     fetchData();
   }, []);
 
+  function formatDate(datetimeString) {
+    const date = new Date(datetimeString);
+
+    // Extract year, month, and day
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // getMonth() returns 0-11
+    const day = String(date.getDate()).padStart(2, "0");
+
+    // Combine them into the desired format
+    return `${year}-${month}-${day}`;
+  }
+
   return (
     <>
       {flag ? (
@@ -136,7 +153,7 @@ export const SalesInvoice = () => {
             </Box>
           </Box>
           <Box>
-            <Box sx={{ display: "flex", width: "100%" ,margin:'5px'}}>
+            <Box sx={{ display: "flex", width: "100%", margin: "5px" }}>
               <Box sx={{ width: "50%" }}>
                 <Search>
                   <SearchIconWrapper>
@@ -219,7 +236,7 @@ export const SalesInvoice = () => {
                           />
                         </TableCell>
                         <StyledTableCell align="center">
-                          {row.salesInvoiceDate}
+                          {formatDate(row.salesInvoiceDate)}
                         </StyledTableCell>
                         <StyledTableCell align="center">
                           {row.id}
@@ -228,7 +245,7 @@ export const SalesInvoice = () => {
                           {row.partyName}
                         </StyledTableCell>
                         <StyledTableCell align="center">
-                          {row.salesDueDate}
+                          {formatDate(row.salesDueDate)}
                         </StyledTableCell>
                         <StyledTableCell align="center">
                           <Box>
