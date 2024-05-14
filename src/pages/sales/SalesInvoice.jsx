@@ -33,6 +33,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useDispatch, useSelector } from "react-redux";
 import { addSalePurchase } from "../../redux/Action";
+import SalesInvoiceView from "./SalesInvoiceView";
 export const SalesInvoice = () => {
   const loginData = useSelector((state) => state.loginReducerValue);
   const { salePurchaseUser } = useSelector(
@@ -52,9 +53,13 @@ export const SalesInvoice = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [filterSalePurchase, setFilterSalePurchase] = useState([]);
   const [filter, setFilter] = useState("");
-  const [flag, setFlag] = useState(true);
+  const [flag, setFlag] = useState(false);
+  const [flagView, setFlagView] = useState(false);
   const handleBooleanChange = () => {
     setFlag((prevState) => !prevState);
+  };
+  const handleBooleanChangeView = () => {
+    setFlagView((prevState) => !prevState);
   };
 
   const handleFilterChange = (event) => {
@@ -142,142 +147,153 @@ export const SalesInvoice = () => {
     <>
       {flag ? (
         <Box>
+          <SalesInvoiceCreate onBooleanChange={handleBooleanChange} />
+        </Box>
+      ) : flagView ? (
+        <Box>
+          <SalesInvoiceView onBooleanChange={handleBooleanChangeView} />
+        </Box>
+      ) : (
+        <Box>
           <Box>
-            <Button variant="contained">Sales Invoice</Button>
-            <Box sx={{ right: "0", float: "right" }}>
-              <ButtonGroup variant="contained" aria-label="Basic button group">
-                <Button onClick={handleBooleanChange}>
-                  Create Sales Invoice
-                </Button>
-              </ButtonGroup>
-            </Box>
-          </Box>
-          <Box>
-            <Box sx={{ display: "flex", width: "100%", margin: "5px" }}>
-              <Box sx={{ width: "50%" }}>
-                <Search>
-                  <SearchIconWrapper>
-                    <SearchIcon />
-                  </SearchIconWrapper>
-                  <StyledInputBase
-                    value={filter}
-                    onChange={handleFilterChange}
-                    placeholder="Search Sale Invoice"
-                    inputProps={{ "aria-label": "search" }}
-                  />
-                </Search>
-              </Box>
-              <Box>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer components={["DatePicker", "DatePicker"]}>
-                    <DatePicker
-                      label="Start Date:"
-                      value={startDate}
-                      onChange={handleStartDateChange}
-                      renderInput={(params) => <TextField {...params} />}
-                    />
-                    <DatePicker
-                      label="End Date:"
-                      value={endDate}
-                      onChange={handleEndDateChange}
-                      renderInput={(params) => <TextField {...params} />}
-                    />
-                  </DemoContainer>
-                </LocalizationProvider>
+            <Box>
+              <Button variant="contained">Sales Invoice</Button>
+              <Box sx={{ right: "0", float: "right" }}>
+                <ButtonGroup
+                  variant="contained"
+                  aria-label="Basic button group"
+                >
+                  <Button onClick={handleBooleanChange}>
+                    Create Sales Invoice
+                  </Button>
+                </ButtonGroup>
               </Box>
             </Box>
             <Box>
-              <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
-                <Table
-                  sx={{ minWidth: 1250 }}
-                  aria-label="customized table"
-                  stickyHeader
-                >
-                  <TableHead>
-                    <TableRow>
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          indeterminate={
-                            selectedRows.length > 0 &&
-                            selectedRows.length < salePurchaseUser.length
-                          }
-                          checked={
-                            selectedRows.length === salePurchaseUser.length
-                          }
-                          onChange={() =>
-                            setSelectedRows(
-                              selectedRows.length === salePurchaseUser.length
-                                ? []
-                                : salePurchaseUser.map((row) => row.id)
-                            )
-                          }
-                        />
-                      </TableCell>
-                      <StyledTableCell align="center">Date</StyledTableCell>
-                      <StyledTableCell align="center">
-                        Invoice Number
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
-                        Party Name
-                      </StyledTableCell>
-                      <StyledTableCell align="center">Due In</StyledTableCell>
-                      <StyledTableCell align="center">Amount</StyledTableCell>
-                      <StyledTableCell align="center">Status</StyledTableCell>
-                      <StyledTableCell align="center">View</StyledTableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {filterSalePurchase.map((row) => (
-                      <StyledTableRow key={row.id}>
+              <Box sx={{ display: "flex", width: "100%", margin: "5px" }}>
+                <Box sx={{ width: "50%" }}>
+                  <Search>
+                    <SearchIconWrapper>
+                      <SearchIcon />
+                    </SearchIconWrapper>
+                    <StyledInputBase
+                      value={filter}
+                      onChange={handleFilterChange}
+                      placeholder="Search Sale Invoice"
+                      inputProps={{ "aria-label": "search" }}
+                    />
+                  </Search>
+                </Box>
+                <Box>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker", "DatePicker"]}>
+                      <DatePicker
+                        label="Start Date:"
+                        value={startDate}
+                        onChange={handleStartDateChange}
+                        renderInput={(params) => <TextField {...params} />}
+                      />
+                      <DatePicker
+                        label="End Date:"
+                        value={endDate}
+                        onChange={handleEndDateChange}
+                        renderInput={(params) => <TextField {...params} />}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </Box>
+              </Box>
+              <Box>
+                <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
+                  <Table
+                    sx={{ minWidth: 1250 }}
+                    aria-label="customized table"
+                    stickyHeader
+                  >
+                    <TableHead>
+                      <TableRow>
                         <TableCell padding="checkbox">
                           <Checkbox
-                            checked={selectedRows.indexOf(row.id) !== -1}
-                            onClick={() => handleCheckboxClick(row.id)}
+                            indeterminate={
+                              selectedRows.length > 0 &&
+                              selectedRows.length < salePurchaseUser.length
+                            }
+                            checked={
+                              selectedRows.length === salePurchaseUser.length
+                            }
+                            onChange={() =>
+                              setSelectedRows(
+                                selectedRows.length === salePurchaseUser.length
+                                  ? []
+                                  : salePurchaseUser.map((row) => row.id)
+                              )
+                            }
                           />
                         </TableCell>
+                        <StyledTableCell align="center">Date</StyledTableCell>
                         <StyledTableCell align="center">
-                          {formatDate(row.salesInvoiceDate)}
+                          Invoice Number
                         </StyledTableCell>
                         <StyledTableCell align="center">
-                          {row.id}
+                          Party Name
                         </StyledTableCell>
-                        <StyledTableCell align="center">
-                          {row.partyName}
-                        </StyledTableCell>
-                        <StyledTableCell align="center">
-                          {formatDate(row.salesDueDate)}
-                        </StyledTableCell>
-                        <StyledTableCell align="center">
-                          <Box>
-                            <Typography> (₹) {row.totalAmount}</Typography>
-                            {row.status !== "Paid" && (
-                              <Typography variant="body2" gutterBottom>
-                                (₹) {row.amountReceived} {row.status}
-                              </Typography>
-                            )}
-                          </Box>
-                        </StyledTableCell>
-                        <StyledTableCell align="center">
-                          {row.status}
-                        </StyledTableCell>
-                        <StyledTableCell align="center">
-                          <IconButton
-                            aria-label="edit"
-                            //     onClick={() => handleView(row.id, row)}
-                          >
-                            <ArticleIcon />
-                          </IconButton>
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                        <StyledTableCell align="center">Due In</StyledTableCell>
+                        <StyledTableCell align="center">Amount</StyledTableCell>
+                        <StyledTableCell align="center">Status</StyledTableCell>
+                        <StyledTableCell align="center">View</StyledTableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {filterSalePurchase.map((row) => (
+                        <StyledTableRow key={row.id}>
+                          <TableCell padding="checkbox">
+                            <Checkbox
+                              checked={selectedRows.indexOf(row.id) !== -1}
+                              onClick={() => handleCheckboxClick(row.id)}
+                            />
+                          </TableCell>
+                          <StyledTableCell align="center">
+                            {formatDate(row.salesInvoiceDate)}
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            {row.id}
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            {row.partyName}
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            {formatDate(row.salesDueDate)}
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            <Box>
+                              <Typography> (₹) {row.totalAmount}</Typography>
+                              {row.status !== "Paid" && (
+                                <Typography variant="body2" gutterBottom>
+                                  (₹) {row.amountReceived} {row.status}
+                                </Typography>
+                              )}
+                            </Box>
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            {row.status}
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            <IconButton
+                              aria-label="edit"
+                              onClick={handleBooleanChangeView}
+                            >
+                              <ArticleIcon />
+                            </IconButton>
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Box>
             </Box>
           </Box>
         </Box>
-      ) : (
-        <SalesInvoiceCreate onBooleanChange={handleBooleanChange} />
       )}
     </>
   );
