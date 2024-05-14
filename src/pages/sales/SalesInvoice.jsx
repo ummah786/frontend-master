@@ -1,4 +1,11 @@
-import { Box, ButtonGroup, TextField } from "@mui/material";
+import {
+  Box,
+  ButtonGroup,
+  Checkbox,
+  TableCell,
+  TextField,
+  Typography,
+} from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
@@ -24,9 +31,15 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
+import { addSalePurchase } from "../../redux/Action";
+
 export const SalesInvoice = () => {
-  const loginData = useSelector(state => state.loginReducerValue);
+
+  const loginData = useSelector((state) => state.loginReducerValue);
+  const { salePurchaseUser } = useSelector(
+    (state) => state.salePurchaseReducerValue
+  );
   const dispatch = useDispatch();
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -38,6 +51,7 @@ export const SalesInvoice = () => {
   const handleEndDateChange = (newEndDate) => {
     setEndDate(newEndDate);
   };
+  const [selectedRows, setSelectedRows] = useState([]);
   const [filterSalePurchase, setFilterSalePurchase] = useState([]);
   const [filter, setFilter] = useState("");
   const [flag, setFlag] = useState(true);
@@ -49,30 +63,70 @@ export const SalesInvoice = () => {
     setFilter(event.target.value);
   };
 
+ useEffect(() => {
+    if (Array.isArray(salePurchaseUser)) {
+        let filteredData = salePurchaseUser;
+
+        if (startDate && endDate) {
+            // Filter based on the date range
+            filteredData = salePurchaseUser.filter((employee) => {
+                const employeeDate = new Date(employee.salesInvoiceDate); // Assuming employee.date is the date to filter
+                return employeeDate >= startDate && employeeDate <= endDate;
+            });
+        }
+
+        // Filter further based on other criteria (if any)
+        if (filter && filter.trim() !== "") {
+            filteredData = filteredData.filter((employee) => {
+                return String(employee.id).includes(filter);
+            });
+        }
+
+        setFilterSalePurchase(filteredData);
+    }
+}, [filter, salePurchaseUser, startDate, endDate]);
+  const handleCheckboxClick = (id) => {
+    const selectedIndex = selectedRows.indexOf(id);
+    let newSelected = [];
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selectedRows, id);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selectedRows.slice(1));
+    } else if (selectedIndex === selectedRows.length - 1) {
+      newSelected = newSelected.concat(selectedRows.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selectedRows.slice(0, selectedIndex),
+        selectedRows.slice(selectedIndex + 1)
+      );
+    }
+    setSelectedRows(newSelected);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
-        try {
-            const response = await axios.get(`http://localhost:8700/hesabbook/sale/purchase/all/${loginData.primary_user_id}`);
-            console.log('Party Response ', response.data.response);
-            if (response.data.code === 200) {
-              //  setMangUser(response.data.response);
-              //  localStorage.setItem('Party-details', response.data.response);
-              //  dispatch(addParty(response.data.response));
-                setFilterSalePurchase(response.data.response);
-            }
-        } catch (error) {
-            console.error('Error fetching data:', error);
+      try {
+        const response = await axios.get(
+          `http://localhost:8700/hesabbook/sale/purchase/all/${loginData.primary_user_id}`
+        );
+        console.log("Party Response ", response.data.response);
+        if (response.data.code === 200) {
+          dispatch(addSalePurchase(response.data.response));
+          setFilterSalePurchase(response.data.response);
         }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
     fetchData();
-}, []);
+  }, []);
 
   return (
     <>
       {flag ? (
         <Box>
           <Box>
-            <Button variant="contained">Party</Button>
+            <Button variant="contained">Sales Invoice</Button>
             <Box sx={{ right: "0", float: "right" }}>
               <ButtonGroup variant="contained" aria-label="Basic button group">
                 <Button onClick={handleBooleanChange}>
@@ -82,7 +136,7 @@ export const SalesInvoice = () => {
             </Box>
           </Box>
           <Box>
-            <Box sx={{ display: "flex", width: "100%" }}>
+            <Box sx={{ display: "flex", width: "100%" ,margin:'5px'}}>
               <Box sx={{ width: "50%" }}>
                 <Search>
                   <SearchIconWrapper>
@@ -124,6 +178,24 @@ export const SalesInvoice = () => {
                 >
                   <TableHead>
                     <TableRow>
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          indeterminate={
+                            selectedRows.length > 0 &&
+                            selectedRows.length < salePurchaseUser.length
+                          }
+                          checked={
+                            selectedRows.length === salePurchaseUser.length
+                          }
+                          onChange={() =>
+                            setSelectedRows(
+                              selectedRows.length === salePurchaseUser.length
+                                ? []
+                                : salePurchaseUser.map((row) => row.id)
+                            )
+                          }
+                        />
+                      </TableCell>
                       <StyledTableCell align="center">Date</StyledTableCell>
                       <StyledTableCell align="center">
                         Invoice Number
@@ -140,6 +212,12 @@ export const SalesInvoice = () => {
                   <TableBody>
                     {filterSalePurchase.map((row) => (
                       <StyledTableRow key={row.id}>
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            checked={selectedRows.indexOf(row.id) !== -1}
+                            onClick={() => handleCheckboxClick(row.id)}
+                          />
+                        </TableCell>
                         <StyledTableCell align="center">
                           {row.salesInvoiceDate}
                         </StyledTableCell>
@@ -147,16 +225,23 @@ export const SalesInvoice = () => {
                           {row.id}
                         </StyledTableCell>
                         <StyledTableCell align="center">
+                          {row.partyName}
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
                           {row.salesDueDate}
                         </StyledTableCell>
                         <StyledTableCell align="center">
-                          {row.gstNumber}
+                          <Box>
+                            <Typography> (₹) {row.totalAmount}</Typography>
+                            {row.status !== "Paid" && (
+                              <Typography variant="body2" gutterBottom>
+                                (₹) {row.amountReceived} {row.status}
+                              </Typography>
+                            )}
+                          </Box>
                         </StyledTableCell>
                         <StyledTableCell align="center">
-                          {row.mobileNumber}
-                        </StyledTableCell>
-                        <StyledTableCell align="center">
-                          {row.mobileNumber}
+                          {row.status}
                         </StyledTableCell>
                         <StyledTableCell align="center">
                           <IconButton

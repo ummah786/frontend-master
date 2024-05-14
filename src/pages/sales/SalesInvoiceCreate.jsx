@@ -64,6 +64,7 @@ import {
   addKeyCategory,
   addKeyCompany,
   addParty,
+  addSalePurchase,
 } from "../../redux/Action";
 import Delete from "@mui/icons-material/Delete";
 const style = {
@@ -113,6 +114,7 @@ export const SalesInvoiceCreate = ({ onBooleanChange }) => {
   const [selectedRows, setSelectedRows] = useState([]);
   const { partyUser } = useSelector((state) => state.partyReducerValue);
   const { inventoryUser } = useSelector((state) => state.inventoryReducerValue);
+  const { salePurchaseUser } = useSelector((state) => state.salePurchaseReducerValue);
   const loginData = useSelector((state) => state.loginReducerValue);
   const [filter, setFilter] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
@@ -712,25 +714,25 @@ export const SalesInvoiceCreate = ({ onBooleanChange }) => {
 
   const handleSubmitSaleInvoiceCreate = async (e) => {
     e.preventDefault();
-    //  const [totalTaxTable, setTotalTaxTable] = useState("");
-    //  const [totalDiscountTable, setTotalDiscountTable] = useState("");
-    //   const [totalAmountTable, setTotalAmountTable] = useState(0);
-    //   const [totalAmountTableOperation, setTotalAmountTableOperation] = useState(0);
-    //   const [autoRoundOffValue, setAutoRoundOffValue] = useState(0);
-    //   const [taxableAmount, setTaxableAmount] = useState(0);
-    //  const [amountRecieved, setAmountRecieved] = useState(0);
-    //   const [balanceAmount, setBalanceAmount] = useState(0);
-    //   const [totalAmountWithOutTax, setTotalAmountWithOutTax] = useState("");
     salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
     salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
     salePurchaseObject["salesInvoiceDate"] = saleInvoiceDate;
     salePurchaseObject["salesDueDate"] = dueDate;
+    salePurchaseObject["totalAmount"] = totalAmountTableOperation;
     salePurchaseObject["addAdditionalCharges"] = JSON.stringify(fields);
 
     salePurchaseObject["amountReceived"] = amountRecieved;
     salePurchaseObject["balanceAmount"] = balanceAmount;
     salePurchaseObject["addDiscount"] = addDiscount;
+
+    salePurchaseObject["autoRoundOffValue"] = autoRoundOffValue;
+    salePurchaseObject["autoRoundOffMark"] = checked;
+    salePurchaseObject["markFullyPaid"] = checkedMark;
+
+    salePurchaseObject["billType"] = "SALE_INVOICE";
+
     salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
+    salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
     salePurchaseObject["items"] = JSON.stringify(employees);
 
     //party Information
@@ -747,8 +749,21 @@ export const SalesInvoiceCreate = ({ onBooleanChange }) => {
       salePurchaseObject
     );
     console.log("Response   ", response);
+    addObjectOnTopSalePurchase(response.data.response);
+
     onBooleanChange();
   };
+
+  const addObjectOnTopSalePurchase = (newObject) => {
+    const existingIndex = salePurchaseUser.findIndex(item => item.id === newObject.id);
+    if (existingIndex === -1) {
+        dispatch(addSalePurchase([newObject, ...salePurchaseUser]));
+    } else {
+        const updatedArray = [...salePurchaseUser];
+        updatedArray[existingIndex] = newObject;
+        dispatch(addSalePurchase(updatedArray));
+    }
+};
   return (
     <Box component="form" onSubmit={handleSubmitSaleInvoiceCreate}>
       <Box sx={{ maxHeight: 300 }}>
@@ -2470,8 +2485,10 @@ export const SalesInvoiceCreate = ({ onBooleanChange }) => {
                     label="Enter Notes"
                     variant="outlined"
                     fullWidth={true}
-                    value={salePurchaseObject.note}
-                    onChange={(event) => handleTextFieldChange(event, "note")}
+                    value={salePurchaseObject.addNote}
+                    onChange={(event) =>
+                      handleTextFieldChange(event, "addNote")
+                    }
                   />
                   <IconButton onClick={handleToggleNotes}>
                     <Close />
@@ -2493,9 +2510,9 @@ export const SalesInvoiceCreate = ({ onBooleanChange }) => {
                     label="Enter Terms & Conditions"
                     variant="outlined"
                     fullWidth={true}
-                    value={salePurchaseObject.termAndCondition}
+                    value={salePurchaseObject.addTermsAndCondition}
                     onChange={(event) =>
-                      handleTextFieldChange(event, "termAndCondition")
+                      handleTextFieldChange(event, "addTermsAndCondition")
                     }
                   />
                   <IconButton onClick={handleToggleTermCondition}>
@@ -2623,9 +2640,7 @@ export const SalesInvoiceCreate = ({ onBooleanChange }) => {
                     <Box sx={{ width: "25%" }}>
                       <TextField
                         label=" ₹ "
-                        onChange={(event) =>
-                          setAddDiscount(event.target.value)
-                        }
+                        onChange={(event) => setAddDiscount(event.target.value)}
                         value={addDiscount}
                         inputProps={{
                           inputMode: "decimal",
@@ -2730,6 +2745,10 @@ export const SalesInvoiceCreate = ({ onBooleanChange }) => {
                     fullWidth
                     select
                     label="Mode"
+                    value={salePurchaseObject.paymentMode}
+                    onChange={(event) =>
+                      handleTextFieldChange(event, "paymentMode")
+                    }
                     variant="outlined"
                     sx={{ marginRight: 1 }}
                   >
