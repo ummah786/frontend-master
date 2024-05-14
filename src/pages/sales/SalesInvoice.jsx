@@ -126,7 +126,7 @@ export const SalesInvoice = () => {
       {flag ? (
         <Box>
           <Box>
-            <Button variant="contained">Party</Button>
+            <Button variant="contained">Sales Invoice</Button>
             <Box sx={{ right: "0", float: "right" }}>
               <ButtonGroup variant="contained" aria-label="Basic button group">
                 <Button onClick={handleBooleanChange}>
@@ -136,7 +136,7 @@ export const SalesInvoice = () => {
             </Box>
           </Box>
           <Box>
-            <Box sx={{ display: "flex", width: "100%" }}>
+            <Box sx={{ display: "flex", width: "100%" ,margin:'5px'}}>
               <Box sx={{ width: "50%" }}>
                 <Search>
                   <SearchIconWrapper>
