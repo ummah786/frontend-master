@@ -777,7 +777,7 @@ export const SalesInvoiceCreate = ({ onBooleanChange }) => {
               aria-label="Basic button group"
               sx={{ justifyContent: "space-around" }}
             >
-              <Button>Cancel</Button>
+              <Button   onClick={onBooleanChange}>Cancel</Button>
               <Button
                 type="submit"
                 fullWidth
