@@ -55,11 +55,13 @@ export const SalesInvoice = () => {
   const [filter, setFilter] = useState("");
   const [flag, setFlag] = useState(false);
   const [flagView, setFlagView] = useState(false);
+  const [idFlagView,setIdFlagView]=useState('');
   const handleBooleanChange = () => {
     setFlag((prevState) => !prevState);
   };
-  const handleBooleanChangeView = () => {
+  const handleBooleanChangeView = (id) => {
     setFlagView((prevState) => !prevState);
+    setIdFlagView(id);
   };
 
   const handleFilterChange = (event) => {
@@ -151,7 +153,7 @@ export const SalesInvoice = () => {
         </Box>
       ) : flagView ? (
         <Box>
-          <SalesInvoiceView onBooleanChange={handleBooleanChangeView} />
+          <SalesInvoiceView onBooleanChange={handleBooleanChangeView} idFlagView={idFlagView} />
         </Box>
       ) : (
         <Box>
@@ -280,7 +282,7 @@ export const SalesInvoice = () => {
                           <StyledTableCell align="center">
                             <IconButton
                               aria-label="edit"
-                              onClick={handleBooleanChangeView}
+                              onClick={()=>handleBooleanChangeView(row.id)}
                             >
                               <ArticleIcon />
                             </IconButton>
