@@ -20,7 +20,7 @@ export const StyledTableCellTableView = styled(TableCell)(({ theme }) => ({
     fontWeight: "bold", // Apply bold font weight
   },
   [`&.${tableCellClasses.body}`]: {
-    fontSize: 12,
+    fontSize: 8,
   },
 }));
 export const StyledTableRow = styled(TableRow)(({ theme }) => ({

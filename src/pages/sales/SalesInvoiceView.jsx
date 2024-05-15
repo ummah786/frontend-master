@@ -1,4 +1,11 @@
-import { Box, Button, ButtonGroup, TableCell, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  TableCell,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Tooltip, IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
@@ -18,15 +25,22 @@ import TableRow from "@mui/material/TableRow";
 import {
   Search,
   SearchIconWrapper,
-  StyledInputBase,StyledTableCellTableView,
+  StyledInputBase,
+  StyledTableCellTableView,
   StyledTableCell,
   StyledTableRow,
 } from "../../commonStyle";
-
+import { useDispatch, useSelector } from "react-redux";
 const SalesInvoiceView = ({ onBooleanChange, idFlagView }) => {
   const [filteredEmployees, setFilteredEmployees] = useState([]);
   const [selectedOption, setSelectedOption] = useState("");
   const [filterSalePurchase, setFilterSalePurchase] = useState([]);
+
+  const loginData = useSelector((state) => state.loginReducerValue);
+  const { salePurchaseUser } = useSelector(
+    (state) => state.salePurchaseReducerValue
+  );
+  const dispatch = useDispatch();
   const handleChange = (event) => {
     setSelectedOption(event.target.value);
     handleMenuItemClick(event.target.value);
@@ -40,8 +54,20 @@ const SalesInvoiceView = ({ onBooleanChange, idFlagView }) => {
     onBooleanChange();
   };
   useEffect(() => {
-    console.log("ID Flag View  ", idFlagView);
-  }, [idFlagView]);
+    if (!idFlagView) {
+      return;
+    }
+    const filteredData = salePurchaseUser.filter((employee) => {
+      return employee.id === idFlagView;
+    });
+    if (filteredData.length === 0) {
+      return;
+    }
+    const jsonArray = JSON.parse(filteredData[0].items);
+    setFilterSalePurchase(filteredData);
+    console.log("JSON ARRAY ", jsonArray);
+    setFilteredEmployees(jsonArray);
+  }, [idFlagView, salePurchaseUser]);
 
   return (
     <>
@@ -221,29 +247,33 @@ const SalesInvoiceView = ({ onBooleanChange, idFlagView }) => {
                                     RATE
                                   </StyledTableCellTableView>
                                   <StyledTableCellTableView align="center">
+                                    TAX
+                                  </StyledTableCellTableView>
+                                  <StyledTableCellTableView align="center">
                                     AMOUNT
                                   </StyledTableCellTableView>
                                 </TableRow>
                               </TableHead>
-                              <TableBody>
-                                {/* //    {mangUser*/}
-
+                              <TableBody> 
                                 {filteredEmployees.map((row) => (
                                   <StyledTableRow key={row.id}>
                                     <TableCell align="center">
                                       {row.id}
                                     </TableCell>
                                     <TableCell align="center">
-                                      {row.accountBusinessName}
+                                      {row.item}
                                     </TableCell>
                                     <TableCell align="center">
-                                      {row.name}
+                                      {row.quantity}
                                     </TableCell>
                                     <TableCell align="center">
-                                      {row.mobileNumber}
+                                      {row.salePrice}
                                     </TableCell>
                                     <TableCell align="center">
-                                      {row.role}
+                                      {row.gst}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      {row.total}
                                     </TableCell>
                                   </StyledTableRow>
                                 ))}
