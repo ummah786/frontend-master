@@ -4,6 +4,8 @@ import {
   ButtonGroup,
   Checkbox,
   TableCell,
+  TableHead,
+  TableRow,
   TextField,
   Typography,
 } from "@mui/material";
@@ -11,25 +13,39 @@ import { Tooltip, IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 import EditIcon from "@mui/icons-material/Edit";
-import React, { useState } from "react";
 import { Menu, MenuItem, ListItemIcon, ListItemText } from "@mui/material";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
-import PrintIcon from "@mui/icons-material/Print";
-import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import { styled } from "@mui/material/styles";
+import Grid from "@mui/material/Grid";
+import UserRole from "../../jsonfile/Role";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableContainer from "@mui/material/TableContainer";
+import Paper from "@mui/material/Paper";
+import * as React from "react";
+import { StyledTableCell, StyledTableRow } from "../../commonStyle";
+import { useEffect, useState } from "react";
+import ArticleIcon from "@mui/icons-material/Article";
+import { useTheme } from "@mui/material/styles";
+const Boxx = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: "center",
+  color: theme.palette.text.secondary,
+}));
 
 const SalesInvoiceView = ({ onBooleanChange }) => {
-
-    const [selectedOption, setSelectedOption] = useState('');
-    const handleChange = (event) => {
-        setSelectedOption(event.target.value);
-        handleMenuItemClick(event.target.value);
-      };
-    
-      const handleMenuItemClick = (action) => {
-        console.log(action);
-        // Add your logic for handling the selected option here
-      };
+  const [selectedOption, setSelectedOption] = useState("");
+  const [filterSalePurchase, setFilterSalePurchase] = useState([]);
+  const handleChange = (event) => {
+    setSelectedOption(event.target.value);
+    handleMenuItemClick(event.target.value);
+  };
+  const theme = useTheme();
+  const handleMenuItemClick = (action) => {
+    console.log(action);
+    // Add your logic for handling the selected option here
+  };
   const handleMainView = () => {
     onBooleanChange();
   };
@@ -67,37 +83,82 @@ const SalesInvoiceView = ({ onBooleanChange }) => {
             </ButtonGroup>
           </Box>
         </Box>
-        <Box>
+        <Box sx={{ display: "flex" }}>
           <TextField
             select
-            sx={{ marginLeft: "100px",width:"150px" }}
+            sx={{ margin: "10px", width: "150px" }}
+            label="Download PDF"
             variant="outlined"
             margin="normal"
-            value={selectedOption}
-            onChange={handleChange}
-            label="Download Pdf"
+            // value={billTo.pname}
+            //  onChange={(event) => handleBilltoSHipToo(event)}
           >
-            <MenuItem onClick={() => handleMenuItemClick("Download Duplicate")}>
-              <ListItemIcon>
-                <FileCopyIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText primary="Download Duplicate" />
-            </MenuItem>
-            <MenuItem
-              onClick={() => handleMenuItemClick("Download Triplicate")}
-            >
-              <ListItemIcon>
-                <PrintIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText primary="Download Triplicate" />
-            </MenuItem>
-            <MenuItem onClick={() => handleMenuItemClick("Download Pdf")}>
-              <ListItemIcon>
-                <PictureAsPdfIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText primary="Download Pdf" />
-            </MenuItem>
+            {UserRole.downloadOption.map((indi) => (
+              <MenuItem key={indi.name} value={indi.name}>
+                {indi.name}
+              </MenuItem>
+            ))}
           </TextField>
+
+          <TextField
+            select
+            sx={{ margin: "10px", width: "150px" }}
+            label="Print PDF"
+            variant="outlined"
+            margin="normal"
+            // value={billTo.pname}
+            //  onChange={(event) => handleBilltoSHipToo(event)}
+          >
+            {UserRole.printPDF.map((indi) => (
+              <MenuItem key={indi.name} value={indi.name}>
+                {indi.name}
+              </MenuItem>
+            ))}
+          </TextField>
+
+          <TextField
+            select
+            sx={{ margin: "10px", width: "150px" }}
+            label="Share"
+            variant="outlined"
+            margin="normal"
+            // value={billTo.pname}
+            //  onChange={(event) => handleBilltoSHipToo(event)}
+          >
+            {UserRole.shareType.map((indi) => (
+              <MenuItem key={indi.name} value={indi.name}>
+                {indi.name}
+              </MenuItem>
+            ))}
+          </TextField>
+
+          <Box sx={{ right: "0", float: "right" }}>
+            <Button variant="outlined" sx={{ margin: "10px", width: "150px" }}>
+              Record Payment In
+            </Button>
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            flexGrow: 1,
+            backgroundColor: theme.palette.grey[300],
+            padding: 2,
+            borderRadius: 1,
+          }}
+        >
+          <Grid container spacing={3}>
+            <Grid item xs={2}></Grid>
+            <Grid item xs={8}>
+              <Boxx>
+                <Typography>How</Typography>
+                <Typography>How</Typography> <Typography>How</Typography>
+                <Typography>How</Typography>
+                <Typography>How</Typography>
+                <Typography>How</Typography>
+              </Boxx>
+            </Grid>
+            <Grid item xs={2}></Grid>
+          </Grid>
         </Box>
       </Box>
     </>

@@ -834,5 +834,38 @@
     {
       "name": "Without Tax"
     }
+  ],
+  "downloadOption": [
+    {
+      "name": "Download Pdf"
+    },
+    {
+      "name": "Download Duplicate"
+    },
+    {
+      "name": "Download Triplicate"
+    }
+  ],
+  "printPDF": [
+    {
+      "name": "Print Thermal"
+    },
+    {
+      "name": "Print Duplicate"
+    },
+    {
+      "name": "Print Triplicate"
+    }
+  ],
+  "shareType": [
+    {
+      "name": "Watsapp"
+    },
+    {
+      "name": "E-mail"
+    },
+    {
+      "name": "SMS"
+    }
   ]
 }
