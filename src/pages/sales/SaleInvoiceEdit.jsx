@@ -7,7 +7,6 @@ import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
-import * as React from "react";
 import { useState } from "react";
 import { Close } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
@@ -137,6 +136,11 @@ export const SaleInvoiceEdit = ({ onBooleanChange, idFlagView,editFlag }) => {
     dayjs("2024-01-01")
   );
   const [dueDate, setDueDate] = React.useState(dayjs("2024-01-01"));
+  useEffect(()=>{
+    console.log("Id  Flag  ",idFlagView);
+    console.log("EditFlag ",editFlag);
+
+  },[idFlagView,editFlag])
 
   useEffect(() => {}, [partyUser, billTo]);
   useEffect(() => {
@@ -766,7 +770,7 @@ export const SaleInvoiceEdit = ({ onBooleanChange, idFlagView,editFlag }) => {
     <Box component="form" onSubmit={handleSubmitSaleInvoiceCreate}>
       <Box sx={{ maxHeight: 300 }}>
         <Box>
-          <Button variant="contained">Sale Invoice</Button>
+          <Button variant="contained">Sale Invoice Edit</Button>
           <Box
             sx={{ right: "0", float: "right", justifyContent: "space-around" }}
           >

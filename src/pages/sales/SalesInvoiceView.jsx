@@ -42,8 +42,9 @@ import { numberToWords } from "number-to-words";
 import { useDispatch, useSelector } from "react-redux";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { removeSalePurchase } from "../../redux/Action";
+import { SaleInvoiceEdit } from "./SaleInvoiceEdit";
 const SalesInvoiceView = ({ onBooleanChange, idFlagView }) => {
-  const [editFlag, setEditFlag] = useState(false);
+  const [editFlag, setEditFlag] = useState(true);
 
   const [paymentDate, setPaymentDate] = React.useState(dayjs("2024-01-01"));
   const [paymentAmount, setPaymentAmount] = useState("");
@@ -686,8 +687,8 @@ const SalesInvoiceView = ({ onBooleanChange, idFlagView }) => {
         </Box>
       ) : (
         <>
-          <SalesInvoiceEdit
-            onBooleanChange={handleBooleanChangeView}
+          <SaleInvoiceEdit
+            onBooleanChange={onBooleanChange}
             idFlagView={idFlagView}
             editFlag={editFlag}
           />
