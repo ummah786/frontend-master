@@ -30,11 +30,16 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "../../commonStyle";
+
+import { numberToWords } from "number-to-words";
 import { useDispatch, useSelector } from "react-redux";
 const SalesInvoiceView = ({ onBooleanChange, idFlagView }) => {
   const [filteredEmployees, setFilteredEmployees] = useState([]);
   const [selectedOption, setSelectedOption] = useState("");
   const [filterSalePurchase, setFilterSalePurchase] = useState([]);
+  const [tableQty, setTableQty] = useState("");
+  const [tableAmount, setTableAmount] = useState("");
+  const [tableTax, setTableTax] = useState("");
 
   const loginData = useSelector((state) => state.loginReducerValue);
   const { salePurchaseUser } = useSelector(
@@ -64,9 +69,29 @@ const SalesInvoiceView = ({ onBooleanChange, idFlagView }) => {
       return;
     }
     const jsonArray = JSON.parse(filteredData[0].items);
-    setFilterSalePurchase(filteredData);
-    console.log("JSON ARRAY ", jsonArray);
+    setFilterSalePurchase(filteredData[0]);
     setFilteredEmployees(jsonArray);
+    const quantityTable = jsonArray.reduce((total, item) => {
+      const quantity = parseFloat(item.quantity);
+      return isNaN(quantity) ? total : total + quantity;
+    }, 0);
+    setTableQty(quantityTable);
+    const amountTable = jsonArray.reduce((total, item) => {
+      const amount = parseFloat(item.total);
+      return isNaN(amount) ? total : total + amount;
+    }, 0);
+
+    setTableAmount(amountTable);
+    const taxTable = jsonArray.reduce((total, item) => {
+      const gst = parseFloat(item.gst);
+      const amount = parseFloat(item.total);
+      if (!isNaN(gst) && !isNaN(amount)) {
+        return total + (gst * amount) / 100;
+      } else {
+        return total;
+      }
+    }, 0);
+    setTableTax(taxTable);
   }, [idFlagView, salePurchaseUser]);
 
   return (
@@ -176,347 +201,305 @@ const SalesInvoiceView = ({ onBooleanChange, idFlagView }) => {
               >
                 <Box>
                   <Box>
-                    <Box>
-                      <Box>LOGO</Box>
-                      <Box sx={{ margin: "5px" }}>
-                        <Box sx={{ display: "flex" }}>
-                          <Box sx={{ width: "50%" }}>
-                            <Box sx={{ color: "#000000", display: "flex" }}>
-                              <Typography>Cosmetice Name</Typography>
-                            </Box>
-                            <Box sx={{ color: "#000000", display: "flex" }}>
-                              <Typography>Mobile :</Typography>
-                              <Typography>8340719781</Typography>
-                            </Box>
+                    <Box>LOGO</Box>
+                    <Box sx={{ margin: "5px" }}>
+                      <Box sx={{ display: "flex" }}>
+                        <Box sx={{ width: "50%" }}>
+                          <Box sx={{ color: "#000000", display: "flex" }}>
+                            <Typography>Cosmetice Name</Typography>
                           </Box>
-                          <Box sx={{ width: "50%" }}>
-                            <Box sx={{ color: "#000000", display: "flex" }}>
-                              <Typography>BILL OF SUPPLY</Typography>
-                              <Typography>Original for Recipient</Typography>
-                            </Box>
-                            <Box sx={{ color: "#000000", display: "flex" }}>
-                              <Typography>Invoice No.</Typography>
-                              <Typography>:</Typography>
-                              <Typography>10</Typography>
-                            </Box>
-                            <Box sx={{ color: "#000000", display: "flex" }}>
-                              <Typography>Invoice Date</Typography>
-                              <Typography>:</Typography>
-                              <Typography>12/11/2023</Typography>
-                            </Box>
-                            <Box
+                          <Box sx={{ color: "#000000", display: "flex" }}>
+                            <Typography>Mobile :</Typography>
+                            <Typography>8340719781</Typography>
+                          </Box>
+                        </Box>
+                        <Box sx={{ width: "50%" }}>
+                          <Box sx={{ color: "#000000", display: "flex" }}>
+                            <Typography>BILL OF SUPPLY</Typography>
+                            <Typography>Original for Recipient</Typography>
+                          </Box>
+                          <Box sx={{ color: "#000000", display: "flex" }}>
+                            <Typography>Invoice No.</Typography>
+                            <Typography>:</Typography>
+                            <Typography>
+                              {salePurchaseUser.salesInvoiceNo}
+                            </Typography>
+                          </Box>
+                          <Box sx={{ color: "#000000", display: "flex" }}>
+                            <Typography>Invoice Date</Typography>
+                            <Typography>:</Typography>
+                            <Typography>
+                              {salePurchaseUser.salesInvoiceDate}
+                            </Typography>
+                          </Box>
+                          <Box
+                            sx={{
+                              color: "#000000",
+                              display: "flex",
+                            }}
+                          >
+                            <Typography>Due Date</Typography>
+                            <Typography>:</Typography>
+                            <Typography>
+                              {salePurchaseUser.salesDueDate}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      </Box>
+                    </Box>
+                    <Box>
+                      <Typography>BILL TO</Typography>
+                      <Typography>{salePurchaseUser.partyName}</Typography>
+                    </Box>
+                    <Box>
+                      <Box>
+                        <TableContainer
+                          component={Paper}
+                          sx={{ maxHeight: 300, minHeight: 300 }}
+                        >
+                          <Table
+                            sx={{ minWidth: 120 }}
+                            aria-label="customized table"
+                            stickyHeader
+                          >
+                            <TableHead>
+                              <TableRow>
+                                <StyledTableCellTableView
+                                  align="center"
+                                  width="10%"
+                                >
+                                  S.NO.
+                                </StyledTableCellTableView>
+                                <StyledTableCellTableView
+                                  align="center"
+                                  width="20%"
+                                >
+                                  ITEMS
+                                </StyledTableCellTableView>
+                                <StyledTableCellTableView
+                                  align="center"
+                                  width="20%"
+                                >
+                                  QTY.
+                                </StyledTableCellTableView>
+                                <StyledTableCellTableView
+                                  align="center"
+                                  width="20%"
+                                >
+                                  RATE
+                                </StyledTableCellTableView>
+                                <StyledTableCellTableView
+                                  align="center"
+                                  width="20%"
+                                >
+                                  TAX
+                                </StyledTableCellTableView>
+                                <StyledTableCellTableView
+                                  align="center"
+                                  width="20%"
+                                >
+                                  AMOUNT
+                                </StyledTableCellTableView>
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              {filteredEmployees.map((row) => (
+                                <StyledTableRow key={row.id}>
+                                  <TableCell align="center">{row.id}</TableCell>
+                                  <TableCell align="center">
+                                    {row.item}
+                                  </TableCell>
+                                  <TableCell align="center">
+                                    {row.quantity}
+                                  </TableCell>
+                                  <TableCell align="center">
+                                    {row.salePrice}
+                                  </TableCell>
+                                  <TableCell align="center">
+                                    {row.gst}
+                                  </TableCell>
+                                  <TableCell align="center">
+                                    {row.total}
+                                  </TableCell>
+                                </StyledTableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                        <TableContainer component={Paper}>
+                          <Table aria-label="customized table" stickyHeader>
+                            <TableHead>
+                              <TableRow>
+                                <StyledTableCellTableView
+                                  align="center"
+                                  width="10%"
+                                >
+                                  {"     "}
+                                </StyledTableCellTableView>
+                                <StyledTableCellTableView
+                                  align="center"
+                                  width="20%"
+                                >
+                                  TOTAL
+                                </StyledTableCellTableView>
+                                <StyledTableCellTableView
+                                  align="center"
+                                  width="20%"
+                                >
+                                  {tableQty}
+                                </StyledTableCellTableView>
+                                <StyledTableCellTableView
+                                  align="center"
+                                  width="20%"
+                                >
+                                  {"    "}
+                                </StyledTableCellTableView>
+                                <StyledTableCellTableView
+                                  align="center"
+                                  width="20%"
+                                >
+                                  (₹) {parseFloat(tableTax).toFixed(2)}
+                                </StyledTableCellTableView>
+                                <StyledTableCellTableView
+                                  align="center"
+                                  width="20%"
+                                >
+                                  (₹){parseFloat(tableAmount).toFixed(2)}
+                                </StyledTableCellTableView>
+                              </TableRow>
+                            </TableHead>
+                          </Table>
+                        </TableContainer>
+                      </Box>
+                    </Box>
+                    <Box></Box>
+                    <Box display="flex">
+                      <Box
+                        sx={{
+                          width: "50%",
+                          margin: "5px",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Typography variant="h6">
+                          TERMS AND CONDITIONS
+                        </Typography>
+                        <Box>
+                          <Typography variant="body2">
+                            {filterSalePurchase.addNote
+                              ? filterSalePurchase.addNote
+                              : "1. Goods once sold will not be taken back or exchanged"}
+                          </Typography>{" "}
+                          addTermsAndCondition
+                          <Typography variant="body2">
+                            {filterSalePurchase.addTermsAndCondition
+                              ? filterSalePurchase.addTermsAndCondition
+                              : "2. All disputes are subject to[ENTER_YOUR_CITY_NAME] jurisdiction only"}
+                          </Typography>
+                        </Box>
+                      </Box>
+                      <Box sx={{ width: "50%" }}>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            margin: "5px",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              borderBottom: "1px solid black",
+                              paddingBottom: "5px",
+                              marginBottom: "5px",
+                              margin: "2px",
+                            }}
+                          >
+                            <Typography variant="body2">
+                              TAXABLE AMOUNT
+                            </Typography>
+                            <Typography variant="body2">
+                              ₹ {filterSalePurchase.totalAmount}
+                            </Typography>
+                          </Box>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              borderBottom: "1px solid black",
+                              paddingBottom: "5px",
+                              marginBottom: "5px",
+                              margin: "2px",
+                            }}
+                          >
+                            <Typography variant="body2">
+                              TOTAL AMOUNT
+                            </Typography>
+                            <Typography variant="body2">
+                              ₹ {filterSalePurchase.totalAmount}
+                            </Typography>
+                          </Box>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              borderBottom: "1px solid black",
+                              paddingBottom: "5px",
+                              marginBottom: "5px",
+                              margin: "2px",
+                            }}
+                          >
+                            <Typography variant="body2">
+                              Received Amount
+                            </Typography>
+                            <Typography variant="body2">
+                              ₹ {filterSalePurchase.amountReceived}
+                            </Typography>
+                          </Box>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              textDecoration: "underline",
+                              margin: "2px",
+                            }}
+                          >
+                            <Typography variant="body2">
+                              Balance Amount
+                            </Typography>
+                            <Typography variant="body2">
+                              ₹ {filterSalePurchase.balanceAmount}
+                            </Typography>
+                          </Box>
+                          <Box
+                            sx={{
+                              marginTop: "15px",
+                              margin: "2px",
+                              display: "inline-block",
+                            }}
+                          >
+                            <Typography
+                              variant="h6"
+                              sx={{ textDecoration: "underline" }}
+                            >
+                              Total Amount (in words)
+                            </Typography>
+                            <Typography
+                              variant="body1"
                               sx={{
-                                color: "#000000",
-                                display: "flex",
+                                position: "absolute",
+                                right: 300,
+                                bottom: "calc(-1 * 0.2em)",
+                                borderBottom: "1px solid black",
                               }}
                             >
-                              <Typography>Due Date</Typography>
-                              <Typography>:</Typography>
-                              <Typography>12/12/2023</Typography>
-                            </Box>
-                          </Box>
-                        </Box>
-                      </Box>
-                      <Box>
-                        <Typography>BILL TO</Typography>
-                        <Typography>Asif</Typography>
-                      </Box>
-                      <Box>
-                        <Box>
-                          <TableContainer
-                            component={Paper}
-                            sx={{ maxHeight: 500 }}
-                          >
-                            <Table
-                              sx={{ minWidth: 120 }}
-                              aria-label="customized table"
-                              stickyHeader
-                            >
-                              <TableHead>
-                                <TableRow>
-                                  <StyledTableCellTableView align="center">
-                                    S.NO.
-                                  </StyledTableCellTableView>
-                                  <StyledTableCellTableView align="center">
-                                    ITEMS
-                                  </StyledTableCellTableView>
-                                  <StyledTableCellTableView align="center">
-                                    QTY.
-                                  </StyledTableCellTableView>
-                                  <StyledTableCellTableView align="center">
-                                    RATE
-                                  </StyledTableCellTableView>
-                                  <StyledTableCellTableView align="center">
-                                    TAX
-                                  </StyledTableCellTableView>
-                                  <StyledTableCellTableView align="center">
-                                    AMOUNT
-                                  </StyledTableCellTableView>
-                                </TableRow>
-                              </TableHead>
-                              <TableBody> 
-                                {filteredEmployees.map((row) => (
-                                  <StyledTableRow key={row.id}>
-                                    <TableCell align="center">
-                                      {row.id}
-                                    </TableCell>
-                                    <TableCell align="center">
-                                      {row.item}
-                                    </TableCell>
-                                    <TableCell align="center">
-                                      {row.quantity}
-                                    </TableCell>
-                                    <TableCell align="center">
-                                      {row.salePrice}
-                                    </TableCell>
-                                    <TableCell align="center">
-                                      {row.gst}
-                                    </TableCell>
-                                    <TableCell align="center">
-                                      {row.total}
-                                    </TableCell>
-                                  </StyledTableRow>
-                                ))}
-                              </TableBody>
-                            </Table>
-                          </TableContainer>
-                        </Box>
-                      </Box>
-                      <Box>
-                        <table
-                          id="items-table"
-                          class="item_table"
-                          data-subsection-id="3"
-                        >
-                          <thead>
-                            <tr>
-                              <th
-                                scope="col"
-                                class="items-table-header items-serial-number-header"
-                                sx={{ backgroundColor: "#E2E2E2" }}
-                              >
-                                S.NO.
-                              </th>
-                              <th
-                                scope="col"
-                                class="items-table-header items-type-header"
-                                sx={{ backgroundColor: "#E2E2E2" }}
-                              >
-                                ITEMS
-                              </th>
-
-                              <th
-                                scope="col"
-                                class="items-table-header items-qty-column"
-                                sx={{ backgroundColor: "#E2E2E2" }}
-                              >
-                                QTY.
-                              </th>
-
-                              <th
-                                scope="col"
-                                class="items-table-header items-rate-header items-rate-column"
-                                sx={{ backgroundColor: "#E2E2E2" }}
-                              >
-                                RATE
-                              </th>
-
-                              <th
-                                scope="col"
-                                class="items-table-header"
-                                sx={{ backgroundColor: "#E2E2E2" }}
-                              >
-                                AMOUNT
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody id="items-table-content">
-                            <tr>
-                              <td
-                                class="items-table-info item-serial-number"
-                                data-row="0"
-                              >
-                                1
-                              </td>
-                              <td
-                                class="items-table-info item-name-desc"
-                                data-row="0"
-                              >
-                                <Box class="item-name">Meat Masala</Box>
-                              </td>
-                              <td
-                                class="items-table-info item-quantity items-qty-column"
-                                data-row="0"
-                              >
-                                1 PCS
-                              </td>
-                              <td
-                                class="items-table-info item-rate items-rate-column"
-                                data-row="0"
-                              >
-                                57
-                              </td>
-                              <td
-                                class="items-table-info item-total nowrap"
-                                data-row="0"
-                              >
-                                57
-                              </td>
-                            </tr>
-                            <tr>
-                              <td
-                                class="items-table-info item-serial-number"
-                                data-row="1"
-                              >
-                                2
-                              </td>
-                              <td
-                                class="items-table-info item-name-desc"
-                                data-row="1"
-                              >
-                                <Box class="item-name">Mirch</Box>
-                              </td>
-                              <td
-                                class="items-table-info item-quantity items-qty-column"
-                                data-row="1"
-                              >
-                                1 PCS
-                              </td>
-                              <td
-                                class="items-table-info item-rate items-rate-column"
-                                data-row="1"
-                              >
-                                21
-                              </td>
-                              <td
-                                class="items-table-info item-total nowrap"
-                                data-row="1"
-                              >
-                                21
-                              </td>
-                            </tr>
-                            <tr class="empty-row" sx="height: 30mm">
-                              <td
-                                class="items-table-info item-serial-number"
-                                sx=""
-                                data-row="-1"
-                              ></td>
-                              <td
-                                class="items-table-info item-name-desc"
-                                sx=""
-                                data-row="-1"
-                              >
-                                <Box class="item-name"></Box>
-                                <Box class="item-imei"></Box>
-                                <Box class="item-serial-no"></Box>
-                              </td>
-                              <td
-                                class="items-table-info item-quantity items-qty-column"
-                                sx=""
-                                data-row="-1"
-                              ></td>
-                              <td
-                                class="items-table-info item-rate items-rate-column"
-                                sx=""
-                                data-row="-1"
-                              ></td>
-                              <td
-                                class="items-table-info item-total nowrap"
-                                sx=""
-                                data-row="-1"
-                              ></td>
-                            </tr>
-                            <tr>
-                              <td
-                                class="items-table-total"
-                                sx="background-color: #E2E2E2;"
-                              ></td>
-                              <td
-                                id="items-table-total-label"
-                                class="bold items-table-total"
-                                sx="background-color: #E2E2E2;"
-                              >
-                                SUBTOTAL
-                              </td>
-                              <td
-                                id="items-table-total-qty"
-                                class="bold items-table-total items-qty-column"
-                                sx="background-color: #E2E2E2;"
-                              >
-                                2
-                              </td>
-                              <td
-                                class="items-table-total items-rate-column"
-                                sx="background-color: #E2E2E2;"
-                              ></td>
-                              <td
-                                id="items-table-total-amount"
-                                class="bold items-table-total nowrap"
-                                sx={{ backgroundColor: "#E2E2E2" }}
-                              >
-                                ₹ 78
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </Box>
-                    </Box>
-                  </Box>
-
-                  <Box id="after-table-container">
-                    <Box id="invoice-bottom-content-left">
-                      <Box id="tnc" class="tnc" data-subsection-id="7">
-                        <Box id="tnc-label">TERMS AND CONDITIONS</Box>
-                        <Box id="tnc-value">
-                          1. Goods once sold will not be taken back or exchanged
-                          2. All disputes are subject to [ENTER_YOUR_CITY_NAME]
-                          jurisdiction only
-                        </Box>
-                      </Box>
-                    </Box>
-                    <Box id="invoice-bottom-content-right">
-                      <table id="invoice-total-table">
-                        <tr class="invoice-total-section-row">
-                          <td class="invoice-total-section-data">
-                            TAXABLE AMOUNT
-                          </td>
-                          <td class="invoice-total-section-data">₹ 78</td>
-                        </tr>
-                        <tr>
-                          <td colspan="2">
-                            <Box class="hr-Boxider"></Box>
-                          </td>
-                        </tr>
-                        <tr class="invoice-total-section-row bold">
-                          <td class="invoice-total-section-data">
-                            TOTAL AMOUNT
-                          </td>
-                          <td class="invoice-total-section-data">₹ 78</td>
-                        </tr>
-                        <tr>
-                          <td colspan="2">
-                            <Box class="hr-Boxider"></Box>
-                          </td>
-                        </tr>
-                        <tr class="invoice-total-section-row">
-                          <td class="invoice-total-section-data">
-                            Received Amount
-                          </td>
-                          <td class="invoice-total-section-data">₹ 0</td>
-                        </tr>
-                      </table>
-
-                      <Box
-                        id="amount-words-container"
-                        class="amount_in_words"
-                        data-subsection-id="4"
-                      >
-                        <Box id="amount-words">
-                          <Box id="amount-words-label">
-                            Total Amount (in words)
-                          </Box>
-                          <Box id="amount-words-value">
-                            Seventy Eight Rupees
+                              {filterSalePurchase.totalAmount
+                                ? numberToWords.toWords(
+                                    filterSalePurchase.totalAmount
+                                  )
+                                : "Not available"}
+                            </Typography>
                           </Box>
                         </Box>
                       </Box>
