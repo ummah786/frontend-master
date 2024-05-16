@@ -12,6 +12,9 @@ import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 import EditIcon from "@mui/icons-material/Edit";
 import { MenuItem } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import Modal from "@mui/joy/Modal";
+import ModalClose from "@mui/joy/ModalClose";
+import { Transition } from "react-transition-group";
 import Grid from "@mui/material/Grid";
 import UserRole from "../../jsonfile/Role";
 import Paper from "@mui/material/Paper";
@@ -22,6 +25,9 @@ import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import {
   Search,
   SearchIconWrapper,
@@ -30,10 +36,19 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "../../commonStyle";
-
+import axios from "axios";
+import dayjs from "dayjs";
 import { numberToWords } from "number-to-words";
 import { useDispatch, useSelector } from "react-redux";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { removeSalePurchase } from "../../redux/Action";
 const SalesInvoiceView = ({ onBooleanChange, idFlagView }) => {
+  const [paymentDate, setPaymentDate] = React.useState(dayjs("2024-01-01"));
+  const [paymentAmount, setPaymentAmount] = useState("");
+  const [paymentType, setPaymentType] = useState("");
+  const [note, setNote] = useState("");
+
+  const [openPaymentRecord, setOpenPaymentRecord] = React.useState(false);
   const [filteredEmployees, setFilteredEmployees] = useState([]);
   const [selectedOption, setSelectedOption] = useState("");
   const [filterSalePurchase, setFilterSalePurchase] = useState([]);
@@ -93,6 +108,31 @@ const SalesInvoiceView = ({ onBooleanChange, idFlagView }) => {
     }, 0);
     setTableTax(taxTable);
   }, [idFlagView, salePurchaseUser]);
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 700,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 1,
+  };
+
+  const handleSubmitForPayment = (e) => {
+    e.prevetDefault();
+  };
+  const handleDelete = async (event) => {
+    event.preventDefault();
+    const response = await axios.post(
+      `http://localhost:8700/hesabbook/sale/purchase/delete/${filterSalePurchase.id}`
+    );
+    dispatch(removeSalePurchase(filterSalePurchase.id));
+    console.log("Submit Response :--    ", response.data);
+    handleMainView();
+    //  TODO handle to remove data from Redux
+  };
 
   return (
     <>
@@ -117,10 +157,7 @@ const SalesInvoiceView = ({ onBooleanChange, idFlagView }) => {
                 </IconButton>{" "}
               </Tooltip>
               <Tooltip title="Delete">
-                <IconButton
-                  aria-label="edit"
-                  //onClick={() => handleEdit(shipIn.id, shipIn, shipTo.id)}
-                >
+                <IconButton aria-label="edit" onClick={handleDelete}>
                   <DeleteIcon />
                 </IconButton>
               </Tooltip>
@@ -177,10 +214,114 @@ const SalesInvoiceView = ({ onBooleanChange, idFlagView }) => {
           </TextField>
 
           <Box sx={{ right: "0", float: "right" }}>
-            <Button variant="outlined" sx={{ margin: "10px", width: "150px" }}>
+            <Button
+              variant="outlined"
+              sx={{ margin: "10px", width: "150px" }}
+              onClick={() => setOpenPaymentRecord(true)}
+            >
               Record Payment In
             </Button>
           </Box>
+          <Transition in={openPaymentRecord} timeout={400}>
+            <Modal
+              open={openPaymentRecord}
+              onClose={() => setOpenPaymentRecord(false)}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Box sx={style}>
+                <Box
+                  sx={{
+                    marginTop: 8,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <ModalClose variant="plain" sx={{ m: 1 }} />
+                  <Typography component="h1" variant="h5">
+                    Record Payment For this invoice
+                  </Typography>
+                  <Box
+                    component="form"
+                    onSubmit={handleSubmitForPayment}
+                    noValidate
+                    sx={{ mt: 1 }}
+                  >
+                    <Box sx={{ display: "flex" }}>
+                      <Box sx={{ width: "50%", margin: "10px" }}>
+                        <TextField
+                          label="Payment Type"
+                          value={paymentType}
+                          onChange={(e) => setPaymentType(e.target.value)}
+                          autoFocus
+                        >
+                          {UserRole.taxType.map((userrole) => (
+                            <MenuItem key={userrole.name} value={userrole.name}>
+                              {userrole.name}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      </Box>
+                      <Box sx={{ width: "50%", margin: "10px" }}>
+                        <TextField
+                          label="Note"
+                          value={note}
+                          onChange={(event) =>
+                            setPaymentAmount(event.target.value)
+                          }
+                        />
+                      </Box>
+                    </Box>
+                    <Box sx={{ display: "flex" }}>
+                      <Box sx={{ width: "50%", margin: "10px" }}>
+                        <TextField
+                          label="Enter Payment Amount"
+                          value={paymentAmount}
+                          onChange={(event) =>
+                            setPaymentAmount(event.target.value)
+                          }
+                        />
+                      </Box>
+                      <Box sx={{ width: "50%", margin: "10px" }}>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DemoContainer
+                            components={["DatePicker", "DatePicker"]}
+                          >
+                            <DatePicker
+                              label="Payment Date:"
+                              value={paymentDate}
+                              onChange={(newValue) => setPaymentDate(newValue)}
+                            />
+                          </DemoContainer>
+                        </LocalizationProvider>
+                      </Box>
+                    </Box>
+                    <Box></Box>
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      onClick={handleSubmitForPayment}
+                      sx={{
+                        mt: 3,
+                        mb: 2,
+                        color: "whitesmoke",
+                        background: "#212121",
+                      }}
+                    >
+                      Submit
+                    </Button>
+                  </Box>
+                </Box>
+              </Box>
+            </Modal>
+          </Transition>
         </Box>
         <Box
           sx={{
@@ -223,7 +364,9 @@ const SalesInvoiceView = ({ onBooleanChange, idFlagView }) => {
                           >
                             <Typography>BILL OF SUPPLY</Typography>
                             <Typography>:</Typography>
-                            <Typography sx={{ border: "1px solid black",padding:"5px" }}>
+                            <Typography
+                              sx={{ border: "1px solid black", padding: "5px" }}
+                            >
                               Original for Recipient
                             </Typography>
                           </Box>
@@ -507,7 +650,7 @@ const SalesInvoiceView = ({ onBooleanChange, idFlagView }) => {
                             <Typography
                               variant="body1"
                               sx={{
-                                bottom: "calc(-1 * 0.2em)"
+                                bottom: "calc(-1 * 0.2em)",
                               }}
                             >
                               {filterSalePurchase.totalAmount
