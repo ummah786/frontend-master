@@ -214,34 +214,53 @@ const SalesInvoiceView = ({ onBooleanChange, idFlagView }) => {
                           </Box>
                         </Box>
                         <Box sx={{ width: "50%" }}>
-                          <Box sx={{ color: "#000000", display: "flex" }}>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              margin: "2px",
+                            }}
+                          >
                             <Typography>BILL OF SUPPLY</Typography>
-                            <Typography>Original for Recipient</Typography>
-                          </Box>
-                          <Box sx={{ color: "#000000", display: "flex" }}>
-                            <Typography>Invoice No.</Typography>
                             <Typography>:</Typography>
-                            <Typography>
-                              {salePurchaseUser.salesInvoiceNo}
-                            </Typography>
-                          </Box>
-                          <Box sx={{ color: "#000000", display: "flex" }}>
-                            <Typography>Invoice Date</Typography>
-                            <Typography>:</Typography>
-                            <Typography>
-                              {salePurchaseUser.salesInvoiceDate}
+                            <Typography sx={{ border: "1px solid black",padding:"5px" }}>
+                              Original for Recipient
                             </Typography>
                           </Box>
                           <Box
                             sx={{
-                              color: "#000000",
                               display: "flex",
+                              justifyContent: "space-between",
+                              margin: "2px",
                             }}
                           >
-                            <Typography>Due Date</Typography>
-                            <Typography>:</Typography>
-                            <Typography>
-                              {salePurchaseUser.salesDueDate}
+                            <Typography variant="h7">Invoice No.</Typography>
+                            <Typography variant="body2">
+                              {filterSalePurchase.id}
+                            </Typography>
+                          </Box>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              margin: "2px",
+                            }}
+                          >
+                            <Typography variant="h7">Invoice Date</Typography>
+                            <Typography variant="body2">
+                              {filterSalePurchase.salesInvoiceDate}
+                            </Typography>
+                          </Box>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              margin: "2px",
+                            }}
+                          >
+                            <Typography variant="h7">Due Date</Typography>
+                            <Typography variant="body2">
+                              {filterSalePurchase.salesDueDate}
                             </Typography>
                           </Box>
                         </Box>
@@ -249,7 +268,7 @@ const SalesInvoiceView = ({ onBooleanChange, idFlagView }) => {
                     </Box>
                     <Box>
                       <Typography>BILL TO</Typography>
-                      <Typography>{salePurchaseUser.partyName}</Typography>
+                      <Typography>{filterSalePurchase.partyName}</Typography>
                     </Box>
                     <Box>
                       <Box>
@@ -488,10 +507,7 @@ const SalesInvoiceView = ({ onBooleanChange, idFlagView }) => {
                             <Typography
                               variant="body1"
                               sx={{
-                                position: "absolute",
-                                right: 300,
-                                bottom: "calc(-1 * 0.2em)",
-                                borderBottom: "1px solid black",
+                                bottom: "calc(-1 * 0.2em)"
                               }}
                             >
                               {filterSalePurchase.totalAmount
