@@ -43,6 +43,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { removeSalePurchase } from "../../redux/Action";
 const SalesInvoiceView = ({ onBooleanChange, idFlagView }) => {
+  const [editFlag, setEditFlag] = useState(false);
+
   const [paymentDate, setPaymentDate] = React.useState(dayjs("2024-01-01"));
   const [paymentAmount, setPaymentAmount] = useState("");
   const [paymentType, setPaymentType] = useState("");
@@ -61,6 +63,9 @@ const SalesInvoiceView = ({ onBooleanChange, idFlagView }) => {
     (state) => state.salePurchaseReducerValue
   );
   const dispatch = useDispatch();
+  const editFlagValue = () => {
+    setEditFlag((prevState) => !prevState);
+  };
   const handleChange = (event) => {
     setSelectedOption(event.target.value);
     handleMenuItemClick(event.target.value);
@@ -136,541 +141,558 @@ const SalesInvoiceView = ({ onBooleanChange, idFlagView }) => {
 
   return (
     <>
-      <Box>
+      {editFlag ? (
         <Box>
-          <Button variant="contained" onClick={handleMainView}>
-            Sales Invoice
-          </Button>
-          <Box sx={{ right: "0", float: "right" }}>
-            <ButtonGroup variant="contained" aria-label="Basic button group">
-              <Tooltip title="Duplicate this invoice">
-                <IconButton aria-label="edit">
-                  <ContentCopyRoundedIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Edit">
-                <IconButton
-                  aria-label="edit"
-                  //onClick={() => handleEdit(shipIn.id, shipIn, shipTo.id)}
-                >
-                  <EditIcon />
-                </IconButton>{" "}
-              </Tooltip>
-              <Tooltip title="Delete">
-                <IconButton aria-label="edit" onClick={handleDelete}>
-                  <DeleteIcon />
-                </IconButton>
-              </Tooltip>
-            </ButtonGroup>
-          </Box>
-        </Box>
-        <Box sx={{ display: "flex" }}>
-          <TextField
-            select
-            sx={{ margin: "10px", width: "150px" }}
-            label="Download PDF"
-            variant="outlined"
-            margin="normal"
-            // value={billTo.pname}
-            //  onChange={(event) => handleBilltoSHipToo(event)}
-          >
-            {UserRole.downloadOption.map((indi) => (
-              <MenuItem key={indi.name} value={indi.name}>
-                {indi.name}
-              </MenuItem>
-            ))}
-          </TextField>
-
-          <TextField
-            select
-            sx={{ margin: "10px", width: "150px" }}
-            label="Print PDF"
-            variant="outlined"
-            margin="normal"
-            // value={billTo.pname}
-            //  onChange={(event) => handleBilltoSHipToo(event)}
-          >
-            {UserRole.printPDF.map((indi) => (
-              <MenuItem key={indi.name} value={indi.name}>
-                {indi.name}
-              </MenuItem>
-            ))}
-          </TextField>
-
-          <TextField
-            select
-            sx={{ margin: "10px", width: "150px" }}
-            label="Share"
-            variant="outlined"
-            margin="normal"
-            // value={billTo.pname}
-            //  onChange={(event) => handleBilltoSHipToo(event)}
-          >
-            {UserRole.shareType.map((indi) => (
-              <MenuItem key={indi.name} value={indi.name}>
-                {indi.name}
-              </MenuItem>
-            ))}
-          </TextField>
-
-          <Box sx={{ right: "0", float: "right" }}>
-            <Button
-              variant="outlined"
-              sx={{ margin: "10px", width: "150px" }}
-              onClick={() => setOpenPaymentRecord(true)}
-            >
-              Record Payment In
+          <Box>
+            <Button variant="contained" onClick={handleMainView}>
+              Sales Invoice
             </Button>
+            <Box sx={{ right: "0", float: "right" }}>
+              <ButtonGroup variant="contained" aria-label="Basic button group">
+                <Tooltip title="Duplicate this invoice">
+                  <IconButton aria-label="edit">
+                    <ContentCopyRoundedIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Edit">
+                  <IconButton aria-label="edit" onClick={editFlagValue}>
+                    <EditIcon />
+                  </IconButton>{" "}
+                </Tooltip>
+                <Tooltip title="Delete">
+                  <IconButton aria-label="edit" onClick={handleDelete}>
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
+              </ButtonGroup>
+            </Box>
           </Box>
-          <Transition in={openPaymentRecord} timeout={400}>
-            <Modal
-              open={openPaymentRecord}
-              onClose={() => setOpenPaymentRecord(false)}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
+          <Box sx={{ display: "flex" }}>
+            <TextField
+              select
+              sx={{ margin: "10px", width: "150px" }}
+              label="Download PDF"
+              variant="outlined"
+              margin="normal"
+              // value={billTo.pname}
+              //  onChange={(event) => handleBilltoSHipToo(event)}
             >
-              <Box sx={style}>
-                <Box
-                  sx={{
-                    marginTop: 8,
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                  }}
-                >
-                  <ModalClose variant="plain" sx={{ m: 1 }} />
-                  <Typography component="h1" variant="h5">
-                    Record Payment For this invoice
-                  </Typography>
-                  <Box
-                    component="form"
-                    onSubmit={handleSubmitForPayment}
-                    noValidate
-                    sx={{ mt: 1 }}
-                  >
-                    <Box sx={{ display: "flex" }}>
-                      <Box sx={{ width: "50%", margin: "10px" }}>
-                        <TextField
-                          label="Payment Type"
-                          value={paymentType}
-                          onChange={(e) => setPaymentType(e.target.value)}
-                          autoFocus
-                        >
-                          {UserRole.taxType.map((userrole) => (
-                            <MenuItem key={userrole.name} value={userrole.name}>
-                              {userrole.name}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      </Box>
-                      <Box sx={{ width: "50%", margin: "10px" }}>
-                        <TextField
-                          label="Note"
-                          value={note}
-                          onChange={(event) =>
-                            setPaymentAmount(event.target.value)
-                          }
-                        />
-                      </Box>
-                    </Box>
-                    <Box sx={{ display: "flex" }}>
-                      <Box sx={{ width: "50%", margin: "10px" }}>
-                        <TextField
-                          label="Enter Payment Amount"
-                          value={paymentAmount}
-                          onChange={(event) =>
-                            setPaymentAmount(event.target.value)
-                          }
-                        />
-                      </Box>
-                      <Box sx={{ width: "50%", margin: "10px" }}>
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DemoContainer
-                            components={["DatePicker", "DatePicker"]}
-                          >
-                            <DatePicker
-                              label="Payment Date:"
-                              value={paymentDate}
-                              onChange={(newValue) => setPaymentDate(newValue)}
-                            />
-                          </DemoContainer>
-                        </LocalizationProvider>
-                      </Box>
-                    </Box>
-                    <Box></Box>
-                    <Button
-                      type="submit"
-                      fullWidth
-                      variant="contained"
-                      onClick={handleSubmitForPayment}
-                      sx={{
-                        mt: 3,
-                        mb: 2,
-                        color: "whitesmoke",
-                        background: "#212121",
-                      }}
-                    >
-                      Submit
-                    </Button>
-                  </Box>
-                </Box>
-              </Box>
-            </Modal>
-          </Transition>
-        </Box>
-        <Box
-          sx={{
-            backgroundColor: theme.palette.grey[300],
-            padding: 2,
-            borderRadius: 1,
-          }}
-        >
-          <Grid container spacing={3}>
-            <Grid item xs={2}></Grid>
-            <Grid item xs={8}>
-              <Box
+              {UserRole.downloadOption.map((indi) => (
+                <MenuItem key={indi.name} value={indi.name}>
+                  {indi.name}
+                </MenuItem>
+              ))}
+            </TextField>
+
+            <TextField
+              select
+              sx={{ margin: "10px", width: "150px" }}
+              label="Print PDF"
+              variant="outlined"
+              margin="normal"
+              // value={billTo.pname}
+              //  onChange={(event) => handleBilltoSHipToo(event)}
+            >
+              {UserRole.printPDF.map((indi) => (
+                <MenuItem key={indi.name} value={indi.name}>
+                  {indi.name}
+                </MenuItem>
+              ))}
+            </TextField>
+
+            <TextField
+              select
+              sx={{ margin: "10px", width: "150px" }}
+              label="Share"
+              variant="outlined"
+              margin="normal"
+              // value={billTo.pname}
+              //  onChange={(event) => handleBilltoSHipToo(event)}
+            >
+              {UserRole.shareType.map((indi) => (
+                <MenuItem key={indi.name} value={indi.name}>
+                  {indi.name}
+                </MenuItem>
+              ))}
+            </TextField>
+
+            <Box sx={{ right: "0", float: "right" }}>
+              <Button
+                variant="outlined"
+                sx={{ margin: "10px", width: "150px" }}
+                onClick={() => setOpenPaymentRecord(true)}
+              >
+                Record Payment In
+              </Button>
+            </Box>
+            <Transition in={openPaymentRecord} timeout={400}>
+              <Modal
+                open={openPaymentRecord}
+                onClose={() => setOpenPaymentRecord(false)}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
                 sx={{
-                  backgroundColor:
-                    theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-                  padding: theme.spacing(5),
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
-                <Box>
-                  <Box>
-                    <Box>LOGO</Box>
-                    <Box sx={{ margin: "5px" }}>
+                <Box sx={style}>
+                  <Box
+                    sx={{
+                      marginTop: 8,
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <ModalClose variant="plain" sx={{ m: 1 }} />
+                    <Typography component="h1" variant="h5">
+                      Record Payment For this invoice
+                    </Typography>
+                    <Box
+                      component="form"
+                      onSubmit={handleSubmitForPayment}
+                      noValidate
+                      sx={{ mt: 1 }}
+                    >
                       <Box sx={{ display: "flex" }}>
-                        <Box sx={{ width: "50%" }}>
-                          <Box sx={{ color: "#000000", display: "flex" }}>
-                            <Typography>Cosmetice Name</Typography>
-                          </Box>
-                          <Box sx={{ color: "#000000", display: "flex" }}>
-                            <Typography>Mobile :</Typography>
-                            <Typography>8340719781</Typography>
-                          </Box>
-                        </Box>
-                        <Box sx={{ width: "50%" }}>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              margin: "2px",
-                            }}
+                        <Box sx={{ width: "50%", margin: "10px" }}>
+                          <TextField
+                            label="Payment Type"
+                            value={paymentType}
+                            onChange={(e) => setPaymentType(e.target.value)}
+                            autoFocus
                           >
-                            <Typography>BILL OF SUPPLY</Typography>
-                            <Typography>:</Typography>
-                            <Typography
-                              sx={{ border: "1px solid black", padding: "5px" }}
+                            {UserRole.taxType.map((userrole) => (
+                              <MenuItem
+                                key={userrole.name}
+                                value={userrole.name}
+                              >
+                                {userrole.name}
+                              </MenuItem>
+                            ))}
+                          </TextField>
+                        </Box>
+                        <Box sx={{ width: "50%", margin: "10px" }}>
+                          <TextField
+                            label="Note"
+                            value={note}
+                            onChange={(event) =>
+                              setPaymentAmount(event.target.value)
+                            }
+                          />
+                        </Box>
+                      </Box>
+                      <Box sx={{ display: "flex" }}>
+                        <Box sx={{ width: "50%", margin: "10px" }}>
+                          <TextField
+                            label="Enter Payment Amount"
+                            value={paymentAmount}
+                            onChange={(event) =>
+                              setPaymentAmount(event.target.value)
+                            }
+                          />
+                        </Box>
+                        <Box sx={{ width: "50%", margin: "10px" }}>
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DemoContainer
+                              components={["DatePicker", "DatePicker"]}
                             >
-                              Original for Recipient
-                            </Typography>
-                          </Box>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              margin: "2px",
-                            }}
-                          >
-                            <Typography variant="h7">Invoice No.</Typography>
-                            <Typography variant="body2">
-                              {filterSalePurchase.id}
-                            </Typography>
-                          </Box>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              margin: "2px",
-                            }}
-                          >
-                            <Typography variant="h7">Invoice Date</Typography>
-                            <Typography variant="body2">
-                              {filterSalePurchase.salesInvoiceDate}
-                            </Typography>
-                          </Box>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              margin: "2px",
-                            }}
-                          >
-                            <Typography variant="h7">Due Date</Typography>
-                            <Typography variant="body2">
-                              {filterSalePurchase.salesDueDate}
-                            </Typography>
-                          </Box>
+                              <DatePicker
+                                label="Payment Date:"
+                                value={paymentDate}
+                                onChange={(newValue) =>
+                                  setPaymentDate(newValue)
+                                }
+                              />
+                            </DemoContainer>
+                          </LocalizationProvider>
                         </Box>
                       </Box>
-                    </Box>
-                    <Box>
-                      <Typography>BILL TO</Typography>
-                      <Typography>{filterSalePurchase.partyName}</Typography>
-                    </Box>
-                    <Box>
-                      <Box>
-                        <TableContainer
-                          component={Paper}
-                          sx={{ maxHeight: 300, minHeight: 300 }}
-                        >
-                          <Table
-                            sx={{ minWidth: 120 }}
-                            aria-label="customized table"
-                            stickyHeader
-                          >
-                            <TableHead>
-                              <TableRow>
-                                <StyledTableCellTableView
-                                  align="center"
-                                  width="10%"
-                                >
-                                  S.NO.
-                                </StyledTableCellTableView>
-                                <StyledTableCellTableView
-                                  align="center"
-                                  width="20%"
-                                >
-                                  ITEMS
-                                </StyledTableCellTableView>
-                                <StyledTableCellTableView
-                                  align="center"
-                                  width="20%"
-                                >
-                                  QTY.
-                                </StyledTableCellTableView>
-                                <StyledTableCellTableView
-                                  align="center"
-                                  width="20%"
-                                >
-                                  RATE
-                                </StyledTableCellTableView>
-                                <StyledTableCellTableView
-                                  align="center"
-                                  width="20%"
-                                >
-                                  TAX
-                                </StyledTableCellTableView>
-                                <StyledTableCellTableView
-                                  align="center"
-                                  width="20%"
-                                >
-                                  AMOUNT
-                                </StyledTableCellTableView>
-                              </TableRow>
-                            </TableHead>
-                            <TableBody>
-                              {filteredEmployees.map((row) => (
-                                <StyledTableRow key={row.id}>
-                                  <TableCell align="center">{row.id}</TableCell>
-                                  <TableCell align="center">
-                                    {row.item}
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    {row.quantity}
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    {row.salePrice}
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    {row.gst}
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    {row.total}
-                                  </TableCell>
-                                </StyledTableRow>
-                              ))}
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
-                        <TableContainer component={Paper}>
-                          <Table aria-label="customized table" stickyHeader>
-                            <TableHead>
-                              <TableRow>
-                                <StyledTableCellTableView
-                                  align="center"
-                                  width="10%"
-                                >
-                                  {"     "}
-                                </StyledTableCellTableView>
-                                <StyledTableCellTableView
-                                  align="center"
-                                  width="20%"
-                                >
-                                  TOTAL
-                                </StyledTableCellTableView>
-                                <StyledTableCellTableView
-                                  align="center"
-                                  width="20%"
-                                >
-                                  {tableQty}
-                                </StyledTableCellTableView>
-                                <StyledTableCellTableView
-                                  align="center"
-                                  width="20%"
-                                >
-                                  {"    "}
-                                </StyledTableCellTableView>
-                                <StyledTableCellTableView
-                                  align="center"
-                                  width="20%"
-                                >
-                                  (₹) {parseFloat(tableTax).toFixed(2)}
-                                </StyledTableCellTableView>
-                                <StyledTableCellTableView
-                                  align="center"
-                                  width="20%"
-                                >
-                                  (₹){parseFloat(tableAmount).toFixed(2)}
-                                </StyledTableCellTableView>
-                              </TableRow>
-                            </TableHead>
-                          </Table>
-                        </TableContainer>
-                      </Box>
-                    </Box>
-                    <Box></Box>
-                    <Box display="flex">
-                      <Box
+                      <Box></Box>
+                      <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        onClick={handleSubmitForPayment}
                         sx={{
-                          width: "50%",
-                          margin: "5px",
-                          alignItems: "center",
+                          mt: 3,
+                          mb: 2,
+                          color: "whitesmoke",
+                          background: "#212121",
                         }}
                       >
-                        <Typography variant="h6">
-                          TERMS AND CONDITIONS
-                        </Typography>
-                        <Box>
-                          <Typography variant="body2">
-                            {filterSalePurchase.addNote
-                              ? filterSalePurchase.addNote
-                              : "1. Goods once sold will not be taken back or exchanged"}
-                          </Typography>{" "}
-                          addTermsAndCondition
-                          <Typography variant="body2">
-                            {filterSalePurchase.addTermsAndCondition
-                              ? filterSalePurchase.addTermsAndCondition
-                              : "2. All disputes are subject to[ENTER_YOUR_CITY_NAME] jurisdiction only"}
-                          </Typography>
-                        </Box>
-                      </Box>
-                      <Box sx={{ width: "50%" }}>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            margin: "5px",
-                          }}
-                        >
-                          <Box
-                            sx={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              borderBottom: "1px solid black",
-                              paddingBottom: "5px",
-                              marginBottom: "5px",
-                              margin: "2px",
-                            }}
-                          >
-                            <Typography variant="body2">
-                              TAXABLE AMOUNT
-                            </Typography>
-                            <Typography variant="body2">
-                              ₹ {filterSalePurchase.totalAmount}
-                            </Typography>
+                        Submit
+                      </Button>
+                    </Box>
+                  </Box>
+                </Box>
+              </Modal>
+            </Transition>
+          </Box>
+          <Box
+            sx={{
+              backgroundColor: theme.palette.grey[300],
+              padding: 2,
+              borderRadius: 1,
+            }}
+          >
+            <Grid container spacing={3}>
+              <Grid item xs={2}></Grid>
+              <Grid item xs={8}>
+                <Box
+                  sx={{
+                    backgroundColor:
+                      theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+                    padding: theme.spacing(5),
+                  }}
+                >
+                  <Box>
+                    <Box>
+                      <Box>LOGO</Box>
+                      <Box sx={{ margin: "5px" }}>
+                        <Box sx={{ display: "flex" }}>
+                          <Box sx={{ width: "50%" }}>
+                            <Box sx={{ color: "#000000", display: "flex" }}>
+                              <Typography>Cosmetice Name</Typography>
+                            </Box>
+                            <Box sx={{ color: "#000000", display: "flex" }}>
+                              <Typography>Mobile :</Typography>
+                              <Typography>8340719781</Typography>
+                            </Box>
                           </Box>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              borderBottom: "1px solid black",
-                              paddingBottom: "5px",
-                              marginBottom: "5px",
-                              margin: "2px",
-                            }}
-                          >
-                            <Typography variant="body2">
-                              TOTAL AMOUNT
-                            </Typography>
-                            <Typography variant="body2">
-                              ₹ {filterSalePurchase.totalAmount}
-                            </Typography>
-                          </Box>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              borderBottom: "1px solid black",
-                              paddingBottom: "5px",
-                              marginBottom: "5px",
-                              margin: "2px",
-                            }}
-                          >
-                            <Typography variant="body2">
-                              Received Amount
-                            </Typography>
-                            <Typography variant="body2">
-                              ₹ {filterSalePurchase.amountReceived}
-                            </Typography>
-                          </Box>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              textDecoration: "underline",
-                              margin: "2px",
-                            }}
-                          >
-                            <Typography variant="body2">
-                              Balance Amount
-                            </Typography>
-                            <Typography variant="body2">
-                              ₹ {filterSalePurchase.balanceAmount}
-                            </Typography>
-                          </Box>
-                          <Box
-                            sx={{
-                              marginTop: "15px",
-                              margin: "2px",
-                              display: "inline-block",
-                            }}
-                          >
-                            <Typography
-                              variant="h6"
-                              sx={{ textDecoration: "underline" }}
-                            >
-                              Total Amount (in words)
-                            </Typography>
-                            <Typography
-                              variant="body1"
+                          <Box sx={{ width: "50%" }}>
+                            <Box
                               sx={{
-                                bottom: "calc(-1 * 0.2em)",
+                                display: "flex",
+                                justifyContent: "space-between",
+                                margin: "2px",
                               }}
                             >
-                              {filterSalePurchase.totalAmount
-                                ? numberToWords.toWords(
-                                    filterSalePurchase.totalAmount
-                                  )
-                                : "Not available"}
+                              <Typography>BILL OF SUPPLY</Typography>
+                              <Typography>:</Typography>
+                              <Typography
+                                sx={{
+                                  border: "1px solid black",
+                                  padding: "5px",
+                                }}
+                              >
+                                Original for Recipient
+                              </Typography>
+                            </Box>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                margin: "2px",
+                              }}
+                            >
+                              <Typography variant="h7">Invoice No.</Typography>
+                              <Typography variant="body2">
+                                {filterSalePurchase.id}
+                              </Typography>
+                            </Box>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                margin: "2px",
+                              }}
+                            >
+                              <Typography variant="h7">Invoice Date</Typography>
+                              <Typography variant="body2">
+                                {filterSalePurchase.salesInvoiceDate}
+                              </Typography>
+                            </Box>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                margin: "2px",
+                              }}
+                            >
+                              <Typography variant="h7">Due Date</Typography>
+                              <Typography variant="body2">
+                                {filterSalePurchase.salesDueDate}
+                              </Typography>
+                            </Box>
+                          </Box>
+                        </Box>
+                      </Box>
+                      <Box>
+                        <Typography>BILL TO</Typography>
+                        <Typography>{filterSalePurchase.partyName}</Typography>
+                      </Box>
+                      <Box>
+                        <Box>
+                          <TableContainer
+                            component={Paper}
+                            sx={{ maxHeight: 300, minHeight: 300 }}
+                          >
+                            <Table
+                              sx={{ minWidth: 120 }}
+                              aria-label="customized table"
+                              stickyHeader
+                            >
+                              <TableHead>
+                                <TableRow>
+                                  <StyledTableCellTableView
+                                    align="center"
+                                    width="10%"
+                                  >
+                                    S.NO.
+                                  </StyledTableCellTableView>
+                                  <StyledTableCellTableView
+                                    align="center"
+                                    width="20%"
+                                  >
+                                    ITEMS
+                                  </StyledTableCellTableView>
+                                  <StyledTableCellTableView
+                                    align="center"
+                                    width="20%"
+                                  >
+                                    QTY.
+                                  </StyledTableCellTableView>
+                                  <StyledTableCellTableView
+                                    align="center"
+                                    width="20%"
+                                  >
+                                    RATE
+                                  </StyledTableCellTableView>
+                                  <StyledTableCellTableView
+                                    align="center"
+                                    width="20%"
+                                  >
+                                    TAX
+                                  </StyledTableCellTableView>
+                                  <StyledTableCellTableView
+                                    align="center"
+                                    width="20%"
+                                  >
+                                    AMOUNT
+                                  </StyledTableCellTableView>
+                                </TableRow>
+                              </TableHead>
+                              <TableBody>
+                                {filteredEmployees.map((row) => (
+                                  <StyledTableRow key={row.id}>
+                                    <TableCell align="center">
+                                      {row.id}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      {row.item}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      {row.quantity}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      {row.salePrice}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      {row.gst}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      {row.total}
+                                    </TableCell>
+                                  </StyledTableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                          <TableContainer component={Paper}>
+                            <Table aria-label="customized table" stickyHeader>
+                              <TableHead>
+                                <TableRow>
+                                  <StyledTableCellTableView
+                                    align="center"
+                                    width="10%"
+                                  >
+                                    {"     "}
+                                  </StyledTableCellTableView>
+                                  <StyledTableCellTableView
+                                    align="center"
+                                    width="20%"
+                                  >
+                                    TOTAL
+                                  </StyledTableCellTableView>
+                                  <StyledTableCellTableView
+                                    align="center"
+                                    width="20%"
+                                  >
+                                    {tableQty}
+                                  </StyledTableCellTableView>
+                                  <StyledTableCellTableView
+                                    align="center"
+                                    width="20%"
+                                  >
+                                    {"    "}
+                                  </StyledTableCellTableView>
+                                  <StyledTableCellTableView
+                                    align="center"
+                                    width="20%"
+                                  >
+                                    (₹) {parseFloat(tableTax).toFixed(2)}
+                                  </StyledTableCellTableView>
+                                  <StyledTableCellTableView
+                                    align="center"
+                                    width="20%"
+                                  >
+                                    (₹){parseFloat(tableAmount).toFixed(2)}
+                                  </StyledTableCellTableView>
+                                </TableRow>
+                              </TableHead>
+                            </Table>
+                          </TableContainer>
+                        </Box>
+                      </Box>
+                      <Box></Box>
+                      <Box display="flex">
+                        <Box
+                          sx={{
+                            width: "50%",
+                            margin: "5px",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Typography variant="h6">
+                            TERMS AND CONDITIONS
+                          </Typography>
+                          <Box>
+                            <Typography variant="body2">
+                              {filterSalePurchase.addNote
+                                ? filterSalePurchase.addNote
+                                : "1. Goods once sold will not be taken back or exchanged"}
+                            </Typography>{" "}
+                            addTermsAndCondition
+                            <Typography variant="body2">
+                              {filterSalePurchase.addTermsAndCondition
+                                ? filterSalePurchase.addTermsAndCondition
+                                : "2. All disputes are subject to[ENTER_YOUR_CITY_NAME] jurisdiction only"}
                             </Typography>
+                          </Box>
+                        </Box>
+                        <Box sx={{ width: "50%" }}>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              margin: "5px",
+                            }}
+                          >
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                borderBottom: "1px solid black",
+                                paddingBottom: "5px",
+                                marginBottom: "5px",
+                                margin: "2px",
+                              }}
+                            >
+                              <Typography variant="body2">
+                                TAXABLE AMOUNT
+                              </Typography>
+                              <Typography variant="body2">
+                                ₹ {filterSalePurchase.totalAmount}
+                              </Typography>
+                            </Box>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                borderBottom: "1px solid black",
+                                paddingBottom: "5px",
+                                marginBottom: "5px",
+                                margin: "2px",
+                              }}
+                            >
+                              <Typography variant="body2">
+                                TOTAL AMOUNT
+                              </Typography>
+                              <Typography variant="body2">
+                                ₹ {filterSalePurchase.totalAmount}
+                              </Typography>
+                            </Box>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                borderBottom: "1px solid black",
+                                paddingBottom: "5px",
+                                marginBottom: "5px",
+                                margin: "2px",
+                              }}
+                            >
+                              <Typography variant="body2">
+                                Received Amount
+                              </Typography>
+                              <Typography variant="body2">
+                                ₹ {filterSalePurchase.amountReceived}
+                              </Typography>
+                            </Box>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                textDecoration: "underline",
+                                margin: "2px",
+                              }}
+                            >
+                              <Typography variant="body2">
+                                Balance Amount
+                              </Typography>
+                              <Typography variant="body2">
+                                ₹ {filterSalePurchase.balanceAmount}
+                              </Typography>
+                            </Box>
+                            <Box
+                              sx={{
+                                marginTop: "15px",
+                                margin: "2px",
+                                display: "inline-block",
+                              }}
+                            >
+                              <Typography
+                                variant="h6"
+                                sx={{ textDecoration: "underline" }}
+                              >
+                                Total Amount (in words)
+                              </Typography>
+                              <Typography
+                                variant="body1"
+                                sx={{
+                                  bottom: "calc(-1 * 0.2em)",
+                                }}
+                              >
+                                {filterSalePurchase.totalAmount
+                                  ? numberToWords.toWords(
+                                      filterSalePurchase.totalAmount
+                                    )
+                                  : "Not available"}
+                              </Typography>
+                            </Box>
                           </Box>
                         </Box>
                       </Box>
                     </Box>
                   </Box>
                 </Box>
-              </Box>
+              </Grid>
+              <Grid item xs={2}></Grid>
             </Grid>
-            <Grid item xs={2}></Grid>
-          </Grid>
+          </Box>
         </Box>
-      </Box>
+      ) : (
+        <>
+          <SalesInvoiceEdit
+            onBooleanChange={handleBooleanChangeView}
+            idFlagView={idFlagView}
+            editFlag={editFlag}
+          />
+        </>
+      )}
     </>
   );
 };
