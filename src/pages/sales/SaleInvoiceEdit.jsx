@@ -139,6 +139,18 @@ export const SaleInvoiceEdit = ({ onBooleanChange, idFlagView,editFlag }) => {
   useEffect(()=>{
     console.log("Id  Flag  ",idFlagView);
     console.log("EditFlag ",editFlag);
+    if (!idFlagView) {
+        return;
+      }
+      const filteredData = salePurchaseUser.filter((employee) => {
+        return employee.id === idFlagView;
+      });
+      if (filteredData.length === 0) {
+        return;
+      }
+      const jsonArray = JSON.parse(filteredData[0].items);
+      setFilteredEmployees(jsonArray);
+      setEmployees(jsonArray);
 
   },[idFlagView,editFlag])
 
