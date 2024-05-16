@@ -21,6 +21,7 @@ import {Party} from "./pages/party/Party";
 import {InventoryGodown} from "./pages/stock/InventoryGodown";
 import {InventoryShop} from "./pages/stock/InventoryShop";
 import {Expense} from "./pages/expense/Expense";
+import {ScreenShare} from "./WebRtc/ScreenShare";
 import {Chat} from "./pages/Chat";
 import ExampleWithProviders from "./pages/Example";
 import {CashAndBank} from "./pages/CashAndBank/CashAndBank";
@@ -67,6 +68,8 @@ function App() {
                                 <Route path="/sales/invoice" element={<SalesInvoice/>}/>
                                 <Route path="/report" element={<ExampleWithProviders/>}/>
                                 <Route path="/expenses" element={<Expense/>}/>
+                                <Route path="/feedback" element={<ScreenShare/>}/>
+                                
                                 <Route path="*" element={<> not found</>}/>
                             </Routes>
                         </SideBar>
