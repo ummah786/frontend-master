@@ -82,7 +82,6 @@ export const SaleInvoiceEdit = ({
   const [shipToAddress, setShipToAddress] = useState(
     filterSalePurchase.partyShippingAddress
   );
-  const [labelBillTO, setLabelBillTO] = useState("Bill To");
   const [shipToFlag, setShipToFlag] = React.useState(true);
   const [openCategory, setOpenCategory] = React.useState(false);
   const [fields, setFields] = useState([]);
@@ -94,7 +93,13 @@ export const SaleInvoiceEdit = ({
   const [checked, setChecked] = useState(filterSalePurchase.autoRoundOffMark);
   const [checkedMark, setCheckedMark] = useState(false);
   const [manageUserObj, setManageUserObj] = useState(partnerDataModel);
-  const [billTo, setBillTo] = useState("");
+  const [billTo, setBillTo] = useState({
+    id: filterSalePurchase.partyId,
+    pname: filterSalePurchase.partyName,
+    mobileNumber: filterSalePurchase.partyPhone,
+    billingAddress: filterSalePurchase.partyBillingAddress,
+    gstNumber: filterSalePurchase.partyGst,
+  });
   const [shipTo, setShipTo] = useState("");
   const [logoImage, setLogoImage] = useState("");
   const [uploadImage, setUploadImage] = useState("");
@@ -155,13 +160,7 @@ export const SaleInvoiceEdit = ({
       setEmployees(jsonArray);
       setShipToAddress(filteredResponse.partyShippingAddress);
       setShipTo({ mobileNumber: filteredResponse.partyPhone });
-      setBillTo({
-        id: filteredResponse.partyId,
-        pname: filteredResponse.partyName,
-        mobileNumber: filteredResponse.partyPhone,
-        billingAddress: filteredResponse.partyBillingAddress,
-        gstNumber: filteredResponse.partyGst,
-      });
+
       //   setCheckedMark(filteredResponse.markFullyPaid);
       setChecked(filteredResponse.autoRoundOffMark);
       setAutoRoundOffValue(filteredResponse.autoRoundOffValue);
@@ -613,8 +612,6 @@ export const SaleInvoiceEdit = ({
         setBillTo(event.target.value);
         setShipToAddress(shippingAddress);
         setShipToFlag(false);
-        setLabelBillTO("Bill To");
-
         const updatedObject = {
           ...salePurchaseObject,
           billAddress: event.target.value.billingAddress,
@@ -939,7 +936,7 @@ export const SaleInvoiceEdit = ({
                   select
                   fullWidth={true}
                   sx={{ margin: "10px" }}
-                  label={labelBillTO}
+                  label={billTo.pname}
                   variant="outlined"
                   margin="normal"
                   value={billTo.pname}
