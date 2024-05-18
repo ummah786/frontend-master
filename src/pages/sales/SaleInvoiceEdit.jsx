@@ -603,29 +603,32 @@ export const SaleInvoiceEdit = ({
     setOpenPartyModal(true);
   };
   const handleBilltoSHipToo = (event) => {
-    // Check if event.target.value is defined
-    if (event.target.value) {
-      // Assuming event.target.value is an object with a shippingAddress property
-      const shippingAddress = event.target.value.shippingAddress;
-      if (shippingAddress) {
-        setShipTo(event.target.value);
-        setBillTo(event.target.value);
-        setShipToAddress(shippingAddress);
-        setShipToFlag(false);
-        const updatedObject = {
-          ...salePurchaseObject,
-          billAddress: event.target.value.billingAddress,
-          phone: event.target.value.mobileNumber,
-          gst: event.target.value.gstNumber,
-          shipAddress: shippingAddress, // Use shippingAddress here
-        };
-        setSalePurchaseObject(updatedObject);
-      } else {
-        console.error("Shipping address is undefined");
-      }
-    } else {
+    const selectedParty = event.target.value;
+    
+    if (!selectedParty) {
       console.error("Event target value is undefined");
+      return;
     }
+  
+    const { shippingAddress, billingAddress, mobileNumber, gstNumber } = selectedParty;
+  
+    // If shippingAddress is undefined, set it to an empty string
+    const updatedShippingAddress = shippingAddress || "";
+  
+    setShipTo(selectedParty);
+    setBillTo(selectedParty);
+    setShipToAddress(updatedShippingAddress);
+    setShipToFlag(false);
+  
+    const updatedObject = {
+      ...salePurchaseObject,
+      billAddress: billingAddress,
+      phone: mobileNumber,
+      gst: gstNumber,
+      shipAddress: updatedShippingAddress, // Use updatedShippingAddress here
+    };
+    
+    setSalePurchaseObject(updatedObject);
   };
 
   const handleSHipToo = (event) => {
