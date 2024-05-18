@@ -44,6 +44,21 @@ const PaymentCreate = ({ onBooleanChange }) => {
   };
   const onSelectAutoComplete = (event, value) => {
     setSelectParty(value);
+    const partyId = value.id;
+    console.log("Party Id ", partyId);
+    const filteredSalesBasedOnPartyId = salePurchaseUser.filter((sales) => {
+      return (
+        parseInt(sales.partyId) === partyId &&
+        parseFloat(sales.balanceAmount) > 0
+      );
+    });
+    setFilteredEmployees(filteredSalesBasedOnPartyId);
+    console.log(
+      "Filtered Sales Based on Party Id",
+      filteredSalesBasedOnPartyId
+    );
+
+    console.log("Party response ", filteredSalesBasedOnPartyId);
   };
 
   const handleCheckboxClick = (id) => {
@@ -243,10 +258,14 @@ const PaymentCreate = ({ onBooleanChange }) => {
                           onClick={() => handleCheckboxClick(row.id)}
                         />
                       </TableCell>
+                      <TableCell align="center">
+                        {row.salesInvoiceDate}
+                      </TableCell>
+                      <TableCell align="center">{row.salesDueDate}</TableCell>
                       <TableCell align="center">{row.id}</TableCell>
-                      <TableCell align="center">{row.item}</TableCell>
-                      <TableCell align="center">{row.quantity}</TableCell>
-                      <TableCell align="center">{row.salePrice}</TableCell>
+                      <TableCell align="center">
+                        {row.totalAmount} ({row.balanceAmount} Pending )
+                      </TableCell>
                       <TableCell align="center">{row.gst}</TableCell>
                     </StyledTableRow>
                   ))}
