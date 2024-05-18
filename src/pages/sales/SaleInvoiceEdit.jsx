@@ -72,11 +72,16 @@ const style = {
   p: 1,
 };
 
-export const SaleInvoiceEdit = ({ onBooleanChange, idFlagView,editFlag }) => {
+export const SaleInvoiceEdit = ({
+  onBooleanChange,
+  idFlagView,
+  editFlag,
+  filterSalePurchase,
+}) => {
   const [filteredParty, setFilteredParty] = useState([]);
 
   const [salePurchaseObject, setSalePurchaseObject] =
-    useState(salePurchaseModel);
+    useState(filterSalePurchase);
   const [inventoryObject, setInventoryObject] = useState(InventoryDataModel);
 
   const [openCompany, setOpenCompany] = React.useState(false);
@@ -86,8 +91,10 @@ export const SaleInvoiceEdit = ({ onBooleanChange, idFlagView,editFlag }) => {
   const [openItemModal, setOpenItemModal] = React.useState(false);
   const [onSelectOfShipTo, setOnSelectOfShipTo] = React.useState(null);
   const [editOpen, setEditOpen] = React.useState(false);
-  const [shipToAddress, setShipToAddress] = useState("");
-  const [labelBillTO, setLabelBillTO] = useState("Select Party");
+  const [shipToAddress, setShipToAddress] = useState(
+    filterSalePurchase.partyShippingAddress
+  );
+  const [labelBillTO, setLabelBillTO] = useState("Bill To");
   const [shipToFlag, setShipToFlag] = React.useState(true);
   const [openCategory, setOpenCategory] = React.useState(false);
   const [fields, setFields] = useState([]);
@@ -97,7 +104,7 @@ export const SaleInvoiceEdit = ({ onBooleanChange, idFlagView,editFlag }) => {
   const [openTermCondition, setOpenTermCondition] = useState(false);
   const [textValue, setTextValue] = useState("");
   const [showAddDiscount, setShowAddDiscount] = useState(false);
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(filterSalePurchase.autoRoundOffMark);
   const [checkedMark, setCheckedMark] = useState(false);
   const [manageUserObj, setManageUserObj] = useState(partnerDataModel);
   const [billTo, setBillTo] = useState("");
@@ -123,11 +130,17 @@ export const SaleInvoiceEdit = ({ onBooleanChange, idFlagView,editFlag }) => {
   const [totalTaxTable, setTotalTaxTable] = useState("");
   const [totalDiscountTable, setTotalDiscountTable] = useState("");
   const [totalAmountTable, setTotalAmountTable] = useState(0);
-  const [totalAmountTableOperation, setTotalAmountTableOperation] = useState(0);
+  const [totalAmountTableOperation, setTotalAmountTableOperation] = useState(
+    filterSalePurchase.totalAmount
+  );
   const [autoRoundOffValue, setAutoRoundOffValue] = useState(0);
   const [addDiscount, setAddDiscount] = useState(0);
-  const [amountRecieved, setAmountRecieved] = useState(0);
-  const [balanceAmount, setBalanceAmount] = useState(0);
+  const [amountRecieved, setAmountRecieved] = useState(
+    filterSalePurchase.amountReceived
+  );
+  const [balanceAmount, setBalanceAmount] = useState(
+    filterSalePurchase.balanceAmount
+  );
   const [totalAmountWithOutTax, setTotalAmountWithOutTax] = useState("");
   const [rValues, setRValues] = useState([]);
   const [rRates, setRRates] = useState([]);
@@ -136,25 +149,71 @@ export const SaleInvoiceEdit = ({ onBooleanChange, idFlagView,editFlag }) => {
     dayjs("2024-01-01")
   );
   const [dueDate, setDueDate] = React.useState(dayjs("2024-01-01"));
-  useEffect(()=>{
-    console.log("Id  Flag  ",idFlagView);
-    console.log("EditFlag ",editFlag);
+
+  const [doubleCheckedForCheckMar, setDoubleCheckedForCheckMar] =
+    useState(false);
+  useEffect(() => {
     if (!idFlagView) {
-        return;
-      }
-      const filteredData = salePurchaseUser.filter((employee) => {
-        return employee.id === idFlagView;
-      });
-      if (filteredData.length === 0) {
-        return;
-      }
-      const jsonArray = JSON.parse(filteredData[0].items);
+      return;
+    }
+    try {
+      const filteredData = salePurchaseUser.filter(
+        (employee) => employee.id === idFlagView
+      );
+      if (filteredData.length === 0) return;
+      const filteredResponse = filteredData[0];
+      const jsonArray = JSON.parse(filteredResponse.items);
+      setSalePurchaseObject(filteredResponse);
       setFilteredEmployees(jsonArray);
       setEmployees(jsonArray);
-
-  },[idFlagView,editFlag])
-
-  useEffect(() => {}, [partyUser, billTo]);
+      setShipToAddress(filteredResponse.partyShippingAddress);
+      setShipTo({ mobileNumber: filteredResponse.partyPhone });
+      setBillTo({
+        id: filteredResponse.partyId,
+        pname: filteredResponse.partyName,
+        mobileNumber: filteredResponse.partyPhone,
+        billingAddress: filteredResponse.partyBillingAddress,
+        gstNumber: filteredResponse.partyGst,
+      });
+   //   setCheckedMark(filteredResponse.markFullyPaid);
+      setChecked(filteredResponse.autoRoundOffMark);
+      setAutoRoundOffValue(filteredResponse.autoRoundOffValue);
+      setAddDiscount(filteredResponse.addDiscount);
+      if (filteredResponse.addDiscount) {
+        setShowAddDiscount(true);
+        setAddDiscount(filteredResponse.addDiscount);
+      } else {
+        setShowAddDiscount(false);
+        setAddDiscount(filteredResponse.addDiscount);
+      }
+      if (filteredResponse.salesInvoiceDate) {
+        const parsedDate = dayjs(filteredResponse.salesInvoiceDate);
+        setSaleInvoiceDate(parsedDate);
+      }
+      if (filteredResponse.salesDueDate) {
+        const parsedDate = dayjs(filteredResponse.salesDueDate);
+        setDueDate(parsedDate);
+      }
+      if (filteredResponse.addAdditionalCharges) {
+        const addAdditional = JSON.parse(filteredResponse.addAdditionalCharges);
+        setFields(addAdditional);
+      }
+      if (filteredResponse.addNote) {
+        setOpenNotes(true);
+      }
+      if (filteredResponse.addTermsAndCondition) {
+        setOpenTermCondition(true);
+      }
+      setTotalAmountTableOperation(filteredResponse.totalAmount);
+      setAmountRecieved(filteredResponse.amountReceived);
+      setBalanceAmount(filteredResponse.balanceAmount);
+    } catch (error) {
+      console.error("An error occurred while processing the data:", error);
+    }
+  }, [idFlagView, editFlag]);
+  useEffect(() => {
+    console.log("SsalePurchaseObject :--- >>  ", salePurchaseObject);
+  }, [partyUser, billTo, salePurchaseObject]);
   useEffect(() => {
     employees.forEach((employee) => updateRValuesAndRates(employee));
     const totalAmountWithOutTaxReturn = employees.reduce(
@@ -544,12 +603,14 @@ export const SaleInvoiceEdit = ({ onBooleanChange, idFlagView,editFlag }) => {
   };
 
   useEffect(() => {
-    setShipToAddress(onSelectOfShipTo);
-    const updatedObject = {
-      ...salePurchaseObject,
-      shipAddress: onSelectOfShipTo,
-    };
-    setSalePurchaseObject(updatedObject);
+    if (onSelectOfShipTo) {
+      setShipToAddress(onSelectOfShipTo);
+      const updatedObject = {
+        ...salePurchaseObject,
+        shipAddress: onSelectOfShipTo,
+      };
+      setSalePurchaseObject(updatedObject);
+    }
   }, [onSelectOfShipTo]);
 
   const openModalPartyValue = () => {
@@ -637,17 +698,19 @@ export const SaleInvoiceEdit = ({ onBooleanChange, idFlagView,editFlag }) => {
       const roundedNumber = Math.round(newValue);
       setTotalAmountTableOperation(roundedNumber);
     }
-    if (!checkedMark) {
-      const updatedValue = Math.max(
-        totalAmountTableOperation - amountRecieved,
-        0
-      );
-      // Update the balance amount state
-      setBalanceAmount(updatedValue);
-      // setBalanceAmount();
-    } else {
-      setBalanceAmount(0);
-      setAmountRecieved(totalAmountTableOperation);
+    if (doubleCheckedForCheckMar) {
+      if (!checkedMark) {
+        const updatedValue = Math.max(
+          totalAmountTableOperation - amountRecieved,
+          0
+        );
+        // Update the balance amount state
+        setBalanceAmount(updatedValue);
+        // setBalanceAmount();
+      } else {
+        setBalanceAmount(0);
+        setAmountRecieved(totalAmountTableOperation);
+      }
     }
   }, [
     autoRoundOffValue,
@@ -661,8 +724,13 @@ export const SaleInvoiceEdit = ({ onBooleanChange, idFlagView,editFlag }) => {
   ]);
 
   const handleChangeCheckedMarkAsFUll = (event) => {
+    setDoubleCheckedForCheckMar(true);
     setCheckedMark(event.target.checked);
   };
+  const handleForSetAmountRecived=(event)=>{
+    setDoubleCheckedForCheckMar(true);
+    setAmountRecieved(event.target.value)
+  }
 
   const addField = () => {
     setFields([...fields, { key: "", value: "" }]);
@@ -1505,10 +1573,11 @@ export const SaleInvoiceEdit = ({ onBooleanChange, idFlagView,editFlag }) => {
               <Box sx={{ width: "50%", margin: "10px" }}>
                 <TextField
                   label="Sales Invoice No: "
+                  disabled={true}
                   onChange={(event) =>
                     handleTextFieldChange(event, "salesInvoiceNo")
                   }
-                  value={salePurchaseObject.salesInvoiceNo}
+                  value={salePurchaseObject.id}
                 />
               </Box>
               <Box sx={{ width: "50%", margin: "10px" }}>
@@ -2747,7 +2816,7 @@ export const SaleInvoiceEdit = ({ onBooleanChange, idFlagView,editFlag }) => {
                   <TextField
                     label=" ₹  "
                     value={amountRecieved}
-                    onChange={(e) => setAmountRecieved(e.target.value)}
+                    onChange={handleForSetAmountRecived}
                     inputProps={{
                       inputMode: "decimal",
                       pattern: "[0-9]*[.,]?[0-9]*",

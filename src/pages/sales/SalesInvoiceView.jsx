@@ -691,6 +691,7 @@ const SalesInvoiceView = ({ onBooleanChange, idFlagView }) => {
             onBooleanChange={onBooleanChange}
             idFlagView={idFlagView}
             editFlag={editFlag}
+            filterSalePurchase={filterSalePurchase}
           />
         </>
       )}

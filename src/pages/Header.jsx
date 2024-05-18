@@ -96,7 +96,7 @@ export const Header = ({onBooleanChange}) => {
     return (
         <>
             <AppBar position='fixed' sx={{backgroundColor: "#212121"}}>
-                <Container maxWidth="xl">
+                <Container maxWidth="100%">
                     <Toolbar disableGutters>
                         <AdbIcon sx={{display: {xs: 'none', md: 'flex'}, mr: 1}}/>
                         <Typography
