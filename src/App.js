@@ -26,6 +26,7 @@ import {Chat} from "./pages/Chat";
 import ExampleWithProviders from "./pages/Example";
 import {CashAndBank} from "./pages/CashAndBank/CashAndBank";
 import {SalesInvoice} from "./pages/sales/SalesInvoice";
+import { PaymentIn } from "./pages/sales/paymentIn/PaymentIn";
 
 function App() {
     const [flag, setFlag] = useState(true);
@@ -66,10 +67,10 @@ function App() {
                                 <Route path="/bank" element={<CashAndBank/>}/>
                                 <Route path="/chat" element={<Chat/>}/>
                                 <Route path="/sales/invoice" element={<SalesInvoice/>}/>
+                                <Route path="/sales/payment-in" element={<PaymentIn/>}/>
                                 <Route path="/report" element={<ExampleWithProviders/>}/>
                                 <Route path="/expenses" element={<Expense/>}/>
                                 <Route path="/feedback" element={<ScreenShare/>}/>
-                                
                                 <Route path="*" element={<> not found</>}/>
                             </Routes>
                         </SideBar>
