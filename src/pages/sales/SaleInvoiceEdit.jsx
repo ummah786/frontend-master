@@ -27,17 +27,9 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import TableCell from "@mui/material/TableCell";
-import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useDispatch, useSelector } from "react-redux";
-import Sheet from "@mui/joy/Sheet";
-import {
-  Search,
-  SearchIconWrapper,
-  StyledInputBase,
-  StyledTableCell,
-  StyledTableRow,
-} from "../../commonStyle";
+import { StyledTableCell, StyledTableRow } from "../../commonStyle";
 import axios from "axios";
 import {
   DELETE_KEY_VALUE,
@@ -50,7 +42,6 @@ import { List, ListItem, ListItemButton } from "@mui/joy";
 import {
   InventoryDataModel,
   partnerDataModel,
-  salePurchaseModel,
 } from "../../datamodel/ManageUserDataModel";
 import {
   addExistingInventory,
@@ -79,15 +70,12 @@ export const SaleInvoiceEdit = ({
   filterSalePurchase,
 }) => {
   const [filteredParty, setFilteredParty] = useState([]);
-
   const [salePurchaseObject, setSalePurchaseObject] =
     useState(filterSalePurchase);
   const [inventoryObject, setInventoryObject] = useState(InventoryDataModel);
-
   const [openCompany, setOpenCompany] = React.useState(false);
   const [openPartyModal, setOpenPartyModal] = React.useState(false);
   const [openCategoryParty, setOpenCategoryParty] = React.useState(false);
-
   const [openItemModal, setOpenItemModal] = React.useState(false);
   const [onSelectOfShipTo, setOnSelectOfShipTo] = React.useState(null);
   const [editOpen, setEditOpen] = React.useState(false);
@@ -99,7 +87,6 @@ export const SaleInvoiceEdit = ({
   const [openCategory, setOpenCategory] = React.useState(false);
   const [fields, setFields] = useState([]);
   const [employees, setEmployees] = useState([]);
-
   const [openNotes, setOpenNotes] = useState(false);
   const [openTermCondition, setOpenTermCondition] = useState(false);
   const [textValue, setTextValue] = useState("");
@@ -175,7 +162,7 @@ export const SaleInvoiceEdit = ({
         billingAddress: filteredResponse.partyBillingAddress,
         gstNumber: filteredResponse.partyGst,
       });
-   //   setCheckedMark(filteredResponse.markFullyPaid);
+      //   setCheckedMark(filteredResponse.markFullyPaid);
       setChecked(filteredResponse.autoRoundOffMark);
       setAutoRoundOffValue(filteredResponse.autoRoundOffValue);
       setAddDiscount(filteredResponse.addDiscount);
@@ -727,10 +714,10 @@ export const SaleInvoiceEdit = ({
     setDoubleCheckedForCheckMar(true);
     setCheckedMark(event.target.checked);
   };
-  const handleForSetAmountRecived=(event)=>{
+  const handleForSetAmountRecived = (event) => {
     setDoubleCheckedForCheckMar(true);
-    setAmountRecieved(event.target.value)
-  }
+    setAmountRecieved(event.target.value);
+  };
 
   const addField = () => {
     setFields([...fields, { key: "", value: "" }]);
