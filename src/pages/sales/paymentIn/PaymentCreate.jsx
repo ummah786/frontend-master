@@ -26,13 +26,21 @@ import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { StyledTableCellTableView, StyledTableRow } from "../../../commonStyle";
+import {
+  StyledTableCellTableView,
+  StyledTableRow,
+  formatDate,
+} from "../../../commonStyle";
+import axios from "axios";
+import { addSalePurchase } from "../../../redux/Action";
 
 const PaymentCreate = ({ onBooleanChange }) => {
   const theme = useTheme();
   const { partyUser } = useSelector((state) => state.partyReducerValue);
+  const loginData = useSelector((state) => state.loginReducerValue);
   const [partyId, setPartyId] = useState("");
   const [totalTableAmount, setTotalTableAmount] = useState(0);
+  const [paymentMode, setPaymentMode] = useState("");
   const [paymentDate, setPaymentDate] = React.useState(dayjs("2024-01-01"));
   const [selectParty, setSelectParty] = useState("");
   const [paymentAmount, setPaymentAmount] = useState(0);
@@ -41,9 +49,65 @@ const PaymentCreate = ({ onBooleanChange }) => {
   const { salePurchaseUser } = useSelector(
     (state) => state.salePurchaseReducerValue
   );
-
+  const dispatch = useDispatch();
   const handleSubmitPaymentCreate = async (e) => {
     e.preventDefault();
+    let salePurchaseObject = {};
+    const salePurchaseObjectResponse = filteredEmployees.filter((paymentIn) => {
+      return paymentIn.amountSettled > 0;
+    });
+    console.log("Before Submit  ", salePurchaseObject);
+    const totalSelectedPartyAmount = salePurchaseObjectResponse.reduce(
+      (acc, emp) => {
+        const parsedValue = parseFloat(emp.totalAmount);
+        if (isNaN(parsedValue)) {
+          return acc;
+        }
+        return acc + parsedValue;
+      },
+      0
+    );
+    salePurchaseObject["paymentDate"] = paymentDate;
+    salePurchaseObject["paymentType"] = paymentMode;
+    salePurchaseObject["gson"] = JSON.stringify(salePurchaseObjectResponse);
+    salePurchaseObject["amountSettled"] = paymentAmount;
+    salePurchaseObject["invoiceAmount"] = totalSelectedPartyAmount;
+    salePurchaseObject["billType"] = "PAYMENT_IN";
+    salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
+    salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
+
+    const partyDetails = partyUser.filter((part) => {
+      return part.id === partyId;
+    });
+
+    //party Information
+    salePurchaseObject["partyId"] = partyId;
+    salePurchaseObject["partyName"] = partyDetails[0].pname;
+    salePurchaseObject["partyPhone"] = partyDetails[0].mobileNumber;
+    salePurchaseObject["partyBillingAddress"] = partyDetails[0].billingAddress;
+    salePurchaseObject["partyShippingAddress"] = partyDetails[0].shippingAddress;
+    salePurchaseObject["partyGst"] = partyDetails[0].gstNumber;
+
+    console.log("Sale Purchase Object ", salePurchaseObject);
+    const response = await axios.post(
+      "http://localhost:8700/hesabbook/sale/purchase/save",
+      salePurchaseObject
+    );
+    console.log("Response   ", response);
+    addObjectOnTopSalePurchase(response.data.response);
+    onBooleanChange();
+  };
+  const addObjectOnTopSalePurchase = (newObject) => {
+    const existingIndex = salePurchaseUser.findIndex(
+      (item) => item.id === newObject.id
+    );
+    if (existingIndex === -1) {
+      dispatch(addSalePurchase([newObject, ...salePurchaseUser]));
+    } else {
+      const updatedArray = [...salePurchaseUser];
+      updatedArray[existingIndex] = newObject;
+      dispatch(addSalePurchase(updatedArray));
+    }
   };
   const onSelectAutoComplete = (event, value) => {
     setSelectParty(value);
@@ -128,6 +192,7 @@ const PaymentCreate = ({ onBooleanChange }) => {
         ...employee,
         balanceAmount: updatedBalance,
         amountSettled: employee.balanceAmount - updatedBalance,
+        updatedInvoice: "Y",
       };
     });
     if (copyPaymentAmount > 0) {
@@ -256,8 +321,8 @@ const PaymentCreate = ({ onBooleanChange }) => {
                     label="Payment Mode"
                     variant="outlined"
                     fullWidth={true}
-                    // value={billTo.pname}
-                    //   onChange={(event) => handleBilltoSHipToo(event)}
+                    value={paymentMode}
+                    onChange={(event) => setPaymentMode(event.target.value)}
                   >
                     {UserRole.paymentMode.map((indi) => (
                       <MenuItem key={indi.name} value={indi.name}>
@@ -332,9 +397,12 @@ const PaymentCreate = ({ onBooleanChange }) => {
                         />
                       </TableCell>
                       <TableCell align="center">
-                        {row.salesInvoiceDate}
+                        {formatDate(row.salesInvoiceDate)}
                       </TableCell>
-                      <TableCell align="center">{row.salesDueDate}</TableCell>
+                      <TableCell align="center">
+                        {" "}
+                        {formatDate(row.salesDueDate)}
+                      </TableCell>
                       <TableCell align="center">{row.id}</TableCell>
                       <TableCell align="center">
                         {row.totalAmount} ({row.balanceAmount} Pending )
