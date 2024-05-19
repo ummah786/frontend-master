@@ -73,9 +73,9 @@ export const MyUserDetails = () => {
                     <Box>
                         <Box sx={{position: 'relative', top: '20px'}}>
                             <Box>
-                                <Button sx={{marginLeft: '60px'}} size="small" variant="contained">Edit/View User Details</Button>
+                                <Button sx={{marginLeft: '110px'}} size="small" variant="contained">Edit/View User Details</Button>
                             </Box>
-                            <Box sx={{float: 'right', marginX: "60px", marginY: "-30px"}}>
+                            <Box sx={{float: 'right', marginX: "110px", marginY: "-30px"}}>
                                 <Button sx={{marginX: "20px"}} size="small" variant="contained" onClick={handleBooleanChange}>Cancel</Button>
                                 <Button sx={{marginX: "3px"}} size="small" variant="contained" onClick={handleBooleanChange}>Save</Button>
                             </Box>
@@ -87,7 +87,7 @@ export const MyUserDetails = () => {
                                     display: 'flex',
                                     flexDirection: 'column',
                                     margin: '30px',
-                                    marginLeft: '50px'
+                                    marginLeft: '100px'
                                 }}>
                                     <TextField id="outlined-basic" label="Id" variant="outlined" disabled={true}
                                                sx={{margin: '10px'}} value={myUser.id}
@@ -136,7 +136,7 @@ export const MyUserDetails = () => {
                                                sx={{margin: '10px', width: '97%'}} value={myUser.email}
                                                onChange={(event) => handleTextFieldChange(event, 'email')}/>
                                 </Box>
-                                <Box sx={{width: '50%', display: 'flex', flexDirection: 'column', margin: "30px", marginRight: '50px'}}>
+                                <Box sx={{width: '50%', display: 'flex', flexDirection: 'column', margin: "30px", marginRight: '100px'}}>
 
                                     <TextField id="outlined-basic" label="Password" variant="outlined"
                                                sx={{margin: '10px'}} value={myUser.password}
@@ -175,7 +175,7 @@ export const MyUserDetails = () => {
                                         }
                                     </TextField>
                                     <Box>
-                                        <Button sx={{marginX: "8px", float: 'right'}} size="small" variant="contained" type="submit">SUBMIT</Button>
+                                        <Button sx={{marginX: "6px", float: 'right'}} size="small" variant="contained" type="submit">SUBMIT</Button>
                                     </Box>
                                 </Box>
                             </Box>
