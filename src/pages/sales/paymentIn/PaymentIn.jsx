@@ -34,6 +34,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addSalePurchase } from "../../../redux/Action";
 import SalesInvoiceView from "../SalesInvoiceView";
 import PaymentCreate from "./PaymentCreate";
+import { PaymentInView } from "./PaymentInView";
 
 export const PaymentIn = () => {
   const loginData = useSelector((state) => state.loginReducerValue);
@@ -154,7 +155,7 @@ export const PaymentIn = () => {
         </Box>
       ) : flagView ? (
         <Box>
-          <SalesInvoiceView
+          <PaymentInView
             onBooleanChange={handleBooleanChangeView}
             idFlagView={idFlagView}
           />
@@ -257,7 +258,7 @@ export const PaymentIn = () => {
                             />
                           </TableCell>
                           <StyledTableCell align="center">
-                            {formatDate(row.salesInvoiceDate)}
+                            {formatDate(row.paymentDate)}
                           </StyledTableCell>
                           <StyledTableCell align="center">
                             {row.id}
@@ -267,12 +268,7 @@ export const PaymentIn = () => {
                           </StyledTableCell>
                           <StyledTableCell align="center">
                             <Box>
-                              <Typography> (₹) {row.totalAmount}</Typography>
-                              {row.status !== "Paid" && (
-                                <Typography variant="body2" gutterBottom>
-                                  (₹) {row.amountReceived} {row.status}
-                                </Typography>
-                              )}
+                              <Typography> (₹) {row.amountSettled}</Typography>
                             </Box>
                           </StyledTableCell>
                           <StyledTableCell align="center">
