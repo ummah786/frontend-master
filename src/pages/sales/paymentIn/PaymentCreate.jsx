@@ -32,6 +32,7 @@ const PaymentCreate = ({ onBooleanChange }) => {
   const theme = useTheme();
   const { partyUser } = useSelector((state) => state.partyReducerValue);
   const [partyId, setPartyId] = useState("");
+  const [totalTableAmount, setTotalTableAmount] = useState(0);
   const [paymentDate, setPaymentDate] = React.useState(dayjs("2024-01-01"));
   const [selectParty, setSelectParty] = useState("");
   const [paymentAmount, setPaymentAmount] = useState(0);
@@ -63,6 +64,19 @@ const PaymentCreate = ({ onBooleanChange }) => {
       );
     });
     setFilteredEmployees(filteredSalesBasedOnPartyId);
+
+    const totalSelectedPartyAmount = filteredSalesBasedOnPartyId.reduce(
+      (acc, emp) => {
+        const parsedValue = parseFloat(emp.totalAmount);
+        if (isNaN(parsedValue)) {
+          return acc;
+        }
+        return acc + parsedValue;
+      },
+      0
+    );
+    setTotalTableAmount(totalSelectedPartyAmount);
+
     console.log(
       "Filtered Sales Based on Party Id",
       filteredSalesBasedOnPartyId
@@ -87,10 +101,10 @@ const PaymentCreate = ({ onBooleanChange }) => {
 
   const handlePaymentAmount = (event) => {
     let paymentAmount = parseFloat(event.target.value);
-    let copyPaymentAmount=parseFloat(event.target.value);
+    let copyPaymentAmount = parseFloat(event.target.value);
     if (isNaN(paymentAmount)) {
       paymentAmount = 0;
-      copyPaymentAmount=0;
+      copyPaymentAmount = 0;
     }
     setPaymentAmount(paymentAmount);
     if (!partyId) {
@@ -265,10 +279,7 @@ const PaymentCreate = ({ onBooleanChange }) => {
             </Box>
           </Box>
           <Box>
-            <TableContainer
-              component={Paper}
-              sx={{ maxHeight: 300, minHeight: 300 }}
-            >
+            <TableContainer component={Paper} sx={{ maxHeight: 300 }}>
               <Table
                 sx={{ minWidth: 120 }}
                 aria-label="customized table"
@@ -349,10 +360,10 @@ const PaymentCreate = ({ onBooleanChange }) => {
                       width="20%"
                     ></StyledTableCellTableView>
                     <StyledTableCellTableView align="center" width="20%">
-                      {"    "}
+                      {"    "} (₹) {totalTableAmount}
                     </StyledTableCellTableView>
                     <StyledTableCellTableView align="center" width="20%">
-                      (₹)
+                      (₹) {paymentAmount}
                     </StyledTableCellTableView>
                   </TableRow>
                 </TableHead>
