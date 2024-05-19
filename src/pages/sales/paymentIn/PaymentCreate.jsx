@@ -41,6 +41,7 @@ const PaymentCreate = ({ onBooleanChange }) => {
   const [partyId, setPartyId] = useState("");
   const [totalTableAmount, setTotalTableAmount] = useState(0);
   const [paymentMode, setPaymentMode] = useState("");
+  const [addNote, setAddNote] = useState("");
   const [paymentDate, setPaymentDate] = React.useState(dayjs("2024-01-01"));
   const [selectParty, setSelectParty] = useState("");
   const [paymentAmount, setPaymentAmount] = useState(0);
@@ -68,11 +69,13 @@ const PaymentCreate = ({ onBooleanChange }) => {
       0
     );
     salePurchaseObject["paymentDate"] = paymentDate;
-    salePurchaseObject["paymentType"] = paymentMode;
+    salePurchaseObject["paymentMode"] = paymentMode;
     salePurchaseObject["gson"] = JSON.stringify(salePurchaseObjectResponse);
     salePurchaseObject["amountSettled"] = paymentAmount;
     salePurchaseObject["invoiceAmount"] = totalSelectedPartyAmount;
     salePurchaseObject["billType"] = "PAYMENT_IN";
+
+    salePurchaseObject["addNote"] = addNote;
     salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
     salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
 
@@ -85,7 +88,8 @@ const PaymentCreate = ({ onBooleanChange }) => {
     salePurchaseObject["partyName"] = partyDetails[0].pname;
     salePurchaseObject["partyPhone"] = partyDetails[0].mobileNumber;
     salePurchaseObject["partyBillingAddress"] = partyDetails[0].billingAddress;
-    salePurchaseObject["partyShippingAddress"] = partyDetails[0].shippingAddress;
+    salePurchaseObject["partyShippingAddress"] =
+      partyDetails[0].shippingAddress;
     salePurchaseObject["partyGst"] = partyDetails[0].gstNumber;
 
     console.log("Sale Purchase Object ", salePurchaseObject);
@@ -337,6 +341,8 @@ const PaymentCreate = ({ onBooleanChange }) => {
                   id="outlined-basic"
                   variant="outlined"
                   label="Notes"
+                  value={addNote}
+                  onChange={(e) => setAddNote(e.target.value)}
                   multiline
                   fullWidth={true}
                 />
