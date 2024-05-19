@@ -263,6 +263,9 @@ export const PaymentIn = () => {
                             {row.id}
                           </StyledTableCell>
                           <StyledTableCell align="center">
+                            {row.partyName}
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
                             <Box>
                               <Typography> (₹) {row.totalAmount}</Typography>
                               {row.status !== "Paid" && (
@@ -271,9 +274,6 @@ export const PaymentIn = () => {
                                 </Typography>
                               )}
                             </Box>
-                          </StyledTableCell>
-                          <StyledTableCell align="center">
-                            {row.status}
                           </StyledTableCell>
                           <StyledTableCell align="center">
                             <IconButton
