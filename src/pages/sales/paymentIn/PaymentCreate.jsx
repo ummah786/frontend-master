@@ -17,7 +17,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import Paper from "@mui/material/Paper";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import { useTheme } from "@mui/material/styles";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,8 +31,10 @@ import { StyledTableCellTableView, StyledTableRow } from "../../../commonStyle";
 const PaymentCreate = ({ onBooleanChange }) => {
   const theme = useTheme();
   const { partyUser } = useSelector((state) => state.partyReducerValue);
+  const [partyId, setPartyId] = useState("");
   const [paymentDate, setPaymentDate] = React.useState(dayjs("2024-01-01"));
   const [selectParty, setSelectParty] = useState("");
+  const [paymentAmount, setPaymentAmount] = useState(0);
   const [selectedRows, setSelectedRows] = useState([]);
   const [filteredEmployees, setFilteredEmployees] = useState([]);
   const { salePurchaseUser } = useSelector(
@@ -44,11 +46,19 @@ const PaymentCreate = ({ onBooleanChange }) => {
   };
   const onSelectAutoComplete = (event, value) => {
     setSelectParty(value);
-    const partyId = value.id;
-    console.log("Party Id ", partyId);
+    if (!value || value.id == null) {
+      console.log("Invalid party selected");
+      setFilteredEmployees([]);
+      setPartyId("");
+      setPaymentAmount(0);
+      return;
+    }
+    const partyIds = value.id;
+    console.log("Party Id ", partyIds);
+    setPartyId(partyIds);
     const filteredSalesBasedOnPartyId = salePurchaseUser.filter((sales) => {
       return (
-        parseInt(sales.partyId) === partyId &&
+        parseInt(sales.partyId) === partyIds &&
         parseFloat(sales.balanceAmount) > 0
       );
     });
@@ -59,6 +69,58 @@ const PaymentCreate = ({ onBooleanChange }) => {
     );
 
     console.log("Party response ", filteredSalesBasedOnPartyId);
+  };
+  useEffect(() => {
+    const filtered = salePurchaseUser.filter((obj) =>
+      selectedRows.includes(obj.id)
+    );
+    const addAdditionalCharge = filtered.reduce((acc, emp) => {
+      const parsedValue = parseFloat(emp.balanceAmount);
+      if (isNaN(parsedValue)) {
+        return acc;
+      }
+      return acc + parsedValue;
+    }, 0);
+    setPaymentAmount(addAdditionalCharge);
+    console.log("Filtered Value  ", filtered);
+  }, [selectedRows]);
+
+  const handlePaymentAmount = (event) => {
+    let paymentAmount = parseFloat(event.target.value);
+    let copyPaymentAmount=parseFloat(event.target.value);
+    if (isNaN(paymentAmount)) {
+      paymentAmount = 0;
+      copyPaymentAmount=0;
+    }
+    setPaymentAmount(paymentAmount);
+    if (!partyId) {
+      return;
+    }
+    const filteredSalesBasedOnPartyId = salePurchaseUser.filter((sales) => {
+      return (
+        parseInt(sales.partyId) === partyId &&
+        parseFloat(sales.balanceAmount) > 0
+      );
+    });
+    console.log(filteredSalesBasedOnPartyId);
+    const updatedEmployees = filteredSalesBasedOnPartyId.map((employee) => {
+      let updatedBalance = employee.balanceAmount;
+      if (paymentAmount > 0) {
+        const amountToAdd = Math.min(paymentAmount, employee.balanceAmount);
+        paymentAmount -= amountToAdd;
+        updatedBalance = employee.balanceAmount - amountToAdd;
+      }
+      return {
+        ...employee,
+        balanceAmount: updatedBalance,
+        amountSettled: employee.balanceAmount - updatedBalance,
+      };
+    });
+    if (copyPaymentAmount > 0) {
+      setFilteredEmployees(updatedEmployees);
+    } else {
+      setFilteredEmployees(filteredSalesBasedOnPartyId);
+    }
   };
 
   const handleCheckboxClick = (id) => {
@@ -149,8 +211,8 @@ const PaymentCreate = ({ onBooleanChange }) => {
                   label="Enter Payment Amount"
                   variant="outlined"
                   fullWidth={true}
-                  //  value={manageUserObj.pname}
-                  //  onChange={(event) => handleTextFieldChangeParty(event, "pname")}
+                  value={paymentAmount}
+                  onChange={(event) => handlePaymentAmount(event)}
                 />
               </Box>
             </Box>
@@ -218,16 +280,16 @@ const PaymentCreate = ({ onBooleanChange }) => {
                       <Checkbox
                         indeterminate={
                           selectedRows.length > 0 &&
-                          selectedRows.length < salePurchaseUser.length
+                          selectedRows.length < filteredEmployees.length
                         }
                         checked={
-                          selectedRows.length === salePurchaseUser.length
+                          selectedRows.length === filteredEmployees.length
                         }
                         onChange={() =>
                           setSelectedRows(
-                            selectedRows.length === salePurchaseUser.length
+                            selectedRows.length === filteredEmployees.length
                               ? []
-                              : salePurchaseUser.map((row) => row.id)
+                              : filteredEmployees.map((row) => row.id)
                           )
                         }
                       />
@@ -266,7 +328,7 @@ const PaymentCreate = ({ onBooleanChange }) => {
                       <TableCell align="center">
                         {row.totalAmount} ({row.balanceAmount} Pending )
                       </TableCell>
-                      <TableCell align="center">{row.gst}</TableCell>
+                      <TableCell align="center">{row.amountSettled}</TableCell>
                     </StyledTableRow>
                   ))}
                 </TableBody>
