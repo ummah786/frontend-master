@@ -354,17 +354,15 @@ export const Party = () => {
             {(enable && enableBulk) && (
                 <Box>
                     <Box>
-                        <Button variant="contained">Party</Button>
+                        <Button sx={{marginLeft: "1px"}} variant="contained">Party</Button>
                         <Box sx={{right: '0', float: 'right'}}>
-                            <ButtonGroup variant="contained" aria-label="Basic button group">
-                                <Button onClick={handleBooleanChange}>Create Party</Button>
-                                <Button onClick={handleBulkChange}>Create Bulk Party</Button>
-                            </ButtonGroup>
+                            <Button sx={{}} variant="contained" onClick={handleBooleanChange}>Create Party</Button>
+                            <Button sx={{marginLeft: "10px", marginRight: "10px"}} variant="contained" onClick={handleBulkChange}>Create Bulk Party</Button>
                         </Box>
                     </Box>
                     <Box>
                         <Box sx={{display: 'flex', width: '100%'}}>
-                            <Box sx={{width: '50%'}}>
+                            <Box sx={{width: '41%', marginLeft: "-23px", marginTop: "10px", marginBottom: "10px"}}>
                                 <Search>
                                     <SearchIconWrapper>
                                         <SearchIcon/>
@@ -372,7 +370,7 @@ export const Party = () => {
                                     <StyledInputBase
                                         value={filter}
                                         onChange={handleFilterChange}
-                                        placeholder="Search by Business Name,Company,Gst And Mobile Number"
+                                        placeholder="Search by Business Name, Company, GST And Mobile Number"
                                         inputProps={{'aria-label': 'search'}}
                                     />
                                 </Search>
@@ -430,23 +428,23 @@ export const Party = () => {
             {
                 !enable && (
                     <Box>
-                        <Box sx={{display: 'flex'}}>
+                        <Box sx={{display: 'flex', marginBottom: "10px", marginTop: "20px"}}>
                             <Box>
-                                <Button size="small" variant="contained">Create Partner</Button>
+                                <Button size="small" variant="contained" sx={{marginLeft: "260px"}}>Create Partner</Button>
                             </Box>
-                            <Box sx={{float: 'right', alignItems: 'center', marginLeft: "50px"}}>
-                                <Button size="small" variant="contained" onClick={handleBooleanCancelChange}>Cancel</Button>
+                            <Box sx={{float: 'right', alignItems: 'center', marginLeft: "430px"}}>
+                                <Button sx={{marginRight: "10px"}} size="small" variant="contained" onClick={handleBooleanCancelChange}>Cancel</Button>
                                 <Button size="small" variant="contained" onClick={handleBooleanCancelChange}>Save</Button>
                             </Box>
                         </Box>
                         <form onSubmit={handleSubmit}>
-                            <Box sx={{width: '100%', display: 'flex'}}>
+                            <Box sx={{width: '70%', display: 'flex'}}>
                                 <Box sx={{
                                     width: '50%',
                                     display: 'flex',
                                     flexDirection: 'column',
                                     margin: "10px",
-                                    marginLeft: '200px'
+                                    marginLeft: '250px'
                                 }}>
                                     <TextField id="outlined-basic" label="Name" variant="outlined" sx={{margin: '10px'}}
                                                value={manageUserObj.pname}
@@ -471,9 +469,9 @@ export const Party = () => {
                                                value={manageUserObj.company}
                                                onChange={(event) => handleTextFieldChange(event, 'company')}/>
                                 </Box>
-                                <Box sx={{display: 'flex', flexDirection: 'column', margin: "10px", paddingRight: '50px'}}>
+                                <Box sx={{display: 'flex', flexDirection: 'column', marginRight: '60px', marginTop: "3px"}}>
                                     <TextField
-                                        fullWidth
+                                        sx={{width: "160%", marginBottom: "6px"}}
                                         select
                                         value={manageUserObj.partyType}
                                         onChange={(event) => handleTextFieldChange(event, 'partyType')}
@@ -489,11 +487,11 @@ export const Party = () => {
                                         }
                                     </TextField>
                                     <TextField id="outlined-basic" label="GST Number" variant="outlined"
-                                               sx={{margin: '10px'}} value={manageUserObj.gstNumber}
+                                               sx={{width: "160%", marginTop: "15px"}} value={manageUserObj.gstNumber}
                                                onChange={(event) => handleTextFieldChange(event, 'gstNumber')}/>
 
                                     <TextField
-                                        fullWidth
+                                        sx={{width: "160%", marginTop: "20px"}}
                                         select
                                         value={manageUserObj.partyCategory}
                                         onChange={(event) => handleTextFieldChange(event, 'partyCategory')}
@@ -578,22 +576,21 @@ export const Party = () => {
                                         </Modal>
                                     </Transition>
                                     <TextField id="outlined-basic" label="Credit Limit" variant="outlined"
-                                               sx={{margin: '10px'}} value={manageUserObj.creditLimit}
+                                               sx={{width: "160%", marginTop: "13px"}} value={manageUserObj.creditLimit}
                                                onChange={(event) => handleTextFieldChange(event, 'creditLimit')}/>
 
                                     <Box sx={{display: 'flex'}}>
                                         <TextField id="outlined-basic" label="Credit Period" variant="outlined"
-                                                   sx={{margin: '10px'}} value={manageUserObj.creditPeriod}
+                                                   sx={{width: "fullWidth", marginTop: "18px"}} value={manageUserObj.creditPeriod}
                                                    onChange={(event) => handleTextFieldChange(event, 'creditPeriod')}/>
 
                                         <TextField
-                                            fullWidth
+                                            sx={{width: "fullWidth", marginTop: "18px", marginLeft: "10px"}}
                                             select
                                             value={manageUserObj.creditPeriodType}
                                             onChange={(event) => handleTextFieldChange(event, 'creditPeriodType')}
                                             label="Credit Period Type"
                                             variant="outlined"
-                                            margin="normal"
                                         >
                                             {
                                                 UserRole.creditPeriod.map(userrole => (
@@ -606,11 +603,11 @@ export const Party = () => {
 
                                     <Box sx={{display: 'flex'}}>
                                         <TextField id="outlined-basic" label="Opening Balance" variant="outlined"
-                                                   sx={{margin: '10px'}} value={manageUserObj.openingBalance}
+                                                   sx={{width: "200%", marginTop: "20px"}} value={manageUserObj.openingBalance}
                                                    onChange={(event) => handleTextFieldChange(event, 'openingBalance')}/>
 
                                         <TextField
-                                            fullWidth
+                                            sx={{width: "200%", marginTop: "20px", marginLeft: "10px"}}
                                             select
                                             value={manageUserObj.openingBalanceType}
                                             onChange={(event) => handleTextFieldChange(event, 'openingBalanceType')}
@@ -627,7 +624,7 @@ export const Party = () => {
                                         </TextField>
                                     </Box>
                                     <Box>
-                                        <Button type="submit">SUBMIT</Button>
+                                        <Button type="submit" variant="contained" sx={{marginLeft: "135px"}}>SUBMIT</Button>
                                     </Box>
                                 </Box>
                             </Box>
@@ -637,13 +634,13 @@ export const Party = () => {
             }
             {
                 !enableBulk && (
-                    <Box>
+                    <Box sx={{marginLeft: "10px"}}>
                         <Box sx={{display: 'flex'}}>
-                            <Box>
+                            <Box sx={{marginTop: "10px", marginBottom: "20px", marginLeft: "-2px"}}>
                                 <Button size="small" variant="contained">Create Bulk Partner</Button>
                             </Box>
-                            <Box sx={{float: 'right', alignItems: 'center', marginLeft: "50px", display: 'flex'}}>
-                                <Box>
+                            <Box sx={{float: 'right', alignItems: 'center', marginLeft: "100px", display: 'flex', marginTop: "-15px"}}>
+                                <Box sx={{ marginBottom: "-80px"}}>
                                     <a
                                         href={require('../../file/PartySample.xlsx')}
                                         download="PartySample.xlsx"
@@ -660,11 +657,11 @@ export const Party = () => {
                                         </Button>
                                     </a>
                                 </Box>
-                                <Button size="small" variant="contained" onClick={handleBooleanCancelChange}>Cancel</Button>
+                                <Button sx={{ marginLeft: "-190px", marginRight: "30px"}} size="small" variant="contained" onClick={handleBooleanCancelChange}>Cancel</Button>
                                 <Button size="small" variant="contained" onClick={handleBooleanCancelChange}>Save</Button>
                             </Box>
                         </Box>
-                        <input type="file" onChange={handleFileUpload}/>
+                        <input type="file" onChange={handleFileUpload} sx={{ marginRight: "100px", marginLeft: "10px"}} />
                         {
                             excelData.length > 0 && (
                                 <Box
