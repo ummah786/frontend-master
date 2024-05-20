@@ -25,8 +25,8 @@ import {ScreenShare} from "./WebRtc/ScreenShare";
 import {Chat} from "./pages/Chat";
 import ExampleWithProviders from "./pages/Example";
 import {CashAndBank} from "./pages/CashAndBank/CashAndBank";
-import {SalesInvoice} from "./pages/sales/saleInvoice/SalesInvoice";
-import { PaymentIn } from "./pages/sales/paymentIn/PaymentIn";
+import {SalesInvoice} from "./pages/Sales/SaleInvoice/SalesInvoice";
+import { PaymentIn } from "./pages/Sales/PaymentIn/PaymentIn";
 
 function App() {
     const [flag, setFlag] = useState(true);

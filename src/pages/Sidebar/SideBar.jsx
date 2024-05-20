@@ -56,58 +56,58 @@ const routes = [
     ],
   },
   {
-    path: "/sales",
+    path: "/Sales",
     name: "Sales",
     icon: <AiTwotoneFileExclamation />,
     subRoutes: [
       {
-        path: "/sales/invoice",
+        path: "/Sales/invoice",
         name: "Sales Invoice",
         icon: <FaUser />,
       },
       {
-        path: "/sales/return",
+        path: "/Sales/return",
         name: "Sales Return",
         icon: <FaLock />,
       }, {
-        path: "/sales/payment-in",
+        path: "/Sales/payment-in",
         name: "Payment In ",
         icon: <FaUser />,
       },
       {
-        path: "/sales/credit-note",
+        path: "/Sales/credit-note",
         name: "Credit Note",
         icon: <FaLock />,
       }
     ],
   },
   {
-    path: "/purchase",
+    path: "/Purchases",
     name: "Purchase",
     icon: <AiTwotoneFileExclamation />,
     subRoutes: [
       {
-        path: "/purchase/invoice",
+        path: "/Purchases/invoice",
         name: "Purchase Invoice",
         icon: <FaUser />,
       },
       {
-        path: "/purchase/order",
+        path: "/Purchases/order",
         name: "Purchase Order",
         icon: <FaUser />,
       },
       {
-        path: "/purchase/return",
+        path: "/Purchases/return",
         name: "Purchase Return",
         icon: <FaLock />,
       },
       {
-        path: "/purchase/payment-out",
+        path: "/Purchases/payment-out",
         name: "Payment Out",
         icon: <FaLock />,
       },
       {
-        path: "/purchase/debit-note",
+        path: "/Purchases/debit-note",
         name: "Debit Note",
         icon: <FaLock />,
       }
