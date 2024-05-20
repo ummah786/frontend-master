@@ -1,6 +1,6 @@
 import React from "react";
 
-import {Autocomplete, Box, Button, TextField, Typography,Grid } from "@mui/material";
+import {Autocomplete, Box, Button, Grid, TextField, Typography} from "@mui/material";
 import {useSelector} from "react-redux";
 
 const POSBilling = () => {
@@ -40,16 +40,20 @@ const POSBilling = () => {
                                     `${option.item} (${option.totalStock}) (${option.salePrice})`
                                 }
                                 renderOption={(props, option) => (
-                                    <Box component="li" {...props} sx={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #ccc' }}>
-                                        <Grid container spacing={2} sx={{ width: '100%', alignItems: 'center' }}>
+                                    <Box component="li" {...props} sx={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        borderBottom: '1px solid #ccc'
+                                    }}>
+                                        <Grid container spacing={2} sx={{width: '100%', alignItems: 'center'}}>
                                             <Grid item xs={4}>
-                                                <Box sx={{ padding: '8px' }}>{option.item}</Box>
+                                                <Box sx={{padding: '8px'}}>{option.item}</Box>
                                             </Grid>
                                             <Grid item xs={4}>
-                                                <Box sx={{ padding: '8px' }}>{option.totalStock}</Box>
+                                                <Box sx={{padding: '8px'}}>{option.totalStock}</Box>
                                             </Grid>
                                             <Grid item xs={4}>
-                                                <Box sx={{ padding: '8px' }}>{option.salePrice}</Box>
+                                                <Box sx={{padding: '8px'}}>{option.salePrice}</Box>
                                             </Grid>
                                         </Grid>
                                     </Box>
@@ -66,25 +70,27 @@ const POSBilling = () => {
                                         overflow: 'auto',
                                     },
                                 }}
-                                PaperComponent={({ children }) => (
-                                    <Box sx={{ position: 'relative', boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.1)' }}>
+                                PaperComponent={({children}) => (
+                                    <Box sx={{position: 'relative', boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.1)'}}>
                                         <Box sx={{
-                                            position: 'sticky',
                                             top: 0,
                                             backgroundColor: 'white',
                                             zIndex: 1,
                                             borderBottom: '1px solid #ccc',
                                             padding: '8px 16px',
                                         }}>
-                                            <Grid container spacing={2}>
+                                            <Grid container spacing={2} >
                                                 <Grid item xs={4}>
-                                                    <Typography variant="body2" sx={{ fontWeight: 'bold' }}>Item</Typography>
+                                                    <Typography variant="body2"
+                                                                sx={{fontWeight: 'bold',marginLeft:'10px'}}>Item</Typography>
                                                 </Grid>
                                                 <Grid item xs={4}>
-                                                    <Typography variant="body2" sx={{ fontWeight: 'bold' }}>Total Stock</Typography>
+                                                    <Typography variant="body2" sx={{fontWeight: 'bold'}}>Total
+                                                        Stock</Typography>
                                                 </Grid>
                                                 <Grid item xs={4}>
-                                                    <Typography variant="body2" sx={{ fontWeight: 'bold' }}>Sale Price</Typography>
+                                                    <Typography variant="body2" sx={{fontWeight: 'bold'}}>Sale
+                                                        Price</Typography>
                                                 </Grid>
                                             </Grid>
                                         </Box>
