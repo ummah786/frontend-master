@@ -215,26 +215,26 @@ export const AccountManagementUsers = () => {
             {enable && (
                 <Box>
                     <Box>
-                        <h6>Manage Users</h6>
+                        <h5>Manage Users</h5>
                     </Box>
                     <Box>
                         <Box sx={{display: "flex"}}>
                             <Box sx={{border: '1px solid #000'}}>
                                 <Typography variant="caption" display="block" gutterBottom>Number of Users</Typography>
                                 <Box>
-                                    <Typography variant="h5">5</Typography>
+                                    <Typography variant="h5" align="center">5</Typography>
                                 </Box>
                             </Box>
                             <Box sx={{border: '1px solid #000'}}>
                                 <Typography variant="caption" display="block" gutterBottom>Activites
                                     Performed</Typography>
                                 <Box>
-                                    <Typography variant="h5">2</Typography>
+                                    <Typography variant="h5" align="center">2</Typography>
                                 </Box>
                             </Box>
                         </Box>
                         <Box sx={{display: 'flex', width: '100%'}}>
-                            <Box sx={{width: '50%'}}>
+                            <Box sx={{width: '40%', marginLeft: "-24px", marginTop: "9px", marginBottom: "5px"}}>
                                 <Search>
                                     <SearchIconWrapper>
                                         <SearchIcon/>
@@ -248,11 +248,13 @@ export const AccountManagementUsers = () => {
                                     />
                                 </Search>
                             </Box>
-                            <Box sx={{width: '50%', right: '0', float: 'right'}}>
-                                <ButtonGroup variant="contained" aria-label="Basic button group">
-                                    <Button>Add Your CA</Button>
+                            <Box sx={{width: '50%', right: '0', float: 'right', marginTop: "10px", marginBottom: "5px"}}>
+                            <Button type="submit" variant="contained" sx={{ marginRight: "10px"}}>Add Your CA</Button>
+                            <Button onClick={handleBooleanChange} type="submit" variant="contained" sx={{ marginRight: "10px"}}>Add New User</Button>
+                                {/* <ButtonGroup variant="contained" aria-label="Basic button group">
+                                    <Button type="submit" variant="contained" sx={{ marginRight: "10px"}}>Add Your CA</Button>
                                     <Button onClick={handleBooleanChange}>Add New User</Button>
-                                </ButtonGroup>
+                                </ButtonGroup> */}
                             </Box>
                         </Box>
                         <Box>

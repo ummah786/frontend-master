@@ -194,12 +194,12 @@ export const MyBusinessAccount = () => {
     <>
       {enable && (
         <Box>
-          <Box>
-            <h6>My Business Account</h6>
+          <Box sx={{padding: "5px"}}>
+            <h5  >My Business Account</h5>
           </Box>
           <Box>
-            <Box sx={{ display: "flex", width: "100%" }}>
-              <Box sx={{ width: "50%" }}>
+            <Box sx={{ display: "flex", width: "100%", marginLeft: "-23px" }}>
+              <Box sx={{ width: "30%", paddingBottom: "10px"}}>
                 <Search>
                   <SearchIconWrapper>
                     <SearchIcon />
@@ -213,7 +213,7 @@ export const MyBusinessAccount = () => {
                   />
                 </Search>
               </Box>
-              <Box sx={{ width: "50%", right: "0", float: "right" }}>
+              <Box>
                 <ButtonGroup
                   variant="contained"
                   aria-label="Basic button group"
@@ -287,15 +287,15 @@ export const MyBusinessAccount = () => {
         </Box>
       )}
       {!enable && (
-        <Box>
-          <Box sx={{ display: "flex" }}>
+        <Box sx={{marginTop: "20px" }}>
+          <Box sx={{ display: "flex", marginLeft: "195px" }}>
             <Box>
               <Button size="small" variant="contained">
                 Create/Edit Business Account
               </Button>
             </Box>
             <Box
-              sx={{ float: "right", alignItems: "center", marginLeft: "50px" }}
+              sx={{ float: "right", marginLeft: "580px" }}
             >
               <Button
                 size="small"
@@ -304,7 +304,7 @@ export const MyBusinessAccount = () => {
               >
                 Cancel
               </Button>
-              <Button
+              <Button sx={{marginLeft: "20px"}}
                 size="small"
                 variant="contained"
                 onClick={handleBooleanChange}
@@ -320,19 +320,19 @@ export const MyBusinessAccount = () => {
                   width: "25%",
                   display: "flex",
                   flexDirection: "column",
-                  margin: "10px",
-                  marginLeft: "180px",
+                  marginTop: "21px",
+                  marginLeft: "150px",
                 }}
               >
-                <Card sx={{ maxWidth: 305 }}>
+                <Card sx={{ maxWidth: 300 }}>
                   <CardMedia
-                    sx={{ height: 100, width: 100 }}
+                    sx={{ height: 230, width: 300 }}
                     image={image1}
                     alt="Card 1 Image"
-                    title="avatar"
+                    title="avatar" 
                   />
                   <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
+                    <Typography gutterBottom variant="h5" component="div" align="center" sx={{marginBottom: "-40px"}}>
                       Avatar
                     </Typography>
                   </CardContent>
@@ -355,22 +355,22 @@ export const MyBusinessAccount = () => {
                         }
                       />
                       <label htmlFor="image-upload-1">
-                        <Button variant="contained" component="span">
+                        <Button variant="contained" component="span" sx={{marginLeft: "22px", marginBottom: "-10px"}}>
                           Upload Image for Card 1
                         </Button>
                       </label>
                     </CardContent>
                   </CardActions>
                 </Card>
-                <Card sx={{ maxWidth: 345, marginTop: "30px" }}>
+                <Card sx={{ maxWidth: 300, marginTop: "20px" }}>
                   <CardMedia
-                    sx={{ height: 140 }}
+                    sx={{ height: 230, width: 300 }}
                     image={image2}
                     alt="Card 1 Image"
                     title="Signature"
                   />
                   <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
+                    <Typography gutterBottom variant="h5" component="div" align="center" sx={{marginBottom: "-40px"}}>
                       Signature
                     </Typography>
                   </CardContent>
@@ -393,7 +393,7 @@ export const MyBusinessAccount = () => {
                         }
                       />
                       <label htmlFor="image-upload-2">
-                        <Button variant="contained" component="span">
+                        <Button variant="contained" component="span" sx={{marginLeft: "22px", marginBottom: "-10px" }}>
                           Upload Image for Card 2
                         </Button>
                       </label>
@@ -432,70 +432,12 @@ export const MyBusinessAccount = () => {
                 />
                 <TextField
                   id="outlined-basic"
-                  label="E-mail"
+                  label="Email"
                   variant="outlined"
                   sx={{ margin: "10px" }}
                   value={manageUserObj.email}
                   onChange={(event) => handleTextFieldChange(event, "email")}
                 />
-
-                <TextField
-                  id="outlined-basic"
-                  label="PAN Number"
-                  variant="outlined"
-                  sx={{ margin: "10px" }}
-                  value={manageUserObj.panNumber}
-                  onChange={(event) =>
-                    handleTextFieldChange(event, "panNumber")
-                  }
-                />
-                <Box sx={{ display: "flex" }}>
-                  <FormControl>
-                    <FormLabel id="demo-controlled-radio-buttons-group">
-                      Are you GST Registered?
-                    </FormLabel>
-                    <RadioGroup
-                      aria-labelledby="demo-controlled-radio-buttons-group"
-                      name="controlled-radio-buttons-group"
-                      value={manageUserObj.gstUser}
-                      onChange={(event) =>
-                        handleTextFieldChange(event, "gstUser")
-                      }
-                    >
-                      <FormControlLabel
-                        value="Yes"
-                        control={<Radio />}
-                        label="Yes"
-                      />
-                      <FormControlLabel
-                        value="No"
-                        control={<Radio />}
-                        label="No"
-                      />
-                    </RadioGroup>
-                  </FormControl>
-                </Box>
-                <TextField
-                  id="outlined-basic"
-                  label="GST Number"
-                  variant="outlined"
-                  sx={{ margin: "10px" }}
-                  value={manageUserObj.gstNumber}
-                  onChange={(event) =>
-                    handleTextFieldChange(event, "gstNumber")
-                  }
-                />
-              </Box>
-
-              <Box
-                sx={{
-                  width: "25%",
-                  display: "flex",
-                  flexDirection: "column",
-                  margin: "10px",
-                  marginLeft: "20px",
-                }}
-              >
                 <TextField
                   id="outlined-basic"
                   label="Billing Address"
@@ -523,7 +465,7 @@ export const MyBusinessAccount = () => {
                   onChange={(event) => handleTextFieldChange(event, "district")}
                 />
                 <TextField
-                  fullWidth
+                  sx={{ width: "94%", marginLeft: "10px" }}
                   select
                   value={manageUserObj.state}
                   onChange={(event) => handleTextFieldChange(event, "state")}
@@ -545,8 +487,33 @@ export const MyBusinessAccount = () => {
                   value={manageUserObj.pinCode}
                   onChange={(event) => handleTextFieldChange(event, "pinCode")}
                 />
+                <Box sx={{ display: "flex", marginLeft: "15px", marginTop: "10px" }}>
+                  <FormControl>
+                    <FormLabel id="demo-controlled-radio-buttons-group">
+                      Are you GST Registered?
+                    </FormLabel>
+                    <RadioGroup
+                      aria-labelledby="demo-controlled-radio-buttons-group"
+                      name="controlled-radio-buttons-group"
+                      value={manageUserObj.gstUser}
+                      onChange={(event) =>
+                        handleTextFieldChange(event, "gstUser")
+                      }
+                    >
+                      <FormControlLabel
+                        value="Yes"
+                        control={<Radio />}
+                        label="Yes"
+                      />
+                      <FormControlLabel
+                        value="No"
+                        control={<Radio />}
+                        label="No"
+                      />
+                    </RadioGroup>
+                  </FormControl>
+                </Box>
               </Box>
-
               <Box
                 sx={{
                   width: "25%",
@@ -555,9 +522,30 @@ export const MyBusinessAccount = () => {
                   margin: "10px",
                 }}
               >
+                <TextField
+                  id="outlined-basic"
+                  label="PAN Number"
+                  variant="outlined"
+                  sx={{ width: "100%", margin:"10px"}}
+                  value={manageUserObj.panNumber}
+                  onChange={(event) =>
+                    handleTextFieldChange(event, "panNumber")
+                  }
+                />
+                
+                <TextField
+                  id="outlined-basic"
+                  label="GST Number"
+                  variant="outlined"
+                  sx={{ width: "100%",  margin:"10px"}}
+                  value={manageUserObj.gstNumber}
+                  onChange={(event) =>
+                    handleTextFieldChange(event, "gstNumber")
+                  }
+                />
                 {/*  handle check box */}
                 <TextField
-                  fullWidth
+                  sx={{ width: "100%",  margin:"10px"}}
                   select
                   value={manageUserObj.businessType}
                   onChange={(event) =>
@@ -575,7 +563,7 @@ export const MyBusinessAccount = () => {
                 </TextField>
 
                 <TextField
-                  fullWidth
+                  sx={{ width: "100%",  margin:"10px"}}
                   select
                   value={manageUserObj.industryType}
                   onChange={(event) =>
@@ -592,7 +580,7 @@ export const MyBusinessAccount = () => {
                   ))}
                 </TextField>
                 <TextField
-                  fullWidth
+                  sx={{ width: "100%",  margin:"10px"}}
                   select
                   value={manageUserObj.businessRegistrationType}
                   onChange={(event) =>
@@ -609,7 +597,7 @@ export const MyBusinessAccount = () => {
                   ))}
                 </TextField>
                 <Box>
-                  <Button type="submit">SUBMIT</Button>
+                  <Button type="submit" variant="contained" sx={{ display: "flex", marginLeft: "245px" }}>SUBMIT</Button>
                 </Box>
               </Box>
             </Box>
