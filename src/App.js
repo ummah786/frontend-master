@@ -25,7 +25,7 @@ import {ScreenShare} from "./WebRtc/ScreenShare";
 import {Chat} from "./pages/Chat";
 import ExampleWithProviders from "./pages/Example";
 import {CashAndBank} from "./pages/CashAndBank/CashAndBank";
-import {SalesInvoice} from "./pages/sales/SalesInvoice";
+import {SalesInvoice} from "./pages/sales/saleInvoice/SalesInvoice";
 import { PaymentIn } from "./pages/sales/paymentIn/PaymentIn";
 
 function App() {

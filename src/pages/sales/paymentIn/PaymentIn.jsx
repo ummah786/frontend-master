@@ -32,8 +32,9 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useDispatch, useSelector } from "react-redux";
 import { addSalePurchase } from "../../../redux/Action";
-import SalesInvoiceView from "../SalesInvoiceView";
+import SalesInvoiceView from "../saleInvoice/SalesInvoiceView";
 import PaymentCreate from "./PaymentCreate";
+import { PaymentInView } from "./PaymentInView";
 
 export const PaymentIn = () => {
   const loginData = useSelector((state) => state.loginReducerValue);
@@ -154,7 +155,7 @@ export const PaymentIn = () => {
         </Box>
       ) : flagView ? (
         <Box>
-          <SalesInvoiceView
+          <PaymentInView
             onBooleanChange={handleBooleanChangeView}
             idFlagView={idFlagView}
           />
@@ -257,23 +258,18 @@ export const PaymentIn = () => {
                             />
                           </TableCell>
                           <StyledTableCell align="center">
-                            {formatDate(row.salesInvoiceDate)}
+                            {formatDate(row.paymentDate)}
                           </StyledTableCell>
                           <StyledTableCell align="center">
                             {row.id}
                           </StyledTableCell>
                           <StyledTableCell align="center">
-                            <Box>
-                              <Typography> (₹) {row.totalAmount}</Typography>
-                              {row.status !== "Paid" && (
-                                <Typography variant="body2" gutterBottom>
-                                  (₹) {row.amountReceived} {row.status}
-                                </Typography>
-                              )}
-                            </Box>
+                            {row.partyName}
                           </StyledTableCell>
                           <StyledTableCell align="center">
-                            {row.status}
+                            <Box>
+                              <Typography> (₹) {row.amountSettled}</Typography>
+                            </Box>
                           </StyledTableCell>
                           <StyledTableCell align="center">
                             <IconButton

@@ -16,7 +16,7 @@ import Modal from "@mui/joy/Modal";
 import ModalClose from "@mui/joy/ModalClose";
 import { Transition } from "react-transition-group";
 import Grid from "@mui/material/Grid";
-import UserRole from "../../jsonfile/Role";
+import UserRole from "../../../jsonfile/Role.json";
 import Paper from "@mui/material/Paper";
 import React, { useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
@@ -35,13 +35,13 @@ import {
   StyledTableCellTableView,
   StyledTableCell,
   StyledTableRow,
-} from "../../commonStyle";
+} from "../../../commonStyle";
 import axios from "axios";
 import dayjs from "dayjs";
 import { numberToWords } from "number-to-words";
 import { useDispatch, useSelector } from "react-redux";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { removeSalePurchase } from "../../redux/Action";
+import { removeSalePurchase } from "../../../redux/Action";
 import { SaleInvoiceEdit } from "./SaleInvoiceEdit";
 const SalesInvoiceView = ({ onBooleanChange, idFlagView }) => {
   const [editFlag, setEditFlag] = useState(true);
