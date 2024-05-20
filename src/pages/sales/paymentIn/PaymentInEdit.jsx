@@ -1,45 +1,32 @@
+import {Autocomplete, Box, ButtonGroup, Checkbox, MenuItem, TableCell, TextField,} from "@mui/material";
+import Button from "@mui/material/Button";
+import React, {useEffect, useState} from "react";
+import UserRole from "../../../jsonfile/Role.json";
+import {DemoContainer} from "@mui/x-date-pickers/internals/demo";
+import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {DatePicker} from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
+import Paper from "@mui/material/Paper";
+import Grid from "@mui/material/Grid";
+import {useTheme} from "@mui/material/styles";
+import {useDispatch, useSelector} from "react-redux";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import {formatDate, StyledTableCellTableView, StyledTableRow,} from "../../../commonStyle";
+import axios from "axios";
+import {addSalePurchase} from "../../../redux/Action";
 
-import {
-    Autocomplete,
-    Box,
-    ButtonGroup,
-    MenuItem,
-    TableCell,
-    TextField,
-    Checkbox,
-  } from "@mui/material";
-  import Typography from "@mui/joy/Typography";
-  import Button from "@mui/material/Button";
-  import React from "react";
-  import UserRole from "../../../jsonfile/Role.json";
-  import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-  import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-  import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-  import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-  import dayjs from "dayjs";
-  import Paper from "@mui/material/Paper";
-  import { useState, useEffect } from "react";
-  import Grid from "@mui/material/Grid";
-  import { useTheme } from "@mui/material/styles";
-  import { useDispatch, useSelector } from "react-redux";
-  import Table from "@mui/material/Table";
-  import TableBody from "@mui/material/TableBody";
-  import TableContainer from "@mui/material/TableContainer";
-  import TableHead from "@mui/material/TableHead";
-  import TableRow from "@mui/material/TableRow";
-  import {
-    StyledTableCellTableView,
-    StyledTableRow,
-    formatDate,
-  } from "../../../commonStyle";
-  import axios from "axios";
-  import { addSalePurchase } from "../../../redux/Action";
 export const PaymentInEdit = ({
   onBooleanChange,
   idFlagView,
   editFlag,
   filterSalePurchase,
 }) => {
+  console.log("values  ", idFlagView, editFlag, filterSalePurchase);
     const theme = useTheme();
     const { partyUser } = useSelector((state) => state.partyReducerValue);
     const loginData = useSelector((state) => state.loginReducerValue);
@@ -74,7 +61,7 @@ export const PaymentInEdit = ({
       );
       salePurchaseObject["paymentDate"] = paymentDate;
       salePurchaseObject["paymentType"] = paymentMode;
-      salePurchaseObject["gson"] = JSON.stringify(salePurchaseObjectResponse);
+      salePurchaseObject["items"] = JSON.stringify(salePurchaseObjectResponse);
       salePurchaseObject["amountSettled"] = paymentAmount;
       salePurchaseObject["invoiceAmount"] = totalSelectedPartyAmount;
       salePurchaseObject["billType"] = "PAYMENT_IN";
