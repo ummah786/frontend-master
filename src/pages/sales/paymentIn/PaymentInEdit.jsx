@@ -30,17 +30,15 @@ export const PaymentInEdit = ({
     const theme = useTheme();
     const { partyUser } = useSelector((state) => state.partyReducerValue);
     const loginData = useSelector((state) => state.loginReducerValue);
-    const [partyId, setPartyId] = useState("");
+    const [partyId, setPartyId] = useState(filterSalePurchase.partyId);
     const [totalTableAmount, setTotalTableAmount] = useState(0);
-    const [paymentMode, setPaymentMode] = useState("");
-    const [paymentDate, setPaymentDate] = React.useState(dayjs("2024-01-01"));
-    const [selectParty, setSelectParty] = useState("");
-    const [paymentAmount, setPaymentAmount] = useState(0);
+    const [paymentMode, setPaymentMode] = useState(filterSalePurchase.paymentMode);
+    const [paymentDate, setPaymentDate] = React.useState(dayjs(filterSalePurchase.paymentDate));
+    const [selectParty, setSelectParty] = useState(filterSalePurchase.partyName);
+    const [paymentAmount, setPaymentAmount] = useState(filterSalePurchase.amountSettled);
     const [selectedRows, setSelectedRows] = useState([]);
     const [filteredEmployees, setFilteredEmployees] = useState([]);
-    const { salePurchaseUser } = useSelector(
-      (state) => state.salePurchaseReducerValue
-    );
+    const { salePurchaseUser } = useSelector((state) => state.salePurchaseReducerValue);
     const dispatch = useDispatch();
     const handleSubmitPaymentCreate = async (e) => {
       e.preventDefault();
@@ -154,7 +152,6 @@ export const PaymentInEdit = ({
       setPaymentAmount(addAdditionalCharge);
       console.log("Filtered Value  ", filtered);
     }, [selectedRows]);
-  
     const handlePaymentAmount = (event) => {
       let paymentAmount = parseFloat(event.target.value);
       let copyPaymentAmount = parseFloat(event.target.value);
@@ -193,7 +190,6 @@ export const PaymentInEdit = ({
         setFilteredEmployees(filteredSalesBasedOnPartyId);
       }
     };
-  
     const handleCheckboxClick = (id) => {
       const selectedIndex = selectedRows.indexOf(id);
       let newSelected = [];
