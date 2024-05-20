@@ -1,11 +1,5 @@
-import {
-  Autocomplete,
-  Box,
-  Button,
-  TextField,
-  ToggleButton,
-  ToggleButtonGroup,
-} from "@mui/material";
+import React from "react";
+import { Autocomplete, Box, Button, TextField } from "@mui/material";
 import Typography from "@mui/joy/Typography";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
@@ -13,7 +7,6 @@ import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
-import * as React from "react";
 import { useState } from "react";
 import { Close } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
@@ -21,7 +14,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@material-ui/icons/Search";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import UserRole from "../../jsonfile/Role.json";
+import UserRole from "../../../jsonfile/Role.json";
 import MenuItem from "@mui/material/MenuItem";
 import Modal from "@mui/joy/Modal";
 import ModalClose from "@mui/joy/ModalClose";
@@ -34,38 +27,29 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import TableCell from "@mui/material/TableCell";
-import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useDispatch, useSelector } from "react-redux";
-import Sheet from "@mui/joy/Sheet";
-import {
-  Search,
-  SearchIconWrapper,
-  StyledInputBase,
-  StyledTableCell,
-  StyledTableRow,
-} from "../../commonStyle";
+import { StyledTableCell, StyledTableRow } from "../../../commonStyle";
 import axios from "axios";
 import {
   DELETE_KEY_VALUE,
   SAVE_ADDRESS,
   SAVE_KEY_VALUE,
-} from "../apiendpoint/APIEndPoint";
+} from "../../apiendpoint/APIEndPoint";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import { useEffect } from "react";
 import { List, ListItem, ListItemButton } from "@mui/joy";
 import {
   InventoryDataModel,
   partnerDataModel,
-  salePurchaseModel,
-} from "../../datamodel/ManageUserDataModel";
+} from "../../../datamodel/ManageUserDataModel";
 import {
   addExistingInventory,
   addKeyCategory,
   addKeyCompany,
   addParty,
   addSalePurchase,
-} from "../../redux/Action";
+} from "../../../redux/Action";
 import Delete from "@mui/icons-material/Delete";
 const style = {
   position: "absolute",
@@ -79,42 +63,52 @@ const style = {
   p: 1,
 };
 
-export const SalesInvoiceCreate = ({ onBooleanChange }) => {
+export const SaleInvoiceEdit = ({
+  onBooleanChange,
+  idFlagView,
+  editFlag,
+  filterSalePurchase,
+}) => {
   const [filteredParty, setFilteredParty] = useState([]);
-
   const [salePurchaseObject, setSalePurchaseObject] =
-    useState(salePurchaseModel);
+    useState(filterSalePurchase);
   const [inventoryObject, setInventoryObject] = useState(InventoryDataModel);
-
   const [openCompany, setOpenCompany] = React.useState(false);
   const [openPartyModal, setOpenPartyModal] = React.useState(false);
   const [openCategoryParty, setOpenCategoryParty] = React.useState(false);
-
   const [openItemModal, setOpenItemModal] = React.useState(false);
   const [onSelectOfShipTo, setOnSelectOfShipTo] = React.useState(null);
   const [editOpen, setEditOpen] = React.useState(false);
-  const [shipToAddress, setShipToAddress] = useState("");
-  const [labelBillTO, setLabelBillTO] = useState("Select Party");
+  const [shipToAddress, setShipToAddress] = useState(
+    filterSalePurchase.partyShippingAddress
+  );
   const [shipToFlag, setShipToFlag] = React.useState(true);
   const [openCategory, setOpenCategory] = React.useState(false);
   const [fields, setFields] = useState([]);
   const [employees, setEmployees] = useState([]);
-
   const [openNotes, setOpenNotes] = useState(false);
   const [openTermCondition, setOpenTermCondition] = useState(false);
   const [textValue, setTextValue] = useState("");
   const [showAddDiscount, setShowAddDiscount] = useState(false);
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(filterSalePurchase.autoRoundOffMark);
   const [checkedMark, setCheckedMark] = useState(false);
   const [manageUserObj, setManageUserObj] = useState(partnerDataModel);
-  const [billTo, setBillTo] = useState("");
+  const [billTo, setBillTo] = useState({
+    id: filterSalePurchase.partyId,
+    pname: filterSalePurchase.partyName,
+    mobileNumber: filterSalePurchase.partyPhone,
+    billingAddress: filterSalePurchase.partyBillingAddress,
+    gstNumber: filterSalePurchase.partyGst,
+  });
   const [shipTo, setShipTo] = useState("");
   const [logoImage, setLogoImage] = useState("");
   const [uploadImage, setUploadImage] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
   const { partyUser } = useSelector((state) => state.partyReducerValue);
   const { inventoryUser } = useSelector((state) => state.inventoryReducerValue);
-  const { salePurchaseUser } = useSelector((state) => state.salePurchaseReducerValue);
+  const { salePurchaseUser } = useSelector(
+    (state) => state.salePurchaseReducerValue
+  );
   const loginData = useSelector((state) => state.loginReducerValue);
   const [filter, setFilter] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
@@ -128,11 +122,17 @@ export const SalesInvoiceCreate = ({ onBooleanChange }) => {
   const [totalTaxTable, setTotalTaxTable] = useState("");
   const [totalDiscountTable, setTotalDiscountTable] = useState("");
   const [totalAmountTable, setTotalAmountTable] = useState(0);
-  const [totalAmountTableOperation, setTotalAmountTableOperation] = useState(0);
+  const [totalAmountTableOperation, setTotalAmountTableOperation] = useState(
+    filterSalePurchase.totalAmount
+  );
   const [autoRoundOffValue, setAutoRoundOffValue] = useState(0);
   const [addDiscount, setAddDiscount] = useState(0);
-  const [amountRecieved, setAmountRecieved] = useState(0);
-  const [balanceAmount, setBalanceAmount] = useState(0);
+  const [amountRecieved, setAmountRecieved] = useState(
+    filterSalePurchase.amountReceived
+  );
+  const [balanceAmount, setBalanceAmount] = useState(
+    filterSalePurchase.balanceAmount
+  );
   const [totalAmountWithOutTax, setTotalAmountWithOutTax] = useState("");
   const [rValues, setRValues] = useState([]);
   const [rRates, setRRates] = useState([]);
@@ -142,7 +142,64 @@ export const SalesInvoiceCreate = ({ onBooleanChange }) => {
   );
   const [dueDate, setDueDate] = React.useState(dayjs("2024-01-01"));
 
-  useEffect(() => {}, [partyUser, billTo]);
+  const [doubleCheckedForCheckMar, setDoubleCheckedForCheckMar] =
+    useState(false);
+  useEffect(() => {
+    if (!idFlagView) {
+      return;
+    }
+    try {
+      const filteredData = salePurchaseUser.filter(
+        (employee) => employee.id === idFlagView
+      );
+      if (filteredData.length === 0) return;
+      const filteredResponse = filteredData[0];
+      const jsonArray = JSON.parse(filteredResponse.items);
+      setSalePurchaseObject(filteredResponse);
+      setFilteredEmployees(jsonArray);
+      setEmployees(jsonArray);
+      setShipToAddress(filteredResponse.partyShippingAddress);
+      setShipTo({ mobileNumber: filteredResponse.partyPhone });
+
+      //   setCheckedMark(filteredResponse.markFullyPaid);
+      setChecked(filteredResponse.autoRoundOffMark);
+      setAutoRoundOffValue(filteredResponse.autoRoundOffValue);
+      setAddDiscount(filteredResponse.addDiscount);
+      if (filteredResponse.addDiscount) {
+        setShowAddDiscount(true);
+        setAddDiscount(filteredResponse.addDiscount);
+      } else {
+        setShowAddDiscount(false);
+        setAddDiscount(filteredResponse.addDiscount);
+      }
+      if (filteredResponse.salesInvoiceDate) {
+        const parsedDate = dayjs(filteredResponse.salesInvoiceDate);
+        setSaleInvoiceDate(parsedDate);
+      }
+      if (filteredResponse.salesDueDate) {
+        const parsedDate = dayjs(filteredResponse.salesDueDate);
+        setDueDate(parsedDate);
+      }
+      if (filteredResponse.addAdditionalCharges) {
+        const addAdditional = JSON.parse(filteredResponse.addAdditionalCharges);
+        setFields(addAdditional);
+      }
+      if (filteredResponse.addNote) {
+        setOpenNotes(true);
+      }
+      if (filteredResponse.addTermsAndCondition) {
+        setOpenTermCondition(true);
+      }
+      setTotalAmountTableOperation(filteredResponse.totalAmount);
+      setAmountRecieved(filteredResponse.amountReceived);
+      setBalanceAmount(filteredResponse.balanceAmount);
+    } catch (error) {
+      console.error("An error occurred while processing the data:", error);
+    }
+  }, [idFlagView, editFlag]);
+  useEffect(() => {
+    console.log("SsalePurchaseObject :--- >>  ", salePurchaseObject);
+  }, [partyUser, billTo, salePurchaseObject]);
   useEffect(() => {
     employees.forEach((employee) => updateRValuesAndRates(employee));
     const totalAmountWithOutTaxReturn = employees.reduce(
@@ -532,43 +589,46 @@ export const SalesInvoiceCreate = ({ onBooleanChange }) => {
   };
 
   useEffect(() => {
-    setShipToAddress(onSelectOfShipTo);
-    const updatedObject = {
-      ...salePurchaseObject,
-      shipAddress: onSelectOfShipTo,
-    };
-    setSalePurchaseObject(updatedObject);
+    if (onSelectOfShipTo) {
+      setShipToAddress(onSelectOfShipTo);
+      const updatedObject = {
+        ...salePurchaseObject,
+        shipAddress: onSelectOfShipTo,
+      };
+      setSalePurchaseObject(updatedObject);
+    }
   }, [onSelectOfShipTo]);
 
   const openModalPartyValue = () => {
     setOpenPartyModal(true);
   };
   const handleBilltoSHipToo = (event) => {
-    // Check if event.target.value is defined
-    if (event.target.value) {
-      // Assuming event.target.value is an object with a shippingAddress property
-      const shippingAddress = event.target.value.shippingAddress;
-      if (shippingAddress) {
-        setShipTo(event.target.value);
-        setBillTo(event.target.value);
-        setShipToAddress(shippingAddress);
-        setShipToFlag(false);
-        setLabelBillTO("Bill To");
-
-        const updatedObject = {
-          ...salePurchaseObject,
-          billAddress: event.target.value.billingAddress,
-          phone: event.target.value.mobileNumber,
-          gst: event.target.value.gstNumber,
-          shipAddress: shippingAddress, // Use shippingAddress here
-        };
-        setSalePurchaseObject(updatedObject);
-      } else {
-        console.error("Shipping address is undefined");
-      }
-    } else {
+    const selectedParty = event.target.value;
+    
+    if (!selectedParty) {
       console.error("Event target value is undefined");
+      return;
     }
+  
+    const { shippingAddress, billingAddress, mobileNumber, gstNumber } = selectedParty;
+  
+    // If shippingAddress is undefined, set it to an empty string
+    const updatedShippingAddress = shippingAddress || "";
+  
+    setShipTo(selectedParty);
+    setBillTo(selectedParty);
+    setShipToAddress(updatedShippingAddress);
+    setShipToFlag(false);
+  
+    const updatedObject = {
+      ...salePurchaseObject,
+      billAddress: billingAddress,
+      phone: mobileNumber,
+      gst: gstNumber,
+      shipAddress: updatedShippingAddress, // Use updatedShippingAddress here
+    };
+    
+    setSalePurchaseObject(updatedObject);
   };
 
   const handleSHipToo = (event) => {
@@ -625,17 +685,19 @@ export const SalesInvoiceCreate = ({ onBooleanChange }) => {
       const roundedNumber = Math.round(newValue);
       setTotalAmountTableOperation(roundedNumber);
     }
-    if (!checkedMark) {
-      const updatedValue = Math.max(
-        totalAmountTableOperation - amountRecieved,
-        0
-      );
-      // Update the balance amount state
-      setBalanceAmount(updatedValue);
-      // setBalanceAmount();
-    } else {
-      setBalanceAmount(0);
-      setAmountRecieved(totalAmountTableOperation);
+    if (doubleCheckedForCheckMar) {
+      if (!checkedMark) {
+        const updatedValue = Math.max(
+          totalAmountTableOperation - amountRecieved,
+          0
+        );
+        // Update the balance amount state
+        setBalanceAmount(updatedValue);
+        // setBalanceAmount();
+      } else {
+        setBalanceAmount(0);
+        setAmountRecieved(totalAmountTableOperation);
+      }
     }
   }, [
     autoRoundOffValue,
@@ -649,7 +711,12 @@ export const SalesInvoiceCreate = ({ onBooleanChange }) => {
   ]);
 
   const handleChangeCheckedMarkAsFUll = (event) => {
+    setDoubleCheckedForCheckMar(true);
     setCheckedMark(event.target.checked);
+  };
+  const handleForSetAmountRecived = (event) => {
+    setDoubleCheckedForCheckMar(true);
+    setAmountRecieved(event.target.value);
   };
 
   const addField = () => {
@@ -755,20 +822,22 @@ export const SalesInvoiceCreate = ({ onBooleanChange }) => {
   };
 
   const addObjectOnTopSalePurchase = (newObject) => {
-    const existingIndex = salePurchaseUser.findIndex(item => item.id === newObject.id);
+    const existingIndex = salePurchaseUser.findIndex(
+      (item) => item.id === newObject.id
+    );
     if (existingIndex === -1) {
-        dispatch(addSalePurchase([newObject, ...salePurchaseUser]));
+      dispatch(addSalePurchase([newObject, ...salePurchaseUser]));
     } else {
-        const updatedArray = [...salePurchaseUser];
-        updatedArray[existingIndex] = newObject;
-        dispatch(addSalePurchase(updatedArray));
+      const updatedArray = [...salePurchaseUser];
+      updatedArray[existingIndex] = newObject;
+      dispatch(addSalePurchase(updatedArray));
     }
-};
+  };
   return (
     <Box component="form" onSubmit={handleSubmitSaleInvoiceCreate}>
       <Box sx={{ maxHeight: 300 }}>
         <Box>
-          <Button variant="contained">Sale Invoice</Button>
+          <Button variant="contained">Sale Invoice Edit</Button>
           <Box
             sx={{ right: "0", float: "right", justifyContent: "space-around" }}
           >
@@ -777,7 +846,7 @@ export const SalesInvoiceCreate = ({ onBooleanChange }) => {
               aria-label="Basic button group"
               sx={{ justifyContent: "space-around" }}
             >
-              <Button   onClick={onBooleanChange}>Cancel</Button>
+              <Button onClick={onBooleanChange}>Cancel</Button>
               <Button
                 type="submit"
                 fullWidth
@@ -870,7 +939,7 @@ export const SalesInvoiceCreate = ({ onBooleanChange }) => {
                   select
                   fullWidth={true}
                   sx={{ margin: "10px" }}
-                  label={labelBillTO}
+                  label={billTo.pname}
                   variant="outlined"
                   margin="normal"
                   value={billTo.pname}
@@ -1491,10 +1560,11 @@ export const SalesInvoiceCreate = ({ onBooleanChange }) => {
               <Box sx={{ width: "50%", margin: "10px" }}>
                 <TextField
                   label="Sales Invoice No: "
+                  disabled={true}
                   onChange={(event) =>
                     handleTextFieldChange(event, "salesInvoiceNo")
                   }
-                  value={salePurchaseObject.salesInvoiceNo}
+                  value={salePurchaseObject.id}
                 />
               </Box>
               <Box sx={{ width: "50%", margin: "10px" }}>
@@ -2535,18 +2605,18 @@ export const SalesInvoiceCreate = ({ onBooleanChange }) => {
           </Box>
           <Box sx={{ width: "50%" }}>
             {/*                        <Box>
-                            <Button variant="contained" onClick={handleAddDiscount}>
-                                Add Additional Charges
-                            </Button>
-                            {boxes.map((box, index) => (
-                                <Box key={box.id} mt={2} p={2} border={1} display="flex" alignItems="center">
-                                    <TextField label="Enter Text" fullWidth/>
-                                    <IconButton onClick={() => handleCloseBox(box.id)}>
-                                        <CloseIcon/>
-                                    </IconButton>
-                                </Box>
-                            ))}
-                        </Box>*/}
+                              <Button variant="contained" onClick={handleAddDiscount}>
+                                  Add Additional Charges
+                              </Button>
+                              {boxes.map((box, index) => (
+                                  <Box key={box.id} mt={2} p={2} border={1} display="flex" alignItems="center">
+                                      <TextField label="Enter Text" fullWidth/>
+                                      <IconButton onClick={() => handleCloseBox(box.id)}>
+                                          <CloseIcon/>
+                                      </IconButton>
+                                  </Box>
+                              ))}
+                          </Box>*/}
             <Box>
               <Box sx={{ padding: "10px" }}>
                 <Button variant="contained" onClick={addField}>
@@ -2733,7 +2803,7 @@ export const SalesInvoiceCreate = ({ onBooleanChange }) => {
                   <TextField
                     label=" ₹  "
                     value={amountRecieved}
-                    onChange={(e) => setAmountRecieved(e.target.value)}
+                    onChange={handleForSetAmountRecived}
                     inputProps={{
                       inputMode: "decimal",
                       pattern: "[0-9]*[.,]?[0-9]*",

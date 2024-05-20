@@ -32,7 +32,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useDispatch, useSelector } from "react-redux";
 import { addSalePurchase } from "../../../redux/Action";
-import SalesInvoiceView from "../SalesInvoiceView";
+import SalesInvoiceView from "../saleInvoice/SalesInvoiceView";
 import PaymentCreate from "./PaymentCreate";
 import { PaymentInView } from "./PaymentInView";
 

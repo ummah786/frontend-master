@@ -22,7 +22,7 @@ import {
   StyledTableCell,
   StyledTableRow,
   formatDate,
-} from "../../commonStyle";
+} from "../../../commonStyle";
 import { useEffect, useState } from "react";
 import ArticleIcon from "@mui/icons-material/Article";
 import IconButton from "@mui/material/IconButton";
@@ -33,7 +33,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useDispatch, useSelector } from "react-redux";
-import { addSalePurchase } from "../../redux/Action";
+import { addSalePurchase } from "../../../redux/Action";
 import SalesInvoiceView from "./SalesInvoiceView";
 export const SalesInvoice = () => {
   const loginData = useSelector((state) => state.loginReducerValue);
