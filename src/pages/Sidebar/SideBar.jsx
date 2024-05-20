@@ -29,7 +29,7 @@ const routes = [
     icon: <FaUser />,
   },
   {
-    path: "/app/posbilling",
+    path: "/posbilling",
     name: "POS-Billing",
     icon: <MdMessage />,
   },

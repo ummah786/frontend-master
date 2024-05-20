@@ -11,7 +11,6 @@ import Saved from "./pages/Saved";
 import Setting from "./pages/Setting";
 import SideBar from "./pages/Sidebar/SideBar";
 import {HesabbookHome} from "./pages/home/HesabbookHome";
-import {PosBilling} from "./pages/PosBilling";
 import {MainPage} from "./pages/MainPage";
 import {useState} from "react";
 import {AccountManagementUsers} from "./pages/account/AccountManagementUsers";
@@ -27,6 +26,7 @@ import ExampleWithProviders from "./pages/Example";
 import {CashAndBank} from "./pages/CashAndBank/CashAndBank";
 import {SalesInvoice} from "./pages/Sales/SaleInvoice/SalesInvoice";
 import { PaymentIn } from "./pages/Sales/PaymentIn/PaymentIn";
+import POSBilling from "./pages/POSBilling/POSBilling";
 
 function App() {
     const [flag, setFlag] = useState(true);
@@ -58,7 +58,7 @@ function App() {
                                 <Route path="/order" element={<Order/>}/>
                                 <Route path="/saved" element={<Saved/>}/>
                                 <Route path="/settings" element={<Setting/>}/>
-                                <Route path="/posbilling" element={<PosBilling/>}/>
+                                <Route path="/posbilling" element={<POSBilling/>}/>
                                 <Route path="/account/manageAccount" element={<AccountManagementUsers/>}/>
                                 <Route path="/account/myuser" element={<MyUserDetails/>}/>
                                 <Route path="/account/business" element={<MyBusinessAccount/>}/>
