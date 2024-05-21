@@ -177,7 +177,7 @@ const POSBilling = () => {
                                 <TableContainer component={Paper}>
                                     <Table
                                         aria-label="customized table"
-                                        stickyHeader sx={{maxHeight:'300vh'}}
+                                        stickyHeader sx={{maxHeight: '200px',}}
                                     >
                                         <TableHead>
                                             <TableRow>
