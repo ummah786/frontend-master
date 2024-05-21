@@ -13,6 +13,17 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
+export const StyledTableCellPOSBILLING = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+    fontSize:12,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 12,
+  },
+}));
+
 export const StyledTableCellTableView = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#E2E2E2", // Updated color
@@ -23,6 +34,8 @@ export const StyledTableCellTableView = styled(TableCell)(({ theme }) => ({
     fontSize: 8,
   },
 }));
+
+
 export const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
