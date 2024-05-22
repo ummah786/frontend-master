@@ -102,6 +102,7 @@ const POSBilling = () => {
                             boxShadow: 3,
                             p: 2,
                             mr: 1,
+                            height:'80vh'
                         }}
                     >
                         <Box>
@@ -182,11 +183,10 @@ const POSBilling = () => {
                             />
                         </Box>
                         <Box sx={{marginTop: '10px'}}>
-                            <Box>
-                                <TableContainer component={Paper}>
+                                <TableContainer component={Paper} sx={{ height:'67vh'}}>
                                     <Table
                                         aria-label="customized table"
-                                        stickyHeader sx={{maxHeight: '200px',}}
+                                        stickyHeader
                                     >
                                         <TableHead>
                                             <TableRow>
@@ -268,7 +268,6 @@ const POSBilling = () => {
                                         </TableBody>
                                     </Table>
                                 </TableContainer>
-                            </Box>
                         </Box>
                     </Box>
                     <Box
