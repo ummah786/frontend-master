@@ -20,7 +20,7 @@ export const StyledTableCellPOSBILLING = styled(TableCell)(({ theme }) => ({
     fontSize:12,
   },
   [`&.${tableCellClasses.body}`]: {
-    fontSize: 12,
+    fontSize: 14,
   },
 }));
 
