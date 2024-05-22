@@ -11,17 +11,15 @@ import TableBody from "@mui/material/TableBody";
 import {StyledTableCellPOSBILLING} from "../../commonStyle";
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from "@mui/material/IconButton";
+
 const POSBilling = () => {
     const [selectedRow, setSelectedRow] = useState(null);
     const [filteredPosBilling, setFilteredPosBilling] = useState([]);
     const {partyUser} = useSelector((state) => state.partyReducerValue);
     const {inventoryUser} = useSelector((state) => state.inventoryReducerValue);
-    const {salePurchaseUser} = useSelector(
-        (state) => state.salePurchaseReducerValue
-    );
+    const {salePurchaseUser} = useSelector((state) => state.salePurchaseReducerValue);
     const loginData = useSelector((state) => state.loginReducerValue);
     const handleAutoComplete = (event, newValue) => {
-        console.log("Auto Complete ", newValue);
         if (newValue) {
             addObjectOnTop(newValue);
         }
@@ -32,9 +30,14 @@ const POSBilling = () => {
     };
 
     const addObjectOnTop = (newObject) => {
+        // Set default quantity to 1 if it's an empty string or undefined
+        newObject.quantity = newObject.quantity === "" || newObject.quantity === undefined ? 1 : newObject.quantity;
         const existingIndex = filteredPosBilling.findIndex(
             (item) => item.id === newObject.id
         );
+        newObject.total =
+            newObject.salePrice * newObject.quantity +
+            (newObject.gst / 100) * newObject.salePrice * newObject.quantity;
         if (existingIndex === -1) {
             setFilteredPosBilling([newObject, ...filteredPosBilling]);
         } else {
@@ -71,6 +74,11 @@ const POSBilling = () => {
                     employee.total =
                         employee.salePrice * employee.quantity - employee.discount;
                     employee.total = employee.total + (value / 100) * employee.total;
+                    return {...employee, [key]: value};
+                } else if (key === "salePrice") {
+                    employee.total =
+                        value * employee.quantity +
+                        (employee.gst / 100) * value * employee.quantity;
                     return {...employee, [key]: value};
                 } else {
                     return {...employee, [key]: value};
@@ -207,9 +215,7 @@ const POSBilling = () => {
                                         </TableHead>
                                         <TableBody>
                                             {filteredPosBilling.map((row) => (
-                                                <TableRow
-                                                    key={row.id}
-                                                >
+                                                <TableRow key={row.id}>
                                                     <StyledTableCellPOSBILLING
                                                         align="center">{row.id}</StyledTableCellPOSBILLING>
                                                     <StyledTableCellPOSBILLING
@@ -227,9 +233,9 @@ const POSBilling = () => {
                                                                 )
                                                             }
                                                             InputProps={{
-                                                                sx: { fontSize: 10},
+                                                                sx: {fontSize: 10},
                                                             }}
-                                                            sx={{ width: "60%", '& .MuiInputBase-input': { fontSize: 10 } }}
+                                                            sx={{width: "60%", '& .MuiInputBase-input': {fontSize: 10}}}
                                                         /></StyledTableCellPOSBILLING>
                                                     <StyledTableCellPOSBILLING align="center">
 
@@ -243,18 +249,18 @@ const POSBilling = () => {
                                                                 )
                                                             }
                                                             InputProps={{
-                                                                sx: { fontSize: 10 },
+                                                                sx: {fontSize: 10},
                                                             }}
-                                                            sx={{ width: "60%", '& .MuiInputBase-input': { fontSize: 10 } }}
+                                                            sx={{width: "60%", '& .MuiInputBase-input': {fontSize: 10}}}
                                                         /></StyledTableCellPOSBILLING>
                                                     <StyledTableCellPOSBILLING
-                                                        align="center">{row.amount}</StyledTableCellPOSBILLING>
+                                                        align="center">{row.total}</StyledTableCellPOSBILLING>
                                                     <StyledTableCellPOSBILLING align="center">
                                                         <IconButton
                                                             aria-label="delete"
                                                             onClick={() => deleteRow(row.id)}
                                                         >
-                                                            <DeleteIcon />
+                                                            <DeleteIcon/>
                                                         </IconButton>
                                                     </StyledTableCellPOSBILLING>
                                                 </TableRow>
