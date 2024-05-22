@@ -292,11 +292,9 @@ const POSBilling = () => {
                                 border: '1px solid #ccc',
                                 borderRadius: '8px'
                             }}>
-
-                                <Typography variant="h5" sx={{textDecoration: 'underline'}}>Bill
+                                <Typography variant="h5">Bill
                                     details</Typography>
-
-                                <Box sx={{display: 'flex', mt: 1}}>
+                                <Box sx={{ display: 'flex', mt: 1, borderTop: '1px solid #ccc', pt: 1 }}>
                                     <Typography variant="h6">Sub Total</Typography>
                                     <Box sx={{flexGrow: 1}}/>
                                     <Typography variant="h6">0</Typography>
@@ -312,9 +310,9 @@ const POSBilling = () => {
                                     <Typography variant="h6">0</Typography>
                                 </Box>
                             </Box>
-                            <Box sx={{boxShadow: 3, p: 2, marginTop: '30px'}}>
+                            <Box sx={{boxShadow: 3, p: 2, marginTop: '10px'}}>
                                 <Typography variant="h5" sx={{textDecoration: 'underline'}}>Received Amount</Typography>
-                                <Box sx={{display: 'flex', margin: '10px'}}>
+                                <Box sx={{ display: 'flex', mt: 1, borderTop: '1px solid #ccc', pt: 1 }}>
                                     <Typography variant="h6">0</Typography>
                                     <Box sx={{flexGrow: 1}}/>
                                     <Typography variant="h6">Cash</Typography>
