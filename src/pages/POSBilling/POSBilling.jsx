@@ -9,7 +9,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
 import {StyledTableCellPOSBILLING} from "../../commonStyle";
-
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from "@mui/material/IconButton";
 const POSBilling = () => {
     const [selectedRow, setSelectedRow] = useState(null);
     const [filteredPosBilling, setFilteredPosBilling] = useState([]);
@@ -249,9 +250,12 @@ const POSBilling = () => {
                                                     <StyledTableCellPOSBILLING
                                                         align="center">{row.amount}</StyledTableCellPOSBILLING>
                                                     <StyledTableCellPOSBILLING align="center">
-                                                        <Button onClick={() => deleteRow(row.id)}>
-                                                            Delete
-                                                        </Button>
+                                                        <IconButton
+                                                            aria-label="delete"
+                                                            onClick={() => deleteRow(row.id)}
+                                                        >
+                                                            <DeleteIcon />
+                                                        </IconButton>
                                                     </StyledTableCellPOSBILLING>
                                                 </TableRow>
                                             ))}
