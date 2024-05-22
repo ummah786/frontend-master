@@ -11,6 +11,8 @@ import TableBody from "@mui/material/TableBody";
 import {StyledTableCellPOSBILLING} from "../../commonStyle";
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from "@mui/material/IconButton";
+import UserRole from "../../jsonfile/Role.json";
+import MenuItem from "@mui/material/MenuItem";
 
 const POSBilling = () => {
     const [selectedRow, setSelectedRow] = useState(null);
@@ -294,37 +296,48 @@ const POSBilling = () => {
                             }}>
                                 <Typography variant="h5">Bill
                                     details</Typography>
-                                <Box sx={{ display: 'flex', mt: 1, borderTop: '1px solid #ccc', pt: 1 }}>
+                                <Box sx={{display: 'flex', mt: 1, borderTop: '1px solid #ccc', pt: 1}}>
                                     <Typography variant="h6">Sub Total</Typography>
                                     <Box sx={{flexGrow: 1}}/>
-                                    <Typography variant="h6">0</Typography>
+                                    <Typography variant="h6">₹ 0</Typography>
                                 </Box>
                                 <Box sx={{display: 'flex', mt: 1}}>
                                     <Typography variant="h6">Tax</Typography>
                                     <Box sx={{flexGrow: 1}}/>
-                                    <Typography variant="h6">0</Typography>
+                                    <Typography variant="h6">₹ 0</Typography>
                                 </Box>
                                 <Box sx={{display: 'flex', mt: 1}}>
                                     <Typography variant="h6">Total Amount</Typography>
                                     <Box sx={{flexGrow: 1}}/>
-                                    <Typography variant="h6">0</Typography>
+                                    <Typography variant="h6">₹ 0</Typography>
                                 </Box>
                             </Box>
-                            <Box sx={{boxShadow: 3, p: 2, marginTop: '10px'}}>
+                            <Box sx={{boxShadow: 3, p: 2, marginTop: '5px'}}>
                                 <Typography variant="h5" sx={{textDecoration: 'underline'}}>Received Amount</Typography>
-                                <Box sx={{ display: 'flex', mt: 1, borderTop: '1px solid #ccc', pt: 1 }}>
-                                    <Typography variant="h6">0</Typography>
+                                <Box sx={{display: 'flex', mt: 1, borderTop: '1px solid #ccc', pt: 1}}>
+                                    <Typography variant="h6" sx={{marginTop: '15px'}}> ₹ 0</Typography>
                                     <Box sx={{flexGrow: 1}}/>
-                                    <Typography variant="h6">Cash</Typography>
+                                    <TextField
+                                        select
+                                        label="Payment Mode"
+                                        sx={{width: '150px'}}
+                                        // value={employee.gst}
+                                        //   onChange={(e) => handleInputChange(employee.id, "gst", e.target.value)}
+                                    >
+                                        {UserRole.paymentMode.map((userrole) => (
+                                            <MenuItem key={userrole.name} value={userrole.name}>
+                                                {userrole.name}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
                                 </Box>
                             </Box>
 
-                            <Box sx={{display: 'flex', boxShadow: 3, p: 2, marginTop: '30px'}}>
+                            <Box sx={{display: 'flex', boxShadow: 3, p: 2, marginTop: '10px'}}>
                                 <Button>Save & Print</Button>
                                 <Box sx={{flexGrow: 1}}/>
                                 <Button>Save Bill</Button>
                             </Box>
-
                         </Box>
                     </Box>
                 </Box>
