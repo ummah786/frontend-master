@@ -280,7 +280,40 @@ const POSBilling = () => {
                             ml: 1,
                         }}
                     >
-                        second half
+                        <Box>
+                            <Box sx={{display: 'flex'}}>
+                                <Button>Add Discount</Button>
+                                <Button>Add Additional Charge</Button>
+                            </Box>
+                            <Box sx={{margin: '10px'}}>
+                                <Typography>Bill details</Typography>
+                                <Box sx={{display: 'flex'}}>
+                                    <Typography>Sub Total</Typography>
+                                    <Typography>0</Typography>
+                                </Box>
+                                <Box sx={{display: 'flex'}}>
+                                    <Typography>Tax</Typography>
+                                    <Typography>0</Typography>
+                                </Box>
+                                <Box sx={{display: 'flex', margin: '10px'}}>
+                                    <Typography>Total Amount</Typography>
+                                    <Typography>0</Typography>
+                                </Box>
+                            </Box>
+                            <Box sx={{margin: '10px'}}>
+                                <Typography>Received Amount</Typography>
+                                <Box sx={{display: 'flex', margin: '10px'}}>
+                                    <Typography>0</Typography>
+                                    <Typography>Cash</Typography>
+                                </Box>
+                            </Box>
+
+                            <Box sx={{display: 'flex', margin: '10px'}}>
+                                <Button>Save & Print</Button>
+                                <Button>Save Bill</Button>
+                            </Box>
+
+                        </Box>
                     </Box>
                 </Box>
 
