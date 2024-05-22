@@ -102,7 +102,7 @@ const POSBilling = () => {
                             boxShadow: 3,
                             p: 2,
                             mr: 1,
-                            height:'80vh'
+                            height: '80vh'
                         }}
                     >
                         <Box>
@@ -183,91 +183,91 @@ const POSBilling = () => {
                             />
                         </Box>
                         <Box sx={{marginTop: '10px'}}>
-                                <TableContainer component={Paper} sx={{ height:'67vh'}}>
-                                    <Table
-                                        aria-label="customized table"
-                                        stickyHeader
-                                    >
-                                        <TableHead>
-                                            <TableRow>
+                            <TableContainer component={Paper} sx={{height: '67vh'}}>
+                                <Table
+                                    aria-label="customized table"
+                                    stickyHeader
+                                >
+                                    <TableHead>
+                                        <TableRow>
+                                            <StyledTableCellPOSBILLING align="center">
+                                                S.NO.
+                                            </StyledTableCellPOSBILLING>
+                                            <StyledTableCellPOSBILLING align="center">
+                                                ITEMS
+                                            </StyledTableCellPOSBILLING>
+                                            <StyledTableCellPOSBILLING align="center">
+                                                ITEM CODE
+                                            </StyledTableCellPOSBILLING>
+                                            <StyledTableCellPOSBILLING align="center">
+                                                (₹) SP
+                                            </StyledTableCellPOSBILLING>
+                                            <StyledTableCellPOSBILLING align="center">
+                                                QUANTITY
+                                            </StyledTableCellPOSBILLING>
+                                            <StyledTableCellPOSBILLING align="center">
+                                                (₹) AMOUNT
+                                            </StyledTableCellPOSBILLING>
+                                            <StyledTableCellPOSBILLING align="center">
+                                                Delete
+                                            </StyledTableCellPOSBILLING>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {filteredPosBilling.map((row) => (
+                                            <TableRow key={row.id}>
+                                                <StyledTableCellPOSBILLING
+                                                    align="center">{row.id}</StyledTableCellPOSBILLING>
+                                                <StyledTableCellPOSBILLING
+                                                    align="center">{row.item}</StyledTableCellPOSBILLING>
+                                                <StyledTableCellPOSBILLING
+                                                    align="center">{row.itemCode}</StyledTableCellPOSBILLING>
                                                 <StyledTableCellPOSBILLING align="center">
-                                                    S.NO.
-                                                </StyledTableCellPOSBILLING>
+                                                    <TextField
+                                                        value={row.salePrice}
+                                                        onChange={(e) =>
+                                                            handleInputChange(
+                                                                row.id,
+                                                                "salePrice",
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                        InputProps={{
+                                                            sx: {fontSize: 10},
+                                                        }}
+                                                        sx={{width: "60%", '& .MuiInputBase-input': {fontSize: 10}}}
+                                                    /></StyledTableCellPOSBILLING>
                                                 <StyledTableCellPOSBILLING align="center">
-                                                    ITEMS
-                                                </StyledTableCellPOSBILLING>
+
+                                                    <TextField
+                                                        value={row.quantity}
+                                                        onChange={(e) =>
+                                                            handleInputChange(
+                                                                row.id,
+                                                                "quantity",
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                        InputProps={{
+                                                            sx: {fontSize: 10},
+                                                        }}
+                                                        sx={{width: "60%", '& .MuiInputBase-input': {fontSize: 10}}}
+                                                    /></StyledTableCellPOSBILLING>
+                                                <StyledTableCellPOSBILLING
+                                                    align="center">{row.total}</StyledTableCellPOSBILLING>
                                                 <StyledTableCellPOSBILLING align="center">
-                                                    ITEM CODE
-                                                </StyledTableCellPOSBILLING>
-                                                <StyledTableCellPOSBILLING align="center">
-                                                    (₹) SP
-                                                </StyledTableCellPOSBILLING>
-                                                <StyledTableCellPOSBILLING align="center">
-                                                    QUANTITY
-                                                </StyledTableCellPOSBILLING>
-                                                <StyledTableCellPOSBILLING align="center">
-                                                    (₹) AMOUNT
-                                                </StyledTableCellPOSBILLING>
-                                                <StyledTableCellPOSBILLING align="center">
-                                                    Delete
+                                                    <IconButton
+                                                        aria-label="delete"
+                                                        onClick={() => deleteRow(row.id)}
+                                                    >
+                                                        <DeleteIcon/>
+                                                    </IconButton>
                                                 </StyledTableCellPOSBILLING>
                                             </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {filteredPosBilling.map((row) => (
-                                                <TableRow key={row.id}>
-                                                    <StyledTableCellPOSBILLING
-                                                        align="center">{row.id}</StyledTableCellPOSBILLING>
-                                                    <StyledTableCellPOSBILLING
-                                                        align="center">{row.item}</StyledTableCellPOSBILLING>
-                                                    <StyledTableCellPOSBILLING
-                                                        align="center">{row.itemCode}</StyledTableCellPOSBILLING>
-                                                    <StyledTableCellPOSBILLING align="center">
-                                                        <TextField
-                                                            value={row.salePrice}
-                                                            onChange={(e) =>
-                                                                handleInputChange(
-                                                                    row.id,
-                                                                    "salePrice",
-                                                                    e.target.value
-                                                                )
-                                                            }
-                                                            InputProps={{
-                                                                sx: {fontSize: 10},
-                                                            }}
-                                                            sx={{width: "60%", '& .MuiInputBase-input': {fontSize: 10}}}
-                                                        /></StyledTableCellPOSBILLING>
-                                                    <StyledTableCellPOSBILLING align="center">
-
-                                                        <TextField
-                                                            value={row.quantity}
-                                                            onChange={(e) =>
-                                                                handleInputChange(
-                                                                    row.id,
-                                                                    "quantity",
-                                                                    e.target.value
-                                                                )
-                                                            }
-                                                            InputProps={{
-                                                                sx: {fontSize: 10},
-                                                            }}
-                                                            sx={{width: "60%", '& .MuiInputBase-input': {fontSize: 10}}}
-                                                        /></StyledTableCellPOSBILLING>
-                                                    <StyledTableCellPOSBILLING
-                                                        align="center">{row.total}</StyledTableCellPOSBILLING>
-                                                    <StyledTableCellPOSBILLING align="center">
-                                                        <IconButton
-                                                            aria-label="delete"
-                                                            onClick={() => deleteRow(row.id)}
-                                                        >
-                                                            <DeleteIcon/>
-                                                        </IconButton>
-                                                    </StyledTableCellPOSBILLING>
-                                                </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
                         </Box>
                     </Box>
                     <Box
@@ -280,35 +280,41 @@ const POSBilling = () => {
                         }}
                     >
                         <Box>
-                            <Box sx={{display: 'flex'}}>
+                            <Box sx={{display: 'flex', boxShadow: 3, p: 2}}>
                                 <Button>Add Discount</Button>
+                                <Box sx={{flexGrow: 1}}/>
                                 <Button>Add Additional Charge</Button>
                             </Box>
-                            <Box sx={{margin: '10px'}}>
+                            <Box sx={{boxShadow: 3, p: 2}}>
                                 <Typography>Bill details</Typography>
                                 <Box sx={{display: 'flex'}}>
                                     <Typography>Sub Total</Typography>
+                                    <Box sx={{flexGrow: 1}}/>
                                     <Typography>0</Typography>
                                 </Box>
                                 <Box sx={{display: 'flex'}}>
                                     <Typography>Tax</Typography>
+                                    <Box sx={{flexGrow: 1}}/>
                                     <Typography>0</Typography>
                                 </Box>
-                                <Box sx={{display: 'flex', margin: '10px'}}>
+                                <Box sx={{display: 'flex'}}>
                                     <Typography>Total Amount</Typography>
+                                    <Box sx={{flexGrow: 1}}/>
                                     <Typography>0</Typography>
                                 </Box>
                             </Box>
-                            <Box sx={{margin: '10px'}}>
+                            <Box sx={{boxShadow: 3, p: 2}}>
                                 <Typography>Received Amount</Typography>
                                 <Box sx={{display: 'flex', margin: '10px'}}>
                                     <Typography>0</Typography>
+                                    <Box sx={{flexGrow: 1}}/>
                                     <Typography>Cash</Typography>
                                 </Box>
                             </Box>
 
-                            <Box sx={{display: 'flex', margin: '10px'}}>
+                            <Box sx={{display: 'flex', boxShadow: 3, p: 2}}>
                                 <Button>Save & Print</Button>
+                                <Box sx={{flexGrow: 1}}/>
                                 <Button>Save Bill</Button>
                             </Box>
 
