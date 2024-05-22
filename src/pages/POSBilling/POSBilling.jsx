@@ -285,34 +285,43 @@ const POSBilling = () => {
                                 <Box sx={{flexGrow: 1}}/>
                                 <Button>Add Additional Charge</Button>
                             </Box>
-                            <Box sx={{boxShadow: 3, p: 2}}>
-                                <Typography>Bill details</Typography>
-                                <Box sx={{display: 'flex'}}>
-                                    <Typography>Sub Total</Typography>
+                            <Box sx={{
+                                boxShadow: 3,
+                                p: 2,
+                                marginTop: '30px',
+                                border: '1px solid #ccc',
+                                borderRadius: '8px'
+                            }}>
+
+                                <Typography variant="h5" sx={{textDecoration: 'underline'}}>Bill
+                                    details</Typography>
+
+                                <Box sx={{display: 'flex', mt: 1}}>
+                                    <Typography variant="h6">Sub Total</Typography>
                                     <Box sx={{flexGrow: 1}}/>
-                                    <Typography>0</Typography>
+                                    <Typography variant="h6">0</Typography>
                                 </Box>
-                                <Box sx={{display: 'flex'}}>
-                                    <Typography>Tax</Typography>
+                                <Box sx={{display: 'flex', mt: 1}}>
+                                    <Typography variant="h6">Tax</Typography>
                                     <Box sx={{flexGrow: 1}}/>
-                                    <Typography>0</Typography>
+                                    <Typography variant="h6">0</Typography>
                                 </Box>
-                                <Box sx={{display: 'flex'}}>
-                                    <Typography>Total Amount</Typography>
+                                <Box sx={{display: 'flex', mt: 1}}>
+                                    <Typography variant="h6">Total Amount</Typography>
                                     <Box sx={{flexGrow: 1}}/>
-                                    <Typography>0</Typography>
+                                    <Typography variant="h6">0</Typography>
                                 </Box>
                             </Box>
-                            <Box sx={{boxShadow: 3, p: 2}}>
-                                <Typography>Received Amount</Typography>
+                            <Box sx={{boxShadow: 3, p: 2, marginTop: '30px'}}>
+                                <Typography variant="h5" sx={{textDecoration: 'underline'}}>Received Amount</Typography>
                                 <Box sx={{display: 'flex', margin: '10px'}}>
-                                    <Typography>0</Typography>
+                                    <Typography variant="h6">0</Typography>
                                     <Box sx={{flexGrow: 1}}/>
-                                    <Typography>Cash</Typography>
+                                    <Typography variant="h6">Cash</Typography>
                                 </Box>
                             </Box>
 
-                            <Box sx={{display: 'flex', boxShadow: 3, p: 2}}>
+                            <Box sx={{display: 'flex', boxShadow: 3, p: 2, marginTop: '30px'}}>
                                 <Button>Save & Print</Button>
                                 <Box sx={{flexGrow: 1}}/>
                                 <Button>Save Bill</Button>
