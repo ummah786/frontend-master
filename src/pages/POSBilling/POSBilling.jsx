@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 import {Autocomplete, Box, Button, Grid, TextField, Typography} from "@mui/material";
 import {useSelector} from "react-redux";
@@ -26,6 +26,41 @@ const POSBilling = () => {
             addObjectOnTop(newValue);
         }
     };
+    const [sideTotalAmount, setSideTotalAmount] = useState("");
+    const [sideSubTotalAmount, setSideSubTotalAmount] = useState("");
+    const [sideTax, setSideTax] = useState("");
+
+    useEffect(() => {
+        const totalAmount = filteredPosBilling.reduce((acc, emp) => {
+            const parsedValue = parseFloat(emp.total);
+            if (isNaN(parsedValue)) {
+                return acc;
+            }
+            return acc + parsedValue;
+        }, 0);
+        const roundedTotalAmount = parseFloat(totalAmount.toFixed(2));
+        setSideTotalAmount(roundedTotalAmount);
+        const subTax = filteredPosBilling.reduce((acc, emp) => {
+            let parseGst = parseFloat(emp.gst);
+            let parseSale = parseFloat(emp.salePrice);
+            let parseQuantity = parseFloat(emp.quantity);
+            let calculatedRValue = null;
+            if (isNaN(parseQuantity) || parseQuantity === 0) {
+                parseQuantity = 1;
+            }
+            if (isNaN(parseGst) || parseGst === 0) {
+                calculatedRValue = 0;
+            } else {
+                calculatedRValue = (parseSale * parseQuantity * parseGst) / 200;
+            }
+            return acc + calculatedRValue;
+        }, 0);
+        const roundedSubTax = parseFloat(subTax.toFixed(2));
+        setSideTax(roundedSubTax);
+        setSideSubTotalAmount(parseFloat(roundedTotalAmount - roundedSubTax).toFixed(2));
+    }, [filteredPosBilling]);
+
+
     const deleteRow = (id) => {
         const updatedEmployees = filteredPosBilling.filter((employee) => employee.id !== id);
         setFilteredPosBilling(updatedEmployees);
@@ -299,17 +334,17 @@ const POSBilling = () => {
                                 <Box sx={{display: 'flex', mt: 1, borderTop: '1px solid #ccc', pt: 1}}>
                                     <Typography variant="h6">Sub Total</Typography>
                                     <Box sx={{flexGrow: 1}}/>
-                                    <Typography variant="h6">₹ 0</Typography>
+                                    <Typography variant="h6">₹ {sideSubTotalAmount}</Typography>
                                 </Box>
                                 <Box sx={{display: 'flex', mt: 1}}>
                                     <Typography variant="h6">Tax</Typography>
                                     <Box sx={{flexGrow: 1}}/>
-                                    <Typography variant="h6">₹ 0</Typography>
+                                    <Typography variant="h6">₹ {sideTax}</Typography>
                                 </Box>
                                 <Box sx={{display: 'flex', mt: 1}}>
                                     <Typography variant="h6">Total Amount</Typography>
                                     <Box sx={{flexGrow: 1}}/>
-                                    <Typography variant="h6">₹ 0</Typography>
+                                    <Typography variant="h6">₹ {sideTotalAmount}</Typography>
                                 </Box>
                             </Box>
                             <Box sx={{boxShadow: 3, p: 2, marginTop: '5px'}}>
