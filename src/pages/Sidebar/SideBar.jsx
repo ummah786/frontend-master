@@ -146,7 +146,7 @@ const routes = [
   },
   {
     path: "/settings",
-    name: "Serttings",
+    name: "Settings",
     icon: <AiFillHeart />,
   },  {
     path: "/chat",
