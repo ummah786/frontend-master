@@ -52,8 +52,7 @@ const POSBilling = () => {
     const [addAdditionalChargeFlag, setAddAdditionalChargeFlag] = useState(false);
     const [addDiscountInRupee, setAddDiscountInRupee] = useState(0);
     const [addDiscountInPer, setAddDiscountInPer] = useState(0);
-
-    const [discountOption, setDiscountOption] = useState('b');
+    const [discountOption, setDiscountOption] = useState();
 
     const handleChange = (event) => {
         setDiscountOption(event.target.value);
@@ -74,7 +73,7 @@ const POSBilling = () => {
             const value = parseFloat(field.value) || 0; // Convert to number and handle empty strings
             return acc + value;
         }, 0);
-        setSideTotalAmount(parseFloat(roundedTotalAmount+fieldsValueTotal).toFixed(2));
+        setSideTotalAmount(parseFloat(roundedTotalAmount + fieldsValueTotal).toFixed(2));
         const subTax = filteredPosBilling.reduce((acc, emp) => {
             let parseGst = parseFloat(emp.gst);
             let parseSale = parseFloat(emp.salePrice);
@@ -164,6 +163,25 @@ const POSBilling = () => {
     const handleClickForAdditionDiscount = (e) => {
         e.preventDefault();
         //add logic for handling Additional Discount
+
+        //check for type of flag //   const [addDiscountInRupee, setAddDiscountInRupee] = useState(0);
+        //     const [addDiscountInPer, setAddDiscountInPer] = useState(0);
+        //     const [discountOption, setDiscountOption] = useState();
+        if (discountOption !== null && discountOption === 'a') {
+            if (addDiscountInRupee > 0) {
+                const sideAddDiscountInRuppe = sideTotalAmount - addDiscountInRupee;
+                setSideTotalAmount(sideAddDiscountInRuppe);
+            } else if (addDiscountInPer > 0) {
+                const findValue = sideTotalAmount * addDiscountInPer / 100;
+                setAddDiscountInRupee(findValue);
+                const sideAddDiscountInRuppe = sideTotalAmount - findValue;
+                setSideTotalAmount(sideAddDiscountInRuppe);
+            }
+        }
+
+        //  after mai 2 thing per total ka per   price to direct hai
+
+
     }
     const handleClickForAdditionCharge = (e) => {
         e.preventDefault();
@@ -172,7 +190,7 @@ const POSBilling = () => {
             const value = parseFloat(field.value) || 0; // Convert to number and handle empty strings
             return acc + value;
         }, 0);
-        const totalAmount = fieldsValueTotal + sideTotalAmount;
+        const totalAmount = parseFloat(fieldsValueTotal) + sideTotalAmount;
         setSideTotalAmount(totalAmount);
     }
     const style = {
@@ -611,7 +629,15 @@ const POSBilling = () => {
                                         )
                                     ))}
                                 </Box>
-
+                                <Box>
+                                    {(discountOption === 'a') &&
+                                        <Box sx={{display: 'flex', alignItems: 'center', mb: 1}}>
+                                            <Typography variant="h6" sx={{mr: 2}}>Discount After Tax</Typography>
+                                            <Box sx={{flexGrow: 1}}/>
+                                            <Typography variant="h6">- ₹ {addDiscountInRupee}</Typography>
+                                        </Box>
+                                    }
+                                </Box>
                                 <Box sx={{display: 'flex', mt: 1}}>
                                     <Typography variant="h6">Total Amount</Typography>
                                     <Box sx={{flexGrow: 1}}/>
