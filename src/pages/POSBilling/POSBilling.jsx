@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Autocomplete, Box, Button, Grid, TextField, Typography} from '@mui/material';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -16,7 +16,12 @@ import Modal from "@mui/joy/Modal";
 import ModalClose from "@mui/joy/ModalClose";
 import {Transition} from "react-transition-group";
 import CloseIcon from "@mui/icons-material/Close";
-
+import {List, ListItem, ListItemButton} from "@mui/joy";
+import Delete from "@mui/icons-material/Delete";
+import axios from "axios";
+import {addExistingInventory, addKeyCategory, addKeyCompany} from "../../redux/Action";
+import {InventoryDataModel} from "../../datamodel/ManageUserDataModel";
+import {DELETE_KEY_VALUE, SAVE_KEY_VALUE} from "../apiendpoint/APIEndPoint";
 const POSBilling = () => {
     const [selectedRow, setSelectedRow] = useState(null);
     const [filteredPosBilling, setFilteredPosBilling] = useState([]);
@@ -30,7 +35,12 @@ const POSBilling = () => {
         }
     };
 
-
+    const [openCompany, setOpenCompany] = React.useState(false);
+    const [openCategory, setOpenCategory] = React.useState(false);
+    const [inventoryObject, setInventoryObject] = useState(InventoryDataModel);
+    const dispatch = useDispatch();
+    const keyCategoryData = useSelector((state) => state.keyCategoryReducerValue);
+    const keyCompanyData = useSelector((state) => state.keyCompanyReducerValue);
     const [sideTotalAmount, setSideTotalAmount] = useState("");
     const [sideSubTotalAmount, setSideSubTotalAmount] = useState("");
     const [sideTax, setSideTax] = useState("");
@@ -62,7 +72,7 @@ const POSBilling = () => {
             const value = parseFloat(field.value) || 0; // Convert to number and handle empty strings
             return acc + value;
         }, 0);
-        setSideTotalAmount(parseFloat(roundedTotalAmount + fieldsValueTotal-addDiscountInRupee).toFixed(2));
+        setSideTotalAmount(parseFloat(roundedTotalAmount + fieldsValueTotal - addDiscountInRupee).toFixed(2));
         const subTax = filteredPosBilling.reduce((acc, emp) => {
             let parseGst = parseFloat(emp.gst);
             let parseSale = parseFloat(emp.salePrice);
@@ -211,11 +221,640 @@ const POSBilling = () => {
         updatedFields.splice(index, 1);
         setFields(updatedFields);
     };
+    const handleForNewItemCreation = async (e) => {
+        e.preventDefault();
+        inventoryObject["primary_user_id"] = loginData.primary_user_id;
+        inventoryObject["secondary_user_id"] = loginData.secondary_user_id;
+        const response = await axios.post(
+            "http://localhost:8700/hesabbook/inventory/save",
+            inventoryObject
+        );
+        console.log("Submit Response :--    ", response.data);
+        console.log("on Submit :-->", inventoryObject);
+        dispatch(addExistingInventory(response.data.response));
+        setInventoryObject(InventoryDataModel);
+        handleAddNewItems();
+    };
+    let axiosConfig = {
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8",
+            "Access-Control-Allow-Origin": "*",
+        },
+    };
+    const handleClickForCategory = (e) => {
+        e.preventDefault();
+        handleSubmitToKeyValuePairForCategory();
+        setCategoryApi("");
+    };
+    const handleSubmitToKeyValuePairForCategory = async () => {
+        try {
+            const response = await axios.post(
+                SAVE_KEY_VALUE,
+                {
+                    kes: "category",
+                    value: categoryApi,
+                    primary_user_id: loginData.primary_user_id,
+                },
+                axiosConfig
+            );
+            console.log("save Categroy response ", response.data.response.value);
+            dispatch(
+                addKeyCategory([response.data.response.value, ...keyCategoryData])
+            );
+            setAddCategory([...addCategory, response.data.response]);
+            console.log("Add Category ", addCategory);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+    const handleTextFieldChangeForInventory = (event, field) => {
+        setInventoryObject({
+            ...inventoryObject,
+            [field]: event.target.value,
+        });
+        console.log("Inventory ", inventoryObject);
+    };
+    const [addCategory, setAddCategory] = React.useState([]);
+    const [categoryApi, setCategoryApi] = useState();
+    const [addNewItemsFlagModal, setAddNewItemsFlagModal] = useState(false);
+    const handleAddNewItems = () => {
+        setAddNewItemsFlagModal(true);
+    };
+    const handleClickForCompany = (e) => {
+        e.preventDefault();
+        handleSubmitToKeyValuePairForCompany();
+        setCategoryApi("");
+    };
+    const handleSubmitToKeyValuePairForCompany = async () => {
+        try {
+            const response = await axios.post(
+                SAVE_KEY_VALUE,
+                {
+                    kes: "company",
+                    value: categoryApi,
+                    primary_user_id: loginData.primary_user_id,
+                },
+                axiosConfig
+            );
+            console.log("save company response ", response.data.response.value);
+            dispatch(
+                addKeyCompany([response.data.response.value, ...keyCompanyData])
+            );
+            setAddCategory([...addCategory, response.data.response]);
+            console.log("Add company ", addCategory);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+    async function deleteCategory(id, value) {
+        try {
+            const response = await axios.get(DELETE_KEY_VALUE + `/${id}`);
+            console.log("DELETE CATEGORY  ", response.data.response);
+            //add logic for remove from
+            // dispatch(removeKeyCategory(value));
+            setAddCategory((prevItems) => prevItems.filter((item) => item.id !== id));
+            console.log("Add Category ", addCategory);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
     return (
         <>
             <Box sx={{p: 2}}>
                 <Box sx={{mb: 2}}>
                     <Button variant="contained">POS BILLING</Button>
+                    <Box
+                        sx={{right: "0", float: "right", justifyContent: "space-around"}}
+                    > <Button variant="contained" onClick={handleAddNewItems}>Create Item</Button>
+
+                        <Modal
+                            open={addNewItemsFlagModal}
+                            onClose={() => setAddNewItemsFlagModal(false)}
+                            aria-labelledby="child-modal-title"
+                            aria-describedby="child-modal-description"
+                        >
+                            <Box sx={{ ...style, width: 200 }}>
+                                <Box
+                                    sx={{
+                                        position: "absolute",
+                                        top: "50%",
+                                        left: "50%",
+                                        transform: "translate(-50%, -50%)",
+                                        width: 1000,
+                                        bgcolor: "background.paper",
+                                        border: "2px solid #000",
+                                        boxShadow: 24,
+                                        p: 1,
+                                    }}
+                                >
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            alignItems: "center",
+                                        }}
+                                    >
+                                        <Box
+                                            sx={{
+                                                display: "flex",
+                                                borderStyle: "dashed",
+                                                borderWidth: "2px",
+                                            }}
+                                        >
+                                            <Typography component="h1" variant="h5">
+                                                Add New Items
+                                            </Typography>
+                                            <ModalClose
+                                                variant="plain"
+                                                sx={{
+                                                    m: 1,
+                                                    borderStyle: "dashed",
+                                                    borderWidth: "2px",
+                                                }}
+                                            />
+                                        </Box>
+                                        <Box
+                                            component="form"
+                                            onSubmit={handleForNewItemCreation}
+                                        >
+                                            <Box>
+                                                <TextField
+                                                    id="outlined-basic"
+                                                    label="Item"
+                                                    variant="outlined"
+                                                    sx={{ margin: "10px" }}
+                                                    value={inventoryObject.item}
+                                                    onChange={(event) =>
+                                                        handleTextFieldChangeForInventory(
+                                                            event,
+                                                            "item"
+                                                        )
+                                                    }
+                                                />
+                                                <TextField
+                                                    id="outlined-basic"
+                                                    label="Item Code"
+                                                    variant="outlined"
+                                                    sx={{ margin: "10px" }}
+                                                    value={inventoryObject.itemCode}
+                                                    onChange={(event) =>
+                                                        handleTextFieldChangeForInventory(
+                                                            event,
+                                                            "itemCode"
+                                                        )
+                                                    }
+                                                />
+                                                <TextField
+                                                    id="outlined-basic"
+                                                    label="Bar Code"
+                                                    variant="outlined"
+                                                    sx={{ margin: "10px" }}
+                                                    value={inventoryObject.barCodeValue}
+                                                    onChange={(event) =>
+                                                        handleTextFieldChangeForInventory(
+                                                            event,
+                                                            "barCodeValue"
+                                                        )
+                                                    }
+                                                />{" "}
+                                                <TextField
+                                                    id="outlined-basic"
+                                                    label="MRP"
+                                                    variant="outlined"
+                                                    sx={{ margin: "10px" }}
+                                                    value={inventoryObject.mrp}
+                                                    onChange={(event) =>
+                                                        handleTextFieldChangeForInventory(
+                                                            event,
+                                                            "mrp"
+                                                        )
+                                                    }
+                                                />
+                                                <Box sx={{ display: "flex" }}>
+                                                    <TextField
+                                                        id="outlined-basic"
+                                                        label="Sale Price"
+                                                        variant="outlined"
+                                                        sx={{ margin: "10px", width: "60%" }}
+                                                        value={inventoryObject.salePrice}
+                                                        onChange={(event) =>
+                                                            handleTextFieldChangeForInventory(
+                                                                event,
+                                                                "salePrice"
+                                                            )
+                                                        }
+                                                    />
+                                                    <TextField
+                                                        sx={{ margin: "10px", width: "60%" }}
+                                                        select
+                                                        value={inventoryObject.salePriceTax}
+                                                        onChange={(event) =>
+                                                            handleTextFieldChangeForInventory(
+                                                                event,
+                                                                "salePriceTax"
+                                                            )
+                                                        }
+                                                        label="Tax"
+                                                        variant="outlined"
+                                                        margin="normal"
+                                                    >
+                                                        {UserRole.taxType.map((userrole) => (
+                                                            <MenuItem
+                                                                key={userrole.name}
+                                                                value={userrole.name}
+                                                            >
+                                                                {userrole.name}
+                                                            </MenuItem>
+                                                        ))}
+                                                    </TextField>
+                                                </Box>
+                                                <Box sx={{ display: "flex" }}>
+                                                    <TextField
+                                                        id="outlined-basic"
+                                                        label="Purchase Price"
+                                                        variant="outlined"
+                                                        sx={{ margin: "10px", width: "60%" }}
+                                                        value={inventoryObject.purchasePrice}
+                                                        onChange={(event) =>
+                                                            handleTextFieldChangeForInventory(
+                                                                event,
+                                                                "purchasePrice"
+                                                            )
+                                                        }
+                                                    />
+                                                    <TextField
+                                                        select
+                                                        value={
+                                                            inventoryObject.purchasePriceTax
+                                                        }
+                                                        onChange={(event) =>
+                                                            handleTextFieldChangeForInventory(
+                                                                event,
+                                                                "purchasePriceTax"
+                                                            )
+                                                        }
+                                                        label="Tax"
+                                                        variant="outlined"
+                                                        margin="normal"
+                                                        sx={{ margin: "10px", width: "60%" }}
+                                                    >
+                                                        {UserRole.taxType.map((userrole) => (
+                                                            <MenuItem
+                                                                key={userrole.name}
+                                                                value={userrole.name}
+                                                            >
+                                                                {userrole.name}
+                                                            </MenuItem>
+                                                        ))}
+                                                    </TextField>
+                                                </Box>
+                                                <TextField
+                                                    fullWidth
+                                                    select
+                                                    value={inventoryObject.gst}
+                                                    onChange={(event) =>
+                                                        handleTextFieldChangeForInventory(
+                                                            event,
+                                                            "gst"
+                                                        )
+                                                    }
+                                                    label="GST %"
+                                                    variant="outlined"
+                                                    margin="normal"
+                                                >
+                                                    {UserRole.GST.map((userrole) => (
+                                                        <MenuItem
+                                                            key={userrole.name}
+                                                            value={userrole.name}
+                                                        >
+                                                            {userrole.name}
+                                                        </MenuItem>
+                                                    ))}
+                                                </TextField>
+                                                <TextField
+                                                    fullWidth
+                                                    select
+                                                    value={inventoryObject.category}
+                                                    onChange={(event) =>
+                                                        handleTextFieldChangeForInventory(
+                                                            event,
+                                                            "category"
+                                                        )
+                                                    }
+                                                    label="Category"
+                                                    variant="outlined"
+                                                    margin="normal"
+                                                >
+                                                    <MenuItem
+                                                        onClick={() => setOpenCategory(true)}
+                                                    >
+                                                        Create a New Category
+                                                    </MenuItem>
+                                                    {Array.isArray(keyCategoryData) &&
+                                                        keyCategoryData.map((userrole) => (
+                                                            <MenuItem
+                                                                key={userrole}
+                                                                value={userrole}
+                                                            >
+                                                                {userrole}
+                                                            </MenuItem>
+                                                        ))}
+                                                </TextField>
+                                                <Modal
+                                                    aria-labelledby="modal-title"
+                                                    aria-describedby="modal-desc"
+                                                    open={openCategory}
+                                                    onClose={() => setOpenCategory(false)}
+                                                    sx={{
+                                                        display: "flex",
+                                                        justifyContent: "center",
+                                                        alignItems: "center",
+                                                    }}
+                                                >
+                                                    <Box>
+                                                        <Box sx={style}>
+                                                            <Box
+                                                                sx={{
+                                                                    marginTop: 8,
+                                                                    display: "flex",
+                                                                    flexDirection: "column",
+                                                                    alignItems: "center",
+                                                                }}
+                                                            >
+                                                                <ModalClose
+                                                                    variant="plain"
+                                                                    sx={{ m: 1 }}
+                                                                />
+                                                                <Typography
+                                                                    component="h1"
+                                                                    variant="h5"
+                                                                >
+                                                                    Save Into Category
+                                                                </Typography>
+                                                                <Box
+                                                                    component="form"
+                                                                    onSubmit={
+                                                                        handleClickForCategory
+                                                                    }
+                                                                    noValidate
+                                                                    sx={{ mt: 1 }}
+                                                                >
+                                                                    <TextField
+                                                                        margin="normal"
+                                                                        required
+                                                                        fullWidth
+                                                                        id="Category"
+                                                                        label="Categroy"
+                                                                        name="Category"
+                                                                        autoComplete="Category"
+                                                                        value={categoryApi}
+                                                                        onChange={(e) =>
+                                                                            setCategoryApi(
+                                                                                e.target.value
+                                                                            )
+                                                                        }
+                                                                        autoFocus
+                                                                    />
+                                                                    <Button
+                                                                        type="submit"
+                                                                        fullWidth
+                                                                        variant="contained"
+                                                                        onClick={
+                                                                            handleClickForCategory
+                                                                        }
+                                                                        sx={{
+                                                                            mt: 3,
+                                                                            mb: 2,
+                                                                            color: "whitesmoke",
+                                                                            background: "#212121",
+                                                                        }}
+                                                                    >
+                                                                        Submit
+                                                                    </Button>
+                                                                    <List sx={{ maxWidth: 300 }}>
+                                                                        {addCategory.length > 0 ? (
+                                                                            addCategory.map(
+                                                                                (item, index) => (
+                                                                                    <ListItem
+                                                                                        endAction={
+                                                                                            <IconButton
+                                                                                                aria-label="Delete"
+                                                                                                size="sm"
+                                                                                                color="danger"
+                                                                                            >
+                                                                                                <Delete
+                                                                                                    onClick={() =>
+                                                                                                        deleteCategory(
+                                                                                                            item.id,
+                                                                                                            item.value
+                                                                                                        )
+                                                                                                    }
+                                                                                                />
+                                                                                            </IconButton>
+                                                                                        }
+                                                                                    >
+                                                                                        <ListItemButton
+                                                                                            key={index}
+                                                                                        >
+                                                                                            {item.value}
+                                                                                        </ListItemButton>
+                                                                                    </ListItem>
+                                                                                )
+                                                                            )
+                                                                        ) : (
+                                                                            <p>Add New Category</p>
+                                                                        )}
+                                                                    </List>
+                                                                </Box>
+                                                            </Box>
+                                                        </Box>
+                                                    </Box>
+                                                </Modal>
+                                                <TextField
+                                                    fullWidth
+                                                    select
+                                                    value={inventoryObject.companyName}
+                                                    onChange={(event) =>
+                                                        handleTextFieldChangeForInventory(
+                                                            event,
+                                                            "companyName"
+                                                        )
+                                                    }
+                                                    label="Company Name"
+                                                    variant="outlined"
+                                                    margin="normal"
+                                                >
+                                                    <MenuItem
+                                                        onClick={() => setOpenCompany(true)}
+                                                    >
+                                                        Create a New Company
+                                                    </MenuItem>
+                                                    {Array.isArray(keyCompanyData) &&
+                                                        keyCompanyData.map((userrole) => (
+                                                            <MenuItem
+                                                                key={userrole}
+                                                                value={userrole}
+                                                            >
+                                                                {userrole}
+                                                            </MenuItem>
+                                                        ))}
+                                                </TextField>
+                                                <Modal
+                                                    aria-labelledby="modal-title"
+                                                    aria-describedby="modal-desc"
+                                                    open={openCompany}
+                                                    onClose={() => setOpenCompany(false)}
+                                                    sx={{
+                                                        display: "flex",
+                                                        justifyContent: "center",
+                                                        alignItems: "center",
+                                                    }}
+                                                >
+                                                    <Box>
+                                                        <Box sx={style}>
+                                                            <Box
+                                                                sx={{
+                                                                    marginTop: 8,
+                                                                    display: "flex",
+                                                                    flexDirection: "column",
+                                                                    alignItems: "center",
+                                                                }}
+                                                            >
+                                                                <ModalClose
+                                                                    variant="plain"
+                                                                    sx={{ m: 1 }}
+                                                                />
+                                                                <Typography
+                                                                    component="h1"
+                                                                    variant="h5"
+                                                                >
+                                                                    Save Into Category
+                                                                </Typography>
+                                                                <Box
+                                                                    component="form"
+                                                                    onSubmit={handleClickForCompany}
+                                                                    noValidate
+                                                                    sx={{ mt: 1 }}
+                                                                >
+                                                                    <TextField
+                                                                        margin="normal"
+                                                                        required
+                                                                        fullWidth
+                                                                        id="Category"
+                                                                        label="Categroy"
+                                                                        name="Category"
+                                                                        autoComplete="Category"
+                                                                        value={categoryApi}
+                                                                        onChange={(e) =>
+                                                                            setCategoryApi(
+                                                                                e.target.value
+                                                                            )
+                                                                        }
+                                                                        autoFocus
+                                                                    />
+                                                                    <Button
+                                                                        type="submit"
+                                                                        fullWidth
+                                                                        variant="contained"
+                                                                        onClick={
+                                                                            handleClickForCompany
+                                                                        }
+                                                                        sx={{
+                                                                            mt: 3,
+                                                                            mb: 2,
+                                                                            color: "whitesmoke",
+                                                                            background: "#212121",
+                                                                        }}
+                                                                    >
+                                                                        Submit
+                                                                    </Button>
+                                                                    <List sx={{ maxWidth: 300 }}>
+                                                                        {addCategory.length > 0 ? (
+                                                                            addCategory.map(
+                                                                                (item, index) => (
+                                                                                    <ListItem
+                                                                                        endAction={
+                                                                                            <IconButton
+                                                                                                aria-label="Delete"
+                                                                                                size="sm"
+                                                                                                color="danger"
+                                                                                            >
+                                                                                                <Delete
+                                                                                                    onClick={() =>
+                                                                                                        deleteCategory(
+                                                                                                            item.id,
+                                                                                                            item.value
+                                                                                                        )
+                                                                                                    }
+                                                                                                />
+                                                                                            </IconButton>
+                                                                                        }
+                                                                                    >
+                                                                                        <ListItemButton
+                                                                                            key={index}
+                                                                                        >
+                                                                                            {item.value}
+                                                                                        </ListItemButton>
+                                                                                    </ListItem>
+                                                                                )
+                                                                            )
+                                                                        ) : (
+                                                                            <p>Add New Company</p>
+                                                                        )}
+                                                                    </List>
+                                                                </Box>
+                                                            </Box>
+                                                        </Box>
+                                                    </Box>
+                                                </Modal>
+                                                <TextField
+                                                    id="outlined-basic"
+                                                    label="HSN Code"
+                                                    variant="outlined"
+                                                    sx={{ margin: "10px" }}
+                                                    value={inventoryObject.hsn}
+                                                    onChange={(event) =>
+                                                        handleTextFieldChangeForInventory(
+                                                            event,
+                                                            "hsn"
+                                                        )
+                                                    }
+                                                />
+                                                <TextField
+                                                    id="outlined-basic"
+                                                    label="Total Stock"
+                                                    variant="outlined"
+                                                    sx={{ margin: "10px" }}
+                                                    value={inventoryObject.totalStock}
+                                                    onChange={(event) =>
+                                                        handleTextFieldChangeForInventory(
+                                                            event,
+                                                            "totalStock"
+                                                        )
+                                                    }
+                                                />
+                                            </Box>
+
+                                            <Button
+                                                type="submit"
+                                                fullWidth
+                                                variant="contained"
+                                                onClick={handleForNewItemCreation}
+                                                sx={{
+                                                    mt: 3,
+                                                    mb: 2,
+                                                    color: "whitesmoke",
+                                                    background: "#212121",
+                                                }}
+                                            >
+                                                Submit
+                                            </Button>
+                                        </Box>
+                                    </Box>
+                                </Box>
+                            </Box>
+                        </Modal>
+                    </Box>
                 </Box>
                 <Box sx={{display: "flex", width: "100%"}}>
                     <Box
