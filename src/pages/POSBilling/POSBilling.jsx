@@ -1,16 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {
-    Autocomplete,
-    Box,
-    Button,
-    FormControl,
-    FormControlLabel,
-    Grid,
-    Radio,
-    RadioGroup,
-    TextField,
-    Typography
-} from '@mui/material';
+import {Autocomplete, Box, Button, Grid, TextField, Typography} from '@mui/material';
 import {useSelector} from "react-redux";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
@@ -73,7 +62,7 @@ const POSBilling = () => {
             const value = parseFloat(field.value) || 0; // Convert to number and handle empty strings
             return acc + value;
         }, 0);
-        setSideTotalAmount(parseFloat(roundedTotalAmount + fieldsValueTotal).toFixed(2));
+        setSideTotalAmount(parseFloat(roundedTotalAmount + fieldsValueTotal-addDiscountInRupee).toFixed(2));
         const subTax = filteredPosBilling.reduce((acc, emp) => {
             let parseGst = parseFloat(emp.gst);
             let parseSale = parseFloat(emp.salePrice);
@@ -162,21 +151,29 @@ const POSBilling = () => {
 
     const handleClickForAdditionDiscount = (e) => {
         e.preventDefault();
-        if (discountOption !== null && discountOption === 'a') {
-            if (addDiscountInRupee > 0) {
-                const sideAddDiscountInRuppe = sideTotalAmount - addDiscountInRupee;
-                setSideTotalAmount(parseFloat(sideAddDiscountInRuppe.toFixed(2)));
-            } else if (addDiscountInPer > 0) {
-                const findValue = sideTotalAmount * addDiscountInPer / 100;
-                setAddDiscountInRupee(findValue);
-                const sideAddDiscountInRuppe = sideTotalAmount - findValue;
-                setSideTotalAmount(parseFloat(sideAddDiscountInRuppe.toFixed(2)));
-            }
+        //   if (discountOption !== null && discountOption === 'a') {
+        if (addDiscountInRupee > 0) {
+            const sideAddDiscountInRuppe = sideTotalAmount - addDiscountInRupee;
+            setSideTotalAmount(parseFloat(sideAddDiscountInRuppe.toFixed(2)));
+        } else if (addDiscountInPer > 0) {
+            const findValue = sideTotalAmount * addDiscountInPer / 100;
+            setAddDiscountInRupee(findValue);
+            const sideAddDiscountInRuppe = sideTotalAmount - findValue;
+            setSideTotalAmount(parseFloat(sideAddDiscountInRuppe.toFixed(2)));
         }
-
-        //  after mai 2 thing per total ka per   price to direct hai
-
-
+        //   }
+        /*        else if (discountOption !== null && discountOption === 'b') {
+                    if (addDiscountInRupee > 0) {
+                        const sideAddDiscountInRuppe = sideSubTotalAmount - addDiscountInRupee;
+                        setSideTotalAmount(parseFloat(sideAddDiscountInRuppe.toFixed(2)));
+                    } else if (addDiscountInPer > 0) {
+                        const findValue = sideSubTotalAmount * addDiscountInPer / 100;
+                        setAddDiscountInRupee(findValue);
+                        const sideAddDiscountInRuppe = sideSubTotalAmount - findValue;
+                        setSideTotalAmount(parseFloat(sideAddDiscountInRuppe.toFixed(2)));
+                    }
+                }*/
+        setAddDiscountFlag(false);
     }
     const handleClickForAdditionCharge = (e) => {
         e.preventDefault();
@@ -432,7 +429,7 @@ const POSBilling = () => {
                                                 <Typography component="h1" variant="h5">
                                                     Add Discount
                                                 </Typography>
-                                                <Box sx={{display: 'flex', marginTop: '15px'}}>
+                                                {/* <Box sx={{display: 'flex', marginTop: '15px'}}>
                                                     <FormControl component="fieldset">
                                                         <RadioGroup
                                                             aria-label="discount"
@@ -450,7 +447,7 @@ const POSBilling = () => {
                                                                               label="Discount After Tax"/>
                                                         </RadioGroup>
                                                     </FormControl>
-                                                </Box>
+                                                </Box>*/}
                                                 <Box
                                                     component="form"
                                                     onSubmit={handleClickForAdditionDiscount}
@@ -625,9 +622,11 @@ const POSBilling = () => {
                                     ))}
                                 </Box>
                                 <Box>
-                                    {(discountOption === 'a') &&
+                                    {addDiscountInRupee > 0 &&
+                                        //(discountOption === 'a') &&
                                         <Box sx={{display: 'flex', alignItems: 'center', mb: 1}}>
-                                            <Typography variant="h6" sx={{mr: 2}}>Discount After Tax</Typography>
+                                            {/* <Typography variant="h6" sx={{mr: 2}}>Discount After Tax</Typography>*/}
+                                            <Typography variant="h6" sx={{mr: 2}}>Discount </Typography>
                                             <Box sx={{flexGrow: 1}}/>
                                             <Typography variant="h6">- ₹ {addDiscountInRupee}</Typography>
                                         </Box>
