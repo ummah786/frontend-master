@@ -25,23 +25,36 @@ const contacts = [
     {name: "Harriii", lastMessage: "Jimmedar nagrik", time: "Yesterday"}
 ];
 
-const messages = [
-    {id: 1, sender: "You", time: "12:42", text: "Sardar.asifjahan@crst.com"},
-    {id: 2, sender: "You", time: "12:43", text: "SJ00755057@techmahindra.com"},
-    {id: 3, sender: "You", time: "11:33", text: "Hi"},
-    {id: 4, sender: "You", time: "11:39", text: "Bro"},
-    {id: 5, sender: "You", time: "20:37", text: "Kitna baje connect karna hai"},
-    {id: 6, sender: "You", time: "20:37", text: "connect kiya jaye"},
-    {id: 7, sender: "You", time: "20:37", text: "kya"},
-    {id: 8, sender: "You", time: "20:37", text: "bro"},
-    {id: 9, sender: "Amit New", time: "21:15", text: "Yaar thoda party main hu\nKal morning pakka connect karte"},
-    {id: 10, sender: "You", time: "11:28", text: "Hi"},
-    {id: 11, sender: "You", time: "16:23", text: "Aji free nahi hai kya"},
-    {id: 12, sender: "You", time: "16:23", text: "???"}
-];
+const messagesData = {
+    "Rani Jio": [],
+    "Joshi": [],
+    "Amit New": [
+        {id: 1, sender: "You", time: "12:42", text: "Sardar.asifjahan@crst.com"},
+        {id: 2, sender: "You", time: "12:43", text: "SJ00755057@techmahindra.com"},
+        {id: 3, sender: "You", time: "11:33", text: "Hi"},
+        {id: 4, sender: "You", time: "11:39", text: "Bro"},
+        {id: 5, sender: "You", time: "20:37", text: "Kitna baje connect karna hai"},
+        {id: 6, sender: "You", time: "20:37", text: "connect kiya jaye"},
+        {id: 7, sender: "You", time: "20:37", text: "kya"},
+        {id: 8, sender: "You", time: "20:37", text: "bro"},
+        {id: 9, sender: "Amit New", time: "21:15", text: "Yaar thoda party main hu\nKal morning pakka connect karte"},
+        {id: 10, sender: "You", time: "11:28", text: "Hi"},
+        {id: 11, sender: "You", time: "16:23", text: "Aji free nahi hai kya"},
+        {id: 12, sender: "You", time: "16:23", text: "???"}
+    ],
+    "Mansoor Alam": [],
+    "Shadab": [],
+    "Tarannum Baji": [],
+    "Sonu Wife": [],
+    "Molana Gholam Jami Qadri": [],
+    "Harriii": []
+    // Add more messages for other contacts similarly
+};
+
 const Setting = () => {
     const [search, setSearch] = useState("");
     const [filteredContacts, setFilteredContacts] = useState(contacts);
+    const [selectedContact, setSelectedContact] = useState(contacts[0].name);
 
     const handleSearchChange = (event) => {
         const value = event.target.value;
@@ -56,6 +69,11 @@ const Setting = () => {
             );
         }
     };
+
+    const handleContactSelect = (contactName) => {
+        setSelectedContact(contactName);
+    };
+
     return (
         <Box sx={{display: 'flex', height: '90vh', backgroundColor: '#f0f0f0'}}>
             <Box sx={{width: '25%', borderRight: '1px solid #ddd', backgroundColor: '#ffffff'}}>
@@ -73,8 +91,8 @@ const Setting = () => {
                     scrollbarWidth: 'none',
                     '&::-webkit-scrollbar': {display: 'none'}
                 }}>
-                    {contacts.map((contact, index) => (
-                        <ListItem key={index} button>
+                    {filteredContacts.map((contact, index) => (
+                        <ListItem key={index} button onClick={() => handleContactSelect(contact.name)}>
                             <Avatar>{contact.name[0]}</Avatar>
                             <ListItemText primary={contact.name}
                                           secondary={`${contact.lastMessage} · ${contact.time}`}/>
@@ -86,7 +104,7 @@ const Setting = () => {
                 <AppBar position="static" sx={{backgroundColor: '#1976d2'}}>
                     <Toolbar>
                         <Typography variant="h6">
-                            Amit New
+                            {selectedContact}
                         </Typography>
                         <Typography variant="caption" sx={{marginLeft: 'auto'}}>
                             online
@@ -101,7 +119,7 @@ const Setting = () => {
                     scrollbarWidth: 'none',
                     '&::-webkit-scrollbar': {display: 'none'}
                 }}>
-                    {messages.map((message, index) => (
+                    {(messagesData[selectedContact] || []).map((message, index) => (
                         <Box key={index} sx={{mb: 2, textAlign: message.sender === 'You' ? 'right' : 'left'}}>
                             <Typography variant="caption" display="block">{message.sender} · {message.time}</Typography>
                             <Typography variant="body1" display="block">{message.text.split('\n').map((line, i) => <div
