@@ -1,4 +1,4 @@
-import {Autocomplete, Box, Button, Modal, TextField} from "@mui/material";
+import {Autocomplete, Box, Button, Card, CardContent, Grid, Modal, TextField, Typography} from "@mui/material";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
@@ -6,7 +6,6 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import SearchIcon from '@mui/icons-material/Search';
-import Typography from "@mui/material/Typography";
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {manageUserDataModel} from "../../datamodel/ManageUserDataModel";
@@ -22,6 +21,8 @@ import {Search, SearchIconWrapper, style, StyledInputBase, StyledTableCell, Styl
 import Sheet from "@mui/joy/Sheet";
 import ModalClose from "@mui/joy/ModalClose";
 import {Transition} from "react-transition-group";
+import PeopleIcon from '@mui/icons-material/People';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 
 export const AccountManagementUsers = () => {
     const [enable, setEnable] = useState(true);
@@ -183,18 +184,6 @@ export const AccountManagementUsers = () => {
             fetchData();
         }
     }, [setMangUser]);
-
-    /*    const getProductKeyValuePair = async () => {
-            const response = await axios.get(`http://localhost:8700/hesabbook/product/key/value/get/business/${loginData.primary_user_id}`);
-            console.log('Submit delete Response :--    ', response.data.response);
-            let responseData = [];
-            responseData = response.data.response;
-            //  responseData.push('Create a business');
-            console.log('response Date after resp', responseData)
-            setFetchBusiness(responseData);
-        }
-
-      */
     useEffect(() => {
         console.log("Business Name ", KeyBusinessData);
         setFetchBusiness(KeyBusinessData);
@@ -229,45 +218,66 @@ export const AccountManagementUsers = () => {
                         <h5>Manage Users</h5>
                     </Box>
                     <Box>
-                        <Box sx={{display: "flex"}}>
-                            <Box sx={{border: '1px solid #000'}}>
-                                <Typography variant="caption" display="block" gutterBottom>Number of Users</Typography>
-                                <Box>
-                                    <Typography variant="h5" align="center">5</Typography>
-                                </Box>
-                            </Box>
-                            <Box sx={{border: '1px solid #000'}}>
-                                <Typography variant="caption" display="block" gutterBottom>Activites
-                                    Performed</Typography>
-                                <Box>
-                                    <Typography variant="h5" align="center">2</Typography>
-                                </Box>
-                            </Box>
-                        </Box>
-                        <Box sx={{display: 'flex', width: '100%'}}>
-                            <Box sx={{width: '40%', marginLeft: "-24px", marginTop: "9px", marginBottom: "5px"}}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={6}>
+                                <Card variant="outlined" style={{backgroundColor: '#f5f5ff'}}>
+                                    <CardContent style={{padding: '8px'}}>
+                                        <Box display="flex" alignItems="center">
+                                            <PeopleIcon
+                                                style={{color: '#00c853', marginRight: '4px', fontSize: '16px'}}/>
+                                            <Typography variant="body2" color="textSecondary" gutterBottom>
+                                                Number of Users
+                                            </Typography>
+                                        </Box>
+                                        <Typography variant="h6">3</Typography>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Card variant="outlined">
+                                    <CardContent style={{padding: '8px'}}>
+                                        <Box display="flex" alignItems="center">
+                                            <TrendingUpIcon
+                                                style={{color: '#1e88e5', marginRight: '4px', fontSize: '16px'}}/>
+                                            <Typography variant="body2" color="textSecondary" gutterBottom>
+                                                Activities Performed
+                                            </Typography>
+                                        </Box>
+                                        <Typography variant="h6">1</Typography>
+
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        </Grid>
+                        <Box sx={{
+                            display: 'flex',
+                            width: '100%',
+                            alignItems: 'center',
+                            justifyContent: 'space-between'
+                        }}>
+                            <Box sx={{ display: 'flex', width: '40%', justifyContent: 'center', alignItems: 'center' }}>
                                 <Search>
                                     <SearchIconWrapper>
-                                        <SearchIcon/>
+                                        <SearchIcon />
                                     </SearchIconWrapper>
                                     <StyledInputBase
                                         type="text"
                                         value={filter}
                                         onChange={handleFilterChange}
                                         placeholder="Search by User Name or Mobile Number"
-                                        inputProps={{'aria-label': 'search'}}
+                                        inputProps={{ 'aria-label': 'search' }}
                                     />
                                 </Search>
                             </Box>
-                            <Box
-                                sx={{right: "0", float: "right", justifyContent: "space-around"}}
-                            >
+                            <Box sx={{display: 'flex', justifyContent: 'flex-end', width: '60%', margin: "5px"}}>
                                 <Button type="submit" variant="contained" sx={{marginRight: "10px"}}
-                                        onClick={() => setCAFlag(true)}>Add Your
-                                    CA</Button>
+                                        onClick={() => setCAFlag(true)}>
+                                    Add Your CA
+                                </Button>
                                 <Button onClick={handleBooleanChange} type="submit" variant="contained"
-                                        sx={{marginRight: "10px"}}>Add New User</Button>
-
+                                        sx={{marginRight: "10px"}}>
+                                    Add New User
+                                </Button>
                                 <Transition in={cAFlag} timeout={400}>
                                     <Modal
                                         open={cAFlag}
@@ -281,13 +291,7 @@ export const AccountManagementUsers = () => {
                                         }}
                                     >
                                         <Box sx={style}>
-                                            <Box
-                                                sx={{
-                                                    display: "flex",
-                                                    flexDirection: "column",
-                                                    alignItems: "center",
-                                                }}
-                                            >
+                                            <Box sx={{display: "flex", flexDirection: "column", alignItems: "center"}}>
                                                 <ModalClose
                                                     onClick={() => setCAFlag(false)}
                                                     variant="plain"
@@ -300,25 +304,25 @@ export const AccountManagementUsers = () => {
                                                 <Typography component="h1" variant="h5">
                                                     Save CA Information
                                                 </Typography>
-                                                <Box
-                                                    component="form"
-                                                    onSubmit={handleSaveCA}
-                                                    noValidate
-                                                    sx={{mt: 1}}
-                                                >
-                                                    <TextField id="outlined-basic" label="Name"
-                                                               variant="outlined"
-                                                               value={manageUserObj.name}
-                                                               fullWidth sx={{mt: 1}}
-                                                               onChange={(event) => handleTextFieldChange(event, 'name')}/>
-                                                    <TextField id="outlined-basic" label="Email Address"
-                                                               variant="outlined"
-                                                               fullWidth
-                                                               sx={{mt: 1}}
-                                                               value={manageUserObj.emailAddress}
-                                                               onChange={(event) => handleTextFieldChange(event, 'emailAddress')}/>
-
-
+                                                <Box component="form" onSubmit={handleSaveCA} noValidate sx={{mt: 1}}>
+                                                    <TextField
+                                                        id="outlined-basic"
+                                                        label="Name"
+                                                        variant="outlined"
+                                                        value={manageUserObj.name}
+                                                        fullWidth
+                                                        sx={{mt: 1}}
+                                                        onChange={(event) => handleTextFieldChange(event, 'name')}
+                                                    />
+                                                    <TextField
+                                                        id="outlined-basic"
+                                                        label="Email Address"
+                                                        variant="outlined"
+                                                        fullWidth
+                                                        sx={{mt: 1}}
+                                                        value={manageUserObj.emailAddress}
+                                                        onChange={(event) => handleTextFieldChange(event, 'emailAddress')}
+                                                    />
                                                     <TextField
                                                         sx={{mt: 1}}
                                                         select
@@ -329,28 +333,31 @@ export const AccountManagementUsers = () => {
                                                         variant="outlined"
                                                         margin="normal"
                                                     >
-
-                                                        <MenuItem key="CA"
-                                                                  value="CA">CA</MenuItem>
+                                                        <MenuItem key="CA" value="CA">CA</MenuItem>
                                                     </TextField>
-                                                    <TextField id="outlined-basic" label="Phone Number"
-                                                               variant="outlined"
-                                                               fullWidth
-                                                               sx={{mt: 1}}
-                                                               value={manageUserObj.mobileNumber}
-                                                               onChange={(event) => handleTextFieldChange(event, 'mobileNumber')}/>
-
-
-                                                    <Button type="submit"
-                                                            fullWidth
-                                                            variant="contained"
-                                                            onClick={handleSaveCA}
-                                                            sx={{
-                                                                mt: 3,
-                                                                mb: 2,
-                                                                color: "whitesmoke",
-                                                                background: "#212121",
-                                                            }}>SUBMIT</Button>
+                                                    <TextField
+                                                        id="outlined-basic"
+                                                        label="Phone Number"
+                                                        variant="outlined"
+                                                        fullWidth
+                                                        sx={{mt: 1}}
+                                                        value={manageUserObj.mobileNumber}
+                                                        onChange={(event) => handleTextFieldChange(event, 'mobileNumber')}
+                                                    />
+                                                    <Button
+                                                        type="submit"
+                                                        fullWidth
+                                                        variant="contained"
+                                                        onClick={handleSaveCA}
+                                                        sx={{
+                                                            mt: 3,
+                                                            mb: 2,
+                                                            color: "whitesmoke",
+                                                            background: "#212121",
+                                                        }}
+                                                    >
+                                                        SUBMIT
+                                                    </Button>
                                                 </Box>
                                             </Box>
                                         </Box>
