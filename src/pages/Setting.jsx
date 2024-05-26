@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
     AppBar,
     Avatar,
@@ -40,10 +40,33 @@ const messages = [
     {id: 12, sender: "You", time: "16:23", text: "???"}
 ];
 const Setting = () => {
+    const [search, setSearch] = useState("");
+    const [filteredContacts, setFilteredContacts] = useState(contacts);
+
+    const handleSearchChange = (event) => {
+        const value = event.target.value;
+        setSearch(value);
+        if (value === "") {
+            setFilteredContacts(contacts);
+        } else {
+            setFilteredContacts(
+                contacts.filter(contact =>
+                    contact.name.toLowerCase().includes(value.toLowerCase())
+                )
+            );
+        }
+    };
     return (
         <Box sx={{display: 'flex', height: '90vh', backgroundColor: '#f0f0f0'}}>
             <Box sx={{width: '25%', borderRight: '1px solid #ddd', backgroundColor: '#ffffff'}}>
-                <TextField placeholder="Search or start a new chat" variant="outlined" sx={{m: 1, width: '85%'}}/>
+                <TextField
+                    fullWidth
+                    placeholder="Search or start a new chat"
+                    variant="outlined"
+                    sx={{m: 1, width: '85%'}}
+                    value={search}
+                    onChange={handleSearchChange}
+                />
                 <List sx={{
                     height: '80vh',
                     overflowY: 'auto',
