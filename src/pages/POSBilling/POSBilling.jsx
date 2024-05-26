@@ -162,20 +162,15 @@ const POSBilling = () => {
 
     const handleClickForAdditionDiscount = (e) => {
         e.preventDefault();
-        //add logic for handling Additional Discount
-
-        //check for type of flag //   const [addDiscountInRupee, setAddDiscountInRupee] = useState(0);
-        //     const [addDiscountInPer, setAddDiscountInPer] = useState(0);
-        //     const [discountOption, setDiscountOption] = useState();
         if (discountOption !== null && discountOption === 'a') {
             if (addDiscountInRupee > 0) {
                 const sideAddDiscountInRuppe = sideTotalAmount - addDiscountInRupee;
-                setSideTotalAmount(sideAddDiscountInRuppe);
+                setSideTotalAmount(   parseFloat(sideAddDiscountInRuppe.toFixed(2)));
             } else if (addDiscountInPer > 0) {
                 const findValue = sideTotalAmount * addDiscountInPer / 100;
                 setAddDiscountInRupee(findValue);
                 const sideAddDiscountInRuppe = sideTotalAmount - findValue;
-                setSideTotalAmount(sideAddDiscountInRuppe);
+                setSideTotalAmount(   parseFloat(sideAddDiscountInRuppe.toFixed(2)));
             }
         }
 
