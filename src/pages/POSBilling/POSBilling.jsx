@@ -165,12 +165,12 @@ const POSBilling = () => {
         if (discountOption !== null && discountOption === 'a') {
             if (addDiscountInRupee > 0) {
                 const sideAddDiscountInRuppe = sideTotalAmount - addDiscountInRupee;
-                setSideTotalAmount(   parseFloat(sideAddDiscountInRuppe.toFixed(2)));
+                setSideTotalAmount(parseFloat(sideAddDiscountInRuppe.toFixed(2)));
             } else if (addDiscountInPer > 0) {
                 const findValue = sideTotalAmount * addDiscountInPer / 100;
                 setAddDiscountInRupee(findValue);
                 const sideAddDiscountInRuppe = sideTotalAmount - findValue;
-                setSideTotalAmount(   parseFloat(sideAddDiscountInRuppe.toFixed(2)));
+                setSideTotalAmount(parseFloat(sideAddDiscountInRuppe.toFixed(2)));
             }
         }
 
