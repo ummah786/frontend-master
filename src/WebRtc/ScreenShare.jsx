@@ -1,90 +1,79 @@
-// ScreenShare.js
-import React, { useRef, useEffect, useState } from 'react';
-import SimplePeer from 'simple-peer';
 
+import React, { useState, useRef, useEffect } from 'react';
 export const ScreenShare = () => {
-    const [stream, setStream] = useState(null);
-    const [peer, setPeer] = useState(null);
-    const localVideo = useRef(null);
-    const remoteVideo = useRef(null);
-    const ws = useRef(null);
-  
+    const [isSharing, setIsSharing] = useState(false);
+    const videoRef = useRef(null);
+    const peerConnectionRef = useRef(null);
+    const signalingRef = useRef(null);
+
     useEffect(() => {
-      ws.current = new WebSocket('ws://localhost:8700/signaling');
-  
-      ws.current.onopen = () => {
-        console.log('WebSocket connection established');
-      };
-  
-      ws.current.onmessage = (message) => {
-        const data = JSON.parse(message.data);
-        if (data.type === 'offer') {
-          handleOffer(data.offer);
-        } else if (data.type === 'answer') {
-          peer.signal(data.answer);
-        } else if (data.type === 'candidate') {
-          peer.signal(data.candidate);
-        }
-      };
-  
-      ws.current.onerror = (error) => {
-        console.error('WebSocket error', error);
-      };
-  
-      ws.current.onclose = () => {
-        console.log('WebSocket connection closed');
-      };
-  
-      navigator.mediaDevices.getDisplayMedia({ video: true })
-        .then(stream => {
-          setStream(stream);
-          localVideo.current.srcObject = stream;
-  
-          const peer = new SimplePeer({
-            initiator: true,
-            trickle: false,
-            stream: stream,
-          });
-  
-          peer.on('signal', data => {
-            ws.current.send(JSON.stringify({ type: 'offer', offer: data }));
-          });
-  
-          peer.on('stream', stream => {
-            remoteVideo.current.srcObject = stream;
-          });
-  
-          setPeer(peer);
-        })
-        .catch(error => {
-          console.error('Error accessing display media', error);
-        });
-  
+        signalingRef.current = new WebSocket('ws://localhost:8080/signaling');
+
+        signalingRef.current.onmessage = async (message) => {
+            const data = JSON.parse(message.data);
+
+            if (data.offer) {
+                await peerConnectionRef.current.setRemoteDescription(new RTCSessionDescription(data.offer));
+                const answer = await peerConnectionRef.current.createAnswer();
+                await peerConnectionRef.current.setLocalDescription(answer);
+                signalingRef.current.send(JSON.stringify({ answer }));
+            }
+
+            if (data.answer) {
+                await peerConnectionRef.current.setRemoteDescription(new RTCSessionDescription(data.answer));
+            }
+
+            if (data.iceCandidate) {
+                try {
+                    await peerConnectionRef.current.addIceCandidate(data.iceCandidate);
+                } catch (e) {
+                    console.error('Error adding received ice candidate', e);
+                }
+            }
+        };
+
+        return () => {
+            signalingRef.current.close();
+        };
     }, []);
-  
-    const handleOffer = (offer) => {
-      const peer = new SimplePeer({
-        initiator: false,
-        trickle: false,
-        stream: stream,
-      });
-  
-      peer.on('signal', data => {
-        ws.current.send(JSON.stringify({ type: 'answer', answer: data }));
-      });
-  
-      peer.on('stream', stream => {
-        remoteVideo.current.srcObject = stream;
-      });
-  
-      peer.signal(offer);
-      setPeer(peer);
+
+    const startScreenShare = async () => {
+        try {
+            const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+            videoRef.current.srcObject = stream;
+
+            const peerConnection = new RTCPeerConnection({
+                iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
+            });
+            peerConnectionRef.current = peerConnection;
+
+            stream.getTracks().forEach((track) => {
+                peerConnection.addTrack(track, stream);
+            });
+
+            peerConnection.onicecandidate = (event) => {
+                if (event.candidate) {
+                    signalingRef.current.send(JSON.stringify({ iceCandidate: event.candidate }));
+                }
+            };
+
+            const offer = await peerConnection.createOffer();
+            await peerConnection.setLocalDescription(offer);
+
+            signalingRef.current.send(JSON.stringify({ offer }));
+
+            setIsSharing(true);
+        } catch (err) {
+            console.error('Error sharing screen:', err);
+        }
     };
-  
+
     return (
-      <div>
-        <video ref={localVideo} autoPlay muted style={{ width: '300px' }} />
-        <video ref={remoteVideo} autoPlay style={{ width: '300px' }} />
-      </div>
+        <div>
+            <button onClick={startScreenShare} disabled={isSharing}>
+                {isSharing ? 'Sharing Screen' : 'Start Screen Share'}
+            </button>
+            <video ref={videoRef} autoPlay style={{ width: '100%', height: 'auto' }}></video>
+        </div>
     );
 };
