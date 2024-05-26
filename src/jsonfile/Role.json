@@ -5,6 +5,18 @@
     },
     {
       "name": "Admin"
+    },
+    {
+      "name": "Delivery Boy"
+    },
+    {
+      "name": "Stock Manager"
+    },
+    {
+      "name": "Partner"
+    },
+    {
+      "name": "CA"
     }
   ],
   "genders": [

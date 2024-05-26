@@ -1,4 +1,4 @@
-import {Autocomplete, Box, Button, ButtonGroup, Modal, TextField} from "@mui/material";
+import {Autocomplete, Box, Button, Modal, TextField} from "@mui/material";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
@@ -39,8 +39,6 @@ export const AccountManagementUsers = () => {
         name: '',
         email: '',
     });
-
-
     const handleChange = (e) => {
         const {name, value} = e.target;
         setFormData({...formData, [name]: value});
@@ -198,6 +196,9 @@ export const AccountManagementUsers = () => {
         setFetchBusiness(KeyBusinessData);
     }, [setFetchBusiness])
 
+    const handleSaveCA = async () => {
+
+    }
     const fetchData = async () => {
         try {
             const response = await axios.get(`http://localhost:8700/hesabbook/manageuser/all/${loginData.primary_user_id}`);
@@ -248,13 +249,10 @@ export const AccountManagementUsers = () => {
                                     />
                                 </Search>
                             </Box>
-                            <Box sx={{width: '50%', right: '0', float: 'right', marginTop: "10px", marginBottom: "5px"}}>
-                            <Button type="submit" variant="contained" sx={{ marginRight: "10px"}}>Add Your CA</Button>
-                            <Button onClick={handleBooleanChange} type="submit" variant="contained" sx={{ marginRight: "10px"}}>Add New User</Button>
-                                {/* <ButtonGroup variant="contained" aria-label="Basic button group">
-                                    <Button type="submit" variant="contained" sx={{ marginRight: "10px"}}>Add Your CA</Button>
-                                    <Button onClick={handleBooleanChange}>Add New User</Button>
-                                </ButtonGroup> */}
+                            <Box
+                                sx={{right: "0", float: "right", justifyContent: "space-around"}}
+                            > <Button onClick={handleBooleanChange} type="submit" variant="contained"
+                                      sx={{marginRight: "10px"}}>Add New User</Button>
                             </Box>
                         </Box>
                         <Box>
@@ -305,10 +303,12 @@ export const AccountManagementUsers = () => {
                 <Box>
                     <Box sx={{display: 'flex'}}>
                         <Box>
-                            <Button size="small" variant="contained" sx={{marginTop: '40px', marginLeft: "210px"}}>Create Manage User</Button>
+                            <Button size="small" variant="contained" sx={{marginTop: '40px', marginLeft: "210px"}}>Create
+                                Manage User</Button>
                         </Box>
                         <Box sx={{float: 'right', alignItems: 'center', marginLeft: "555px", marginTop: '40px'}}>
-                            <Button sx={{marginRight: "10px"}} size="small" variant="contained" onClick={handleBooleanChange}>Cancel</Button>
+                            <Button sx={{marginRight: "10px"}} size="small" variant="contained"
+                                    onClick={handleBooleanChange}>Cancel</Button>
                             <Button size="small" variant="contained" onClick={handleBooleanChange}>Save</Button>
                         </Box>
                     </Box>
@@ -395,7 +395,13 @@ export const AccountManagementUsers = () => {
                                            value={manageUserObj.address}
                                            onChange={(event) => handleTextFieldChange(event, 'address')}/>
                             </Box>
-                            <Box sx={{width: '50%', display: 'flex', flexDirection: 'column', margin: "10px", marginRight: "200px"}}>
+                            <Box sx={{
+                                width: '50%',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                margin: "10px",
+                                marginRight: "200px"
+                            }}>
                                 <TextField
                                     sx={{margin: '10px'}}
                                     select
