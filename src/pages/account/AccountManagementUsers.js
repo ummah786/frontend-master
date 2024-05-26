@@ -305,10 +305,10 @@ export const AccountManagementUsers = () => {
                 <Box>
                     <Box sx={{display: 'flex'}}>
                         <Box>
-                            <Button size="small" variant="contained">Create Manage User</Button>
+                            <Button size="small" variant="contained" sx={{marginTop: '40px', marginLeft: "210px"}}>Create Manage User</Button>
                         </Box>
-                        <Box sx={{float: 'right', alignItems: 'center', marginLeft: "50px"}}>
-                            <Button size="small" variant="contained" onClick={handleBooleanChange}>Cancel</Button>
+                        <Box sx={{float: 'right', alignItems: 'center', marginLeft: "555px", marginTop: '40px'}}>
+                            <Button sx={{marginRight: "10px"}} size="small" variant="contained" onClick={handleBooleanChange}>Cancel</Button>
                             <Button size="small" variant="contained" onClick={handleBooleanChange}>Save</Button>
                         </Box>
                     </Box>
@@ -318,7 +318,7 @@ export const AccountManagementUsers = () => {
                                 width: '50%',
                                 display: 'flex',
                                 flexDirection: 'column',
-                                margin: "100px",
+                                marginTop: "10px",
                                 marginLeft: '200px'
                             }}>
                                 <TextField id="outlined-basic" label="Name" variant="outlined" sx={{margin: '10px'}}
@@ -328,6 +328,7 @@ export const AccountManagementUsers = () => {
                                 <div>
                                     <Autocomplete
                                         options={fetchBusiness}
+                                        sx={{margin: '10px'}}
                                         value={manageUserObj.accountBusinessName}
                                         renderInput={(params) => <TextField {...params} label="Business Name"/>}
                                         onInputChange={(event, value, reason) => {
@@ -394,9 +395,9 @@ export const AccountManagementUsers = () => {
                                            value={manageUserObj.address}
                                            onChange={(event) => handleTextFieldChange(event, 'address')}/>
                             </Box>
-                            <Box sx={{width: '50%', display: 'flex', flexDirection: 'column', margin: "100px"}}>
+                            <Box sx={{width: '50%', display: 'flex', flexDirection: 'column', margin: "10px", marginRight: "200px"}}>
                                 <TextField
-                                    fullWidth
+                                    sx={{margin: '10px'}}
                                     select
                                     value={manageUserObj.role}
                                     onChange={(event) => handleTextFieldChange(event, 'role')}
@@ -421,8 +422,8 @@ export const AccountManagementUsers = () => {
                                 <TextField id="outlined-basic" label="User Id" variant="outlined" disabled={true}
                                            sx={{margin: '10px'}} value={manageUserObj.secondary_user_id}
                                            onChange={(event) => handleTextFieldChange(event, 'secondary_user_id')}/>
-                                <Box>
-                                    <Button type="submit">SUBMIT</Button>
+                                <Box sx={{float: 'right', marginLeft: "340px"}}>
+                                    <Button type="submit" variant="contained">SUBMIT</Button>
                                 </Box>
                             </Box>
                         </Box>
