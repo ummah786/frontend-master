@@ -18,9 +18,10 @@ import UserRole from '../../jsonfile/Role';
 import MenuItem from "@mui/material/MenuItem";
 import {useDispatch, useSelector} from 'react-redux';
 import {addManageUser, removeManageUser, updateManageUser} from "../../redux/Action";
-import {Search, SearchIconWrapper, StyledInputBase, StyledTableCell, StyledTableRow} from "../../commonStyle";
+import {Search, SearchIconWrapper, style, StyledInputBase, StyledTableCell, StyledTableRow} from "../../commonStyle";
 import Sheet from "@mui/joy/Sheet";
 import ModalClose from "@mui/joy/ModalClose";
+import {Transition} from "react-transition-group";
 
 export const AccountManagementUsers = () => {
     const [enable, setEnable] = useState(true);
@@ -39,6 +40,9 @@ export const AccountManagementUsers = () => {
         name: '',
         email: '',
     });
+    const [cAFlag, setCAFlag] = useState(false);
+
+
     const handleChange = (e) => {
         const {name, value} = e.target;
         setFormData({...formData, [name]: value});
@@ -196,9 +200,15 @@ export const AccountManagementUsers = () => {
         setFetchBusiness(KeyBusinessData);
     }, [setFetchBusiness])
 
-    const handleSaveCA = async () => {
-
-    }
+    const handleSaveCA = async (event) => {
+        event.preventDefault();
+        manageUserObj['primary_user_id'] = loginData.primary_user_id;
+        manageUserObj['secondary_user_id'] = loginData.secondary_user_id;
+        const response = await axios.post('http://localhost:8700/hesabbook/manageuser/save', manageUserObj);
+        addObjectOnTop(response.data.response)
+        setManageUserObj(manageUserDataModel);
+        setCAFlag(false);
+    };
     const fetchData = async () => {
         try {
             const response = await axios.get(`http://localhost:8700/hesabbook/manageuser/all/${loginData.primary_user_id}`);
@@ -251,8 +261,101 @@ export const AccountManagementUsers = () => {
                             </Box>
                             <Box
                                 sx={{right: "0", float: "right", justifyContent: "space-around"}}
-                            > <Button onClick={handleBooleanChange} type="submit" variant="contained"
-                                      sx={{marginRight: "10px"}}>Add New User</Button>
+                            >
+                                <Button type="submit" variant="contained" sx={{marginRight: "10px"}}
+                                        onClick={() => setCAFlag(true)}>Add Your
+                                    CA</Button>
+                                <Button onClick={handleBooleanChange} type="submit" variant="contained"
+                                        sx={{marginRight: "10px"}}>Add New User</Button>
+
+                                <Transition in={cAFlag} timeout={400}>
+                                    <Modal
+                                        open={cAFlag}
+                                        onClose={() => setCAFlag(false)}
+                                        aria-labelledby="modal-modal-title"
+                                        aria-describedby="modal-modal-description"
+                                        sx={{
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                        }}
+                                    >
+                                        <Box sx={style}>
+                                            <Box
+                                                sx={{
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    alignItems: "center",
+                                                }}
+                                            >
+                                                <ModalClose
+                                                    onClick={() => setCAFlag(false)}
+                                                    variant="plain"
+                                                    sx={{
+                                                        m: 1,
+                                                        borderStyle: "dashed",
+                                                        borderWidth: "2px",
+                                                    }}
+                                                />
+                                                <Typography component="h1" variant="h5">
+                                                    Save CA Information
+                                                </Typography>
+                                                <Box
+                                                    component="form"
+                                                    onSubmit={handleSaveCA}
+                                                    noValidate
+                                                    sx={{mt: 1}}
+                                                >
+                                                    <TextField id="outlined-basic" label="Name"
+                                                               variant="outlined"
+                                                               value={manageUserObj.name}
+                                                               fullWidth sx={{mt: 1}}
+                                                               onChange={(event) => handleTextFieldChange(event, 'name')}/>
+                                                    <TextField id="outlined-basic" label="Email Address"
+                                                               variant="outlined"
+                                                               fullWidth
+                                                               sx={{mt: 1}}
+                                                               value={manageUserObj.emailAddress}
+                                                               onChange={(event) => handleTextFieldChange(event, 'emailAddress')}/>
+
+
+                                                    <TextField
+                                                        sx={{mt: 1}}
+                                                        select
+                                                        value={manageUserObj.role}
+                                                        onChange={(event) => handleTextFieldChange(event, 'role')}
+                                                        label="Role"
+                                                        fullWidth
+                                                        variant="outlined"
+                                                        margin="normal"
+                                                    >
+
+                                                        <MenuItem key="CA"
+                                                                  value="CA">CA</MenuItem>
+                                                    </TextField>
+                                                    <TextField id="outlined-basic" label="Phone Number"
+                                                               variant="outlined"
+                                                               fullWidth
+                                                               sx={{mt: 1}}
+                                                               value={manageUserObj.mobileNumber}
+                                                               onChange={(event) => handleTextFieldChange(event, 'mobileNumber')}/>
+
+
+                                                    <Button type="submit"
+                                                            fullWidth
+                                                            variant="contained"
+                                                            onClick={handleSaveCA}
+                                                            sx={{
+                                                                mt: 3,
+                                                                mb: 2,
+                                                                color: "whitesmoke",
+                                                                background: "#212121",
+                                                            }}>SUBMIT</Button>
+                                                </Box>
+                                            </Box>
+                                        </Box>
+                                    </Modal>
+                                </Transition>
                             </Box>
                         </Box>
                         <Box>
