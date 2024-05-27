@@ -17,157 +17,172 @@ import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
 import Avatar from '@mui/material/Avatar';
+
+import styled from 'styled-components';
+
+// Styled component for icon container
+const IconContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px; /* Adjust the width and height as needed */
+  height: 30px;
+  background-color: #2d2d2d; /* Adjust the background color as needed */
+  border-radius: 5px; /* Adjust the border radius for rounded corners */
+`;
 const routes = [
   {
     path: "/app/dashboard",
     name: "Dashboard",
-    icon: <FaHome />,
+    icon: <IconContainer><FaHome color="white" /></IconContainer>,
   },
   {
     path: "/party",
     name: "Parties",
-    icon: <FaUser />,
+    icon: <IconContainer><FaUser color="white" /></IconContainer>,
   },
   {
     path: "/posbilling",
     name: "POS-Billing",
-    icon: <MdMessage />,
+    icon: <IconContainer><MdMessage color="white" /></IconContainer>,
   },
   {
     path: "/expenses",
     name: "Expenses",
-    icon: <BiAnalyse />,
+    icon: <IconContainer><BiAnalyse color="white" /></IconContainer>,
   },
   {
     path: "/stock",
     name: "Stock",
-    icon: <AiTwotoneFileExclamation />,
+    icon: <IconContainer><AiTwotoneFileExclamation color="white" /></IconContainer>,
     subRoutes: [
       {
         path: "/stock/shop",
-        name: "Shop ",
-        icon: <FaUser />,
+        name: "Shop",
+        icon: <IconContainer><FaUser color="white" /></IconContainer>,
       },
       {
         path: "/stock/godowon",
         name: "Godowon",
-        icon: <FaLock />,
+        icon: <IconContainer><FaLock color="white" /></IconContainer>,
       }
     ],
   },
   {
     path: "/Sales",
     name: "Sales",
-    icon: <AiTwotoneFileExclamation />,
+    icon: <IconContainer><AiTwotoneFileExclamation color="white" /></IconContainer>,
     subRoutes: [
       {
         path: "/Sales/invoice",
         name: "Sales Invoice",
-        icon: <FaUser />,
+        icon: <IconContainer><FaUser color="white" /></IconContainer>,
       },
       {
         path: "/Sales/return",
         name: "Sales Return",
-        icon: <FaLock />,
-      }, {
+        icon: <IconContainer><FaLock color="white" /></IconContainer>,
+      },
+      {
         path: "/Sales/payment-in",
-        name: "Payment In ",
-        icon: <FaUser />,
+        name: "Payment In",
+        icon: <IconContainer><FaUser color="white" /></IconContainer>,
       },
       {
         path: "/Sales/credit-note",
         name: "Credit Note",
-        icon: <FaLock />,
+        icon: <IconContainer><FaLock color="white" /></IconContainer>,
       }
     ],
   },
   {
     path: "/Purchases",
     name: "Purchase",
-    icon: <AiTwotoneFileExclamation />,
+    icon: <IconContainer><AiTwotoneFileExclamation color="white" /></IconContainer>,
     subRoutes: [
       {
         path: "/Purchases/invoice",
         name: "Purchase Invoice",
-        icon: <FaUser />,
+        icon: <IconContainer><FaUser color="white" /></IconContainer>,
       },
       {
         path: "/Purchases/order",
         name: "Purchase Order",
-        icon: <FaUser />,
+        icon: <IconContainer><FaUser color="white" /></IconContainer>,
       },
       {
         path: "/Purchases/return",
         name: "Purchase Return",
-        icon: <FaLock />,
+        icon: <IconContainer><FaLock color="white" /></IconContainer>,
       },
       {
         path: "/Purchases/payment-out",
         name: "Payment Out",
-        icon: <FaLock />,
+        icon: <IconContainer><FaLock color="white" /></IconContainer>,
       },
       {
         path: "/Purchases/debit-note",
         name: "Debit Note",
-        icon: <FaLock />,
+        icon: <IconContainer><FaLock color="white" /></IconContainer>,
       }
     ],
   },
   {
     path: "/account",
     name: "Account",
-    icon: <AiTwotoneFileExclamation />,
+    icon: <IconContainer><AiTwotoneFileExclamation color="white" /></IconContainer>,
     subRoutes: [
       {
         path: "/account/manageAccount",
         name: "Manage Account",
-        icon: <FaUser />,
+        icon: <IconContainer><FaUser color="white" /></IconContainer>,
       },
       {
         path: "/account/myuser",
         name: "My User",
-        icon: <FaLock />,
-      }, {
+        icon: <IconContainer><FaLock color="white" /></IconContainer>,
+      },
+      {
         path: "/account/business",
         name: "Business",
-        icon: <FaUser />,
+        icon: <IconContainer><FaUser color="white" /></IconContainer>,
       }
     ],
   },
   {
     path: "/bank",
     name: "Cash & Bank",
-    icon: <BsCartCheck />,
+    icon: <IconContainer><BsCartCheck color="white" /></IconContainer>,
   },
   {
     path: "/feedback",
     name: "Feedback",
-    icon: <AiFillHeart />,
+    icon: <IconContainer><AiFillHeart color="white" /></IconContainer>,
   },
   {
     path: "/settings",
     name: "Settings",
-    icon: <AiFillHeart />,
-  },  {
+    icon: <IconContainer><AiFillHeart color="white" /></IconContainer>,
+  },
+  {
     path: "/chat",
     name: "Chat",
-    icon: <AiFillHeart />,
+    icon: <IconContainer><AiFillHeart color="white" /></IconContainer>,
   },
   {
     path: "/help",
     name: "Help & Support",
-    icon: <AiFillHeart />,
+    icon: <IconContainer><AiFillHeart color="white" /></IconContainer>,
   },
   {
-
     path: "/report",
     name: "Reports",
-    icon: <AiFillHeart />,
+    icon: <IconContainer><AiFillHeart color="white" /></IconContainer>,
   },
   {
     path: "/Logout",
     name: "Logout",
-    icon: <AiFillHeart />,
+    icon: <IconContainer><AiFillHeart color="white" /></IconContainer>,
   },
 ];
 

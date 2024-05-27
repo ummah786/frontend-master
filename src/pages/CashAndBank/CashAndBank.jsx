@@ -18,7 +18,25 @@ import {
     Typography
 } from '@mui/material';
 import {Download as DownloadIcon, Share as ShareIcon, Visibility as VisibilityIcon} from '@mui/icons-material';
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { format } from 'date-fns';
 
+const dateRanges = {
+    today: [new Date(), new Date()],
+    yesterday: [new Date(new Date().setDate(new Date().getDate() - 1)), new Date(new Date().setDate(new Date().getDate() - 1))],
+    thisWeek: [new Date(new Date().setDate(new Date().getDate() - new Date().getDay())), new Date()],
+    lastWeek: [
+        new Date(new Date().setDate(new Date().getDate() - new Date().getDay() - 7)),
+        new Date(new Date().setDate(new Date().getDate() - new Date().getDay() - 1))
+    ],
+    last7Days: [new Date(new Date().setDate(new Date().getDate() - 6)), new Date()],
+    thisMonth: [new Date(new Date().getFullYear(), new Date().getMonth(), 1), new Date()],
+    previousMonth: [
+        new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
+        new Date(new Date().getFullYear(), new Date().getMonth(), 0)
+    ]
+};
 const transactions = [
     {
         date: '27 May 2024',
@@ -33,6 +51,15 @@ const transactions = [
 ];
 
 export const CashAndBank = () => {
+
+    const [selectedRange, setSelectedRange] = useState('thisWeek');
+    const [dateRange, setDateRange] = useState(dateRanges['thisWeek']);
+
+    const handleDateChange = (event) => {
+        const range = event.target.value;
+        setSelectedRange(range);
+        setDateRange(dateRanges[range]);
+    };
     const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
@@ -41,11 +68,6 @@ export const CashAndBank = () => {
 
     const handleClose = () => {
         setOpen(false);
-    };
-    const [dateRange, setDateRange] = useState('');
-
-    const handleDateChange = (event) => {
-        setDateRange(event.target.value);
     };
 
     return (
@@ -97,17 +119,30 @@ export const CashAndBank = () => {
                             Statement</Button>
                     </Box>
 
-                    <FormControl fullWidth sx={{mb: 2}}>
-                        <Select value={dateRange} onChange={handleDateChange}>
-                            <MenuItem value="today">Today</MenuItem>
-                            <MenuItem value="yesterday">Yesterday</MenuItem>
-                            <MenuItem value="thisWeek">This Week</MenuItem>
-                            <MenuItem value="lastWeek">Last Week</MenuItem>
-                            <MenuItem value="last7Days">Last 7 Days</MenuItem>
-                            <MenuItem value="thisMonth">This Month</MenuItem>
-                            <MenuItem value="previousMonth">Previous Month</MenuItem>
-                        </Select>
-                    </FormControl>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <Box sx={{ p: 2 }}>
+                            <FormControl fullWidth>
+                                <Select value={selectedRange} onChange={handleDateChange} displayEmpty>
+                                    <MenuItem value="today">Today</MenuItem>
+                                    <MenuItem value="yesterday">
+                                        Yesterday ({format(dateRanges.yesterday[0], 'dd MMM yyyy')} to {format(dateRanges.yesterday[1], 'dd MMM yyyy')})
+                                    </MenuItem>
+                                    <MenuItem value="thisWeek">This Week</MenuItem>
+                                    <MenuItem value="lastWeek">Last Week</MenuItem>
+                                    <MenuItem value="last7Days">Last 7 days</MenuItem>
+                                    <MenuItem value="thisMonth">This Month</MenuItem>
+                                    <MenuItem value="previousMonth">Previous Month</MenuItem>
+                                </Select>
+                            </FormControl>
+
+                            <Box sx={{ mt: 2 }}>
+                                <Typography variant="h6">Selected Date Range:</Typography>
+                                <Typography>
+                                    {format(dateRange[0], 'dd MMM yyyy')} to {format(dateRange[1], 'dd MMM yyyy')}
+                                </Typography>
+                            </Box>
+                        </Box>
+                    </LocalizationProvider>
 
                     <TableContainer component={Paper}>
                         <Table>
