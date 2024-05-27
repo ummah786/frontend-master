@@ -178,6 +178,10 @@ const routes = [
     path: "/report",
     name: "Reports",
     icon: <IconContainer><AiFillHeart color="white" /></IconContainer>,
+  },  {
+    path: "/printing",
+    name: "Print",
+    icon: <IconContainer><AiFillHeart color="white" /></IconContainer>,
   },
   {
     path: "/Logout",

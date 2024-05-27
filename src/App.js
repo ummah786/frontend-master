@@ -25,8 +25,9 @@ import {Chat} from "./pages/Chat";
 import ExampleWithProviders from "./pages/Example";
 import {CashAndBank} from "./pages/CashAndBank/CashAndBank";
 import {SalesInvoice} from "./pages/Sales/SaleInvoice/SalesInvoice";
-import { PaymentIn } from "./pages/Sales/PaymentIn/PaymentIn";
+import {PaymentIn} from "./pages/Sales/PaymentIn/PaymentIn";
 import POSBilling from "./pages/POSBilling/POSBilling";
+import {Print} from "./pages/print/Print";
 
 function App() {
     const [flag, setFlag] = useState(true);
@@ -71,6 +72,7 @@ function App() {
                                 <Route path="/report" element={<ExampleWithProviders/>}/>
                                 <Route path="/expenses" element={<Expense/>}/>
                                 <Route path="/feedback" element={<ScreenShare/>}/>
+                                <Route path="/printing" element={<Print/>}/>
                                 <Route path="*" element={<> not found</>}/>
                             </Routes>
                         </SideBar>
