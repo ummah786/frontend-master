@@ -17,11 +17,11 @@ export const ScreenShare = () => {
     const [name, setName] = useState('');
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
+    const [stompClient, setStompClient] = useState(null);
     const myVideo = useRef(null);
     const userVideo = useRef(null);
     const screenVideo = useRef(null);
     const connectionRef = useRef(null);
-    const stompClient = useRef(null);
 
     useEffect(() => {
         if (name) {
@@ -35,10 +35,10 @@ export const ScreenShare = () => {
             });
 
             const socket = new SockJS('http://localhost:8700/webrtc');
-            stompClient.current = new Client({
+            const client = new Client({
                 webSocketFactory: () => socket,
                 onConnect: () => {
-                    stompClient.current.subscribe('/user/topic/receiveSignal', (message) => {
+                    client.subscribe('/user/topic/receiveSignal', (message) => {
                         const data = JSON.parse(message.body);
                         if (data.to === name) {
                             setReceivingCall(true);
@@ -47,22 +47,45 @@ export const ScreenShare = () => {
                         }
                     });
 
-                    stompClient.current.subscribe('/user/topic/receiveMessage', (message) => {
+                    client.subscribe('/user/topic/receiveMessage', (message) => {
                         const data = JSON.parse(message.body);
                         setMessages((prevMessages) => [...prevMessages, data]);
                     });
 
-                    stompClient.current.publish({ destination: '/app/register', body: JSON.stringify({ id: me, name: name }) });
+                    client.publish({ destination: '/app/register', body: JSON.stringify({ id: me, name: name }) });
+                },
+                onStompError: (frame) => {
+                    console.error('Broker reported error: ' + frame.headers['message']);
+                    console.error('Additional details: ' + frame.body);
+                },
+                onWebSocketError: (event) => {
+                    console.error('WebSocket Error: ', event);
                 },
             });
 
-            stompClient.current.activate();
+            client.activate();
+            setStompClient(client);
 
             return () => {
-                stompClient.current.deactivate();
+                client.deactivate();
             };
         }
     }, [name]);
+
+    useEffect(() => {
+        if (stompClient && stompClient.connected) {
+            const subscription = stompClient.subscribe(
+                `/topic/receiveMessage`,
+                (response) => {
+                    const receivedMessage = JSON.parse(response.body);
+                    setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+                }
+            );
+            return () => {
+                subscription.unsubscribe(); // Clean up subscription
+            };
+        }
+    }, [stompClient]);
 
     const callUser = (nameToCall) => {
         const peer = new Peer({
@@ -78,7 +101,9 @@ export const ScreenShare = () => {
                 to: nameToCall,
                 signal: JSON.stringify(data),
             };
-            stompClient.current.publish({ destination: '/app/sendSignal', body: JSON.stringify(signalMessage) });
+            if (stompClient && stompClient.connected) {
+                stompClient.publish({ destination: '/app/sendSignal', body: JSON.stringify(signalMessage) });
+            }
         });
 
         peer.on('stream', (stream) => {
@@ -106,7 +131,9 @@ export const ScreenShare = () => {
                 to: caller,
                 signal: JSON.stringify(data),
             };
-            stompClient.current.publish({ destination: '/app/sendSignal', body: JSON.stringify(signalMessage) });
+            if (stompClient && stompClient.connected) {
+                stompClient.publish({ destination: '/app/sendSignal', body: JSON.stringify(signalMessage) });
+            }
         });
 
         peer.on('stream', (stream) => {
@@ -143,7 +170,9 @@ export const ScreenShare = () => {
                     to: nameToCall,
                     signal: JSON.stringify(data),
                 };
-                stompClient.current.publish({ destination: '/app/sendSignal', body: JSON.stringify(signalMessage) });
+                if (stompClient && stompClient.connected) {
+                    stompClient.publish({ destination: '/app/sendSignal', body: JSON.stringify(signalMessage) });
+                }
             });
 
             peer.on('stream', (stream) => {
@@ -165,7 +194,9 @@ export const ScreenShare = () => {
             to: nameToCall,
             content: message,
         };
-        stompClient.current.publish({ destination: '/app/sendMessage', body: JSON.stringify(chatMessage) });
+        if (stompClient && stompClient.connected) {
+            stompClient.publish({ destination: '/app/sendMessage', body: JSON.stringify(chatMessage) });
+        }
         setMessages((prevMessages) => [...prevMessages, chatMessage]);
         setMessage('');
     };
