@@ -62,7 +62,7 @@ export const ScreenShare = () => {
                 stompClient.current.deactivate();
             };
         }
-    }, [name]);
+    }, [stompClient]);
 
     const callUser = (nameToCall) => {
         const peer = new Peer({
