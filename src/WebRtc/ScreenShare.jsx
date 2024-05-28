@@ -1,42 +1,70 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Peer from 'simple-peer';
-import { Button, TextField } from '@material-ui/core';
-
-const socket =new WebSocket('ws://localhost:8700/websocket-example');
+import { Button, TextField, Paper, List, ListItem, ListItemText } from '@mui/material';
+import { Client } from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
 
 export const ScreenShare = () => {
     const [me, setMe] = useState('');
-    const [stream, setStream] = useState();
+    const [stream, setStream] = useState(null);
+    const [screenStream, setScreenStream] = useState(null);
     const [receivingCall, setReceivingCall] = useState(false);
     const [caller, setCaller] = useState('');
-    const [callerSignal, setCallerSignal] = useState();
+    const [callerSignal, setCallerSignal] = useState(null);
     const [callAccepted, setCallAccepted] = useState(false);
-    const [idToCall, setIdToCall] = useState('');
+    const [nameToCall, setNameToCall] = useState('');
     const [callEnded, setCallEnded] = useState(false);
     const [name, setName] = useState('');
-    const myVideo = useRef();
-    const userVideo = useRef();
-    const connectionRef = useRef();
+    const [message, setMessage] = useState('');
+    const [messages, setMessages] = useState([]);
+    const myVideo = useRef(null);
+    const userVideo = useRef(null);
+    const screenVideo = useRef(null);
+    const connectionRef = useRef(null);
+    const stompClient = useRef(null);
 
     useEffect(() => {
-        navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
-            setStream(stream);
-            myVideo.current.srcObject = stream;
-        });
+        if (name) {
+            navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
+                setStream(stream);
+                if (myVideo.current) {
+                    myVideo.current.srcObject = stream;
+                }
+            }).catch(error => {
+                console.error('Error accessing media devices.', error);
+            });
 
-        socket.on('me', (id) => {
-            setMe(id);
-        });
+            const socket = new SockJS('http://localhost:8700/webrtc');
+            stompClient.current = new Client({
+                webSocketFactory: () => socket,
+                onConnect: () => {
+                    stompClient.current.subscribe('/user/topic/receiveSignal', (message) => {
+                        const data = JSON.parse(message.body);
+                        if (data.to === name) {
+                            setReceivingCall(true);
+                            setCaller(data.from);
+                            setCallerSignal(data.signal);
+                        }
+                    });
 
-        socket.on('callUser', (data) => {
-            setReceivingCall(true);
-            setCaller(data.from);
-            setName(data.name);
-            setCallerSignal(data.signal);
-        });
-    }, []);
+                    stompClient.current.subscribe('/user/topic/receiveMessage', (message) => {
+                        const data = JSON.parse(message.body);
+                        setMessages((prevMessages) => [...prevMessages, data]);
+                    });
 
-    const callUser = (id) => {
+                    stompClient.current.publish({ destination: '/app/register', body: JSON.stringify({ id: me, name: name }) });
+                },
+            });
+
+            stompClient.current.activate();
+
+            return () => {
+                stompClient.current.deactivate();
+            };
+        }
+    }, [name]);
+
+    const callUser = (nameToCall) => {
         const peer = new Peer({
             initiator: true,
             trickle: false,
@@ -44,23 +72,22 @@ export const ScreenShare = () => {
         });
 
         peer.on('signal', (data) => {
-            socket.emit('callUser', {
-                userToCall: id,
-                signalData: data,
-                from: me,
-                name: name,
-            });
+            const signalMessage = {
+                type: 'callUser',
+                from: name,
+                to: nameToCall,
+                signal: JSON.stringify(data),
+            };
+            stompClient.current.publish({ destination: '/app/sendSignal', body: JSON.stringify(signalMessage) });
         });
 
         peer.on('stream', (stream) => {
-            userVideo.current.srcObject = stream;
+            if (userVideo.current) {
+                userVideo.current.srcObject = stream;
+            }
         });
 
-        socket.on('callAccepted', (signal) => {
-            setCallAccepted(true);
-            peer.signal(signal);
-        });
-
+        setCallAccepted(true);
         connectionRef.current = peer;
     };
 
@@ -73,14 +100,22 @@ export const ScreenShare = () => {
         });
 
         peer.on('signal', (data) => {
-            socket.emit('answerCall', { signal: data, to: caller });
+            const signalMessage = {
+                type: 'answerCall',
+                from: name,
+                to: caller,
+                signal: JSON.stringify(data),
+            };
+            stompClient.current.publish({ destination: '/app/sendSignal', body: JSON.stringify(signalMessage) });
         });
 
         peer.on('stream', (stream) => {
-            userVideo.current.srcObject = stream;
+            if (userVideo.current) {
+                userVideo.current.srcObject = stream;
+            }
         });
 
-        peer.signal(callerSignal);
+        peer.signal(JSON.parse(callerSignal));
         connectionRef.current = peer;
     };
 
@@ -89,57 +124,141 @@ export const ScreenShare = () => {
         connectionRef.current.destroy();
     };
 
+    const startScreenShare = () => {
+        navigator.mediaDevices.getDisplayMedia({ cursor: true }).then((screenStream) => {
+            setScreenStream(screenStream);
+            if (screenVideo.current) {
+                screenVideo.current.srcObject = screenStream;
+            }
+            const peer = new Peer({
+                initiator: true,
+                trickle: false,
+                stream: screenStream,
+            });
+
+            peer.on('signal', (data) => {
+                const signalMessage = {
+                    type: 'callUser',
+                    from: name,
+                    to: nameToCall,
+                    signal: JSON.stringify(data),
+                };
+                stompClient.current.publish({ destination: '/app/sendSignal', body: JSON.stringify(signalMessage) });
+            });
+
+            peer.on('stream', (stream) => {
+                if (userVideo.current) {
+                    userVideo.current.srcObject = stream;
+                }
+            });
+
+            setCallAccepted(true);
+            connectionRef.current = peer;
+        }).catch((error) => {
+            console.error('Error accessing display media.', error);
+        });
+    };
+
+    const sendMessage = () => {
+        const chatMessage = {
+            from: name,
+            to: nameToCall,
+            content: message,
+        };
+        stompClient.current.publish({ destination: '/app/sendMessage', body: JSON.stringify(chatMessage) });
+        setMessages((prevMessages) => [...prevMessages, chatMessage]);
+        setMessage('');
+    };
+
     return (
         <div>
-            <h1>WebRTC Chat</h1>
-            <div>
+            {!name ? (
                 <div>
-                    {stream && <video playsInline muted ref={myVideo} autoPlay style={{ width: '300px' }} />}
+                    <TextField
+                        id="filled-basic"
+                        label="Enter your name"
+                        variant="filled"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                    <Button variant="contained" color="primary" onClick={() => setMe(name)}>
+                        Set Name
+                    </Button>
                 </div>
+            ) : (
                 <div>
-                    {callAccepted && !callEnded ? (
-                        <video playsInline ref={userVideo} autoPlay style={{ width: '300px' }} />
-                    ) : null}
-                </div>
-            </div>
-            <div>
-                <TextField
-                    id="filled-basic"
-                    label="Name"
-                    variant="filled"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                />
-                <TextField
-                    id="filled-basic"
-                    label="ID to call"
-                    variant="filled"
-                    value={idToCall}
-                    onChange={(e) => setIdToCall(e.target.value)}
-                />
-                <div>
-                    {callAccepted && !callEnded ? (
-                        <Button variant="contained" color="secondary" onClick={leaveCall}>
-                            End Call
-                        </Button>
-                    ) : (
-                        <Button variant="contained" color="primary" onClick={() => callUser(idToCall)}>
-                            Call
-                        </Button>
-                    )}
-                    {idToCall}
-                </div>
-            </div>
-            <div>
-                {receivingCall && !callAccepted ? (
+                    <h1>WebRTC Audio/Video Call</h1>
                     <div>
-                        <h1>{name} is calling...</h1>
-                        <Button variant="contained" color="primary" onClick={answerCall}>
-                            Answer
-                        </Button>
+                        <div>
+                            {stream && <video playsInline muted ref={myVideo} autoPlay style={{ width: '300px' }} />}
+                        </div>
+                        <div>
+                            {callAccepted && !callEnded ? (
+                                <video playsInline ref={userVideo} autoPlay style={{ width: '300px' }} />
+                            ) : null}
+                        </div>
+                        <div>
+                            {screenStream && <video playsInline ref={screenVideo} autoPlay style={{ width: '300px' }} />}
+                        </div>
                     </div>
-                ) : null}
-            </div>
+                    <div>
+                        <TextField
+                            id="filled-basic"
+                            label="Name to call"
+                            variant="filled"
+                            value={nameToCall}
+                            onChange={(e) => setNameToCall(e.target.value)}
+                        />
+                        <div>
+                            {callAccepted && !callEnded ? (
+                                <Button variant="contained" color="secondary" onClick={leaveCall}>
+                                    End Call
+                                </Button>
+                            ) : (
+                                <>
+                                    <Button variant="contained" color="primary" onClick={() => callUser(nameToCall)}>
+                                        Call
+                                    </Button>
+                                    <Button variant="contained" color="primary" onClick={startScreenShare}>
+                                        Share Screen
+                                    </Button>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                    <div>
+                        {receivingCall && !callAccepted ? (
+                            <div>
+                                <h1>{caller} is calling...</h1>
+                                <Button variant="contained" color="primary" onClick={answerCall}>
+                                    Answer
+                                </Button>
+                            </div>
+                        ) : null}
+                    </div>
+                    <div>
+                        <TextField
+                            id="filled-basic"
+                            label="Message"
+                            variant="filled"
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
+                        />
+                        <Button variant="contained" color="primary" onClick={sendMessage}>
+                            Send
+                        </Button>
+                        <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
+                            <List>
+                                {messages.map((msg, index) => (
+                                    <ListItem key={index}>
+                                        <ListItemText primary={`${msg.from}: ${msg.content}`} />
+                                    </ListItem>
+                                ))}
+                            </List>
+                        </Paper>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

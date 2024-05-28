@@ -10,7 +10,7 @@ export const Chat = () => {
   const mobileNumber = localStorage.getItem("username");
 
   useEffect(() => {
-    const socket = new SockJS("http://localhost:8700/websocket-example");
+    const socket = new SockJS("http://localhost:8700/webrtc");
     const client = Stomp.over(socket);
     client.connect({}, () => {
       setStompClient(client);
