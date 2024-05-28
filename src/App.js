@@ -28,6 +28,7 @@ import {SalesInvoice} from "./pages/Sales/SaleInvoice/SalesInvoice";
 import {PaymentIn} from "./pages/Sales/PaymentIn/PaymentIn";
 import POSBilling from "./pages/POSBilling/POSBilling";
 import {Print} from "./pages/print/Print";
+import {MainDashboard} from "./pages/Dashboard/MainDashboard";
 
 function App() {
     const [flag, setFlag] = useState(true);
@@ -48,7 +49,7 @@ function App() {
                 {!flag && (<div>
                         <SideBar>
                             <Routes>
-                                <Route path="/" element={<Dashboard onBooleanChange={handleBooleanChange}/>}/>
+                                <Route path="/" element={<MainDashboard/>}/>
                                 <Route path="/party" element={<Party/>}/>
                                 <Route path="/users" element={<Users/>}/>
                                 <Route path="/app/dashboard"

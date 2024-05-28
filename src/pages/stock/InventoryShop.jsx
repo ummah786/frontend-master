@@ -3,8 +3,12 @@ import {
   ButtonGroup,
   Checkbox,
   FormControlLabel,
-  TextField,
+  TextField,Tooltip
 } from "@mui/material";
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import InventoryIcon from '@mui/icons-material/Inventory';
+import WarningIcon from '@mui/icons-material/Warning';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
@@ -415,6 +419,87 @@ export const InventoryShop = () => {
                   Create Bulk Inventory
                 </Button>
               </ButtonGroup>
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 2 }}>
+              <Paper
+                  elevation={3}
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    p: 2,
+                    width: '30%',
+                    backgroundColor: '#f0f0ff',
+                    border: '1px solid #e0e0e0',
+                    position: 'relative',
+                  }}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <TrendingUpIcon />
+                    <Typography variant="h6" sx={{ ml: 1 }}>Stock Value</Typography>
+                  </Box>
+                  <Tooltip title="Open Details">
+                    <IconButton size="small">
+                      <OpenInNewIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+                <Typography variant="h3">₹ 2,400</Typography>
+              </Paper>
+              <Paper
+                  elevation={3}
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    p: 2,
+                    width: '30%',
+                    border: '1px solid #e0e0e0',
+                    position: 'relative',
+                  }}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', color: 'orange' }}>
+                    <InventoryIcon />
+                    <Typography variant="h6" sx={{ ml: 1 }}>Low Stock</Typography>
+                  </Box>
+                  <Tooltip title="Open Details">
+                    <IconButton size="small">
+                      <OpenInNewIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+                <Typography variant="h3">0</Typography>
+              </Paper>
+              <Paper
+                  elevation={3}
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    p: 2,
+                    width: '30%',
+                    border: '1px solid #e0e0e0',
+                    position: 'relative',
+                  }}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', color: 'red' }}>
+                    <WarningIcon />
+                    <Typography variant="h6" sx={{ ml: 1 }}>Items Expiring (30 days)</Typography>
+                  </Box>
+                  <Tooltip title="Open Details">
+                    <IconButton size="small">
+                      <OpenInNewIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+                <Typography variant="h3">0</Typography>
+              </Paper>
             </Box>
           </Box>
           <Box>

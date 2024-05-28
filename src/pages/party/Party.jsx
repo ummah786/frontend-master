@@ -1,4 +1,4 @@
-import {Box, ButtonGroup, TextField} from "@mui/material";
+import {Box, IconButton, TextField} from "@mui/material";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
@@ -13,19 +13,11 @@ import {partnerDataModel} from "../../datamodel/ManageUserDataModel";
 import DeleteIcon from '@mui/icons-material/Delete';
 import Delete from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import IconButton from "@mui/material/IconButton";
 import axios from "axios";
 import UserRole from '../../jsonfile/Role';
 import MenuItem from "@mui/material/MenuItem";
 import {useDispatch, useSelector} from 'react-redux';
-import {
-    addKeyCategory,
-    addKeyCompany,
-    addManageUser,
-    addParty,
-    removeKeyCategory,
-    removeParty
-} from "../../redux/Action";
+import {addKeyCategory, addKeyCompany, addManageUser, addParty, removeParty} from "../../redux/Action";
 import ArticleIcon from '@mui/icons-material/Article';
 import * as XLSX from 'xlsx';
 import {DataGrid} from "@mui/x-data-grid";
@@ -36,6 +28,9 @@ import Typography from "@mui/joy/Typography";
 import {Transition} from "react-transition-group";
 import {DELETE_KEY_VALUE, SAVE_KEY_VALUE} from "../apiendpoint/APIEndPoint";
 import {List, ListItem, ListItemButton} from "@mui/joy";
+import PeopleIcon from '@mui/icons-material/People';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import MoneyOffIcon from '@mui/icons-material/MoneyOff';
 
 
 export const Party = () => {
@@ -340,7 +335,7 @@ export const Party = () => {
             const response = await axios.get(DELETE_KEY_VALUE + `/${id}`);
             console.log("DELETE CATEGORY  ", response.data.response);
             //add logic for remove from
-           // dispatch(removeKeyCategory(value));
+            // dispatch(removeKeyCategory(value));
             setAddCategory(prevItems => prevItems.filter(item => item.id !== id));
             console.log('Add Category ', addCategory);
         } catch (error) {
@@ -355,10 +350,64 @@ export const Party = () => {
                 <Box>
                     <Box>
                         <Button sx={{marginLeft: "1px"}} variant="contained">Party</Button>
-                        <Box sx={{right: '0', float: 'right'}}>
-                            <Button sx={{}} variant="contained" onClick={handleBooleanChange}>Create Party</Button>
-                            <Button sx={{marginLeft: "10px", marginRight: "10px"}} variant="contained" onClick={handleBulkChange}>Create Bulk Party</Button>
+                        <Box sx={{display: 'flex', justifyContent: 'space-between', p: 2}}>
+                            <Paper
+                                elevation={3}
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    p: 2,
+                                    width: '30%',
+                                    backgroundColor: '#f0f0ff',
+                                    border: '1px solid #e0e0e0',
+                                }}
+                            >
+                                <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                    <PeopleIcon/>
+                                    <Typography variant="h6" sx={{ml: 1}}>All Parties</Typography>
+                                </Box>
+                                <Typography variant="h3">3</Typography>
+                            </Paper>
+                            <Paper
+                                elevation={3}
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    p: 2,
+                                    width: '30%',
+                                    border: '1px solid #e0e0e0',
+                                }}
+                            >
+                                <Box sx={{display: 'flex', alignItems: 'center', color: 'green'}}>
+                                    <AttachMoneyIcon/>
+                                    <Typography variant="h6" sx={{ml: 1}}>To Collect</Typography>
+                                </Box>
+                                <Typography variant="h3">₹ 300</Typography>
+                            </Paper>
+                            <Paper
+                                elevation={3}
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    p: 2,
+                                    width: '30%',
+                                    border: '1px solid #e0e0e0',
+                                }}
+                            >
+                                <Box sx={{display: 'flex', alignItems: 'center', color: 'red'}}>
+                                    <MoneyOffIcon/>
+                                    <Typography variant="h6" sx={{ml: 1}}>To Pay</Typography>
+                                </Box>
+                                <Typography variant="h3">₹ 200</Typography>
+                            </Paper>
                         </Box>
+
                     </Box>
                     <Box>
                         <Box sx={{display: 'flex', width: '100%'}}>
@@ -374,6 +423,11 @@ export const Party = () => {
                                         inputProps={{'aria-label': 'search'}}
                                     />
                                 </Search>
+                            </Box>
+                            <Box sx={{right: '0', float: 'right'}}>
+                                <Button sx={{}} variant="contained" onClick={handleBooleanChange}>Create Party</Button>
+                                <Button sx={{marginLeft: "10px", marginRight: "10px"}} variant="contained"
+                                        onClick={handleBulkChange}>Create Bulk Party</Button>
                             </Box>
 
                         </Box>
@@ -433,7 +487,8 @@ export const Party = () => {
                                 <Button size="small" variant="contained" sx={{marginLeft: "260px"}}>Create Partner</Button>
                             </Box>
                             <Box sx={{float: 'right', alignItems: 'center', marginLeft: "430px"}}>
-                                <Button sx={{marginRight: "10px"}} size="small" variant="contained" onClick={handleBooleanCancelChange}>Cancel</Button>
+                                <Button sx={{marginRight: "10px"}} size="small" variant="contained"
+                                        onClick={handleBooleanCancelChange}>Cancel</Button>
                                 <Button size="small" variant="contained" onClick={handleBooleanCancelChange}>Save</Button>
                             </Box>
                         </Box>
@@ -581,7 +636,8 @@ export const Party = () => {
 
                                     <Box sx={{display: 'flex'}}>
                                         <TextField id="outlined-basic" label="Credit Period" variant="outlined"
-                                                   sx={{width: "fullWidth", marginTop: "18px"}} value={manageUserObj.creditPeriod}
+                                                   sx={{width: "fullWidth", marginTop: "18px"}}
+                                                   value={manageUserObj.creditPeriod}
                                                    onChange={(event) => handleTextFieldChange(event, 'creditPeriod')}/>
 
                                         <TextField
@@ -603,7 +659,8 @@ export const Party = () => {
 
                                     <Box sx={{display: 'flex'}}>
                                         <TextField id="outlined-basic" label="Opening Balance" variant="outlined"
-                                                   sx={{width: "200%", marginTop: "20px"}} value={manageUserObj.openingBalance}
+                                                   sx={{width: "200%", marginTop: "20px"}}
+                                                   value={manageUserObj.openingBalance}
                                                    onChange={(event) => handleTextFieldChange(event, 'openingBalance')}/>
 
                                         <TextField
@@ -639,8 +696,14 @@ export const Party = () => {
                             <Box sx={{marginTop: "10px", marginBottom: "20px", marginLeft: "-2px"}}>
                                 <Button size="small" variant="contained">Create Bulk Partner</Button>
                             </Box>
-                            <Box sx={{float: 'right', alignItems: 'center', marginLeft: "100px", display: 'flex', marginTop: "-15px"}}>
-                                <Box sx={{ marginBottom: "-80px"}}>
+                            <Box sx={{
+                                float: 'right',
+                                alignItems: 'center',
+                                marginLeft: "100px",
+                                display: 'flex',
+                                marginTop: "-15px"
+                            }}>
+                                <Box sx={{marginBottom: "-80px"}}>
                                     <a
                                         href={require('../../file/PartySample.xlsx')}
                                         download="PartySample.xlsx"
@@ -657,11 +720,12 @@ export const Party = () => {
                                         </Button>
                                     </a>
                                 </Box>
-                                <Button sx={{ marginLeft: "-190px", marginRight: "30px"}} size="small" variant="contained" onClick={handleBooleanCancelChange}>Cancel</Button>
+                                <Button sx={{marginLeft: "-190px", marginRight: "30px"}} size="small" variant="contained"
+                                        onClick={handleBooleanCancelChange}>Cancel</Button>
                                 <Button size="small" variant="contained" onClick={handleBooleanCancelChange}>Save</Button>
                             </Box>
                         </Box>
-                        <input type="file" onChange={handleFileUpload} sx={{ marginRight: "100px", marginLeft: "10px"}} />
+                        <input type="file" onChange={handleFileUpload} sx={{marginRight: "100px", marginLeft: "10px"}}/>
                         {
                             excelData.length > 0 && (
                                 <Box
