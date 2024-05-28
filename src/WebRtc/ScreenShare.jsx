@@ -71,6 +71,20 @@ export const ScreenShare = () => {
             };
         }
     }, [name]);
+    useEffect(() => {
+        if (stompClient && stompClient.connected) {
+            const subscription = stompClient.subscribe(
+                '/user/topic/receiveMessage',
+                (response) => {
+                    const receivedMessage = JSON.parse(response.body);
+                    setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+                }
+            );
+            return () => {
+                subscription.unsubscribe(); // Clean up subscription
+            };
+        }
+    }, [stompClient]);
 
     useEffect(() => {
         if (stompClient && stompClient.connected) {
