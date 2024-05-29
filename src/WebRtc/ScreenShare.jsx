@@ -52,6 +52,11 @@ export const ScreenShare = () => {
                         setMessages((prevMessages) => [...prevMessages, data]);
                     });
 
+                    client.subscribe(`/topic/receiveMessage/${name}`, (message) => {
+                        const data = JSON.parse(message.body);
+                        setMessages((prevMessages) => [...prevMessages, data]);
+                    });
+
                     client.publish({ destination: '/app/register', body: JSON.stringify({ id: me, name: name }) });
                 },
                 onStompError: (frame) => {
@@ -71,35 +76,6 @@ export const ScreenShare = () => {
             };
         }
     }, [name]);
-    useEffect(() => {
-        if (stompClient && stompClient.connected) {
-            const subscription = stompClient.subscribe(
-                '/user/topic/receiveMessage',
-                (response) => {
-                    const receivedMessage = JSON.parse(response.body);
-                    setMessages((prevMessages) => [...prevMessages, receivedMessage]);
-                }
-            );
-            return () => {
-                subscription.unsubscribe(); // Clean up subscription
-            };
-        }
-    }, [stompClient]);
-
-    useEffect(() => {
-        if (stompClient && stompClient.connected) {
-            const subscription = stompClient.subscribe(
-                `/topic/receiveMessage`,
-                (response) => {
-                    const receivedMessage = JSON.parse(response.body);
-                    setMessages((prevMessages) => [...prevMessages, receivedMessage]);
-                }
-            );
-            return () => {
-                subscription.unsubscribe(); // Clean up subscription
-            };
-        }
-    }, [stompClient]);
 
     const callUser = (nameToCall) => {
         const peer = new Peer({
