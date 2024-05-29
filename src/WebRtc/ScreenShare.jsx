@@ -31,7 +31,17 @@ export const ScreenShare = () => {
                     myVideo.current.srcObject = stream;
                 }
             }).catch(error => {
-                console.error('Error accessing media devices.', error);
+                if (error.name === 'NotAllowedError') {
+                    console.error('Permissions denied: Please allow access to the camera and microphone.');
+                } else if (error.name === 'NotFoundError') {
+                    console.error('No media devices found: Please ensure your camera and microphone are connected.');
+                } else if (error.name === 'NotReadableError') {
+                    console.error('Media device is already in use by another application.');
+                } else if (error.name === 'OverconstrainedError') {
+                    console.error('No device found that matches the specified constraints.');
+                } else {
+                    console.error('Error accessing media devices.', error);
+                }
             });
 
             const socket = new SockJS('http://localhost:8700/webrtc');
@@ -45,12 +55,21 @@ export const ScreenShare = () => {
                             setCaller(data.from);
                             setCallerSignal(data.signal);
                         }
-                    });
+                    })
+                    client.subscribe(`/topic/receiveSignal/${name}`, (message) => {
+                            const data = JSON.parse(message.body);
+                            if (data.to === name) {
+                                setReceivingCall(true);
+                                setCaller(data.from);
+                                setCallerSignal(data.signal);
+                            }
+                        }
+                    );
 
-                    client.subscribe('/user/topic/receiveMessage', (message) => {
+/*                    client.subscribe('/user/topic/receiveMessage', (message) => {
                         const data = JSON.parse(message.body);
                         setMessages((prevMessages) => [...prevMessages, data]);
-                    });
+                    });*/
 
                     client.subscribe(`/topic/receiveMessage/${name}`, (message) => {
                         const data = JSON.parse(message.body);

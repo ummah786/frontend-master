@@ -4,8 +4,11 @@ import {
   Checkbox,
   TableCell,
   TextField,
-  Typography,
+  Typography,Grid, Link
 } from "@mui/material";
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import InventoryIcon from '@mui/icons-material/Inventory';
+import ErrorIcon from '@mui/icons-material/Error';
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
@@ -162,6 +165,47 @@ export const SalesInvoice = () => {
                 </ButtonGroup>
               </Box>
             </Box>
+            <Box sx={{ flexGrow: 1, padding: 2 }}>
+              <Grid container spacing={2}>
+                <Grid item xs={4}>
+                  <Paper sx={{ padding: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #ddd' }}>
+                    <Box display="flex" alignItems="center">
+                      <TrendingUpIcon color="primary" />
+                      <Typography variant="h6" sx={{ marginLeft: 1 }}>Stock Value</Typography>
+                    </Box>
+                    <Box textAlign="right">
+                      <Typography variant="h5" color="textPrimary">₹ 3,952.38</Typography>
+                    </Box>
+                    <Link href="#" sx={{ marginLeft: 1 }}>🔗</Link>
+                  </Paper>
+                </Grid>
+                <Grid item xs={4}>
+                  <Paper sx={{ padding: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #ddd' }}>
+                    <Box display="flex" alignItems="center">
+                      <InventoryIcon color="warning" />
+                      <Typography variant="h6" sx={{ marginLeft: 1 }}>Low Stock</Typography>
+                    </Box>
+                    <Box textAlign="right">
+                      <Typography variant="h5" color="textPrimary">0</Typography>
+                    </Box>
+                    <Link href="#" sx={{ marginLeft: 1 }}>🔗</Link>
+                  </Paper>
+                </Grid>
+                <Grid item xs={4}>
+                  <Paper sx={{ padding: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #ddd' }}>
+                    <Box display="flex" alignItems="center">
+                      <ErrorIcon color="error" />
+                      <Typography variant="h6" sx={{ marginLeft: 1 }}>Items Expiring (30 days)</Typography>
+                    </Box>
+                    <Box textAlign="right">
+                      <Typography variant="h5" color="textPrimary">0</Typography>
+                    </Box>
+                    <Link href="#" sx={{ marginLeft: 1 }}>🔗</Link>
+                  </Paper>
+                </Grid>
+              </Grid>
+            </Box>
+
             <Box>
               <Box sx={{ display: "flex", width: "100%", margin: "5px" }}>
                 <Box sx={{ width: "50%" }}>
