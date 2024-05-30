@@ -1,30 +1,27 @@
 import React from 'react';
-import { Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Grid } from '@mui/material';
+import { Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Grid, MenuItem, Select } from '@mui/material';
 
-const PartyLedger = ({ partyName }) => {
-    const ledgerData = {
-        'Cash Sale': [
-            { date: '2024-05-28', voucher: 'Sales Invoice', srNo: 2, credit: 200, debit: 200, balance: 200 },
-            { date: '2024-05-28', voucher: 'Sales Invoice', srNo: 3, credit: 200, debit: 200, balance: 200 },
-        ],
-        Raju: [
-            // Ledger details for Raju
-        ],
-        Sandeep: [
-            // Ledger details for Sandeep
-        ],
-    }[partyName];
+
+const PartyLedger = ({ party  }) => {
+    const transactions = [
+        { date: '2024-05-28', voucher: 'Sales Invoice', srNo: 2, credit: 200, debit: 200, tdsByParty: '-', tdsBySelf: '-', balance: 200 },
+        { date: '2024-05-28', voucher: 'Sales Invoice', srNo: 3, credit: 200, debit: 200, tdsByParty: '-', tdsBySelf: '-', balance: 200 },
+    ];
 
     return (
         <div>
-            <Grid container justifyContent="space-between" alignItems="center" style={{ marginBottom: 16 }}>
-                <Typography variant="h6">Party Ledger</Typography>
+            <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+                <Select defaultValue="Last 365 Days">
+                    <MenuItem value="Last 30 Days">Last 30 Days</MenuItem>
+                    <MenuItem value="Last 90 Days">Last 90 Days</MenuItem>
+                    <MenuItem value="Last 365 Days">Last 365 Days</MenuItem>
+                </Select>
                 <div>
-                    <Button variant="contained" style={{ marginRight: 8 }}>Download</Button>
-                    <Button variant="contained" style={{ marginRight: 8 }}>Print</Button>
-                    <Button variant="contained">Share</Button>
+                    <Button variant="outlined" sx={{ mr: 1 }}>Download</Button>
+                    <Button variant="outlined">Print</Button>
                 </div>
             </Grid>
+            <Typography variant="h6" gutterBottom>{party}</Typography>
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
@@ -34,18 +31,22 @@ const PartyLedger = ({ partyName }) => {
                             <TableCell>Sr No</TableCell>
                             <TableCell>Credit</TableCell>
                             <TableCell>Debit</TableCell>
+                            <TableCell>TDS deducted by party</TableCell>
+                            <TableCell>TDS deducted by self</TableCell>
                             <TableCell>Balance</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {ledgerData.map((row, index) => (
+                        {transactions.map((transaction, index) => (
                             <TableRow key={index}>
-                                <TableCell>{row.date}</TableCell>
-                                <TableCell>{row.voucher}</TableCell>
-                                <TableCell>{row.srNo}</TableCell>
-                                <TableCell>{row.credit}</TableCell>
-                                <TableCell>{row.debit}</TableCell>
-                                <TableCell>{row.balance}</TableCell>
+                                <TableCell>{transaction.date}</TableCell>
+                                <TableCell>{transaction.voucher}</TableCell>
+                                <TableCell>{transaction.srNo}</TableCell>
+                                <TableCell>{transaction.credit}</TableCell>
+                                <TableCell>{transaction.debit}</TableCell>
+                                <TableCell>{transaction.tdsByParty}</TableCell>
+                                <TableCell>{transaction.tdsBySelf}</TableCell>
+                                <TableCell>{transaction.balance}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
