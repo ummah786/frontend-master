@@ -64,6 +64,7 @@ import {
 } from "../../redux/Action";
 
 import { Input } from "@mui/joy";
+import {MainItemDetails} from "./MainItemDetails";
 
 export const InventoryShop = () => {
   const [enable, setEnable] = useState(true);
@@ -187,7 +188,10 @@ export const InventoryShop = () => {
     fetchData();
   }, [setInventory]);
 
-  function handleView(id, row) {}
+  function handleView(id, row) {
+    <MainItemDetails/>
+
+  }
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0];

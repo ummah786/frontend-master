@@ -1,0 +1,80 @@
+
+import React, { useState } from 'react';
+import { CssBaseline, Container, Grid, Paper, Typography, Tabs, Tab, Box } from '@mui/material';
+import Sidebar from './Sidebar';
+import PartyDetails from './PartyDetails';
+import PartyLedger from './PartyLedger';
+import PartyTransactions from './PartyTransactions';
+
+
+export const MainPartyDetails = () => {
+    const [selectedParty, setSelectedParty] = useState('Cash Sale');
+    const [tabIndex, setTabIndex] = useState(0);
+    const parties = [
+        { name: 'Cash Sale', amount: 200 },
+        { name: 'Raju', amount: 50 },
+        { name: 'Sandeep', amount: 200 },
+    ];
+
+    const handlePartySelect = (party) => {
+        setSelectedParty(party);
+    };
+
+    const handleTabChange = (event, newValue) => {
+        setTabIndex(newValue);
+    };
+
+    return (
+        <Container>
+            <CssBaseline />
+            <Grid container spacing={2}>
+                <Grid item xs={3}>
+                    <Sidebar parties={parties} onPartySelect={handlePartySelect} selectedParty={selectedParty} />
+                </Grid>
+                <Grid item xs={9}>
+                    <Paper style={{ padding: 16 }}>
+                        <Typography variant="h5">{selectedParty}</Typography>
+                        <Tabs value={tabIndex} onChange={handleTabChange} aria-label="party tabs">
+                            <Tab label="Transactions" />
+                            <Tab label="Profile" />
+                            <Tab label="Ledger" />
+                            <Tab label="Item Wise Report" />
+                        </Tabs>
+                        <TabPanel value={tabIndex} index={0}>
+                            <PartyTransactions partyName={selectedParty} />
+                        </TabPanel>
+                        <TabPanel value={tabIndex} index={1}>
+                            <PartyDetails partyName={selectedParty} />
+                        </TabPanel>
+                        <TabPanel value={tabIndex} index={2}>
+                            <PartyLedger partyName={selectedParty} />
+                        </TabPanel>
+                        <TabPanel value={tabIndex} index={3}>
+                            <Typography>Item Wise Report</Typography>
+                        </TabPanel>
+                    </Paper>
+                </Grid>
+            </Grid>
+        </Container>
+    );
+};
+
+const TabPanel = (props) => {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`tabpanel-${index}`}
+            aria-labelledby={`tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box p={3}>
+                    {children}
+                </Box>
+            )}
+        </div>
+    );
+};

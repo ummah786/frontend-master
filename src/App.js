@@ -29,6 +29,8 @@ import {PaymentIn} from "./pages/Sales/PaymentIn/PaymentIn";
 import POSBilling from "./pages/POSBilling/POSBilling";
 import {Print} from "./pages/print/Print";
 import {MainDashboard} from "./pages/Dashboard/MainDashboard";
+import {MainItemDetails} from "./pages/stock/MainItemDetails";
+import {MainPartyDetails} from "./pages/party/MainPartyDetails";
 
 function App() {
     const [flag, setFlag] = useState(true);
@@ -68,6 +70,9 @@ function App() {
                                 <Route path="/stock/godowon" element={<InventoryGodown/>}/>
                                 <Route path="/bank" element={<CashAndBank/>}/>
                                 <Route path="/chat" element={<Chat/>}/>
+                                <Route path="/logout" element={<MainItemDetails/>}/>
+                                <Route path="/help" element={<MainPartyDetails/>}/>
+
                                 <Route path="/sales/invoice" element={<SalesInvoice/>}/>
                                 <Route path="/sales/payment-in" element={<PaymentIn/>}/>
                                 <Route path="/report" element={<ExampleWithProviders/>}/>
