@@ -1,7 +1,5 @@
 import "./App.css";
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
-
-import Dashboard from "./pages/Dashboard";
 import Users from "./pages/Users";
 import Messages from "./pages/Messages";
 import FileManager from "./pages/FileManager";
@@ -38,7 +36,7 @@ function App() {
         setFlag(prevState => !prevState);
     };
     useEffect(() => {
-        console.log("Flag" ,flag);
+        console.log("Flag", flag);
 
     }, [flag]);
     return (<>
@@ -58,8 +56,6 @@ function App() {
                                 <Route path="/" element={<MainDashboard/>}/>
                                 <Route path="/party" element={<Party/>}/>
                                 <Route path="/users" element={<Users/>}/>
-                                <Route path="/app/dashboard"
-                                       element={<Dashboard onBooleanChange={handleBooleanChange}/>}/>
                                 <Route path="/messages" element={<Messages/>}/>
                                 <Route path="/analytics" element={<Analytics/>}/>
                                 <Route path="/file-manager" element={<FileManager/>}/>
