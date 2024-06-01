@@ -81,7 +81,7 @@ function App() {
                                 <Route path="/expenses" element={<Expense/>}/>
                                 <Route path="/feedback" element={<ScreenShare/>}/>
                                 <Route path="/printing" element={<Print/>}/>
-                                <Route path="/logout" element={<Logout onBooleanChange={handleBooleanChange} setFlag={setFlag}/>}/>
+                                <Route path="/logout" element={<Logout setFlag={setFlag}/>}/>
                                 <Route path="*" element={<> not found</>}/>
                             </Routes>
                         </SideBar>

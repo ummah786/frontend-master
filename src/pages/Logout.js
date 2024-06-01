@@ -1,14 +1,13 @@
 import {useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 
-export const Logout = ({onBooleanChange, setFlag}) => {
+export const Logout = ({setFlag}) => {
     const navigate = useNavigate();
 
     useEffect(() => {
         setFlag(true);
-      //  onBooleanChange();  // Change the flag state
-        navigate('/');      // Navigate to the home page
-    }, [onBooleanChange, navigate]);
+        navigate('/');
+    }, [ navigate]);
 
     return null;  // No need to render anything
 };
