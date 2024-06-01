@@ -184,7 +184,7 @@ const routes = [
     icon: <IconContainer><AiFillHeart color="white" /></IconContainer>,
   },
   {
-    path: "/Logout",
+    path: "/logout",
     name: "Logout",
     icon: <IconContainer><AiFillHeart color="white" /></IconContainer>,
   },
