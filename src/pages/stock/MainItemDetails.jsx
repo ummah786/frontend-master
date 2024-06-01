@@ -30,7 +30,6 @@ export const MainItemDetails = ({detailFlagId, onBooleanChange}) => {
             <Box>
                 <Button onClick={onBooleanChange}>Back To View</Button>
             </Box>
-            <Container>
                 <Grid container spacing={2}>
                     <Grid item xs={3}>
                         <Paper elevation={3}>
@@ -66,7 +65,6 @@ export const MainItemDetails = ({detailFlagId, onBooleanChange}) => {
                         </Paper>
                     </Grid>
                 </Grid>
-            </Container>
         </>
     );
 }
