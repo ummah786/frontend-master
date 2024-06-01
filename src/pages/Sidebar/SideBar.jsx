@@ -19,14 +19,9 @@ import Tooltip from '@mui/material/Tooltip';
 import Avatar from '@mui/material/Avatar';
 import styled from 'styled-components';
 import './SideBar.css';
-import SearchIcon from "@material-ui/icons/Search";
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import Badge from '@mui/material/Badge';
 import MailIcon from '@mui/icons-material/Mail';
-import InputBase from '@mui/material/InputBase';
-import Popper from '@mui/material/Popper';
-import Paper from '@mui/material/Paper';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
-import { useHistory } from 'react-router-dom';
 const IconContainer = styled.div`
     display: flex;
     align-items: center;
@@ -135,25 +130,10 @@ const SideBar = ({children}) => {
     const [isOpen, setIsOpen] = useState(true);
     const location = useLocation();
     const navigate = useNavigate();
-    const [searchText, setSearchText] = useState('');
-    const [open, setOpen] = useState(false);
-    const [anchorEl, setAnchorEl] = useState(null);
-    const history = useHistory();
     const toggle = () => setIsOpen(!isOpen);
+    const [notificationsCount, setNotificationsCount] = useState(5);
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
-    };
-
-
-    const handleInputChange = (event) => {
-        setSearchText(event.target.value);
-        setOpen(!!event.target.value);
-    };
-
-    const handleItemClick = (path) => {
-        history.push(path);
-        setOpen(false);
-        setSearchText('');
     };
     // Function to get the current route name
     const getRouteName = () => {
@@ -214,37 +194,48 @@ const SideBar = ({children}) => {
                     <Typography variant="h6" color="inherit" component="div" sx={{flexGrow: 1}}>
                         {getRouteName()}
                     </Typography>
-                    <Box sx={{flexGrow: 1}}>
-                        {/* Growable Search Field */}
-                        <div>
-                            <SearchIcon />
-                            <InputBase
-                                placeholder="Search…"
-                                value={searchText}
-                                onChange={handleInputChange}
-                                onFocus={(event) => setOpen(!!event.target.value)}
-                                onBlur={() => setOpen(false)}
-                            />
-                            <Popper open={open} anchorEl={anchorEl}>
-                                <Paper>
-                                    <ClickAwayListener onClickAway={() => setOpen(false)}>
-                                        <div>
-                                            {/* Render Suggestions based on searchText */}
-                                            {/* For example, render NavLink for each suggestion */}
-                                            {routes
-                                                .filter(route => route.name.toLowerCase().includes(searchText.toLowerCase()))
-                                                .map(route => (
-                                                    <NavLink key={route.path} to={route.path}>
-                                                        <div onClick={() => handleItemClick(route.path)}>
-                                                            {route.name}
-                                                        </div>
-                                                    </NavLink>
-                                                ))}
-                                        </div>
-                                    </ClickAwayListener>
-                                </Paper>
-                            </Popper>
-                        </div>
+                    <Box sx={{flexGrow: 0, display: 'flex', gap: '10px'}}>
+                        <Tooltip title="Messages">
+                            <IconButton color="inherit">
+                                <Badge badgeContent={4} color="error">
+                                    <MailIcon />
+                                </Badge>
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Updates">
+                            <IconButton color="inherit">
+                                <Badge badgeContent={notificationsCount} color="error">
+                                    <NotificationsIcon />
+                                </Badge>
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Open settings">
+                            <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
+                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg"/>
+                            </IconButton>
+                        </Tooltip>
+                        <Menu
+                            sx={{mt: '45px'}}
+                            id="menu-appbar"
+                            anchorEl={anchorElUser}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            open={Boolean(anchorElUser)}
+                            onClose={handleCloseUserMenu}
+                        >
+                            {settings.map((setting) => (
+                                <MenuItem key={setting.name} onClick={() => handleSettingsItemClick(setting.path)}>
+                                    <Typography textAlign="center">{setting.name}</Typography>
+                                </MenuItem>
+                            ))}
+                        </Menu>
                     </Box>
                 </Toolbar>
             </AppBar>
