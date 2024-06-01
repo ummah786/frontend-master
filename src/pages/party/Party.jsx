@@ -31,6 +31,7 @@ import {List, ListItem, ListItemButton} from "@mui/joy";
 import PeopleIcon from '@mui/icons-material/People';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import MoneyOffIcon from '@mui/icons-material/MoneyOff';
+import {MainPartyDetails} from "./MainPartyDetails";
 
 
 export const Party = () => {
@@ -54,7 +55,11 @@ export const Party = () => {
     const keyCategoryData = useSelector(state => state.keyCategoryReducerValue);
 
     const [addCategory, setAddCategory] = React.useState([]);
+    const [detailFlag, setDetailFlag] = React.useState(false);
 
+    const handleDetailFlag = () => {
+        setDetailFlag((prevState) => !prevState);
+    };
     const handleBooleanChange = () => {
         setManageUserObj(partnerDataModel);
         setEnable(false);
@@ -218,7 +223,8 @@ export const Party = () => {
     }, [setMangUser]);
 
     function handleView(id, row) {
-
+        handleDetailFlag();
+        console.log("view Flag id  row   ", id, row)
     }
 
 
@@ -345,415 +351,440 @@ export const Party = () => {
     }
 
     return (
-        <>
-            {(enable && enableBulk) && (
-                <Box>
+        <>  {detailFlag ? (
+            <Box>
+                {(enable && enableBulk) && (
                     <Box>
-                        <Button sx={{marginLeft: "1px"}} variant="contained">Party</Button>
-                        <Box sx={{display: 'flex', justifyContent: 'space-between', p: 2}}>
-                            <Paper
-                                elevation={3}
-                                sx={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    p: 2,
-                                    width: '30%',
-                                    backgroundColor: '#f0f0ff',
-                                    border: '1px solid #e0e0e0',
-                                }}
-                            >
-                                <Box sx={{display: 'flex', alignItems: 'center'}}>
-                                    <PeopleIcon/>
-                                    <Typography variant="h6" sx={{ml: 1}}>All Parties</Typography>
-                                </Box>
-                                <Typography variant="h3">3</Typography>
-                            </Paper>
-                            <Paper
-                                elevation={3}
-                                sx={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    p: 2,
-                                    width: '30%',
-                                    border: '1px solid #e0e0e0',
-                                }}
-                            >
-                                <Box sx={{display: 'flex', alignItems: 'center', color: 'green'}}>
-                                    <AttachMoneyIcon/>
-                                    <Typography variant="h6" sx={{ml: 1}}>To Collect</Typography>
-                                </Box>
-                                <Typography variant="h3">₹ 300</Typography>
-                            </Paper>
-                            <Paper
-                                elevation={3}
-                                sx={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    p: 2,
-                                    width: '30%',
-                                    border: '1px solid #e0e0e0',
-                                }}
-                            >
-                                <Box sx={{display: 'flex', alignItems: 'center', color: 'red'}}>
-                                    <MoneyOffIcon/>
-                                    <Typography variant="h6" sx={{ml: 1}}>To Pay</Typography>
-                                </Box>
-                                <Typography variant="h3">₹ 200</Typography>
-                            </Paper>
-                        </Box>
-
-                    </Box>
-                    <Box>
-                        <Box sx={{display: 'flex', width: '100%'}}>
-                            <Box sx={{width: '41%', marginLeft: "-23px", marginTop: "10px", marginBottom: "10px"}}>
-                                <Search>
-                                    <SearchIconWrapper>
-                                        <SearchIcon/>
-                                    </SearchIconWrapper>
-                                    <StyledInputBase
-                                        value={filter}
-                                        onChange={handleFilterChange}
-                                        placeholder="Search by Business Name, Company, GST And Mobile Number"
-                                        inputProps={{'aria-label': 'search'}}
-                                    />
-                                </Search>
-                            </Box>
-                            <Box sx={{right: '0', float: 'right'}}>
-                                <Button sx={{}} variant="contained" onClick={handleBooleanChange}>Create Party</Button>
-                                <Button sx={{marginLeft: "10px", marginRight: "10px"}} variant="contained"
-                                        onClick={handleBulkChange}>Create Bulk Party</Button>
+                        <Box>
+                            <Button sx={{marginLeft: "1px"}} variant="contained">Party</Button>
+                            <Box sx={{display: 'flex', justifyContent: 'space-between', p: 2}}>
+                                <Paper
+                                    elevation={3}
+                                    sx={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        p: 2,
+                                        width: '30%',
+                                        backgroundColor: '#f0f0ff',
+                                        border: '1px solid #e0e0e0',
+                                    }}
+                                >
+                                    <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                        <PeopleIcon/>
+                                        <Typography variant="h6" sx={{ml: 1}}>All Parties</Typography>
+                                    </Box>
+                                    <Typography variant="h3">3</Typography>
+                                </Paper>
+                                <Paper
+                                    elevation={3}
+                                    sx={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        p: 2,
+                                        width: '30%',
+                                        border: '1px solid #e0e0e0',
+                                    }}
+                                >
+                                    <Box sx={{display: 'flex', alignItems: 'center', color: 'green'}}>
+                                        <AttachMoneyIcon/>
+                                        <Typography variant="h6" sx={{ml: 1}}>To Collect</Typography>
+                                    </Box>
+                                    <Typography variant="h3">₹ 300</Typography>
+                                </Paper>
+                                <Paper
+                                    elevation={3}
+                                    sx={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        p: 2,
+                                        width: '30%',
+                                        border: '1px solid #e0e0e0',
+                                    }}
+                                >
+                                    <Box sx={{display: 'flex', alignItems: 'center', color: 'red'}}>
+                                        <MoneyOffIcon/>
+                                        <Typography variant="h6" sx={{ml: 1}}>To Pay</Typography>
+                                    </Box>
+                                    <Typography variant="h3">₹ 200</Typography>
+                                </Paper>
                             </Box>
 
                         </Box>
                         <Box>
-                            <TableContainer component={Paper} sx={{maxHeight: 500}}>
-                                <Table sx={{minWidth: 1250}} aria-label="customized table" stickyHeader>
-                                    <TableHead>
-                                        <TableRow>
-                                            <StyledTableCell align="center">Name</StyledTableCell>
-                                            <StyledTableCell align="center">Company</StyledTableCell>
-                                            <StyledTableCell align="center">Party Type</StyledTableCell>
-                                            <StyledTableCell align="center">GST</StyledTableCell>
-                                            <StyledTableCell align="center">Phone</StyledTableCell>
-                                            <StyledTableCell align="center">Actions</StyledTableCell>
-                                            <StyledTableCell align="center">View</StyledTableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {filteredEmployees.map((row) => (
-                                            <StyledTableRow key={row.id}>
-                                                <StyledTableCell align="center">{row.pname}</StyledTableCell>
-                                                <StyledTableCell
-                                                    align="center">{row.company}</StyledTableCell>
-                                                <StyledTableCell align="center">{row.partyType}</StyledTableCell>
-                                                <StyledTableCell align="center">{row.gstNumber}</StyledTableCell>
-                                                <StyledTableCell align="center">{row.mobileNumber}</StyledTableCell>
-                                                <StyledTableCell align="center">
-                                                    <IconButton aria-label="edit"
-                                                                onClick={() => handleEdit(row.id, row)}>
-                                                        <EditIcon/>
-                                                    </IconButton>
-                                                    <IconButton aria-label="delete"
-                                                                onClick={() => handleDelete(row.id)}>
-                                                        <DeleteIcon/>
-                                                    </IconButton>
-                                                </StyledTableCell>
-                                                <StyledTableCell align="center">
-                                                    <IconButton aria-label="edit"
-                                                                onClick={() => handleView(row.id, row)}>
-                                                        <ArticleIcon/>
-                                                    </IconButton>
-                                                </StyledTableCell>
-                                            </StyledTableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
+                            <Box sx={{display: 'flex', width: '100%'}}>
+                                <Box sx={{width: '41%', marginLeft: "-23px", marginTop: "10px", marginBottom: "10px"}}>
+                                    <Search>
+                                        <SearchIconWrapper>
+                                            <SearchIcon/>
+                                        </SearchIconWrapper>
+                                        <StyledInputBase
+                                            value={filter}
+                                            onChange={handleFilterChange}
+                                            placeholder="Search by Business Name, Company, GST And Mobile Number"
+                                            inputProps={{'aria-label': 'search'}}
+                                        />
+                                    </Search>
+                                </Box>
+                                <Box sx={{right: '0', float: 'right'}}>
+                                    <Button sx={{}} variant="contained" onClick={handleBooleanChange}>Create
+                                        Party</Button>
+                                    <Button sx={{marginLeft: "10px", marginRight: "10px"}} variant="contained"
+                                            onClick={handleBulkChange}>Create Bulk Party</Button>
+                                </Box>
+
+                            </Box>
+                            <Box>
+                                <TableContainer component={Paper} sx={{maxHeight: 500}}>
+                                    <Table sx={{minWidth: 1250}} aria-label="customized table" stickyHeader>
+                                        <TableHead>
+                                            <TableRow>
+                                                <StyledTableCell align="center">Name</StyledTableCell>
+                                                <StyledTableCell align="center">Company</StyledTableCell>
+                                                <StyledTableCell align="center">Party Type</StyledTableCell>
+                                                <StyledTableCell align="center">GST</StyledTableCell>
+                                                <StyledTableCell align="center">Phone</StyledTableCell>
+                                                <StyledTableCell align="center">Actions</StyledTableCell>
+                                                <StyledTableCell align="center">View</StyledTableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {filteredEmployees.map((row) => (
+                                                <StyledTableRow key={row.id}>
+                                                    <StyledTableCell align="center">{row.pname}</StyledTableCell>
+                                                    <StyledTableCell
+                                                        align="center">{row.company}</StyledTableCell>
+                                                    <StyledTableCell align="center">{row.partyType}</StyledTableCell>
+                                                    <StyledTableCell align="center">{row.gstNumber}</StyledTableCell>
+                                                    <StyledTableCell align="center">{row.mobileNumber}</StyledTableCell>
+                                                    <StyledTableCell align="center">
+                                                        <IconButton aria-label="edit"
+                                                                    onClick={() => handleEdit(row.id, row)}>
+                                                            <EditIcon/>
+                                                        </IconButton>
+                                                        <IconButton aria-label="delete"
+                                                                    onClick={() => handleDelete(row.id)}>
+                                                            <DeleteIcon/>
+                                                        </IconButton>
+                                                    </StyledTableCell>
+                                                    <StyledTableCell align="center">
+                                                        <IconButton aria-label="edit"
+                                                                    onClick={() => handleView(row.id, row)}>
+                                                            <ArticleIcon/>
+                                                        </IconButton>
+                                                    </StyledTableCell>
+                                                </StyledTableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </Box>
                         </Box>
                     </Box>
-                </Box>
-            )}
-            {
-                !enable && (
-                    <Box>
-                        <Box sx={{display: 'flex', marginBottom: "10px", marginTop: "20px"}}>
-                            <Box>
-                                <Button size="small" variant="contained" sx={{marginLeft: "260px"}}>Create Partner</Button>
-                            </Box>
-                            <Box sx={{float: 'right', alignItems: 'center', marginLeft: "430px"}}>
-                                <Button sx={{marginRight: "10px"}} size="small" variant="contained"
-                                        onClick={handleBooleanCancelChange}>Cancel</Button>
-                                <Button size="small" variant="contained" onClick={handleBooleanCancelChange}>Save</Button>
-                            </Box>
-                        </Box>
-                        <form onSubmit={handleSubmit}>
-                            <Box sx={{width: '70%', display: 'flex'}}>
-                                <Box sx={{
-                                    width: '50%',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    margin: "10px",
-                                    marginLeft: '250px'
-                                }}>
-                                    <TextField id="outlined-basic" label="Name" variant="outlined" sx={{margin: '10px'}}
-                                               value={manageUserObj.pname}
-                                               onChange={(event) => handleTextFieldChange(event, 'pname')}/>
-
-                                    <TextField id="outlined-basic" label="Phone Number" variant="outlined"
-                                               sx={{margin: '10px'}} value={manageUserObj.mobileNumber}
-                                               onChange={(event) => handleTextFieldChange(event, 'mobileNumber')}/>
-                                    <TextField id="outlined-basic" label="Email Address" variant="outlined"
-                                               sx={{margin: '10px'}} value={manageUserObj.email}
-                                               onChange={(event) => handleTextFieldChange(event, 'email')}/>
-                                    <TextField id="outlined-basic" label="Billing Address" variant="outlined"
-                                               sx={{margin: '10px'}}
-                                               value={manageUserObj.billingAddress}
-                                               onChange={(event) => handleTextFieldChange(event, 'billingAddress')}/>
-                                    <TextField id="outlined-basic" label="Shipping Address" variant="outlined"
-                                               sx={{margin: '10px'}}
-                                               value={manageUserObj.shippingAddress}
-                                               onChange={(event) => handleTextFieldChange(event, 'shippingAddress')}/>
-                                    <TextField id="outlined-basic" label="Company Name" variant="outlined"
-                                               sx={{margin: '10px'}}
-                                               value={manageUserObj.company}
-                                               onChange={(event) => handleTextFieldChange(event, 'company')}/>
+                )}
+                {
+                    !enable && (
+                        <Box>
+                            <Box sx={{display: 'flex', marginBottom: "10px", marginTop: "20px"}}>
+                                <Box>
+                                    <Button size="small" variant="contained" sx={{marginLeft: "260px"}}>Create
+                                        Partner</Button>
                                 </Box>
-                                <Box sx={{display: 'flex', flexDirection: 'column', marginRight: '60px', marginTop: "3px"}}>
-                                    <TextField
-                                        sx={{width: "160%", marginBottom: "6px"}}
-                                        select
-                                        value={manageUserObj.partyType}
-                                        onChange={(event) => handleTextFieldChange(event, 'partyType')}
-                                        label="Party Type"
-                                        variant="outlined"
-                                        margin="normal"
-                                    >
-                                        {
-                                            UserRole.PartyType.map(userrole => (
-                                                <MenuItem key={userrole.name}
-                                                          value={userrole.name}>{userrole.name}</MenuItem>
-                                            ))
-                                        }
-                                    </TextField>
-                                    <TextField id="outlined-basic" label="GST Number" variant="outlined"
-                                               sx={{width: "160%", marginTop: "15px"}} value={manageUserObj.gstNumber}
-                                               onChange={(event) => handleTextFieldChange(event, 'gstNumber')}/>
+                                <Box sx={{float: 'right', alignItems: 'center', marginLeft: "430px"}}>
+                                    <Button sx={{marginRight: "10px"}} size="small" variant="contained"
+                                            onClick={handleBooleanCancelChange}>Cancel</Button>
+                                    <Button size="small" variant="contained"
+                                            onClick={handleBooleanCancelChange}>Save</Button>
+                                </Box>
+                            </Box>
+                            <form onSubmit={handleSubmit}>
+                                <Box sx={{width: '70%', display: 'flex'}}>
+                                    <Box sx={{
+                                        width: '50%',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        margin: "10px",
+                                        marginLeft: '250px'
+                                    }}>
+                                        <TextField id="outlined-basic" label="Name" variant="outlined" sx={{margin: '10px'}}
+                                                   value={manageUserObj.pname}
+                                                   onChange={(event) => handleTextFieldChange(event, 'pname')}/>
 
-                                    <TextField
-                                        sx={{width: "160%", marginTop: "20px"}}
-                                        select
-                                        value={manageUserObj.partyCategory}
-                                        onChange={(event) => handleTextFieldChange(event, 'partyCategory')}
-                                        label="Category"
-                                        variant="outlined"
-                                        margin="normal"
-                                    >
-                                        <MenuItem onClick={() => setOpenCategory(true)}>Create a New Category</MenuItem>
-                                        {Array.isArray(keyCategoryData) &&
-                                            keyCategoryData.map(userrole => (
-                                                <MenuItem key={userrole}
-                                                          value={userrole}>{userrole}</MenuItem>
-                                            ))
-                                        }
-                                    </TextField>
-                                    <Transition in={openCategory} timeout={400}>
-                                        <Modal
-                                            open={openCategory}
-                                            onClose={() => setOpenCategory(false)}
-                                            aria-labelledby="modal-modal-title"
-                                            aria-describedby="modal-modal-description"
-                                            sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
-                                        >
-                                            <Box sx={style}>
-                                                <Box
-                                                    sx={{
-                                                        marginTop: 8,
-                                                        display: 'flex',
-                                                        flexDirection: 'column',
-                                                        alignItems: 'center',
-                                                    }}
-                                                >
-                                                    <ModalClose variant="plain" sx={{m: 1}}/>
-                                                    <Typography component="h1" variant="h5">
-                                                        Save Into Category
-                                                    </Typography>
-                                                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
-                                                        <TextField
-                                                            margin="normal"
-                                                            required
-                                                            fullWidth
-                                                            id="Category"
-                                                            label="Categroy"
-                                                            name="Category"
-                                                            autoComplete="Category"
-                                                            value={categoryApi}
-                                                            onChange={(e) => setCategoryApi(e.target.value)}
-                                                            autoFocus
-                                                        />
-                                                        <Button
-                                                            type="submit"
-                                                            fullWidth
-                                                            variant="contained"
-                                                            onClick={handleClick}
-                                                            sx={{mt: 3, mb: 2, color: "whitesmoke", background: '#212121'}}
-                                                        >
-                                                            Submit
-                                                        </Button>
-                                                        <List sx={{maxWidth: 300}}>
-                                                            {addCategory.length > 0 ? (
-                                                                addCategory.map((item, index) => (
-                                                                    <ListItem
-                                                                        endAction={
-                                                                            <IconButton aria-label="Delete" size="sm"
-                                                                                        color="danger">
-                                                                                <Delete
-                                                                                    onClick={() => deleteCategory(item.id, item.value)}/>
-                                                                            </IconButton>
-                                                                        }
-                                                                    >
-                                                                        <ListItemButton
-                                                                            key={index}>{item.value}</ListItemButton>
-                                                                    </ListItem>
-                                                                ))) : (
-                                                                <p>Add New Category</p>
-                                                            )
-                                                            }
-                                                        </List>
-                                                    </Box>
-                                                </Box>
-                                            </Box>
-                                        </Modal>
-                                    </Transition>
-                                    <TextField id="outlined-basic" label="Credit Limit" variant="outlined"
-                                               sx={{width: "160%", marginTop: "13px"}} value={manageUserObj.creditLimit}
-                                               onChange={(event) => handleTextFieldChange(event, 'creditLimit')}/>
-
-                                    <Box sx={{display: 'flex'}}>
-                                        <TextField id="outlined-basic" label="Credit Period" variant="outlined"
-                                                   sx={{width: "fullWidth", marginTop: "18px"}}
-                                                   value={manageUserObj.creditPeriod}
-                                                   onChange={(event) => handleTextFieldChange(event, 'creditPeriod')}/>
-
-                                        <TextField
-                                            sx={{width: "fullWidth", marginTop: "18px", marginLeft: "10px"}}
-                                            select
-                                            value={manageUserObj.creditPeriodType}
-                                            onChange={(event) => handleTextFieldChange(event, 'creditPeriodType')}
-                                            label="Credit Period Type"
-                                            variant="outlined"
-                                        >
-                                            {
-                                                UserRole.creditPeriod.map(userrole => (
-                                                    <MenuItem key={userrole.name}
-                                                              value={userrole.name}>{userrole.name}</MenuItem>
-                                                ))
-                                            }
-                                        </TextField>
+                                        <TextField id="outlined-basic" label="Phone Number" variant="outlined"
+                                                   sx={{margin: '10px'}} value={manageUserObj.mobileNumber}
+                                                   onChange={(event) => handleTextFieldChange(event, 'mobileNumber')}/>
+                                        <TextField id="outlined-basic" label="Email Address" variant="outlined"
+                                                   sx={{margin: '10px'}} value={manageUserObj.email}
+                                                   onChange={(event) => handleTextFieldChange(event, 'email')}/>
+                                        <TextField id="outlined-basic" label="Billing Address" variant="outlined"
+                                                   sx={{margin: '10px'}}
+                                                   value={manageUserObj.billingAddress}
+                                                   onChange={(event) => handleTextFieldChange(event, 'billingAddress')}/>
+                                        <TextField id="outlined-basic" label="Shipping Address" variant="outlined"
+                                                   sx={{margin: '10px'}}
+                                                   value={manageUserObj.shippingAddress}
+                                                   onChange={(event) => handleTextFieldChange(event, 'shippingAddress')}/>
+                                        <TextField id="outlined-basic" label="Company Name" variant="outlined"
+                                                   sx={{margin: '10px'}}
+                                                   value={manageUserObj.company}
+                                                   onChange={(event) => handleTextFieldChange(event, 'company')}/>
                                     </Box>
-
-                                    <Box sx={{display: 'flex'}}>
-                                        <TextField id="outlined-basic" label="Opening Balance" variant="outlined"
-                                                   sx={{width: "200%", marginTop: "20px"}}
-                                                   value={manageUserObj.openingBalance}
-                                                   onChange={(event) => handleTextFieldChange(event, 'openingBalance')}/>
-
+                                    <Box sx={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        marginRight: '60px',
+                                        marginTop: "3px"
+                                    }}>
                                         <TextField
-                                            sx={{width: "200%", marginTop: "20px", marginLeft: "10px"}}
+                                            sx={{width: "160%", marginBottom: "6px"}}
                                             select
-                                            value={manageUserObj.openingBalanceType}
-                                            onChange={(event) => handleTextFieldChange(event, 'openingBalanceType')}
-                                            label="Opening Balance Type"
+                                            value={manageUserObj.partyType}
+                                            onChange={(event) => handleTextFieldChange(event, 'partyType')}
+                                            label="Party Type"
                                             variant="outlined"
                                             margin="normal"
                                         >
                                             {
-                                                UserRole.openingBalance.map(userrole => (
+                                                UserRole.PartyType.map(userrole => (
                                                     <MenuItem key={userrole.name}
                                                               value={userrole.name}>{userrole.name}</MenuItem>
                                                 ))
                                             }
                                         </TextField>
-                                    </Box>
-                                    <Box>
-                                        <Button type="submit" variant="contained" sx={{marginLeft: "135px"}}>SUBMIT</Button>
-                                    </Box>
-                                </Box>
-                            </Box>
-                        </form>
-                    </Box>
-                )
-            }
-            {
-                !enableBulk && (
-                    <Box sx={{marginLeft: "10px"}}>
-                        <Box sx={{display: 'flex'}}>
-                            <Box sx={{marginTop: "10px", marginBottom: "20px", marginLeft: "-2px"}}>
-                                <Button size="small" variant="contained">Create Bulk Partner</Button>
-                            </Box>
-                            <Box sx={{
-                                float: 'right',
-                                alignItems: 'center',
-                                marginLeft: "100px",
-                                display: 'flex',
-                                marginTop: "-15px"
-                            }}>
-                                <Box sx={{marginBottom: "-80px"}}>
-                                    <a
-                                        href={require('../../file/PartySample.xlsx')}
-                                        download="PartySample.xlsx"
-                                        target="_blank"
-                                        rel="noreferrer"
-                                    >
-                                        <Button
-                                            type="submit"
-                                            variant="contained"
-                                            /// onClick={handleClick}
-                                            sx={{mt: 3, mb: 2, color: "whitesmoke", background: '#212121'}}
+                                        <TextField id="outlined-basic" label="GST Number" variant="outlined"
+                                                   sx={{width: "160%", marginTop: "15px"}} value={manageUserObj.gstNumber}
+                                                   onChange={(event) => handleTextFieldChange(event, 'gstNumber')}/>
+
+                                        <TextField
+                                            sx={{width: "160%", marginTop: "20px"}}
+                                            select
+                                            value={manageUserObj.partyCategory}
+                                            onChange={(event) => handleTextFieldChange(event, 'partyCategory')}
+                                            label="Category"
+                                            variant="outlined"
+                                            margin="normal"
                                         >
-                                            Download the sample file
-                                        </Button>
-                                    </a>
+                                            <MenuItem onClick={() => setOpenCategory(true)}>Create a New Category</MenuItem>
+                                            {Array.isArray(keyCategoryData) &&
+                                                keyCategoryData.map(userrole => (
+                                                    <MenuItem key={userrole}
+                                                              value={userrole}>{userrole}</MenuItem>
+                                                ))
+                                            }
+                                        </TextField>
+                                        <Transition in={openCategory} timeout={400}>
+                                            <Modal
+                                                open={openCategory}
+                                                onClose={() => setOpenCategory(false)}
+                                                aria-labelledby="modal-modal-title"
+                                                aria-describedby="modal-modal-description"
+                                                sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+                                            >
+                                                <Box sx={style}>
+                                                    <Box
+                                                        sx={{
+                                                            marginTop: 8,
+                                                            display: 'flex',
+                                                            flexDirection: 'column',
+                                                            alignItems: 'center',
+                                                        }}
+                                                    >
+                                                        <ModalClose variant="plain" sx={{m: 1}}/>
+                                                        <Typography component="h1" variant="h5">
+                                                            Save Into Category
+                                                        </Typography>
+                                                        <Box component="form" onSubmit={handleSubmit} noValidate
+                                                             sx={{mt: 1}}>
+                                                            <TextField
+                                                                margin="normal"
+                                                                required
+                                                                fullWidth
+                                                                id="Category"
+                                                                label="Categroy"
+                                                                name="Category"
+                                                                autoComplete="Category"
+                                                                value={categoryApi}
+                                                                onChange={(e) => setCategoryApi(e.target.value)}
+                                                                autoFocus
+                                                            />
+                                                            <Button
+                                                                type="submit"
+                                                                fullWidth
+                                                                variant="contained"
+                                                                onClick={handleClick}
+                                                                sx={{
+                                                                    mt: 3,
+                                                                    mb: 2,
+                                                                    color: "whitesmoke",
+                                                                    background: '#212121'
+                                                                }}
+                                                            >
+                                                                Submit
+                                                            </Button>
+                                                            <List sx={{maxWidth: 300}}>
+                                                                {addCategory.length > 0 ? (
+                                                                    addCategory.map((item, index) => (
+                                                                        <ListItem
+                                                                            endAction={
+                                                                                <IconButton aria-label="Delete" size="sm"
+                                                                                            color="danger">
+                                                                                    <Delete
+                                                                                        onClick={() => deleteCategory(item.id, item.value)}/>
+                                                                                </IconButton>
+                                                                            }
+                                                                        >
+                                                                            <ListItemButton
+                                                                                key={index}>{item.value}</ListItemButton>
+                                                                        </ListItem>
+                                                                    ))) : (
+                                                                    <p>Add New Category</p>
+                                                                )
+                                                                }
+                                                            </List>
+                                                        </Box>
+                                                    </Box>
+                                                </Box>
+                                            </Modal>
+                                        </Transition>
+                                        <TextField id="outlined-basic" label="Credit Limit" variant="outlined"
+                                                   sx={{width: "160%", marginTop: "13px"}} value={manageUserObj.creditLimit}
+                                                   onChange={(event) => handleTextFieldChange(event, 'creditLimit')}/>
+
+                                        <Box sx={{display: 'flex'}}>
+                                            <TextField id="outlined-basic" label="Credit Period" variant="outlined"
+                                                       sx={{width: "fullWidth", marginTop: "18px"}}
+                                                       value={manageUserObj.creditPeriod}
+                                                       onChange={(event) => handleTextFieldChange(event, 'creditPeriod')}/>
+
+                                            <TextField
+                                                sx={{width: "fullWidth", marginTop: "18px", marginLeft: "10px"}}
+                                                select
+                                                value={manageUserObj.creditPeriodType}
+                                                onChange={(event) => handleTextFieldChange(event, 'creditPeriodType')}
+                                                label="Credit Period Type"
+                                                variant="outlined"
+                                            >
+                                                {
+                                                    UserRole.creditPeriod.map(userrole => (
+                                                        <MenuItem key={userrole.name}
+                                                                  value={userrole.name}>{userrole.name}</MenuItem>
+                                                    ))
+                                                }
+                                            </TextField>
+                                        </Box>
+
+                                        <Box sx={{display: 'flex'}}>
+                                            <TextField id="outlined-basic" label="Opening Balance" variant="outlined"
+                                                       sx={{width: "200%", marginTop: "20px"}}
+                                                       value={manageUserObj.openingBalance}
+                                                       onChange={(event) => handleTextFieldChange(event, 'openingBalance')}/>
+
+                                            <TextField
+                                                sx={{width: "200%", marginTop: "20px", marginLeft: "10px"}}
+                                                select
+                                                value={manageUserObj.openingBalanceType}
+                                                onChange={(event) => handleTextFieldChange(event, 'openingBalanceType')}
+                                                label="Opening Balance Type"
+                                                variant="outlined"
+                                                margin="normal"
+                                            >
+                                                {
+                                                    UserRole.openingBalance.map(userrole => (
+                                                        <MenuItem key={userrole.name}
+                                                                  value={userrole.name}>{userrole.name}</MenuItem>
+                                                    ))
+                                                }
+                                            </TextField>
+                                        </Box>
+                                        <Box>
+                                            <Button type="submit" variant="contained"
+                                                    sx={{marginLeft: "135px"}}>SUBMIT</Button>
+                                        </Box>
+                                    </Box>
                                 </Box>
-                                <Button sx={{marginLeft: "-190px", marginRight: "30px"}} size="small" variant="contained"
-                                        onClick={handleBooleanCancelChange}>Cancel</Button>
-                                <Button size="small" variant="contained" onClick={handleBooleanCancelChange}>Save</Button>
-                            </Box>
+                            </form>
                         </Box>
-                        <input type="file" onChange={handleFileUpload} sx={{marginRight: "100px", marginLeft: "10px"}}/>
-                        {
-                            excelData.length > 0 && (
-                                <Box
-                                    sx={{
-                                        height: 550,
-                                        width: 1300,
-                                        '& .actions': {
-                                            color: 'text.secondary',
-                                        },
-                                        '& .textPrimary': {
-                                            color: 'text.primary',
-                                        },
-                                    }}
-                                >
-                                    <DataGrid
-                                        rows={excelData}
-                                        columns={columns}
-                                        pageSize={5}
-                                        rowsPerPageOptions={[5, 10, 20]}
-                                        checkboxSelection
-                                        disableSelectionOnClick
-                                    />
-                                    <button onClick={handleSave}>Save</button>
+                    )
+                }
+                {
+                    !enableBulk && (
+                        <Box sx={{marginLeft: "10px"}}>
+                            <Box sx={{display: 'flex'}}>
+                                <Box sx={{marginTop: "10px", marginBottom: "20px", marginLeft: "-2px"}}>
+                                    <Button size="small" variant="contained">Create Bulk Partner</Button>
                                 </Box>
-                            )
-                        }
-                    </Box>
-                )}
+                                <Box sx={{
+                                    float: 'right',
+                                    alignItems: 'center',
+                                    marginLeft: "100px",
+                                    display: 'flex',
+                                    marginTop: "-15px"
+                                }}>
+                                    <Box sx={{marginBottom: "-80px"}}>
+                                        <a
+                                            href={require('../../file/PartySample.xlsx')}
+                                            download="PartySample.xlsx"
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        >
+                                            <Button
+                                                type="submit"
+                                                variant="contained"
+                                                /// onClick={handleClick}
+                                                sx={{mt: 3, mb: 2, color: "whitesmoke", background: '#212121'}}
+                                            >
+                                                Download the sample file
+                                            </Button>
+                                        </a>
+                                    </Box>
+                                    <Button sx={{marginLeft: "-190px", marginRight: "30px"}} size="small"
+                                            variant="contained"
+                                            onClick={handleBooleanCancelChange}>Cancel</Button>
+                                    <Button size="small" variant="contained"
+                                            onClick={handleBooleanCancelChange}>Save</Button>
+                                </Box>
+                            </Box>
+                            <input type="file" onChange={handleFileUpload} sx={{marginRight: "100px", marginLeft: "10px"}}/>
+                            {
+                                excelData.length > 0 && (
+                                    <Box
+                                        sx={{
+                                            height: 550,
+                                            width: 1300,
+                                            '& .actions': {
+                                                color: 'text.secondary',
+                                            },
+                                            '& .textPrimary': {
+                                                color: 'text.primary',
+                                            },
+                                        }}
+                                    >
+                                        <DataGrid
+                                            rows={excelData}
+                                            columns={columns}
+                                            pageSize={5}
+                                            rowsPerPageOptions={[5, 10, 20]}
+                                            checkboxSelection
+                                            disableSelectionOnClick
+                                        />
+                                        <button onClick={handleSave}>Save</button>
+                                    </Box>
+                                )
+                            }
+                        </Box>
+                    )}
+            </Box>
+        ) : (
+            <Box>
+                <MainPartyDetails onBooleanChange={handleDetailFlag}/>
+            </Box>
+        )
+        }
         </>
     )
 }
