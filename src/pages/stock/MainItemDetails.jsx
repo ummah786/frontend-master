@@ -1,12 +1,16 @@
 import {InventoryItemDetails} from "./InventoryItemDetails";
 import {InventoryStockDetails} from "./InventoryStockDetails"
 import {InventoryPartyWiseReport} from "./InventoryPartyWiseReport"
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Button, Container, Divider, Grid, List, ListItem, ListItemText, Paper, Typography} from '@mui/material';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
-export const MainItemDetails = () => {
+export const MainItemDetails =  ({ detailFlagId,onBooleanChange}) => {
+    useEffect(() => {
+        console.log("Details Items Flag Id ",detailFlagId);
+        console.log("On Booolean CHange",onBooleanChange);
+    }, []);
     const items = [
         {name: 'Comb', stock: 8},
         {name: 'Cup', stock: 10},

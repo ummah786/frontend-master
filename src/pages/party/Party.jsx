@@ -55,7 +55,8 @@ export const Party = () => {
     const keyCategoryData = useSelector(state => state.keyCategoryReducerValue);
 
     const [addCategory, setAddCategory] = React.useState([]);
-    const [detailFlag, setDetailFlag] = React.useState(false);
+    const [detailFlag, setDetailFlag] = React.useState(true);
+    const [detailFlagId,setDetailFlagId]=React.useState('');
 
     const handleDetailFlag = () => {
         setDetailFlag((prevState) => !prevState);
@@ -223,8 +224,10 @@ export const Party = () => {
     }, [setMangUser]);
 
     function handleView(id, row) {
+        setDetailFlagId(id);
         handleDetailFlag();
-        console.log("view Flag id  row   ", id, row)
+        console.log("view Flag id  row   ", id, row);
+
     }
 
 
@@ -781,7 +784,7 @@ export const Party = () => {
             </Box>
         ) : (
             <Box>
-                <MainPartyDetails onBooleanChange={handleDetailFlag}/>
+                <MainPartyDetails detailFlagId={detailFlagId}  onBooleanChange={handleDetailFlag}/>
             </Box>
         )
         }

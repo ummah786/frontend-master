@@ -1,12 +1,16 @@
-import React, {useState} from 'react';
-import {Box, Container, CssBaseline, Grid, Paper, Tab, Tabs, Typography,Button} from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import {Box, Button, Container, CssBaseline, Grid, Paper, Tab, Tabs, Typography} from '@mui/material';
 import Sidebar from './Sidebar';
 import PartyDetails from './PartyDetails';
 import PartyLedger from './PartyLedger';
 import PartyTransactions from './PartyTransactions';
 
 
-export const MainPartyDetails = ({onBooleanChange}) => {
+export const MainPartyDetails = ({ detailFlagId,onBooleanChange}) => {
+    useEffect(() => {
+        console.log("Details Flag Id ",detailFlagId);
+        console.log("On Booolean CHange",onBooleanChange);
+    }, []);
     const [selectedParty, setSelectedParty] = useState('Cash Sale');
     const [tabIndex, setTabIndex] = useState(0);
     const parties = [
