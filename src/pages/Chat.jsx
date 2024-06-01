@@ -113,7 +113,7 @@ export const Chat = () => {
                         id: prevMessages.length + 1, // Ensure unique IDs
                         sender: receivedMessage.sender,
                         time: receivedMessage.time,
-                        text: receivedMessagecontent
+                        text: receivedMessage.content
                       }
                     ]);
                   })
