@@ -33,9 +33,6 @@ export const MainItemDetails = ({detailFlagId, onBooleanChange}) => {
                 <Grid container spacing={2}>
                     <Grid item xs={3}>
                         <Paper elevation={3}>
-                            <Typography variant="h6" component="div" sx={{p: 2}}>
-                                Items
-                            </Typography>
                             <List component="nav">
                                 {items.map((item, index) => (
                                     <div key={index}>
