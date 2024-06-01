@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Button, Container, CssBaseline, Grid, Paper, Tab, Tabs, Typography} from '@mui/material';
+import {Box, Button, CssBaseline, Grid, Paper, Tab, Tabs, Typography} from '@mui/material';
 import Sidebar from './Sidebar';
 import PartyDetails from './PartyDetails';
 import PartyLedger from './PartyLedger';
 import PartyTransactions from './PartyTransactions';
 
 
-export const MainPartyDetails = ({ detailFlagId,onBooleanChange}) => {
+export const MainPartyDetails = ({detailFlagId, onBooleanChange}) => {
     useEffect(() => {
-        console.log("Details Flag Id ",detailFlagId);
-        console.log("On Booolean CHange",onBooleanChange);
+        console.log("Details Flag Id ", detailFlagId);
+        console.log("On Booolean CHange", onBooleanChange);
     }, []);
     const [selectedParty, setSelectedParty] = useState('Cash Sale');
     const [tabIndex, setTabIndex] = useState(0);
@@ -31,37 +31,37 @@ export const MainPartyDetails = ({ detailFlagId,onBooleanChange}) => {
             <Box>
                 <Button onClick={onBooleanChange}>Back To View</Button>
             </Box>
-            <Container>
-                <CssBaseline/>
-                <Grid container spacing={2}>
-                    <Grid item xs={3}>
-                        <Sidebar parties={parties} onPartySelect={handlePartySelect} selectedParty={selectedParty}/>
-                    </Grid>
-                    <Grid item xs={9}>
-                        <Paper style={{padding: 16}}>
-                            <Typography variant="h5">{selectedParty}</Typography>
-                            <Tabs value={tabIndex} onChange={handleTabChange} aria-label="party tabs">
-                                <Tab label="Transactions"/>
-                                <Tab label="Profile"/>
-                                <Tab label="Ledger"/>
-                                <Tab label="Item Wise Report"/>
-                            </Tabs>
-                            <TabPanel value={tabIndex} index={0}>
-                                <PartyTransactions partyName={selectedParty}/>
-                            </TabPanel>
-                            <TabPanel value={tabIndex} index={1}>
-                                <PartyDetails partyName={selectedParty}/>
-                            </TabPanel>
-                            <TabPanel value={tabIndex} index={2}>
-                                <PartyLedger partyName={selectedParty}/>
-                            </TabPanel>
-                            <TabPanel value={tabIndex} index={3}>
-                                <Typography>Item Wise Report</Typography>
-                            </TabPanel>
-                        </Paper>
-                    </Grid>
+            <CssBaseline/>
+            <Grid container spacing={2}>
+                <Grid item xs={3}> <Paper elevation={3}>
+                    <Sidebar parties={parties} onPartySelect={handlePartySelect} selectedParty={selectedParty}/>
+                </Paper>
                 </Grid>
-            </Container></>
+                <Grid item xs={9}>
+                    <Paper style={{padding: 16}}>
+                        <Typography variant="h5">{selectedParty}</Typography>
+                        <Tabs value={tabIndex} onChange={handleTabChange} aria-label="party tabs">
+                            <Tab label="Transactions"/>
+                            <Tab label="Profile"/>
+                            <Tab label="Ledger"/>
+                            <Tab label="Item Wise Report"/>
+                        </Tabs>
+                        <TabPanel value={tabIndex} index={0}>
+                            <PartyTransactions partyName={selectedParty}/>
+                        </TabPanel>
+                        <TabPanel value={tabIndex} index={1}>
+                            <PartyDetails partyName={selectedParty}/>
+                        </TabPanel>
+                        <TabPanel value={tabIndex} index={2}>
+                            <PartyLedger partyName={selectedParty}/>
+                        </TabPanel>
+                        <TabPanel value={tabIndex} index={3}>
+                            <Typography>Item Wise Report</Typography>
+                        </TabPanel>
+                    </Paper>
+                </Grid>
+            </Grid>
+        </>
     );
 };
 
