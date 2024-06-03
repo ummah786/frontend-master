@@ -260,7 +260,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                 },
                 axiosConfig
             );
-            console.log("save Categroy response ", response.data.response.value);
+            console.log("save Category response ", response.data.response.value);
             dispatch(
                 addKeyCategory([response.data.response.value, ...keyCategoryData])
             );
@@ -730,18 +730,14 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
     return (
         <Box component="form" onSubmit={handleSubmitSaleInvoiceCreate}>
             <Box sx={{maxHeight: 300}}>
-                <Box>
+                <Box sx={{marginBottom:"10px"}}>
                     <Button variant="contained">Sale Invoice</Button>
                     <Box
-                        sx={{right: "0", float: "right", justifyContent: "space-around"}}
+                        sx={{right: "0", float: "right", justifyContent: "space-around", margin: "10px", marginTop: "1px"}}
                     >
-                        <ButtonGroup
-                            variant="contained"
-                            aria-label="Basic button group"
-                            sx={{justifyContent: "space-around"}}
-                        >
-                            <Button onClick={onBooleanChange}>Cancel</Button>
+                            <Button variant="contained" onClick={onBooleanChange} sx={{marginRight: "40px", marginLeft: "-105px"}}>Cancel</Button>
                             <Button
+                            sx={{marginRight: "10px", marginTop: "-60px"}}
                                 type="submit"
                                 fullWidth
                                 variant="contained"
@@ -749,18 +745,17 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                             >
                                 Save
                             </Button>
-                        </ButtonGroup>
                     </Box>
                 </Box>
 
-                <Box>
-                    <Card variant="outlined">
-                        <Box sx={{height: "100px", width: "100px"}}>
+                <Box sx={{width: "120px", marginBottom: "10px"}}>
+                    <Card>
+                        <Box sx={{height: "fullWidth", width: "120px"}}>
                             {logoImage ? (
                                 <Box sx={{display: "flex", position: "relative"}}>
                                     <CardMedia
                                         sx={{
-                                            height: "90px",
+                                            height: "100px",
                                             width: "90px",
                                             margin: "10px",
                                             borderStyle: "dashed",
@@ -807,7 +802,6 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                             onChange={(event) => handleImageUpload(event, setLogoImage)}
                         />
                     </Card>
-                    <Typography>Ummah Hub</Typography>
                 </Box>
                 <Box sx={{display: "flex"}}>
                     <Box
@@ -880,9 +874,11 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                         display: "flex",
                                                         borderStyle: "dashed",
                                                         borderWidth: "2px",
+                                                        marginLeft: "-5px",
+                                                        marginTop: "5px"
                                                     }}
                                                 >
-                                                    <Typography component="h1" variant="h5">
+                                                    <Typography component="h1" variant="h5" padding="7px" paddingBottom="10px" textColor={"common.black"}>
                                                         Add New Party
                                                     </Typography>
                                                     <ModalClose
@@ -890,17 +886,17 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                         sx={{
                                                             m: 1,
                                                             borderStyle: "dashed",
-                                                            borderWidth: "2px",
+                                                            borderWidth: "2px"
                                                         }}
                                                     />
                                                 </Box>
                                                 <Box component="form" onSubmit={handleSubmitForParty}>
-                                                    <Box>
+                                                    <Box  sx={{marginTop: "5px"}}>
                                                         <TextField
                                                             id="outlined-basic"
                                                             label="Name"
                                                             variant="outlined"
-                                                            sx={{margin: "10px"}}
+                                                            sx={{margin: "10px", width: "270px", marginLeft: "60px"}}
                                                             value={manageUserObj.pname}
                                                             onChange={(event) =>
                                                                 handleTextFieldChangeParty(event, "pname")
@@ -911,7 +907,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                             id="outlined-basic"
                                                             label="Phone Number"
                                                             variant="outlined"
-                                                            sx={{margin: "10px"}}
+                                                            sx={{margin: "10px", width: "270px"}}
                                                             value={manageUserObj.mobileNumber}
                                                             onChange={(event) =>
                                                                 handleTextFieldChangeParty(
@@ -924,7 +920,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                             id="outlined-basic"
                                                             label="Email Address"
                                                             variant="outlined"
-                                                            sx={{margin: "10px"}}
+                                                            sx={{margin: "10px", width: "270px"}}
                                                             value={manageUserObj.email}
                                                             onChange={(event) =>
                                                                 handleTextFieldChangeParty(event, "email")
@@ -934,7 +930,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                             id="outlined-basic"
                                                             label="Billing Address"
                                                             variant="outlined"
-                                                            sx={{margin: "10px"}}
+                                                            sx={{margin: "10px", width: "270px", marginLeft: "60px"}}
                                                             value={manageUserObj.billingAddress}
                                                             onChange={(event) =>
                                                                 handleTextFieldChangeParty(
@@ -947,7 +943,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                             id="outlined-basic"
                                                             label="Shipping Address"
                                                             variant="outlined"
-                                                            sx={{margin: "10px"}}
+                                                            sx={{margin: "10px", width: "270px"}}
                                                             value={manageUserObj.shippingAddress}
                                                             onChange={(event) =>
                                                                 handleTextFieldChangeParty(
@@ -960,14 +956,14 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                             id="outlined-basic"
                                                             label="Company Name"
                                                             variant="outlined"
-                                                            sx={{margin: "10px"}}
+                                                            sx={{margin: "10px", width: "270px"}}
                                                             value={manageUserObj.company}
                                                             onChange={(event) =>
                                                                 handleTextFieldChangeParty(event, "company")
                                                             }
                                                         />
                                                         <TextField
-                                                            fullWidth
+                                                            sx={{margin: "10px", width: "270px", marginLeft: "60px"}}
                                                             select
                                                             value={manageUserObj.partyType}
                                                             onChange={(event) =>
@@ -987,18 +983,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                             ))}
                                                         </TextField>
                                                         <TextField
-                                                            id="outlined-basic"
-                                                            label="GST Number"
-                                                            variant="outlined"
-                                                            sx={{margin: "10px"}}
-                                                            value={manageUserObj.gstNumber}
-                                                            onChange={(event) =>
-                                                                handleTextFieldChangeParty(event, "gstNumber")
-                                                            }
-                                                        />
-
-                                                        <TextField
-                                                            fullWidth
+                                                            sx={{margin: "10px", width: "270px"}}
                                                             select
                                                             value={manageUserObj.partyCategory}
                                                             onChange={(event) =>
@@ -1023,6 +1008,17 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                     </MenuItem>
                                                                 ))}
                                                         </TextField>
+                                                        <TextField
+                                                            id="outlined-basic"
+                                                            label="GST Number"
+                                                            variant="outlined"
+                                                            sx={{margin: "10px", width: "270px"}}
+                                                            value={manageUserObj.gstNumber}
+                                                            onChange={(event) =>
+                                                                handleTextFieldChangeParty(event, "gstNumber")
+                                                            }
+                                                        />
+
                                                         <Transition in={openCategoryParty} timeout={400}>
                                                             <Modal
                                                                 open={openCategoryParty}
@@ -1038,7 +1034,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                 <Box sx={style}>
                                                                     <Box
                                                                         sx={{
-                                                                            marginTop: 8,
+                                                                            marginTop: 1,
                                                                             display: "flex",
                                                                             flexDirection: "column",
                                                                             alignItems: "center",
@@ -1057,7 +1053,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                             <TextField
                                                                                 margin="normal"
                                                                                 required
-                                                                                fullWidth
+                                                                                sx={{width: "300px", marginLeft: "185px"}}
                                                                                 id="Category"
                                                                                 label="Categroy"
                                                                                 name="Category"
@@ -1070,7 +1066,6 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                             />
                                                                             <Button
                                                                                 type="submit"
-                                                                                fullWidth
                                                                                 variant="contained"
                                                                                 onClick={handleClickForCategory}
                                                                                 sx={{
@@ -1078,11 +1073,14 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                                     mb: 2,
                                                                                     color: "whitesmoke",
                                                                                     background: "#212121",
+                                                                                    width: "100px",
+                                                                                    marginLeft: "280px",
+                                                                                    marginTop: "10px"
                                                                                 }}
                                                                             >
                                                                                 Submit
                                                                             </Button>
-                                                                            <List sx={{maxWidth: 300}}>
+                                                                            <List sx={{maxWidth: 300, marginLeft: "185px"}}>
                                                                                 {addCategory.length > 0 ? (
                                                                                     addCategory.map((item, index) => (
                                                                                         <ListItem
@@ -1121,7 +1119,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
 
                                                     <Button
                                                         type="submit"
-                                                        fullWidth
+                                                        
                                                         variant="contained"
                                                         onClick={handleSubmitForParty}
                                                         sx={{
@@ -1129,6 +1127,8 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                             mb: 2,
                                                             color: "whitesmoke",
                                                             background: "#212121",
+                                                            width: "200px",
+                                                            marginLeft: "380px"
                                                         }}
                                                     >
                                                         Submit
@@ -1174,7 +1174,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                     }}
                                 >
                                     <Box sx={style}>
-                                        <Typography variant="h2" sx={{marginLeft: "10px"}}>
+                                        <Typography variant="h2" sx={{marginLeft: "280px", marginBottom: "10px"}}>
                                             Change Shipping Address
                                         </Typography>
                                         <ModalClose
@@ -1303,9 +1303,10 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                         display: "flex",
                                                                         borderStyle: "dashed",
                                                                         borderWidth: "2px",
+                                                                        marginTop: "7px"
                                                                     }}
                                                                 >
-                                                                    <Typography component="h1" variant="h5">
+                                                                    <Typography component="h1" variant="h5" sx={{padding: "7px"}}>
                                                                         Edit Shipping Address
                                                                     </Typography>
                                                                     <ModalClose
@@ -1323,7 +1324,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                             sx={{width: "100%"}}
                                                                             margin="normal"
                                                                             value={address}
-                                                                            label="Street Address*"
+                                                                            label="Street Address *"
                                                                             onChange={(e) =>
                                                                                 setAddress(e.target.value)
                                                                             }
@@ -1335,7 +1336,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                             margin="normal"
                                                                             fullWidth
                                                                             value={city}
-                                                                            label="City*"
+                                                                            label="City *"
                                                                             onChange={(e) => setCity(e.target.value)}
                                                                         />
                                                                     </Box>
@@ -1343,8 +1344,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                         <TextField
                                                                             select
                                                                             fullWidth={true}
-                                                                            sx={{margin: "10px"}}
-                                                                            label="State"
+                                                                            label="State *"
                                                                             value={stateLoc}
                                                                             variant="outlined"
                                                                             margin="normal"
@@ -1367,7 +1367,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                             margin="normal"
                                                                             required
                                                                             value={zip}
-                                                                            label="Pin Code *"
+                                                                            label="Pin Code"
                                                                             fullWidth={true}
                                                                             onChange={(e) => setZip(e.target.value)}
                                                                         />
@@ -1375,14 +1375,15 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
 
                                                                     <Button
                                                                         type="submit"
-                                                                        fullWidth
                                                                         variant="contained"
                                                                         onClick={handleClick}
                                                                         sx={{
-                                                                            mt: 3,
+                                                                            mt: 1,
                                                                             mb: 2,
+                                                                            ml: 7,
                                                                             color: "whitesmoke",
                                                                             background: "#212121",
+
                                                                         }}
                                                                     >
                                                                         Submit
@@ -1752,12 +1753,13 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                 >
                                                                     <Box
                                                                         sx={{
+                                                                            mt: 1,
                                                                             display: "flex",
                                                                             borderStyle: "dashed",
                                                                             borderWidth: "2px",
                                                                         }}
                                                                     >
-                                                                        <Typography component="h1" variant="h5">
+                                                                        <Typography component="h1" variant="h5" padding={1}>
                                                                             Add New Items
                                                                         </Typography>
                                                                         <ModalClose
@@ -1905,7 +1907,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                                 </TextField>
                                                                             </Box>
                                                                             <TextField
-                                                                                fullWidth
+                                                                                sx={{margin: "10px", width: "98%"}}
                                                                                 select
                                                                                 value={inventoryObject.gst}
                                                                                 onChange={(event) =>
@@ -1928,7 +1930,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                                 ))}
                                                                             </TextField>
                                                                             <TextField
-                                                                                fullWidth
+                                                                                sx={{margin: "10px", width: "98%"}}
                                                                                 select
                                                                                 value={inventoryObject.category}
                                                                                 onChange={(event) =>
@@ -1971,7 +1973,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                                     <Box sx={style}>
                                                                                         <Box
                                                                                             sx={{
-                                                                                                marginTop: 8,
+                                                                                                marginTop: 1,
                                                                                                 display: "flex",
                                                                                                 flexDirection: "column",
                                                                                                 alignItems: "center",
@@ -1998,9 +2000,9 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                                                 <TextField
                                                                                                     margin="normal"
                                                                                                     required
-                                                                                                    fullWidth
+                                                                                                    sx={{width: "300px", marginLeft: "187px"}}
                                                                                                     id="Category"
-                                                                                                    label="Categroy"
+                                                                                                    label="Category"
                                                                                                     name="Category"
                                                                                                     autoComplete="Category"
                                                                                                     value={categoryApi}
@@ -2013,7 +2015,6 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                                                 />
                                                                                                 <Button
                                                                                                     type="submit"
-                                                                                                    fullWidth
                                                                                                     variant="contained"
                                                                                                     onClick={
                                                                                                         handleClickForCategory
@@ -2023,12 +2024,15 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                                                         mb: 2,
                                                                                                         color: "whitesmoke",
                                                                                                         background: "#212121",
+                                                                                                        width: "100px",
+                                                                                                        marginLeft: "280px",
+                                                                                                        marginTop: "10px"
                                                                                                     }}
                                                                                                 >
                                                                                                     Submit
                                                                                                 </Button>
                                                                                                 <List
-                                                                                                    sx={{maxWidth: 300}}>
+                                                                                                    sx={{maxWidth: 300, marginLeft: "260px"}}>
                                                                                                     {addCategory.length > 0 ? (
                                                                                                         addCategory.map(
                                                                                                             (item, index) => (
@@ -2069,7 +2073,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                                 </Box>
                                                                             </Modal>
                                                                             <TextField
-                                                                                fullWidth
+                                                                                sx={{margin: "10px", width: "98%"}}
                                                                                 select
                                                                                 value={inventoryObject.companyName}
                                                                                 onChange={(event) =>
@@ -2112,7 +2116,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                                     <Box sx={style}>
                                                                                         <Box
                                                                                             sx={{
-                                                                                                marginTop: 8,
+                                                                                                marginTop: 1,
                                                                                                 display: "flex",
                                                                                                 flexDirection: "column",
                                                                                                 alignItems: "center",
@@ -2137,9 +2141,9 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                                                 <TextField
                                                                                                     margin="normal"
                                                                                                     required
-                                                                                                    fullWidth
+                                                                                                    sx={{width: "300px", marginLeft: "190px"}}
                                                                                                     id="Category"
-                                                                                                    label="Categroy"
+                                                                                                    label="Category"
                                                                                                     name="Category"
                                                                                                     autoComplete="Category"
                                                                                                     value={categoryApi}
@@ -2152,7 +2156,6 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                                                 />
                                                                                                 <Button
                                                                                                     type="submit"
-                                                                                                    fullWidth
                                                                                                     variant="contained"
                                                                                                     onClick={
                                                                                                         handleClickForCompany
@@ -2162,12 +2165,15 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                                                         mb: 2,
                                                                                                         color: "whitesmoke",
                                                                                                         background: "#212121",
+                                                                                                        width: "100px",
+                                                                                                        marginLeft: "280px",
+                                                                                                        marginTop: "10px"
                                                                                                     }}
                                                                                                 >
                                                                                                     Submit
                                                                                                 </Button>
                                                                                                 <List
-                                                                                                    sx={{maxWidth: 300}}>
+                                                                                                    sx={{maxWidth: 300, marginLeft: "270px"}}>
                                                                                                     {addCategory.length > 0 ? (
                                                                                                         addCategory.map(
                                                                                                             (item, index) => (
@@ -2211,7 +2217,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                                 id="outlined-basic"
                                                                                 label="HSN Code"
                                                                                 variant="outlined"
-                                                                                sx={{margin: "10px"}}
+                                                                                sx={{margin: "10px", width: "48%"}}
                                                                                 value={inventoryObject.hsn}
                                                                                 onChange={(event) =>
                                                                                     handleTextFieldChangeForInventory(
@@ -2224,7 +2230,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                                 id="outlined-basic"
                                                                                 label="Total Stock"
                                                                                 variant="outlined"
-                                                                                sx={{margin: "10px"}}
+                                                                                sx={{margin: "10px", width: "47.42%"}}
                                                                                 value={inventoryObject.totalStock}
                                                                                 onChange={(event) =>
                                                                                     handleTextFieldChangeForInventory(
@@ -2236,15 +2242,16 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                         </Box>
 
                                                                         <Button
-                                                                            type="submit"
-                                                                            fullWidth
+                                                                            type="submit" 
                                                                             variant="contained"
                                                                             onClick={handleForNewItemCreation}
                                                                             sx={{
-                                                                                mt: 3,
+                                                                                mt: 2,
                                                                                 mb: 2,
+                                                                                ml: 49,
                                                                                 color: "whitesmoke",
                                                                                 background: "#212121",
+                                                                                width: "100px"
                                                                             }}
                                                                         >
                                                                             Submit
@@ -2873,7 +2880,7 @@ const ChildModal = ({shipId, setShipTo, setBillTo}) => {
                 variant="outlined"
                 color="primary"
                 onClick={handleOpen}
-                sx={{margin: "10px"}}
+                sx={{margin: "10px", marginLeft: "250px"}}
             >
                 Add New Shipping Address
             </Button>
@@ -2908,7 +2915,7 @@ const ChildModal = ({shipId, setShipTo, setBillTo}) => {
                                 sx={{
                                     display: "flex",
                                     borderStyle: "dashed",
-                                    borderWidth: "2px",
+                                    borderWidth: "2px"
                                 }}
                             >
                                 <Typography component="h1" variant="h5">

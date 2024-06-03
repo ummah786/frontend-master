@@ -211,7 +211,7 @@ export const Expense = () => {
                 <Box>
 
                     <Box sx={{display: 'flex', width: '100%'}}>
-                        <Box sx={{width: '50%'}}>
+                        <Box sx={{width: '50%', marginBottom: "10px", marginLeft: "5px"}}>
                             <Box>
                                 <h3>Expenses</h3>
                             </Box>
@@ -224,7 +224,7 @@ export const Expense = () => {
                     </Box>
                     <Box>
                         <Box sx={{display: 'flex', width: '100%'}}>
-                            <Box sx={{width: '40%'}}>
+                            <Box sx={{width: '30%'}}>
                                 <Search>
                                     <SearchIconWrapper>
                                         <SearchIcon/>
@@ -233,7 +233,7 @@ export const Expense = () => {
                                         type="text"
                                         value={filter}
                                         onChange={handleFilterChange}
-                                        placeholder="Search by Expense Id Or Note "
+                                        placeholder="Search by Expense Id Or Note"
                                         inputProps={{'aria-label': 'search'}}
                                     />
                                 </Search>

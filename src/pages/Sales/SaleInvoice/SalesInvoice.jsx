@@ -153,8 +153,8 @@ export const SalesInvoice = () => {
         <Box>
           <Box>
             <Box>
-              <Button variant="contained">Sales Invoice</Button>
-              <Box sx={{ right: "0", float: "right" }}>
+              <Button variant="contained" sx={{margin: "5px"}}>Sales Invoice</Button>
+              <Box sx={{ right: "0", float: "right", margin: "5px", marginRight: "10px"}}>
                 <ButtonGroup
                   variant="contained"
                   aria-label="Basic button group"
@@ -168,7 +168,7 @@ export const SalesInvoice = () => {
             <Box sx={{ flexGrow: 1, padding: 2 }}>
               <Grid container spacing={2}>
                 <Grid item xs={4}>
-                  <Paper sx={{ padding: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #ddd' }}>
+                  <Paper sx={{ padding: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #ddd', marginLeft: "-10px"}}>
                     <Box display="flex" alignItems="center">
                       <TrendingUpIcon color="primary" />
                       <Typography variant="h6" sx={{ marginLeft: 1 }}>Stock Value</Typography>
@@ -192,7 +192,7 @@ export const SalesInvoice = () => {
                   </Paper>
                 </Grid>
                 <Grid item xs={4}>
-                  <Paper sx={{ padding: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #ddd' }}>
+                  <Paper sx={{ padding: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #ddd', width: "403px"}}>
                     <Box display="flex" alignItems="center">
                       <ErrorIcon color="error" />
                       <Typography variant="h6" sx={{ marginLeft: 1 }}>Items Expiring (30 days)</Typography>
@@ -207,13 +207,14 @@ export const SalesInvoice = () => {
             </Box>
 
             <Box>
-              <Box sx={{ display: "flex", width: "100%", margin: "5px" }}>
-                <Box sx={{ width: "50%" }}>
+              <Box sx={{ display: "flex", width: "100%", marginLeft: "-20px", marginTop: "10px"}}>
+                <Box sx={{ width: "36%"}}>
                   <Search>
                     <SearchIconWrapper>
                       <SearchIcon />
                     </SearchIconWrapper>
                     <StyledInputBase
+                    sx={{ height: "54px"}}
                       value={filter}
                       onChange={handleFilterChange}
                       placeholder="Search Sale Invoice"
@@ -221,17 +222,19 @@ export const SalesInvoice = () => {
                     />
                   </Search>
                 </Box>
-                <Box>
+                <Box  sx={{ marginBottom: "10px", marginTop: "-8px"}}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
                         label="Start Date:"
+                        sx={{ width: "395px"}}
                         value={startDate}
                         onChange={handleStartDateChange}
                         renderInput={(params) => <TextField {...params} />}
                       />
                       <DatePicker
                         label="End Date:"
+                        sx={{ width: "400px"}}
                         value={endDate}
                         onChange={handleEndDateChange}
                         renderInput={(params) => <TextField {...params} />}
