@@ -110,7 +110,7 @@ const routes = [
     {path: '/expenses', name: 'Expenses', icon: <IconContainer><BiAnalyse color="white"/></IconContainer>},
     {path: '/chat', name: 'Chat', icon: <IconContainer><AiFillHeart color="white"/></IconContainer>},
 
-
+    {path: '/settings', name: 'Settings', icon: <IconContainer><AiFillHeart color="white"/></IconContainer>},
     {path: '/logout', name: 'Logout', icon: <IconContainer><AiFillHeart color="white"/></IconContainer>},
 ];
 
