@@ -38,7 +38,7 @@ const routes = [
     { path: '/', name: 'Dashboard', icon: <IconContainer><FaHome color="white" /></IconContainer> },
     { path: '/party', name: 'Parties', icon: <IconContainer><FaUser color="white" /></IconContainer> },
     { path: '/posbilling', name: 'POS-Billing', icon: <IconContainer><MdMessage color="white" /></IconContainer> },
-    { path: '/expenses', name: 'Expenses', icon: <IconContainer><BiAnalyse color="white" /></IconContainer> },
+
     {
         path: '/stock',
         name: 'Stock',
@@ -71,22 +71,13 @@ const routes = [
             { path: '/Purchases/debit-note', name: 'Debit Note', icon: <IconContainer><FaLock color="white" /></IconContainer> },
         ]
     },
-    {
-        path: '/account',
-        name: 'Account',
-        icon: <IconContainer><AiTwotoneFileExclamation color="white" /></IconContainer>,
-        subRoutes: [
-            { path: '/account/manageAccount', name: 'Manage Account', icon: <IconContainer><FaUser color="white" /></IconContainer> },
-            { path: '/account/myuser', name: 'My User', icon: <IconContainer><FaLock color="white" /></IconContainer> },
-            { path: '/account/business', name: 'Business', icon: <IconContainer><FaUser color="white" /></IconContainer> },
-        ]
-    },
     { path: '/bank', name: 'Cash & Bank', icon: <IconContainer><BsCartCheck color="white" /></IconContainer> },
+    { path: '/report', name: 'Reports', icon: <IconContainer><AiFillHeart color="white" /></IconContainer> },
+    { path: '/expenses', name: 'Expenses', icon: <IconContainer><BiAnalyse color="white" /></IconContainer> },
     { path: '/feedback', name: 'Feedback', icon: <IconContainer><AiFillHeart color="white" /></IconContainer> },
     { path: '/chat', name: 'Chat', icon: <IconContainer><AiFillHeart color="white" /></IconContainer> },
     { path: '/help', name: 'Help & Support', icon: <IconContainer><AiFillHeart color="white" /></IconContainer> },
-    { path: '/report', name: 'Reports', icon: <IconContainer><AiFillHeart color="white" /></IconContainer> },
-    { path: '/printing', name: 'Print', icon: <IconContainer><AiFillHeart color="white" /></IconContainer> },
+
     { path: '/logout', name: 'Logout', icon: <IconContainer><AiFillHeart color="white" /></IconContainer> },
 ];
 

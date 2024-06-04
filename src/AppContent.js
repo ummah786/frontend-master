@@ -1,12 +1,5 @@
 import "./App.css";
 import {Route, Routes, useLocation} from "react-router-dom";
-import Users from "./pages/Users";
-import Messages from "./pages/Messages";
-import FileManager from "./pages/FileManager";
-import Analytics from "./pages/Analytics";
-import Order from "./pages/Order";
-import Saved from "./pages/Saved";
-import Setting from "./pages/Setting";
 import SideBar from "./pages/Sidebar/SideBar";
 import {HesabbookHome} from "./pages/home/HesabbookHome";
 import {MainPage} from "./pages/MainPage";
@@ -20,7 +13,6 @@ import {InventoryShop} from "./pages/stock/InventoryShop";
 import {Expense} from "./pages/expense/Expense";
 import {ScreenShare} from "./WebRtc/ScreenShare";
 import {Chat} from "./pages/Chat";
-import ExampleWithProviders from "./pages/Example";
 import {CashAndBank} from "./pages/CashAndBank/CashAndBank";
 import {SalesInvoice} from "./pages/Sales/SaleInvoice/SalesInvoice";
 import {PaymentIn} from "./pages/Sales/PaymentIn/PaymentIn";
@@ -47,27 +39,25 @@ export const AppContent = ({flag, handleBooleanChange, setFlag}) => {
         return <Routes>
             <Route path="/" element={<MainDashboard/>}/>
             <Route path="/party" element={<Party/>}/>
-            <Route path="/users" element={<Users/>}/>
-            <Route path="/messages" element={<Messages/>}/>
-            <Route path="/analytics" element={<Analytics/>}/>
-            <Route path="/file-manager" element={<FileManager/>}/>
-            <Route path="/order" element={<Order/>}/>
-            <Route path="/saved" element={<Saved/>}/>
             <Route path="/posbilling" element={<POSBilling/>}/>
-            <Route path="/account/manageAccount" element={<AccountManagementUsers/>}/>
-            <Route path="/account/myuser" element={<MyUserDetails/>}/>
-            <Route path="/account/business" element={<MyBusinessAccount/>}/>
             <Route path="/stock/shop" element={<InventoryShop/>}/>
             <Route path="/stock/godowon" element={<InventoryGodown/>}/>
             <Route path="/bank" element={<CashAndBank/>}/>
+            <Route path="/report" element={<Report/>}/>
+
             <Route path="/chat" element={<Chat/>}/>
             <Route path="/help" element={<MainPartyDetails/>}/>
             <Route path="/sales/invoice" element={<SalesInvoice/>}/>
             <Route path="/sales/payment-in" element={<PaymentIn/>}/>
-            <Route path="/report" element={<ExampleWithProviders/>}/>
             <Route path="/expenses" element={<Expense/>}/>
             <Route path="/feedback" element={<ScreenShare/>}/>
-            <Route path="/printing" element={<Print/>}/>
+
+            <Route path="/settings/manage/users" element={<AccountManagementUsers/>}/>
+            <Route path="/settings/account" element={<MyUserDetails/>}/>
+            <Route path="/settings/manage/business" element={<MyBusinessAccount/>}/>
+            <Route path="/settings/thermal/print" element={<Print/>}/>
+
+
             <Route path="/logout" element={<Logout setFlag={setFlag}/>}/>
             <Route path="*" element={<> not found</>}/>
         </Routes>;
@@ -79,7 +69,6 @@ export const AppContent = ({flag, handleBooleanChange, setFlag}) => {
                 <div>
                     <Routes>
                         <Route path="/" element={<HesabbookHome onBooleanChange={handleBooleanChange}/>}/>
-                        <Route path="/posbilling" element={<MainPage/>}/>
                     </Routes>
                 </div>
             ) : (
