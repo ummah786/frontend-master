@@ -36,12 +36,42 @@ export const AppContent = ({flag, handleBooleanChange, setFlag}) => {
     const location = useLocation();
 
     useEffect(() => {
-        if (location.pathname === '/settings') {
+        if (location.pathname.startsWith('/settings')) {
             setSidebarType('settings');
         } else {
             setSidebarType('default');
         }
     }, [location.pathname]);
+
+    function getRoutesAndElement() {
+        return <Routes>
+            <Route path="/" element={<MainDashboard/>}/>
+            <Route path="/party" element={<Party/>}/>
+            <Route path="/users" element={<Users/>}/>
+            <Route path="/messages" element={<Messages/>}/>
+            <Route path="/analytics" element={<Analytics/>}/>
+            <Route path="/file-manager" element={<FileManager/>}/>
+            <Route path="/order" element={<Order/>}/>
+            <Route path="/saved" element={<Saved/>}/>
+            <Route path="/posbilling" element={<POSBilling/>}/>
+            <Route path="/account/manageAccount" element={<AccountManagementUsers/>}/>
+            <Route path="/account/myuser" element={<MyUserDetails/>}/>
+            <Route path="/account/business" element={<MyBusinessAccount/>}/>
+            <Route path="/stock/shop" element={<InventoryShop/>}/>
+            <Route path="/stock/godowon" element={<InventoryGodown/>}/>
+            <Route path="/bank" element={<CashAndBank/>}/>
+            <Route path="/chat" element={<Chat/>}/>
+            <Route path="/help" element={<MainPartyDetails/>}/>
+            <Route path="/sales/invoice" element={<SalesInvoice/>}/>
+            <Route path="/sales/payment-in" element={<PaymentIn/>}/>
+            <Route path="/report" element={<ExampleWithProviders/>}/>
+            <Route path="/expenses" element={<Expense/>}/>
+            <Route path="/feedback" element={<ScreenShare/>}/>
+            <Route path="/printing" element={<Print/>}/>
+            <Route path="/logout" element={<Logout setFlag={setFlag}/>}/>
+            <Route path="*" element={<> not found</>}/>
+        </Routes>;
+    }
 
     return (
         <>
@@ -56,63 +86,10 @@ export const AppContent = ({flag, handleBooleanChange, setFlag}) => {
                 <div>
                     {sidebarType === 'default' ? (
                         <SideBar>
-                        <Routes>
-                            <Route path="/" element={<MainDashboard/>}/>
-                            <Route path="/party" element={<Party/>}/>
-                            <Route path="/users" element={<Users/>}/>
-                            <Route path="/messages" element={<Messages/>}/>
-                            <Route path="/analytics" element={<Analytics/>}/>
-                            <Route path="/file-manager" element={<FileManager/>}/>
-                            <Route path="/order" element={<Order/>}/>
-                            <Route path="/saved" element={<Saved/>}/>
-                            <Route path="/settings" element={<Setting/>}/>
-                            <Route path="/posbilling" element={<POSBilling/>}/>
-                            <Route path="/account/manageAccount" element={<AccountManagementUsers/>}/>
-                            <Route path="/account/myuser" element={<MyUserDetails/>}/>
-                            <Route path="/account/business" element={<MyBusinessAccount/>}/>
-                            <Route path="/stock/shop" element={<InventoryShop/>}/>
-                            <Route path="/stock/godowon" element={<InventoryGodown/>}/>
-                            <Route path="/bank" element={<CashAndBank/>}/>
-                            <Route path="/chat" element={<Chat/>}/>
-                            <Route path="/help" element={<MainPartyDetails/>}/>
-                            <Route path="/sales/invoice" element={<SalesInvoice/>}/>
-                            <Route path="/sales/payment-in" element={<PaymentIn/>}/>
-                            <Route path="/report" element={<ExampleWithProviders/>}/>
-                            <Route path="/expenses" element={<Expense/>}/>
-                            <Route path="/feedback" element={<ScreenShare/>}/>
-                            <Route path="/printing" element={<Print/>}/>
-                            <Route path="/logout" element={<Logout setFlag={setFlag}/>}/>
-                            <Route path="*" element={<> not found</>}/>
-                        </Routes></SideBar>) : (
+                            {getRoutesAndElement()}
+                        </SideBar>) : (
                         <SettingsSideBar>
-                            <Routes>
-                                <Route path="/" element={<MainDashboard/>}/>
-                                <Route path="/party" element={<Party/>}/>
-                                <Route path="/users" element={<Users/>}/>
-                                <Route path="/messages" element={<Messages/>}/>
-                                <Route path="/analytics" element={<Analytics/>}/>
-                                <Route path="/file-manager" element={<FileManager/>}/>
-                                <Route path="/order" element={<Order/>}/>
-                                <Route path="/saved" element={<Saved/>}/>
-                                <Route path="/settings" element={<Setting/>}/>
-                                <Route path="/posbilling" element={<POSBilling/>}/>
-                                <Route path="/account/manageAccount" element={<AccountManagementUsers/>}/>
-                                <Route path="/account/myuser" element={<MyUserDetails/>}/>
-                                <Route path="/account/business" element={<MyBusinessAccount/>}/>
-                                <Route path="/stock/shop" element={<InventoryShop/>}/>
-                                <Route path="/stock/godowon" element={<InventoryGodown/>}/>
-                                <Route path="/bank" element={<CashAndBank/>}/>
-                                <Route path="/chat" element={<Chat/>}/>
-                                <Route path="/help" element={<MainPartyDetails/>}/>
-                                <Route path="/sales/invoice" element={<SalesInvoice/>}/>
-                                <Route path="/sales/payment-in" element={<PaymentIn/>}/>
-                                <Route path="/report" element={<ExampleWithProviders/>}/>
-                                <Route path="/expenses" element={<Expense/>}/>
-                                <Route path="/feedback" element={<ScreenShare/>}/>
-                                <Route path="/printing" element={<Print/>}/>
-                                <Route path="/logout" element={<Logout setFlag={setFlag}/>}/>
-                                <Route path="*" element={<> not found</>}/>
-                            </Routes>
+                            {getRoutesAndElement()}
                         </SettingsSideBar>
                     )
                     }

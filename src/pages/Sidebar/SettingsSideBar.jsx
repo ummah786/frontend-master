@@ -1,24 +1,13 @@
-import React, {useState} from 'react';
-import {NavLink, useLocation, useNavigate} from 'react-router-dom';
-import {FaHome, FaUser} from 'react-icons/fa';
-import {AiFillHeart, AiTwotoneFileExclamation} from 'react-icons/ai';
-import {AnimatePresence, motion} from 'framer-motion';
+import React, { useState } from 'react';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { FaHome, FaUser } from 'react-icons/fa';
+import { AiFillHeart } from 'react-icons/ai';
+import { AnimatePresence, motion } from 'framer-motion';
 import SidebarMenu from './SidebarMenu';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import MenuItem from '@mui/material/MenuItem';
-import Tooltip from '@mui/material/Tooltip';
-import Avatar from '@mui/material/Avatar';
+import { AppBar, Box, Toolbar, Typography, IconButton, MenuItem, Tooltip, Avatar, Menu, Badge } from '@mui/material';
+import { Menu as MenuIcon, Notifications as NotificationsIcon, Mail as MailIcon } from '@mui/icons-material';
 import styled from 'styled-components';
 import './SideBar.css';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import Badge from '@mui/material/Badge';
-import MailIcon from '@mui/icons-material/Mail';
 
 const IconContainer = styled.div`
     display: flex;
@@ -31,160 +20,99 @@ const IconContainer = styled.div`
 `;
 
 const routes = [
-    {path: '/', name: 'Dashboard', icon: <IconContainer><FaHome color="white"/></IconContainer>},
-    {path: '/party', name: 'Parties', icon: <IconContainer><FaUser color="white"/></IconContainer>},
-    {
-        path: '/settings',
-        name: 'Settings',
-        icon: <IconContainer><AiTwotoneFileExclamation color="white"/></IconContainer>
-    },
-
-    {
-        path: '/setting/account',
-        name: 'Account',
-        icon: <IconContainer><FaUser color="white"/></IconContainer>
-    },
-    {
-        path: '/setting/manage/business',
-        name: 'Manage Business',
-        icon: <IconContainer><FaUser color="white"/></IconContainer>
-    },
-    {
-        path: '/setting/invoice',
-        name: 'Invoice Settings',
-        icon: <IconContainer><FaUser color="white"/></IconContainer>
-    },
-    {
-        path: '/setting/thermal/print',
-        name: 'Thermal Print',
-        icon: <IconContainer><FaUser color="white"/></IconContainer>
-    },
-    {
-        path: '/setting/manage/users',
-        name: 'Manage Users',
-        icon: <IconContainer><FaUser color="white"/></IconContainer>
-    },
-    {
-        path: '/setting/reminders',
-        name: 'Reminders',
-        icon: <IconContainer><FaUser color="white"/></IconContainer>
-    },
-    {
-        path: '/setting/pricing',
-        name: 'Pricing',
-        icon: <IconContainer><FaUser color="white"/></IconContainer>
-    },
-    {
-        path: '/setting/help/support',
-        name: 'Help And Support',
-        icon: <IconContainer><FaUser color="white"/></IconContainer>
-    },
-
-    {path: '/logout', name: 'Logout', icon: <IconContainer><AiFillHeart color="white"/></IconContainer>},
+    { path: '/', name: 'Back to Dashboard', icon: <IconContainer><FaHome color="white" /></IconContainer> },
+    { path: '/settings/account', name: 'Account', icon: <IconContainer><FaUser color="white" /></IconContainer> },
+    { path: '/settings/manage/business', name: 'Manage Business', icon: <IconContainer><FaUser color="white" /></IconContainer> },
+    { path: '/settings/invoice', name: 'Invoice Settings', icon: <IconContainer><FaUser color="white" /></IconContainer> },
+    { path: '/settings/thermal/print', name: 'Thermal Print', icon: <IconContainer><FaUser color="white" /></IconContainer> },
+    { path: '/settings/manage/users', name: 'Manage Users', icon: <IconContainer><FaUser color="white" /></IconContainer> },
+    { path: '/settings/reminders', name: 'Reminders', icon: <IconContainer><FaUser color="white" /></IconContainer> },
+    { path: '/settings/pricing', name: 'Pricing', icon: <IconContainer><FaUser color="white" /></IconContainer> },
+    { path: '/settings/help/support', name: 'Help And Support', icon: <IconContainer><FaUser color="white" /></IconContainer> },
+    { path: '/logout', name: 'Logout', icon: <IconContainer><AiFillHeart color="white" /></IconContainer> },
 ];
 
-const SettingsSideBar = ({children}) => {
+const settings = [
+    { name: 'Profile', path: '/profile' },
+    { name: 'Account', path: '/account' },
+    { name: 'Dashboard', path: '/' },
+    { name: 'Logout', path: '/logout' }
+];
+
+const showAnimation = {
+    hidden: { width: 0, opacity: 0, transition: { duration: 0.5 } },
+    show: { opacity: 1, width: "auto", transition: { duration: 0.5 } },
+};
+
+const SettingsSideBar = ({ children }) => {
     const [anchorElUser, setAnchorElUser] = useState(null);
     const [isOpen, setIsOpen] = useState(true);
     const location = useLocation();
     const navigate = useNavigate();
-    const toggle = () => setIsOpen(!isOpen);
     const [notificationsCount, setNotificationsCount] = useState(5);
+
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
-    // Function to get the current route name
+
+    const handleCloseUserMenu = () => {
+        setAnchorElUser(null);
+    };
+
+    const handleSettingsItemClick = (path) => {
+        handleCloseUserMenu();
+        navigate(path);
+    };
+
+    const toggleSidebar = () => {
+        setIsOpen(!isOpen);
+    };
+
     const getRouteName = () => {
         const route = routes.find(r => r.path === location.pathname);
         if (route) {
             return route.name;
-        } else {
-            // Check in subRoutes
-            for (const mainRoute of routes) {
-                if (mainRoute.subRoutes) {
-                    const subRoute = mainRoute.subRoutes.find(sr => sr.path === location.pathname);
-                    if (subRoute) {
-                        return subRoute.name;
-                    }
-                }
-            }
         }
         return 'Dashboard'; // Default title
     };
-    const showAnimation = {
-        hidden: {
-            width: 0,
-            opacity: 0,
-            transition: {
-                duration: 0.5,
-            },
-        },
-        show: {
-            opacity: 1,
-            width: "auto",
-            transition: {
-                duration: 0.5,
-            },
-        },
-    };
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
-    };
-    const settings = [
-        {name: 'Profile', path: '/profile'},
-        {name: 'Account', path: '/account'},
-        {name: 'Dashboard', path: '/'},
-        {name: 'Logout', path: '/logout'}
-    ];
 
-    const handleSettingsItemClick = (path) => {
-        // Handle navigation when a settings item is clicked
-        handleCloseUserMenu();
-        navigate(path);
-    };
     return (
         <>
             <AppBar position="static">
                 <Toolbar variant="dense">
-                    <IconButton edge="start" color="inherit" aria-label="menu" sx={{mr: 2}}>
-                        <MenuIcon onClick={toggle}/>
+                    <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={toggleSidebar}>
+                        <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" color="inherit" component="div" sx={{flexGrow: 1}}>
+                    <Typography variant="h6" color="inherit" component="div" sx={{ flexGrow: 1 }}>
                         {getRouteName()}
                     </Typography>
-                    <Box sx={{flexGrow: 0, display: 'flex', gap: '10px'}}>
+                    <Box sx={{ flexGrow: 0, display: 'flex', gap: '10px' }}>
                         <Tooltip title="Messages">
                             <IconButton color="inherit">
                                 <Badge badgeContent={4} color="error">
-                                    <MailIcon/>
+                                    <MailIcon />
                                 </Badge>
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="Updates">
                             <IconButton color="inherit">
                                 <Badge badgeContent={notificationsCount} color="error">
-                                    <NotificationsIcon/>
+                                    <NotificationsIcon />
                                 </Badge>
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg"/>
+                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                <Avatar alt="User Avatar" src="/static/images/avatar/2.jpg" />
                             </IconButton>
                         </Tooltip>
                         <Menu
-                            sx={{mt: '45px'}}
+                            sx={{ mt: '45px' }}
                             id="menu-appbar"
                             anchorEl={anchorElUser}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                             keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
+                            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
@@ -199,33 +127,21 @@ const SettingsSideBar = ({children}) => {
             </AppBar>
             <div className="main-container">
                 <motion.div
-                    animate={{
-                        width: isOpen ? "230px" : "60px",
-                        transition: {
-                            duration: 0.5,
-                            type: "spring",
-                            damping: 10,
-                        },
-                    }}
-                    className={`sidebar`}
-                    style={{height: '100vh', overflow: 'hidden'}} // Ensure full height and hidden overflow
+                    animate={{ width: isOpen ? "230px" : "60px", transition: { duration: 0.5, type: "spring", damping: 10 } }}
+                    className="sidebar"
+                    style={{ height: '100vh', overflow: 'hidden' }}
                 >
-                    <section className="routes"
-                             style={{height: 'calc(100vh - 64px)', overflowY: 'auto', overflowX: 'hidden'}}>
-                        {routes.map((route, index) => {
-                            if (route.subRoutes) {
-                                return (
-                                    <SidebarMenu
-                                        key={route.path}
-                                        setIsOpen={setIsOpen}
-                                        route={route}
-                                        showAnimation={showAnimation}
-                                        isOpen={isOpen}
-                                    />
-                                );
-                            }
-
-                            return (
+                    <section className="routes" style={{ height: 'calc(100vh - 64px)', overflowY: 'auto', overflowX: 'hidden' }}>
+                        {routes.map((route, index) => (
+                            route.subRoutes ? (
+                                <SidebarMenu
+                                    key={route.path}
+                                    setIsOpen={setIsOpen}
+                                    route={route}
+                                    showAnimation={showAnimation}
+                                    isOpen={isOpen}
+                                />
+                            ) : (
                                 <NavLink
                                     to={route.path}
                                     key={index}
@@ -247,13 +163,14 @@ const SettingsSideBar = ({children}) => {
                                         )}
                                     </AnimatePresence>
                                 </NavLink>
-                            );
-                        })}
+                            )
+                        ))}
                     </section>
                 </motion.div>
-                <main style={{height: 'calc(100vh - 64px)', overflowY: 'auto', overflowX: 'hidden'}}>{children}</main>
+                <main style={{ height: 'calc(100vh - 64px)', overflowY: 'auto', overflowX: 'hidden' }}>
+                    {children}
+                </main>
             </div>
-
         </>
     );
 };
