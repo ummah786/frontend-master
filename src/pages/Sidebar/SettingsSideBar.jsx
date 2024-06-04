@@ -4,9 +4,23 @@ import { FaHome, FaUser } from 'react-icons/fa';
 import { AiFillHeart } from 'react-icons/ai';
 import { AnimatePresence, motion } from 'framer-motion';
 import SidebarMenu from './SidebarMenu';
-import { AppBar, Box, Toolbar, Typography, IconButton, MenuItem, Tooltip, Avatar, Menu, Badge } from '@mui/material';
+import {
+    AppBar,
+    Box,
+    Toolbar,
+    Typography,
+    IconButton,
+    MenuItem,
+    Tooltip,
+    Avatar,
+    Menu,
+    Badge,
+    InputLabel
+} from '@mui/material';
 import { Menu as MenuIcon, Notifications as NotificationsIcon, Mail as MailIcon } from '@mui/icons-material';
 import styled from 'styled-components';
+import { Radio, RadioGroup, FormControlLabel, FormControl, FormLabel } from '@mui/material';
+import Select from '@mui/material/Select';
 import './SideBar.css';
 
 const IconContainer = styled.div`
@@ -50,6 +64,11 @@ const SettingsSideBar = ({ children }) => {
     const location = useLocation();
     const navigate = useNavigate();
     const [notificationsCount, setNotificationsCount] = useState(5);
+    const [selectedBusiness, setSelectedBusiness] = useState('Business 1');
+
+    const handleBusinessChange = (event) => {
+        setSelectedBusiness(event.target.value);
+    };
 
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
@@ -86,33 +105,44 @@ const SettingsSideBar = ({ children }) => {
                     <Typography variant="h6" color="inherit" component="div" sx={{ flexGrow: 1 }}>
                         {getRouteName()}
                     </Typography>
-                    <Box sx={{ flexGrow: 0, display: 'flex', gap: '10px' }}>
+                    <Box sx={{flexGrow: 0, display: 'flex', gap: '10px'}}>
+                        <Select
+                            value={selectedBusiness}
+                            onChange={handleBusinessChange}
+                            displayEmpty
+                            inputProps={{ 'aria-label': 'Without label' }}
+                            sx={{ color: 'inherit', '& .MuiSvgIcon-root': { color: 'inherit' } }}
+                        >
+                            <MenuItem value="Business 1">Business 1</MenuItem>
+                            <MenuItem value="Business 2">Business 2</MenuItem>
+                            <MenuItem value="Business 3">Business 3</MenuItem>
+                        </Select>
                         <Tooltip title="Messages">
                             <IconButton color="inherit">
                                 <Badge badgeContent={4} color="error">
-                                    <MailIcon />
+                                    <MailIcon/>
                                 </Badge>
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="Updates">
                             <IconButton color="inherit">
                                 <Badge badgeContent={notificationsCount} color="error">
-                                    <NotificationsIcon />
+                                    <NotificationsIcon/>
                                 </Badge>
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="User Avatar" src="/static/images/avatar/2.jpg" />
+                            <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
+                                <Avatar alt="User Avatar" src="/static/images/avatar/2.jpg"/>
                             </IconButton>
                         </Tooltip>
                         <Menu
-                            sx={{ mt: '45px' }}
+                            sx={{mt: '45px'}}
                             id="menu-appbar"
                             anchorEl={anchorElUser}
-                            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                            anchorOrigin={{vertical: 'top', horizontal: 'right'}}
                             keepMounted
-                            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                            transformOrigin={{vertical: 'top', horizontal: 'right'}}
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
@@ -127,11 +157,15 @@ const SettingsSideBar = ({ children }) => {
             </AppBar>
             <div className="main-container">
                 <motion.div
-                    animate={{ width: isOpen ? "230px" : "60px", transition: { duration: 0.5, type: "spring", damping: 10 } }}
+                    animate={{
+                        width: isOpen ? "230px" : "60px",
+                        transition: {duration: 0.5, type: "spring", damping: 10}
+                    }}
                     className="sidebar"
-                    style={{ height: '100vh', overflow: 'hidden' }}
+                    style={{height: '100vh', overflow: 'hidden'}}
                 >
-                    <section className="routes" style={{ height: 'calc(100vh - 64px)', overflowY: 'auto', overflowX: 'hidden' }}>
+                    <section className="routes"
+                             style={{height: 'calc(100vh - 64px)', overflowY: 'auto', overflowX: 'hidden'}}>
                         {routes.map((route, index) => (
                             route.subRoutes ? (
                                 <SidebarMenu
