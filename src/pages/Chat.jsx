@@ -104,7 +104,7 @@ export const Chat = () => {
                     manageUserObj['primary_user_id'] = loginData.primary_user_id;
                     manageUserObj['secondary_user_id'] = loginData.secondary_user_id;
                     const response = await axios.post('http://localhost:8700/hesabbook/partner/save', manageUserObj);
-                    console.log('Submit Recieve Message :--    ', receivedMessage);
+                    console.log('Submit Receive Message :--    ', receivedMessage);
                     addObjectOnTop(response.data.response);
                     setSelectedContact(response.data.response);
                     setMessages(prevMessages => [
