@@ -1,10 +1,7 @@
 import React, {useState} from 'react';
 import {NavLink, useLocation, useNavigate} from 'react-router-dom';
-import {FaHome, FaLock, FaUser} from 'react-icons/fa';
-import {MdMessage} from 'react-icons/md';
-import {BiAnalyse} from 'react-icons/bi';
+import {FaHome, FaUser} from 'react-icons/fa';
 import {AiFillHeart, AiTwotoneFileExclamation} from 'react-icons/ai';
-import {BsCartCheck} from 'react-icons/bs';
 import {AnimatePresence, motion} from 'framer-motion';
 import SidebarMenu from './SidebarMenu';
 import Menu from '@mui/material/Menu';
@@ -36,96 +33,57 @@ const IconContainer = styled.div`
 const routes = [
     {path: '/', name: 'Dashboard', icon: <IconContainer><FaHome color="white"/></IconContainer>},
     {path: '/party', name: 'Parties', icon: <IconContainer><FaUser color="white"/></IconContainer>},
-    {path: '/posbilling', name: 'POS-Billing', icon: <IconContainer><MdMessage color="white"/></IconContainer>},
-    {path: '/expenses', name: 'Expenses', icon: <IconContainer><BiAnalyse color="white"/></IconContainer>},
     {
-        path: '/stock',
-        name: 'Stock',
-        icon: <IconContainer><AiTwotoneFileExclamation color="white"/></IconContainer>,
-        subRoutes: [
-            {path: '/stock/shop', name: 'Shop', icon: <IconContainer><FaUser color="white"/></IconContainer>},
-            {path: '/stock/godowon', name: 'Godowon', icon: <IconContainer><FaLock color="white"/></IconContainer>},
-        ]
+        path: '/settings',
+        name: 'Settings',
+        icon: <IconContainer><AiTwotoneFileExclamation color="white"/></IconContainer>
     },
+
     {
-        path: '/Sales',
-        name: 'Sales',
-        icon: <IconContainer><AiTwotoneFileExclamation color="white"/></IconContainer>,
-        subRoutes: [
-            {
-                path: '/Sales/invoice',
-                name: 'Sales Invoice',
-                icon: <IconContainer><FaUser color="white"/></IconContainer>
-            },
-            {path: '/Sales/return', name: 'Sales Return', icon: <IconContainer><FaLock color="white"/></IconContainer>},
-            {
-                path: '/Sales/payment-in',
-                name: 'Payment In',
-                icon: <IconContainer><FaUser color="white"/></IconContainer>
-            },
-            {
-                path: '/Sales/credit-note',
-                name: 'Credit Note',
-                icon: <IconContainer><FaLock color="white"/></IconContainer>
-            },
-        ]
-    },
-    {
-        path: '/Purchases',
-        name: 'Purchase',
-        icon: <IconContainer><AiTwotoneFileExclamation color="white"/></IconContainer>,
-        subRoutes: [
-            {
-                path: '/Purchases/invoice',
-                name: 'Purchase Invoice',
-                icon: <IconContainer><FaUser color="white"/></IconContainer>
-            },
-            {
-                path: '/Purchases/order',
-                name: 'Purchase Order',
-                icon: <IconContainer><FaUser color="white"/></IconContainer>
-            },
-            {
-                path: '/Purchases/return',
-                name: 'Purchase Return',
-                icon: <IconContainer><FaLock color="white"/></IconContainer>
-            },
-            {
-                path: '/Purchases/payment-out',
-                name: 'Payment Out',
-                icon: <IconContainer><FaLock color="white"/></IconContainer>
-            },
-            {
-                path: '/Purchases/debit-note',
-                name: 'Debit Note',
-                icon: <IconContainer><FaLock color="white"/></IconContainer>
-            },
-        ]
-    },
-    {
-        path: '/account',
+        path: '/setting/account',
         name: 'Account',
-        icon: <IconContainer><AiTwotoneFileExclamation color="white"/></IconContainer>,
-        subRoutes: [
-            {
-                path: '/account/manageAccount',
-                name: 'Manage Account',
-                icon: <IconContainer><FaUser color="white"/></IconContainer>
-            },
-            {path: '/account/myuser', name: 'My User', icon: <IconContainer><FaLock color="white"/></IconContainer>},
-            {path: '/account/business', name: 'Business', icon: <IconContainer><FaUser color="white"/></IconContainer>},
-        ]
+        icon: <IconContainer><FaUser color="white"/></IconContainer>
     },
-    {path: '/bank', name: 'Cash & Bank', icon: <IconContainer><BsCartCheck color="white"/></IconContainer>},
-    {path: '/feedback', name: 'Feedback', icon: <IconContainer><AiFillHeart color="white"/></IconContainer>},
-    {path: '/chat', name: 'Chat', icon: <IconContainer><AiFillHeart color="white"/></IconContainer>},
-    {path: '/help', name: 'Help & Support', icon: <IconContainer><AiFillHeart color="white"/></IconContainer>},
-    {path: '/report', name: 'Reports', icon: <IconContainer><AiFillHeart color="white"/></IconContainer>},
-    {path: '/printing', name: 'Print', icon: <IconContainer><AiFillHeart color="white"/></IconContainer>},
+    {
+        path: '/setting/manage/business',
+        name: 'Manage Business',
+        icon: <IconContainer><FaUser color="white"/></IconContainer>
+    },
+    {
+        path: '/setting/invoice',
+        name: 'Invoice Settings',
+        icon: <IconContainer><FaUser color="white"/></IconContainer>
+    },
+    {
+        path: '/setting/thermal/print',
+        name: 'Thermal Print',
+        icon: <IconContainer><FaUser color="white"/></IconContainer>
+    },
+    {
+        path: '/setting/manage/users',
+        name: 'Manage Users',
+        icon: <IconContainer><FaUser color="white"/></IconContainer>
+    },
+    {
+        path: '/setting/reminders',
+        name: 'Reminders',
+        icon: <IconContainer><FaUser color="white"/></IconContainer>
+    },
+    {
+        path: '/setting/pricing',
+        name: 'Pricing',
+        icon: <IconContainer><FaUser color="white"/></IconContainer>
+    },
+    {
+        path: '/setting/help/support',
+        name: 'Help And Support',
+        icon: <IconContainer><FaUser color="white"/></IconContainer>
+    },
+
     {path: '/logout', name: 'Logout', icon: <IconContainer><AiFillHeart color="white"/></IconContainer>},
 ];
 
-const SideBar = ({children}) => {
+const SettingsSideBar = ({children}) => {
     const [anchorElUser, setAnchorElUser] = useState(null);
     const [isOpen, setIsOpen] = useState(true);
     const location = useLocation();
@@ -175,7 +133,6 @@ const SideBar = ({children}) => {
     const settings = [
         {name: 'Profile', path: '/profile'},
         {name: 'Account', path: '/account'},
-        {name: 'Setting', path: '/settings'},
         {name: 'Dashboard', path: '/'},
         {name: 'Logout', path: '/logout'}
     ];
@@ -301,4 +258,4 @@ const SideBar = ({children}) => {
     );
 };
 
-export default SideBar;
+export default SettingsSideBar;
