@@ -30,13 +30,9 @@ export const MainItemDetails = ({detailFlagId, onBooleanChange}) => {
             <Box>
                 <Button onClick={onBooleanChange}>Back To View</Button>
             </Box>
-            <Container>
                 <Grid container spacing={2}>
                     <Grid item xs={3}>
                         <Paper elevation={3}>
-                            <Typography variant="h6" component="div" sx={{p: 2}}>
-                                Items
-                            </Typography>
                             <List component="nav">
                                 {items.map((item, index) => (
                                     <div key={index}>
@@ -66,7 +62,6 @@ export const MainItemDetails = ({detailFlagId, onBooleanChange}) => {
                         </Paper>
                     </Grid>
                 </Grid>
-            </Container>
         </>
     );
 }
