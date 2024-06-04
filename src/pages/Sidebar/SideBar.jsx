@@ -74,9 +74,8 @@ const routes = [
     { path: '/bank', name: 'Cash & Bank', icon: <IconContainer><BsCartCheck color="white" /></IconContainer> },
     { path: '/report', name: 'Reports', icon: <IconContainer><AiFillHeart color="white" /></IconContainer> },
     { path: '/expenses', name: 'Expenses', icon: <IconContainer><BiAnalyse color="white" /></IconContainer> },
-    { path: '/feedback', name: 'Feedback', icon: <IconContainer><AiFillHeart color="white" /></IconContainer> },
     { path: '/chat', name: 'Chat', icon: <IconContainer><AiFillHeart color="white" /></IconContainer> },
-    { path: '/help', name: 'Help & Support', icon: <IconContainer><AiFillHeart color="white" /></IconContainer> },
+
 
     { path: '/logout', name: 'Logout', icon: <IconContainer><AiFillHeart color="white" /></IconContainer> },
 ];

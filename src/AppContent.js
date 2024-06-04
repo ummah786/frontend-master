@@ -2,8 +2,7 @@ import "./App.css";
 import {Route, Routes, useLocation} from "react-router-dom";
 import SideBar from "./pages/Sidebar/SideBar";
 import {HesabbookHome} from "./pages/home/HesabbookHome";
-import {MainPage} from "./pages/MainPage";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {AccountManagementUsers} from "./pages/account/AccountManagementUsers";
 import {MyUserDetails} from "./pages/account/MyUserDetails";
 import {MyBusinessAccount} from "./pages/account/MyBusinessAccount";
@@ -22,6 +21,10 @@ import {MainDashboard} from "./pages/Dashboard/MainDashboard";
 import {MainPartyDetails} from "./pages/party/MainPartyDetails";
 import {Logout} from "./pages/Logout";
 import SettingsSideBar from "./pages/Sidebar/SettingsSideBar";
+import Report from "./pages/Report/Report";
+import Feedback from "./pages/Feedback/Feedback";
+import {AiFillHeart} from "react-icons/ai";
+import HelpSupport from "./pages/HelpSupport/HelpSupport";
 
 export const AppContent = ({flag, handleBooleanChange, setFlag}) => {
     const [sidebarType, setSidebarType] = useState('default');
@@ -56,9 +59,11 @@ export const AppContent = ({flag, handleBooleanChange, setFlag}) => {
             <Route path="/settings/account" element={<MyUserDetails/>}/>
             <Route path="/settings/manage/business" element={<MyBusinessAccount/>}/>
             <Route path="/settings/thermal/print" element={<Print/>}/>
-
+            <Route path="/settings/help/support" element={<HelpSupport/>}/>
+            <Route path="/settings/feedback" element={<Feedback/>}/>
 
             <Route path="/logout" element={<Logout setFlag={setFlag}/>}/>
+
             <Route path="*" element={<> not found</>}/>
         </Routes>;
     }
