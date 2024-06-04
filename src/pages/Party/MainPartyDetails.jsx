@@ -44,7 +44,7 @@ export const MainPartyDetails = ({detailFlagId, onBooleanChange}) => {
                             <Tab label="Transactions"/>
                             <Tab label="Profile"/>
                             <Tab label="Ledger"/>
-                            <Tab label="Item Wise Report"/>
+                            <Tab label="Item Wise ReportReport"/>
                         </Tabs>
                         <TabPanel value={tabIndex} index={0}>
                             <PartyTransactions partyName={selectedParty}/>
@@ -56,7 +56,7 @@ export const MainPartyDetails = ({detailFlagId, onBooleanChange}) => {
                             <PartyLedger partyName={selectedParty}/>
                         </TabPanel>
                         <TabPanel value={tabIndex} index={3}>
-                            <Typography>Item Wise Report</Typography>
+                            <Typography>Item Wise ReportReport</Typography>
                         </TabPanel>
                     </Paper>
                 </Grid>

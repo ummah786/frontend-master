@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { FaHome, FaLock, FaUser } from 'react-icons/fa';
-import { MdMessage } from 'react-icons/md';
-import { BiAnalyse } from 'react-icons/bi';
-import { AiFillHeart, AiTwotoneFileExclamation } from 'react-icons/ai';
-import { BsCartCheck } from 'react-icons/bs';
-import { AnimatePresence, motion } from 'framer-motion';
+import React, {useState} from 'react';
+import {NavLink, useLocation, useNavigate} from 'react-router-dom';
+import {FaHome, FaLock, FaUser} from 'react-icons/fa';
+import {MdMessage} from 'react-icons/md';
+import {BiAnalyse} from 'react-icons/bi';
+import {AiFillHeart, AiTwotoneFileExclamation} from 'react-icons/ai';
+import {BsCartCheck} from 'react-icons/bs';
+import {AnimatePresence, motion} from 'framer-motion';
 import SidebarMenu from './SidebarMenu';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -23,7 +23,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Select from '@mui/material/Select';
 import styled from 'styled-components';
 import './SideBar.css';
-import BusinessIcon from '@mui/icons-material/Business';
+
 const IconContainer = styled.div`
     display: flex;
     align-items: center;
@@ -35,60 +35,94 @@ const IconContainer = styled.div`
 `;
 
 const routes = [
-    { path: '/', name: 'Dashboard', icon: <IconContainer><FaHome color="white" /></IconContainer> },
-    { path: '/Party', name: 'Parties', icon: <IconContainer><FaUser color="white" /></IconContainer> },
-    { path: '/posbilling', name: 'POS-Billing', icon: <IconContainer><MdMessage color="white" /></IconContainer> },
+    {path: '/', name: 'Dashboard', icon: <IconContainer><FaHome color="white"/></IconContainer>},
+    {path: '/Party', name: 'Parties', icon: <IconContainer><FaUser color="white"/></IconContainer>},
+    {path: '/posbilling', name: 'POS-Billing', icon: <IconContainer><MdMessage color="white"/></IconContainer>},
 
     {
         path: '/Stock',
         name: 'Stock',
-        icon: <IconContainer><AiTwotoneFileExclamation color="white" /></IconContainer>,
+        icon: <IconContainer><AiTwotoneFileExclamation color="white"/></IconContainer>,
         subRoutes: [
-            { path: '/Stock/shop', name: 'Shop', icon: <IconContainer><FaUser color="white" /></IconContainer> },
-            { path: '/Stock/godowon', name: 'Godowon', icon: <IconContainer><FaLock color="white" /></IconContainer> },
+            {path: '/Stock/shop', name: 'Shop', icon: <IconContainer><FaUser color="white"/></IconContainer>},
+            {path: '/Stock/godowon', name: 'Godowon', icon: <IconContainer><FaLock color="white"/></IconContainer>},
         ]
     },
     {
         path: '/Sales',
         name: 'Sales',
-        icon: <IconContainer><AiTwotoneFileExclamation color="white" /></IconContainer>,
+        icon: <IconContainer><AiTwotoneFileExclamation color="white"/></IconContainer>,
         subRoutes: [
-            { path: '/Sales/invoice', name: 'Sales Invoice', icon: <IconContainer><FaUser color="white" /></IconContainer> },
-            { path: '/Sales/return', name: 'Sales Return', icon: <IconContainer><FaLock color="white" /></IconContainer> },
-            { path: '/Sales/payment-in', name: 'Payment In', icon: <IconContainer><FaUser color="white" /></IconContainer> },
-            { path: '/Sales/credit-note', name: 'Credit Note', icon: <IconContainer><FaLock color="white" /></IconContainer> },
+            {
+                path: '/Sales/invoice',
+                name: 'Sales Invoice',
+                icon: <IconContainer><FaUser color="white"/></IconContainer>
+            },
+            {path: '/Sales/return', name: 'Sales Return', icon: <IconContainer><FaLock color="white"/></IconContainer>},
+            {
+                path: '/Sales/payment-in',
+                name: 'Payment In',
+                icon: <IconContainer><FaUser color="white"/></IconContainer>
+            },
+            {
+                path: '/Sales/credit-note',
+                name: 'Credit Note',
+                icon: <IconContainer><FaLock color="white"/></IconContainer>
+            },
         ]
     },
     {
         path: '/Purchases',
         name: 'Purchase',
-        icon: <IconContainer><AiTwotoneFileExclamation color="white" /></IconContainer>,
+        icon: <IconContainer><AiTwotoneFileExclamation color="white"/></IconContainer>,
         subRoutes: [
-            { path: '/Purchases/invoice', name: 'Purchase Invoice', icon: <IconContainer><FaUser color="white" /></IconContainer> },
-            { path: '/Purchases/order', name: 'Purchase Order', icon: <IconContainer><FaUser color="white" /></IconContainer> },
-            { path: '/Purchases/return', name: 'Purchase Return', icon: <IconContainer><FaLock color="white" /></IconContainer> },
-            { path: '/Purchases/payment-out', name: 'Payment Out', icon: <IconContainer><FaLock color="white" /></IconContainer> },
-            { path: '/Purchases/debit-note', name: 'Debit Note', icon: <IconContainer><FaLock color="white" /></IconContainer> },
+            {
+                path: '/Purchases/invoice',
+                name: 'Purchase Invoice',
+                icon: <IconContainer><FaUser color="white"/></IconContainer>
+            },
+            {
+                path: '/Purchases/order',
+                name: 'Purchase Order',
+                icon: <IconContainer><FaUser color="white"/></IconContainer>
+            },
+            {
+                path: '/Purchases/return',
+                name: 'Purchase Return',
+                icon: <IconContainer><FaLock color="white"/></IconContainer>
+            },
+            {
+                path: '/Purchases/payment-out',
+                name: 'Payment Out',
+                icon: <IconContainer><FaLock color="white"/></IconContainer>
+            },
+            {
+                path: '/Purchases/debit-note',
+                name: 'Debit Note',
+                icon: <IconContainer><FaLock color="white"/></IconContainer>
+            },
         ]
     },
-    { path: '/bank', name: 'Cash & Bank', icon: <IconContainer><BsCartCheck color="white" /></IconContainer> },
-    { path: '/report', name: 'Reports', icon: <IconContainer><AiFillHeart color="white" /></IconContainer> },
-    { path: '/expenses', name: 'Expenses', icon: <IconContainer><BiAnalyse color="white" /></IconContainer> },
-    { path: '/chat', name: 'Chat', icon: <IconContainer><AiFillHeart color="white" /></IconContainer> },
+    {path: '/attendance', name: 'Attendance', icon: <IconContainer><BsCartCheck color="white"/></IconContainer>},
+
+    {path: '/bank', name: 'Cash & Bank', icon: <IconContainer><BsCartCheck color="white"/></IconContainer>},
+    {path: '/report', name: 'Reports', icon: <IconContainer><AiFillHeart color="white"/></IconContainer>},
+    {path: '/expenses', name: 'Expenses', icon: <IconContainer><BiAnalyse color="white"/></IconContainer>},
+    {path: '/chat', name: 'Chat', icon: <IconContainer><AiFillHeart color="white"/></IconContainer>},
 
 
-    { path: '/logout', name: 'Logout', icon: <IconContainer><AiFillHeart color="white" /></IconContainer> },
+    {path: '/logout', name: 'Logout', icon: <IconContainer><AiFillHeart color="white"/></IconContainer>},
 ];
 
 const settings = [
-    { name: 'Profile', path: '/profile' },
-    { name: 'Account', path: '/Account' },
-    { name: 'Setting', path: '/settings' },
-    { name: 'Dashboard', path: '/' },
-    { name: 'Logout', path: '/logout' }
+    {name: 'Profile', path: '/profile'},
+    {name: 'Account', path: '/Account'},
+    {name: 'Setting', path: '/settings'},
+    {name: 'Dashboard', path: '/'},
+    {name: 'Logout', path: '/logout'}
 ];
 
-const SideBar = ({ children }) => {
+const SideBar = ({children}) => {
     const [anchorElUser, setAnchorElUser] = useState(null);
     const [selectedBusiness, setSelectedBusiness] = useState('Business 1');
     const [isOpen, setIsOpen] = useState(true);
@@ -130,8 +164,8 @@ const SideBar = ({ children }) => {
     };
 
     const showAnimation = {
-        hidden: { width: 0, opacity: 0, transition: { duration: 0.5 } },
-        show: { opacity: 1, width: "auto", transition: { duration: 0.5 } },
+        hidden: {width: 0, opacity: 0, transition: {duration: 0.5}},
+        show: {opacity: 1, width: "auto", transition: {duration: 0.5}},
     };
 
     const handleSettingsItemClick = (path) => {
@@ -143,19 +177,19 @@ const SideBar = ({ children }) => {
         <>
             <AppBar position="static">
                 <Toolbar variant="dense">
-                    <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={toggleSidebar}>
-                        <MenuIcon />
+                    <IconButton edge="start" color="inherit" aria-label="menu" sx={{mr: 2}} onClick={toggleSidebar}>
+                        <MenuIcon/>
                     </IconButton>
-                    <Typography variant="h6" color="inherit" component="div" sx={{ flexGrow: 1 }}>
+                    <Typography variant="h6" color="inherit" component="div" sx={{flexGrow: 1}}>
                         {getRouteName()}
                     </Typography>
-                    <Box sx={{ flexGrow: 0, display: 'flex', gap: '10px' }}>
+                    <Box sx={{flexGrow: 0, display: 'flex', gap: '10px'}}>
                         <Select
                             value={selectedBusiness}
                             onChange={handleBusinessChange}
                             displayEmpty
-                            inputProps={{ 'aria-label': 'Without label' }}
-                            sx={{ color: 'inherit', '& .MuiSvgIcon-root': { color: 'inherit' } }}
+                            inputProps={{'aria-label': 'Without label'}}
+                            sx={{color: 'inherit', '& .MuiSvgIcon-root': {color: 'inherit'}}}
                         >
                             <MenuItem value="Business 1">Business 1</MenuItem>
                             <MenuItem value="Business 2">Business 2</MenuItem>
@@ -164,29 +198,29 @@ const SideBar = ({ children }) => {
                         <Tooltip title="Messages">
                             <IconButton color="inherit">
                                 <Badge badgeContent={4} color="error">
-                                    <MailIcon />
+                                    <MailIcon/>
                                 </Badge>
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="Updates">
                             <IconButton color="inherit">
                                 <Badge badgeContent={notificationsCount} color="error">
-                                    <NotificationsIcon />
+                                    <NotificationsIcon/>
                                 </Badge>
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="User Avatar" src="/static/images/avatar/2.jpg" />
+                            <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
+                                <Avatar alt="User Avatar" src="/static/images/avatar/2.jpg"/>
                             </IconButton>
                         </Tooltip>
                         <Menu
-                            sx={{ mt: '45px' }}
+                            sx={{mt: '45px'}}
                             id="menu-appbar"
                             anchorEl={anchorElUser}
-                            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                            anchorOrigin={{vertical: 'top', horizontal: 'right'}}
                             keepMounted
-                            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                            transformOrigin={{vertical: 'top', horizontal: 'right'}}
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
@@ -210,9 +244,10 @@ const SideBar = ({ children }) => {
                         },
                     }}
                     className="sidebar"
-                    style={{ height: '100vh', overflow: 'hidden' }}
+                    style={{height: '100vh', overflow: 'hidden'}}
                 >
-                    <section className="routes" style={{ height: 'calc(100vh - 64px)', overflowY: 'auto', overflowX: 'hidden' }}>
+                    <section className="routes"
+                             style={{height: 'calc(100vh - 64px)', overflowY: 'auto', overflowX: 'hidden'}}>
                         {routes.map((route, index) => {
                             if (route.subRoutes) {
                                 return (
@@ -251,7 +286,7 @@ const SideBar = ({ children }) => {
                         })}
                     </section>
                 </motion.div>
-                <main style={{ height: 'calc(100vh - 64px)', overflowY: 'auto', overflowX: 'hidden' }}>
+                <main style={{height: 'calc(100vh - 64px)', overflowY: 'auto', overflowX: 'hidden'}}>
                     {children}
                 </main>
             </div>

@@ -54,7 +54,7 @@ export const MainItemDetails = ({detailFlagId, onBooleanChange}) => {
                             <Tabs value={selectedTab} onChange={handleTabChange}>
                                 <Tab label="Item Details"/>
                                 <Tab label="Stock Details"/>
-                                <Tab label="Party Wise Report"/>
+                                <Tab label="Party Wise ReportReport"/>
                             </Tabs>
                             {selectedTab === 0 && <InventoryItemDetails item={selectedItem}/>}
                             {selectedTab === 1 && <InventoryStockDetails item={selectedItem}/>}

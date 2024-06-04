@@ -21,11 +21,12 @@ import {MainDashboard} from "./pages/Dashboard/MainDashboard";
 import {MainPartyDetails} from "./pages/Party/MainPartyDetails";
 import {Logout} from "./pages/Logout";
 import SettingsSideBar from "./pages/Sidebar/SettingsSideBar";
-import Report from "./pages/Report/Report";
+import {MainReport} from "./pages/Report/MainReport";
 import Feedback from "./pages/Feedback/Feedback";
-import {AiFillHeart} from "react-icons/ai";
 import HelpSupport from "./pages/HelpSupport/HelpSupport";
 import {Pricing} from "./pages/Pricing/Pricing";
+import Attendance from "./pages/Attendance/Attendance";
+import {ReportDetail} from "./pages/Report/ReportDetail";
 
 export const AppContent = ({flag, handleBooleanChange, setFlag}) => {
     const [sidebarType, setSidebarType] = useState('default');
@@ -47,7 +48,8 @@ export const AppContent = ({flag, handleBooleanChange, setFlag}) => {
             <Route path="/stock/shop" element={<InventoryShop/>}/>
             <Route path="/stock/godowon" element={<InventoryGodown/>}/>
             <Route path="/bank" element={<CashAndBank/>}/>
-            <Route path="/report" element={<Report/>}/>
+            <Route path="/report" element={<MainReport/>}/>
+            <Route path="/reports/:report" element={<ReportDetail/>}/>
 
             <Route path="/chat" element={<Chat/>}/>
             <Route path="/help" element={<MainPartyDetails/>}/>
@@ -55,6 +57,8 @@ export const AppContent = ({flag, handleBooleanChange, setFlag}) => {
             <Route path="/sales/payment-in" element={<PaymentIn/>}/>
             <Route path="/expenses" element={<Expense/>}/>
             <Route path="/feedback" element={<ScreenShare/>}/>
+            <Route path="/attendance" element={<Attendance/>}/>
+
 
             <Route path="/settings/manage/users" element={<AccountManagementUsers/>}/>
             <Route path="/settings/account" element={<MyUserDetails/>}/>
