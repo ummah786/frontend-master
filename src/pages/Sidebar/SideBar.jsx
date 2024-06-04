@@ -36,16 +36,16 @@ const IconContainer = styled.div`
 
 const routes = [
     { path: '/', name: 'Dashboard', icon: <IconContainer><FaHome color="white" /></IconContainer> },
-    { path: '/party', name: 'Parties', icon: <IconContainer><FaUser color="white" /></IconContainer> },
+    { path: '/Party', name: 'Parties', icon: <IconContainer><FaUser color="white" /></IconContainer> },
     { path: '/posbilling', name: 'POS-Billing', icon: <IconContainer><MdMessage color="white" /></IconContainer> },
 
     {
-        path: '/stock',
+        path: '/Stock',
         name: 'Stock',
         icon: <IconContainer><AiTwotoneFileExclamation color="white" /></IconContainer>,
         subRoutes: [
-            { path: '/stock/shop', name: 'Shop', icon: <IconContainer><FaUser color="white" /></IconContainer> },
-            { path: '/stock/godowon', name: 'Godowon', icon: <IconContainer><FaLock color="white" /></IconContainer> },
+            { path: '/Stock/shop', name: 'Shop', icon: <IconContainer><FaUser color="white" /></IconContainer> },
+            { path: '/Stock/godowon', name: 'Godowon', icon: <IconContainer><FaLock color="white" /></IconContainer> },
         ]
     },
     {
@@ -82,7 +82,7 @@ const routes = [
 
 const settings = [
     { name: 'Profile', path: '/profile' },
-    { name: 'Account', path: '/account' },
+    { name: 'Account', path: '/Account' },
     { name: 'Setting', path: '/settings' },
     { name: 'Dashboard', path: '/' },
     { name: 'Logout', path: '/logout' }

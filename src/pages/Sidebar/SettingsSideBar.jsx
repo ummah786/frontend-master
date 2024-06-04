@@ -35,10 +35,10 @@ const IconContainer = styled.div`
 
 const routes = [
     { path: '/', name: 'Back to Dashboard', icon: <IconContainer><FaHome color="white" /></IconContainer> },
-    { path: '/settings/account', name: 'Account', icon: <IconContainer><FaUser color="white" /></IconContainer> },
+    { path: '/settings/Account', name: 'Account', icon: <IconContainer><FaUser color="white" /></IconContainer> },
     { path: '/settings/manage/business', name: 'Manage Business', icon: <IconContainer><FaUser color="white" /></IconContainer> },
     { path: '/settings/invoice', name: 'Invoice Settings', icon: <IconContainer><FaUser color="white" /></IconContainer> },
-    { path: '/settings/thermal/print', name: 'Thermal Print', icon: <IconContainer><FaUser color="white" /></IconContainer> },
+    { path: '/settings/thermal/Print', name: 'Thermal Print', icon: <IconContainer><FaUser color="white" /></IconContainer> },
     { path: '/settings/manage/users', name: 'Manage Users', icon: <IconContainer><FaUser color="white" /></IconContainer> },
     { path: '/settings/reminders', name: 'Reminders', icon: <IconContainer><FaUser color="white" /></IconContainer> },
     { path: '/settings/pricing', name: 'Pricing', icon: <IconContainer><FaUser color="white" /></IconContainer> },
@@ -49,7 +49,7 @@ const routes = [
 
 const settings = [
     { name: 'Profile', path: '/profile' },
-    { name: 'Account', path: '/account' },
+    { name: 'Account', path: '/Account' },
     { name: 'Dashboard', path: '/' },
     { name: 'Logout', path: '/logout' }
 ];

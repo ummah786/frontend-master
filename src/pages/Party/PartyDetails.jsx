@@ -2,7 +2,7 @@ import React from 'react';
 import { Typography, Grid, Paper } from '@mui/material';
 
 const PartyDetails = ({ partyName }) => {
-    // Here you would fetch and display the party details based on the selected party
+    // Here you would fetch and display the Party details based on the selected Party
     const partyDetails = {
         'Cash Sale': {
             mobile: '6299669816',

@@ -31,7 +31,7 @@ const messagesData = {
     {id: 6, sender: "You", time: "20:37", text: "connect kiya jaye"},
     {id: 7, sender: "You", time: "20:37", text: "kya"},
     {id: 8, sender: "You", time: "20:37", text: "bro"},
-    {id: 9, sender: "Amit New", time: "21:15", text: "Yaar thoda party main hu\nKal morning pakka connect karte"},
+    {id: 9, sender: "Amit New", time: "21:15", text: "Yaar thoda Party main hu\nKal morning pakka connect karte"},
     {id: 10, sender: "You", time: "11:28", text: "Hi"},
     {id: 11, sender: "You", time: "16:23", text: "Aji free nahi hai kya"},
     {id: 12, sender: "You", time: "16:23", text: "???"}

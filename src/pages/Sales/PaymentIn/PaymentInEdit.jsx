@@ -74,7 +74,7 @@ export const PaymentInEdit = ({
             return part.id === partyId;
         });
 
-        //party Information
+        //Party Information
         salePurchaseObject["partyId"] = partyId;
         salePurchaseObject["partyName"] = partyDetails[0].pname;
         salePurchaseObject["partyPhone"] = partyDetails[0].mobileNumber;
@@ -106,7 +106,7 @@ export const PaymentInEdit = ({
     const onSelectAutoComplete = (event, value) => {
         setSelectParty(value);
         if (!value || value.id == null) {
-            console.log("Invalid party selected");
+            console.log("Invalid Party selected");
             setFilteredEmployees([]);
             setPartyId("");
             setPaymentAmount(0);

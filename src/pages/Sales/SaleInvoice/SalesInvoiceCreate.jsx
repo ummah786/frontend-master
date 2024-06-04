@@ -698,7 +698,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
         salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
         salePurchaseObject["items"] = JSON.stringify(employees);
 
-        //party Information
+        //Party Information
         salePurchaseObject["partyId"] = billTo.id;
         salePurchaseObject["partyName"] = billTo.pname;
         salePurchaseObject["partyPhone"] = billTo.mobileNumber;
