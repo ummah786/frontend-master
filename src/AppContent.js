@@ -25,6 +25,7 @@ import Report from "./pages/Report/Report";
 import Feedback from "./pages/Feedback/Feedback";
 import {AiFillHeart} from "react-icons/ai";
 import HelpSupport from "./pages/HelpSupport/HelpSupport";
+import {Pricing} from "./pages/Pricing/Pricing";
 
 export const AppContent = ({flag, handleBooleanChange, setFlag}) => {
     const [sidebarType, setSidebarType] = useState('default');
@@ -59,6 +60,7 @@ export const AppContent = ({flag, handleBooleanChange, setFlag}) => {
             <Route path="/settings/account" element={<MyUserDetails/>}/>
             <Route path="/settings/manage/business" element={<MyBusinessAccount/>}/>
             <Route path="/settings/thermal/print" element={<Print/>}/>
+            <Route path="/settings/pricing" element={<Pricing/>}/>
             <Route path="/settings/help/support" element={<HelpSupport/>}/>
             <Route path="/settings/feedback" element={<Feedback/>}/>
 
