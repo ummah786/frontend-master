@@ -40,7 +40,7 @@ export const AddBankAccountForm = ({ open, handleClose }) => {
             <DialogContent>
                 <Grid container spacing={2}>
                     <Grid item xs={12} sm={6}>
-                        <TextField
+                        <TextField sx={{marginTop:'15px'}}
                             label="Account Name"
                             name="accountName"
                             value={formValues.accountName}
@@ -50,7 +50,7 @@ export const AddBankAccountForm = ({ open, handleClose }) => {
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <TextField
+                        <TextField sx={{marginTop:'15px'}}
                             label="Opening Balance"
                             name="openingBalance"
                             value={formValues.openingBalance}

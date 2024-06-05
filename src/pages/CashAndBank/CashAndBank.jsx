@@ -1,26 +1,21 @@
-import {AddBankAccountForm} from './AddBankAccountForm';
 import React, {useState} from 'react';
 import {
     Box,
     Button,
+    Card,
+    CardContent,
     Container,
-    FormControl,
     Grid,
-    MenuItem,
     Paper,
-    Select,
     Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
     TableRow,
-    Typography
+    Typography,
 } from '@mui/material';
-import {Download as DownloadIcon, Share as ShareIcon, Visibility as VisibilityIcon} from '@mui/icons-material';
-import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { format } from 'date-fns';
+import {AddBankAccountForm} from './AddBankAccountForm'; // Adjust the path as needed
 
 const dateRanges = {
     today: [new Date(), new Date()],
@@ -37,30 +32,62 @@ const dateRanges = {
         new Date(new Date().getFullYear(), new Date().getMonth(), 0)
     ]
 };
-const transactions = [
-    {
-        date: '27 May 2024',
-        type: 'Add Money',
-        txnNo: 2,
-        party: '-',
-        mode: 'Bank',
-        paid: '-',
-        received: '₹100',
-        balance: '₹1,00,100'
-    }
-];
+
+const bankAccounts = {
+    Unlinked: {
+        accountHolder: 'Unknown',
+        accountName: 'Unlinked Transactions',
+        accountNumber: '000000000',
+        ifscCode: 'UNL0000000',
+        bankBranch: 'Unknown',
+        balance: '₹48',
+        transactions: [{
+            date: '26 May 2024',
+            type: 'Withdrawal',
+            txnNo: 1,
+            party: 'Bank',
+            mode: 'Bank',
+            paid: '₹500',
+            received: '-',
+            balance: '₹5,555'
+        },
+        ]
+    },
+    SBI: {
+        accountHolder: 'Sardar Asif Jahan',
+        accountName: 'SBI SARDAR ASIFJ',
+        accountNumber: '353656',
+        ifscCode: 'SBI903230000000',
+        bankBranch: 'PHusro',
+        balance: '₹88',
+        transactions: [{
+            date: '26 May 2024',
+            type: 'Withdrawal',
+            txnNo: 1,
+            party: 'Bank',
+            mode: 'Bank',
+            paid: '₹500',
+            received: '-',
+            balance: '₹5,555'
+        },
+            {
+                date: '26 May 2024',
+                type: 'Withdrawal',
+                txnNo: 1,
+                party: 'Bank',
+                mode: 'Bank',
+                paid: '₹500',
+                received: '-',
+                balance: '₹5,555'
+            },
+        ]
+    },
+    // Add more bank accounts here
+};
 
 export const CashAndBank = () => {
-
-    const [selectedRange, setSelectedRange] = useState('thisWeek');
-    const [dateRange, setDateRange] = useState(dateRanges['thisWeek']);
-
-    const handleDateChange = (event) => {
-        const range = event.target.value;
-        setSelectedRange(range);
-        setDateRange(dateRanges[range]);
-    };
     const [open, setOpen] = useState(false);
+    const [selectedAccount, setSelectedAccount] = useState('Unlinked');
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -69,6 +96,12 @@ export const CashAndBank = () => {
     const handleClose = () => {
         setOpen(false);
     };
+
+    const handleAccountClick = (account) => {
+        setSelectedAccount(account);
+    };
+
+    const account = bankAccounts[selectedAccount];
 
     return (
         <Container>
@@ -81,99 +114,101 @@ export const CashAndBank = () => {
                         + Add New Account
                     </Button>
                     <AddBankAccountForm open={open} handleClose={handleClose}/>
-
                 </Box>
             </Box>
 
-            <Grid container spacing={2}>
-                <Grid item xs={3}>
-                    <Typography variant="h6">Total Balance: ₹1,00,100</Typography>
-                    <Typography>Cash in hand: ₹0</Typography>
-                    <Typography>Bank Accounts</Typography>
-                    <Box display="flex" alignItems="center" mt={1} mb={1}>
-                        <Box sx={{display: 'flex', alignItems: 'center', mr: 1}}>
-                            <Box component="span" sx={{display: 'flex', alignItems: 'center', pr: 1}}>
-                                <Typography variant="body2">SBI</Typography>
-                            </Box>
-                            <Typography variant="body2">Deactivated</Typography>
-                        </Box>
-                        <Typography>329392432</Typography>
-                        <Typography>₹1,00,100</Typography>
-                    </Box>
-                    <Button variant="contained" sx={{mt: 1}}>+ Add New Bank</Button>
+            <Grid container spacing={3}>
+                <Grid item xs={12} sm={4}>
+                    <Card>
+                        <CardContent>
+                            <Typography variant="h5">Total Balance:</Typography>
+                            <Typography variant="h4">₹3,381.75</Typography>
+                        </CardContent>
+                    </Card>
+                    <Card style={{marginTop: 16}}>
+                        <CardContent>
+                            <Typography variant="h6">Cash</Typography>
+                            <Typography>Cash in hand: ₹3,333.75</Typography>
+                        </CardContent>
+                    </Card>
+
+                    <CardContent>
+                        <Typography variant="h6">Bank Accounts</Typography>
+                        {Object.keys(bankAccounts).map((key) => (
+                            <Card style={{marginTop: 16}}>
+                                <Button
+                                    key={key}
+                                    onClick={() => handleAccountClick(key)}
+                                    fullWidth
+                                    style={{marginBottom: 8}}
+                                >
+                                    {bankAccounts[key].accountName}: {bankAccounts[key].balance}
+                                </Button> </Card>
+                        ))}
+                    </CardContent>
+
+                    <Button variant="contained" color="primary" style={{marginTop: 16}}>Add New Bank</Button>
                 </Grid>
-
-                <Grid item xs={9}>
-                    <Box mb={2}>
-                        <Typography variant="h6">Account Holder's Name: sardar asif jahan</Typography>
-                        <Typography>Account Name: SBI <Button variant="outlined" size="small" color="secondary"
-                                                              sx={{ml: 1}}>Deactivated</Button></Typography>
-                        <Typography>Account Number: 329392432</Typography>
-                        <Typography>IFSC Code: SBIN0001235</Typography>
-                        <Typography>Bank & Branch: State Bank of India, PHUSRO BAZAR</Typography>
-                        <Button variant="outlined" startIcon={<VisibilityIcon/>} sx={{mt: 1}}>Reactivate
-                            Account</Button>
-                        <Button variant="outlined" startIcon={<ShareIcon/>} sx={{mt: 1, ml: 1}}>Share Bank
-                            Details</Button>
-                        <Button variant="outlined" startIcon={<DownloadIcon/>} sx={{mt: 1, ml: 1}}>Download
-                            Statement</Button>
-                    </Box>
-
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <Box sx={{ p: 2 }}>
-                            <FormControl fullWidth>
-                                <Select value={selectedRange} onChange={handleDateChange} displayEmpty>
-                                    <MenuItem value="today">Today</MenuItem>
-                                    <MenuItem value="yesterday">
-                                        Yesterday ({format(dateRanges.yesterday[0], 'dd MMM yyyy')} to {format(dateRanges.yesterday[1], 'dd MMM yyyy')})
-                                    </MenuItem>
-                                    <MenuItem value="thisWeek">This Week</MenuItem>
-                                    <MenuItem value="lastWeek">Last Week</MenuItem>
-                                    <MenuItem value="last7Days">Last 7 days</MenuItem>
-                                    <MenuItem value="thisMonth">This Month</MenuItem>
-                                    <MenuItem value="previousMonth">Previous Month</MenuItem>
-                                </Select>
-                            </FormControl>
-
-                            <Box sx={{ mt: 2 }}>
-                                <Typography variant="h6">Selected Date Range:</Typography>
-                                <Typography>
-                                    {format(dateRange[0], 'dd MMM yyyy')} to {format(dateRange[1], 'dd MMM yyyy')}
-                                </Typography>
-                            </Box>
-                        </Box>
-                    </LocalizationProvider>
-
-                    <TableContainer component={Paper}>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Date</TableCell>
-                                    <TableCell>Type</TableCell>
-                                    <TableCell>Txn No</TableCell>
-                                    <TableCell>Party</TableCell>
-                                    <TableCell>Mode</TableCell>
-                                    <TableCell>Paid</TableCell>
-                                    <TableCell>Received</TableCell>
-                                    <TableCell>Balance</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {transactions.map((txn, index) => (
-                                    <TableRow key={index}>
-                                        <TableCell>{txn.date}</TableCell>
-                                        <TableCell>{txn.type}</TableCell>
-                                        <TableCell>{txn.txnNo}</TableCell>
-                                        <TableCell>{txn.party}</TableCell>
-                                        <TableCell>{txn.mode}</TableCell>
-                                        <TableCell>{txn.paid}</TableCell>
-                                        <TableCell>{txn.received}</TableCell>
-                                        <TableCell>{txn.balance}</TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                <Grid item xs={12} sm={8}>
+                    <Card>
+                        <CardContent>
+                            <Typography variant="h5">Account Details</Typography>
+                            <Typography>Account Holder's Name: {account.accountHolder}</Typography>
+                            <Typography>Account Name: {account.accountName}</Typography>
+                            <Typography>Account Number: {account.accountNumber}</Typography>
+                            <Typography>IFSC Code: {account.ifscCode}</Typography>
+                            <Typography>Bank & Branch: {account.bankBranch}</Typography>
+                            <Button variant="outlined" color="primary" style={{marginTop: 16}}>Reactivate
+                                Account</Button>
+                            <Button variant="outlined" color="secondary" style={{marginTop: 16, marginLeft: 16}}>Share
+                                Bank Details</Button>
+                            <Button variant="outlined" style={{marginTop: 16, marginLeft: 16}}>Download
+                                Statement</Button>
+                        </CardContent>
+                    </Card>
+                    <Card style={{marginTop: 16}}>
+                        <CardContent>
+                            <Typography variant="h6">Transactions</Typography>
+                            <TableContainer component={Paper} style={{marginTop: 16}}>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>Date</TableCell>
+                                            <TableCell>Type</TableCell>
+                                            <TableCell>TXN NO</TableCell>
+                                            <TableCell>Party</TableCell>
+                                            <TableCell>Mode</TableCell>
+                                            <TableCell>Paid</TableCell>
+                                            <TableCell>Received</TableCell>
+                                            <TableCell>Balance</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {account.transactions.length === 0 ? (
+                                            <TableRow>
+                                                <TableCell colSpan={8} align="center">
+                                                    No transactions found
+                                                </TableCell>
+                                            </TableRow>
+                                        ) : (
+                                            account.transactions.map((row, index) => (
+                                                <TableRow key={index}>
+                                                    <TableCell>{row.date}</TableCell>
+                                                    <TableCell>{row.type}</TableCell>
+                                                    <TableCell>{row.txnNo}</TableCell>
+                                                    <TableCell>{row.party}</TableCell>
+                                                    <TableCell>{row.mode}</TableCell>
+                                                    <TableCell>{row.paid}</TableCell>
+                                                    <TableCell>{row.received}</TableCell>
+                                                    <TableCell>{row.balance}</TableCell>
+                                                </TableRow>
+                                            ))
+                                        )}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </CardContent>
+                    </Card>
                 </Grid>
             </Grid>
         </Container>
