@@ -113,21 +113,13 @@ export const MainDashboard = () => {
                         </CardContent>
                     </Card>
                 </Grid>
-                <Grid item xs={12} sm={8}>
+                <Grid item xs={12}>
                     <Paper style={{padding: '20px'}}>
                         <Typography variant="h6">Sales Report</Typography>
                         <SalesReport/>
                     </Paper>
                 </Grid>
-                <Grid item xs={12} sm={4}>
 
-                    <Paper style={{padding: '20px', marginTop: '20px'}}>
-                        <img src="https://via.placeholder.com/150" alt="Ad 1" style={{width: '100%'}}/>
-                    </Paper>
-                    <Paper style={{padding: '20px', marginTop: '20px'}}>
-                        <img src="https://via.placeholder.com/150" alt="Ad 2" style={{width: '100%'}}/>
-                    </Paper>
-                </Grid>
             </Grid>
         </Box>
     );
