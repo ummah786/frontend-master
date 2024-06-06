@@ -1,11 +1,12 @@
 import React from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Link } from '@mui/material';
+import {Link, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from '@mui/material';
+import {Link as RouterLink} from 'react-router-dom';
 
 const transactions = [
-    { date: '28 May 2024', type: 'Purchase Record', txnNo: 1, partyName: 'sandeep', amount: '₹1,000' },
-    { date: '28 May 2024', type: 'Sales Invoice', txnNo: 3, partyName: 'Cash Sale', amount: '₹200' },
-    { date: '28 May 2024', type: 'Sales Invoice', txnNo: 2, partyName: 'Cash Sale', amount: '₹200' },
-    { date: '23 May 2024', type: 'Sales Invoice', txnNo: 1, partyName: 'Raju', amount: '₹100' },
+    {date: '28 May 2024', type: 'Purchase Record', txnNo: 1, partyName: 'sandeep', amount: '₹1,000'},
+    {date: '28 May 2024', type: 'Sales Invoice', txnNo: 3, partyName: 'Cash Sale', amount: '₹200'},
+    {date: '28 May 2024', type: 'Sales Invoice', txnNo: 2, partyName: 'Cash Sale', amount: '₹200'},
+    {date: '23 May 2024', type: 'Sales Invoice', txnNo: 1, partyName: 'Raju', amount: '₹100'},
 ];
 
 function LatestTransactions() {
@@ -14,11 +15,11 @@ function LatestTransactions() {
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell>Date</TableCell>
-                        <TableCell>Type</TableCell>
-                        <TableCell>Txn No</TableCell>
-                        <TableCell>Party Name</TableCell>
-                        <TableCell>Amount</TableCell>
+                        <TableCell sx={{fontWeight: 'bold'}}>Date</TableCell>
+                        <TableCell sx={{fontWeight: 'bold'}}>Type</TableCell>
+                        <TableCell sx={{fontWeight: 'bold'}}>Txn No</TableCell>
+                        <TableCell sx={{fontWeight: 'bold'}}>Party Name</TableCell>
+                        <TableCell sx={{fontWeight: 'bold'}}>Amount</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -33,7 +34,9 @@ function LatestTransactions() {
                     ))}
                 </TableBody>
             </Table>
-            <Link href="#" style={{ margin: '10px' }}>See All Transactions</Link>
+            <Link component={RouterLink} to="/transactions" style={{margin: '10px'}}>
+                See All Transactions
+            </Link>
         </TableContainer>
     );
 }

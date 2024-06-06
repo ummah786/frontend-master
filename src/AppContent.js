@@ -37,6 +37,7 @@ import PurchaseOrders from "./pages/Purchases/PurchaseOrders/PurchaseOrders";
 import PurcaseReturn from "./pages/Purchases/PurchaseReturn/PurcaseReturn";
 import PaymentOut from "./pages/Purchases/PaymentOut/PaymentOut";
 import DebitNote from "./pages/Purchases/DebitNote/DebitNote";
+import AllTransactions from "./pages/Dashboard/AllTransactions";
 
 export const AppContent = ({flag, handleBooleanChange, setFlag}) => {
     const [sidebarType, setSidebarType] = useState('default');
@@ -53,7 +54,8 @@ export const AppContent = ({flag, handleBooleanChange, setFlag}) => {
     function getRoutesAndElement() {
         return <Routes>
             <Route path="/" element={<MainDashboard/>}/>
-            <Route path="/party" element={<Party/>}/>
+            <Route path="/transactions" element={<AllTransactions/>}/>
+            <Route path="/party" element={<Party/>}/>s
             <Route path="/posbilling" element={<POSBilling/>}/>
             <Route path="/stock/shop" element={<InventoryShop/>}/>
             <Route path="/stock/godowon" element={<InventoryGodown/>}/>
@@ -63,7 +65,7 @@ export const AppContent = ({flag, handleBooleanChange, setFlag}) => {
 
             <Route path="/chat" element={<Chat/>}/>
             <Route path="/help" element={<MainPartyDetails/>}/>
-          {/*Sale*/}
+            {/*Sale*/}
             <Route path="/sales/invoice" element={<SalesInvoice/>}/>
             <Route path="/sales/payment-in" element={<PaymentIn/>}/>
             <Route path="/sales/estimate" element={<Quotation/>}/>
@@ -71,7 +73,7 @@ export const AppContent = ({flag, handleBooleanChange, setFlag}) => {
             <Route path="/sales/credit-note" element={<CreditNote/>}/>
             <Route path="/sales/delivery" element={<DeliveryChallan/>}/>
             <Route path="/sales/proforma" element={<ProformaInvoice/>}/>
-           {/* Purchase*/}
+            {/* Purchase*/}
             <Route path="/purchases/invoice" element={<PurchaseInvoices/>}/>
             <Route path="/purchases/order" element={<PurchaseOrders/>}/>
             <Route path="/purchases/return" element={<PurcaseReturn/>}/>
