@@ -36,68 +36,82 @@ const IconContainer = styled.div`
 
 const routes = [
     {path: '/', name: 'Dashboard', icon: <IconContainer><FaHome color="white"/></IconContainer>},
-    {path: '/Party', name: 'Parties', icon: <IconContainer><FaUser color="white"/></IconContainer>},
+    {path: '/party', name: 'Parties', icon: <IconContainer><FaUser color="white"/></IconContainer>},
     {path: '/posbilling', name: 'POS-Billing', icon: <IconContainer><MdMessage color="white"/></IconContainer>},
 
     {
-        path: '/Stock',
+        path: '/stock',
         name: 'Stock',
         icon: <IconContainer><AiTwotoneFileExclamation color="white"/></IconContainer>,
         subRoutes: [
-            {path: '/Stock/shop', name: 'Shop', icon: <IconContainer><FaUser color="white"/></IconContainer>},
-            {path: '/Stock/godowon', name: 'Godowon', icon: <IconContainer><FaLock color="white"/></IconContainer>},
+            {path: '/stock/shop', name: 'Shop', icon: <IconContainer><FaUser color="white"/></IconContainer>},
+            {path: '/stock/godowon', name: 'Godowon', icon: <IconContainer><FaLock color="white"/></IconContainer>},
         ]
     },
     {
-        path: '/Sales',
+        path: '/sales',
         name: 'Sales',
         icon: <IconContainer><AiTwotoneFileExclamation color="white"/></IconContainer>,
         subRoutes: [
             {
-                path: '/Sales/invoice',
+                path: '/sales/invoice',
                 name: 'Sales Invoice',
                 icon: <IconContainer><FaUser color="white"/></IconContainer>
-            },
-            {path: '/Sales/return', name: 'Sales Return', icon: <IconContainer><FaLock color="white"/></IconContainer>},
-            {
-                path: '/Sales/payment-in',
+            }, {
+                path: '/sales/estimate',
+                name: 'Quotation',
+                icon: <IconContainer><FaUser color="white"/></IconContainer>
+            }, {
+                path: '/sales/payment-in',
                 name: 'Payment In',
                 icon: <IconContainer><FaUser color="white"/></IconContainer>
             },
+            {path: '/sales/return', name: 'Sales Return', icon: <IconContainer><FaLock color="white"/></IconContainer>},
+
             {
                 path: '/Sales/credit-note',
                 name: 'Credit Note',
                 icon: <IconContainer><FaLock color="white"/></IconContainer>
             },
+            {
+                path: '/sales/delivery',
+                name: 'Delivery Challan ',
+                icon: <IconContainer><FaLock color="white"/></IconContainer>
+            },
+            {
+                path: '/sales/proforma',
+                name: 'Proforma Invoice',
+                icon: <IconContainer><FaLock color="white"/></IconContainer>
+            },
         ]
     },
     {
-        path: '/Purchases',
+        path: '/purchases',
         name: 'Purchase',
         icon: <IconContainer><AiTwotoneFileExclamation color="white"/></IconContainer>,
         subRoutes: [
             {
-                path: '/Purchases/invoice',
+                path: '/purchases/invoice',
                 name: 'Purchase Invoice',
                 icon: <IconContainer><FaUser color="white"/></IconContainer>
             },
             {
-                path: '/Purchases/order',
+                path: '/purchases/order',
                 name: 'Purchase Order',
                 icon: <IconContainer><FaUser color="white"/></IconContainer>
             },
             {
-                path: '/Purchases/return',
+                path: '/purchases/return',
                 name: 'Purchase Return',
                 icon: <IconContainer><FaLock color="white"/></IconContainer>
             },
             {
-                path: '/Purchases/payment-out',
+                path: '/purchases/payment-out',
                 name: 'Payment Out',
                 icon: <IconContainer><FaLock color="white"/></IconContainer>
             },
             {
-                path: '/Purchases/debit-note',
+                path: '/purchases/debit-note',
                 name: 'Debit Note',
                 icon: <IconContainer><FaLock color="white"/></IconContainer>
             },

@@ -27,6 +27,16 @@ import HelpSupport from "./pages/HelpSupport/HelpSupport";
 import {Pricing} from "./pages/Pricing/Pricing";
 import Attendance from "./pages/Attendance/Attendance";
 import {ReportDetail} from "./pages/Report/ReportDetail";
+import Quotation from "./pages/Sales/QuotationEstimate/Quotation";
+import SalesReturn from "./pages/Sales/SalesReturn/SalesReturn";
+import CreditNote from "./pages/Sales/CreditNote/CreditNote";
+import ProformaInvoice from "./pages/Sales/ProformaInvoice/ProformaInvoice";
+import DeliveryChallan from "./pages/Sales/DeliveryChallan/DeliveryChallan";
+import PurchaseInvoices from "./pages/Purchases/PurchaseInvoices/PurchaseInvoices";
+import PurchaseOrders from "./pages/Purchases/PurchaseOrders/PurchaseOrders";
+import PurcaseReturn from "./pages/Purchases/PurchaseReturn/PurcaseReturn";
+import PaymentOut from "./pages/Purchases/PaymentOut/PaymentOut";
+import DebitNote from "./pages/Purchases/DebitNote/DebitNote";
 
 export const AppContent = ({flag, handleBooleanChange, setFlag}) => {
     const [sidebarType, setSidebarType] = useState('default');
@@ -53,8 +63,21 @@ export const AppContent = ({flag, handleBooleanChange, setFlag}) => {
 
             <Route path="/chat" element={<Chat/>}/>
             <Route path="/help" element={<MainPartyDetails/>}/>
+          {/*Sale*/}
             <Route path="/sales/invoice" element={<SalesInvoice/>}/>
             <Route path="/sales/payment-in" element={<PaymentIn/>}/>
+            <Route path="/sales/estimate" element={<Quotation/>}/>
+            <Route path="/sales/return" element={<SalesReturn/>}/>
+            <Route path="/sales/credit-note" element={<CreditNote/>}/>
+            <Route path="/sales/delivery" element={<DeliveryChallan/>}/>
+            <Route path="/sales/proforma" element={<ProformaInvoice/>}/>
+           {/* Purchase*/}
+            <Route path="/purchases/invoice" element={<PurchaseInvoices/>}/>
+            <Route path="/purchases/order" element={<PurchaseOrders/>}/>
+            <Route path="/purchases/return" element={<PurcaseReturn/>}/>
+            <Route path="/purchases/payment-out" element={<PaymentOut/>}/>
+            <Route path="/purchases/debit-note" element={<DebitNote/>}/>
+
             <Route path="/expenses" element={<Expense/>}/>
             <Route path="/feedback" element={<ScreenShare/>}/>
             <Route path="/attendance" element={<Attendance/>}/>
