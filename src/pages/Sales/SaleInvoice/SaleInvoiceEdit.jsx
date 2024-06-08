@@ -836,18 +836,14 @@ export const SaleInvoiceEdit = ({
   return (
     <Box component="form" onSubmit={handleSubmitSaleInvoiceCreate}>
       <Box sx={{ maxHeight: 300 }}>
-        <Box>
+        <Box sx={{marginBottom:"10px"}}>
           <Button variant="contained">Sale Invoice Edit</Button>
           <Box
-            sx={{ right: "0", float: "right", justifyContent: "space-around" }}
+            sx={{ right: "0", float: "right", justifyContent: "space-around", margin: "10px", marginTop: "1px" }}
           >
-            <ButtonGroup
-              variant="contained"
-              aria-label="Basic button group"
-              sx={{ justifyContent: "space-around" }}
-            >
-              <Button onClick={onBooleanChange}>Cancel</Button>
+              <Button variant="contained" onClick={onBooleanChange} sx={{marginRight: "40px", marginLeft: "-105px"}}>Cancel</Button>
               <Button
+                sx={{marginRight: "10px", marginTop: "-60px"}}
                 type="submit"
                 fullWidth
                 variant="contained"
@@ -855,18 +851,17 @@ export const SaleInvoiceEdit = ({
               >
                 Save
               </Button>
-            </ButtonGroup>
           </Box>
         </Box>
 
-        <Box>
-          <Card variant="outlined">
-            <Box sx={{ height: "100px", width: "100px" }}>
+        <Box sx={{width: "150px", marginBottom: "10px"}}>
+          <Card sx={{marginBottom: "10px"}}>
+            <Box sx={{height: "fullWidth", width: "150px"}}>
               {logoImage ? (
                 <Box sx={{ display: "flex", position: "relative" }}>
                   <CardMedia
                     sx={{
-                      height: "90px",
+                      height: "100px",
                       width: "90px",
                       margin: "10px",
                       borderStyle: "dashed",
@@ -897,6 +892,7 @@ export const SaleInvoiceEdit = ({
                       borderStyle: "dashed",
                       borderWidth: "2px",
                       textAlign: "center",
+                      height: "100px"
                     }}
                     component="span"
                   >
@@ -988,7 +984,7 @@ export const SaleInvoiceEdit = ({
                             borderWidth: "2px",
                           }}
                         >
-                          <Typography component="h1" variant="h5">
+                          <Typography component="h1" variant="h5" padding="7px" paddingBottom="10px" textColor={"common.black"}>
                             Add New Party
                           </Typography>
                           <ModalClose
@@ -1001,12 +997,12 @@ export const SaleInvoiceEdit = ({
                           />
                         </Box>
                         <Box component="form" onSubmit={handleSubmitForParty}>
-                          <Box>
+                          <Box sx={{marginTop: "5px"}}>
                             <TextField
                               id="outlined-basic"
                               label="Name"
                               variant="outlined"
-                              sx={{ margin: "10px" }}
+                              sx={{ margin: "10px", width: "270px", marginLeft: "60px" }}
                               value={manageUserObj.pname}
                               onChange={(event) =>
                                 handleTextFieldChangeParty(event, "pname")
@@ -1017,7 +1013,7 @@ export const SaleInvoiceEdit = ({
                               id="outlined-basic"
                               label="Phone Number"
                               variant="outlined"
-                              sx={{ margin: "10px" }}
+                              sx={{margin: "10px", width: "270px"}}
                               value={manageUserObj.mobileNumber}
                               onChange={(event) =>
                                 handleTextFieldChangeParty(
@@ -1030,7 +1026,7 @@ export const SaleInvoiceEdit = ({
                               id="outlined-basic"
                               label="Email Address"
                               variant="outlined"
-                              sx={{ margin: "10px" }}
+                              sx={{ margin: "10px", width: "270px" }}
                               value={manageUserObj.email}
                               onChange={(event) =>
                                 handleTextFieldChangeParty(event, "email")
@@ -1040,7 +1036,7 @@ export const SaleInvoiceEdit = ({
                               id="outlined-basic"
                               label="Billing Address"
                               variant="outlined"
-                              sx={{ margin: "10px" }}
+                              sx={{margin: "10px", width: "270px", marginLeft: "60px"}}
                               value={manageUserObj.billingAddress}
                               onChange={(event) =>
                                 handleTextFieldChangeParty(
@@ -1053,7 +1049,7 @@ export const SaleInvoiceEdit = ({
                               id="outlined-basic"
                               label="Shipping Address"
                               variant="outlined"
-                              sx={{ margin: "10px" }}
+                              sx={{margin: "10px", width: "270px"}}
                               value={manageUserObj.shippingAddress}
                               onChange={(event) =>
                                 handleTextFieldChangeParty(
@@ -1066,14 +1062,14 @@ export const SaleInvoiceEdit = ({
                               id="outlined-basic"
                               label="Company Name"
                               variant="outlined"
-                              sx={{ margin: "10px" }}
+                              sx={{margin: "10px", width: "270px"}}
                               value={manageUserObj.company}
                               onChange={(event) =>
                                 handleTextFieldChangeParty(event, "company")
                               }
                             />
                             <TextField
-                              fullWidth
+                              sx={{margin: "10px", width: "270px", marginLeft: "60px"}}
                               select
                               value={manageUserObj.partyType}
                               onChange={(event) =>
@@ -1093,18 +1089,7 @@ export const SaleInvoiceEdit = ({
                               ))}
                             </TextField>
                             <TextField
-                              id="outlined-basic"
-                              label="GST Number"
-                              variant="outlined"
-                              sx={{ margin: "10px" }}
-                              value={manageUserObj.gstNumber}
-                              onChange={(event) =>
-                                handleTextFieldChangeParty(event, "gstNumber")
-                              }
-                            />
-
-                            <TextField
-                              fullWidth
+                              sx={{margin: "10px", width: "270px"}}
                               select
                               value={manageUserObj.partyCategory}
                               onChange={(event) =>
@@ -1129,6 +1114,16 @@ export const SaleInvoiceEdit = ({
                                   </MenuItem>
                                 ))}
                             </TextField>
+                            <TextField
+                              id="outlined-basic"
+                              label="GST Number"
+                              variant="outlined"
+                              sx={{margin: "10px", width: "270px"}}
+                              value={manageUserObj.gstNumber}
+                              onChange={(event) =>
+                                handleTextFieldChangeParty(event, "gstNumber")
+                              }
+                            />
                             <Transition in={openCategoryParty} timeout={400}>
                               <Modal
                                 open={openCategoryParty}
@@ -1144,7 +1139,7 @@ export const SaleInvoiceEdit = ({
                                 <Box sx={style}>
                                   <Box
                                     sx={{
-                                      marginTop: 8,
+                                      marginTop: 1,
                                       display: "flex",
                                       flexDirection: "column",
                                       alignItems: "center",
@@ -1163,7 +1158,7 @@ export const SaleInvoiceEdit = ({
                                       <TextField
                                         margin="normal"
                                         required
-                                        fullWidth
+                                        sx={{width: "300px", marginLeft: "185px"}}
                                         id="Category"
                                         label="Categroy"
                                         name="Category"
@@ -1184,11 +1179,14 @@ export const SaleInvoiceEdit = ({
                                           mb: 2,
                                           color: "whitesmoke",
                                           background: "#212121",
+                                          width: "100px",
+                                          marginLeft: "280px",
+                                          marginTop: "10px"
                                         }}
                                       >
                                         Submit
                                       </Button>
-                                      <List sx={{ maxWidth: 300 }}>
+                                      <List sx={{maxWidth: 300, marginLeft: "185px"}}>
                                         {addCategory.length > 0 ? (
                                           addCategory.map((item, index) => (
                                             <ListItem
@@ -1235,6 +1233,8 @@ export const SaleInvoiceEdit = ({
                               mb: 2,
                               color: "whitesmoke",
                               background: "#212121",
+                              width: "200px",
+                              marginLeft: "380px"
                             }}
                           >
                             Submit
@@ -1280,7 +1280,7 @@ export const SaleInvoiceEdit = ({
                   }}
                 >
                   <Box sx={style}>
-                    <Typography variant="h2" sx={{ marginLeft: "10px" }}>
+                    <Typography variant="h2" sx={{marginLeft: "260px", marginBottom: "10px"}}>
                       Change Shipping Address
                     </Typography>
                     <ModalClose
@@ -1509,7 +1509,7 @@ export const SaleInvoiceEdit = ({
                 </Modal>
               </Transition>
             </Box>
-            <Box sx={{ display: "flex" }}>
+            <Box sx={{ display: "flex", marginLeft: "10px" }}>
               <Box
                 sx={{
                   width: "50%",
@@ -1567,7 +1567,7 @@ export const SaleInvoiceEdit = ({
                   value={salePurchaseObject.id}
                 />
               </Box>
-              <Box sx={{ width: "50%", margin: "10px" }}>
+              <Box sx={{ width: "50%", margin: "2px" }}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoContainer components={["DatePicker", "DatePicker"]}>
                     <DatePicker
@@ -1589,7 +1589,7 @@ export const SaleInvoiceEdit = ({
                   }
                 />
               </Box>
-              <Box sx={{ width: "50%", margin: "10px" }}>
+              <Box sx={{ width: "50%", margin: "4px" }}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoContainer components={["DatePicker", "DatePicker"]}>
                     <DatePicker
@@ -1864,7 +1864,7 @@ export const SaleInvoiceEdit = ({
                                       borderWidth: "2px",
                                     }}
                                   >
-                                    <Typography component="h1" variant="h5">
+                                    <Typography component="h1" variant="h5" padding={1}>
                                       Add New Items
                                     </Typography>
                                     <ModalClose
@@ -2012,7 +2012,7 @@ export const SaleInvoiceEdit = ({
                                         </TextField>
                                       </Box>
                                       <TextField
-                                        fullWidth
+                                        sx={{margin: "10px", width: "98%"}}
                                         select
                                         value={inventoryObject.gst}
                                         onChange={(event) =>
@@ -2035,7 +2035,7 @@ export const SaleInvoiceEdit = ({
                                         ))}
                                       </TextField>
                                       <TextField
-                                        fullWidth
+                                        sx={{margin: "10px", width: "98%"}}
                                         select
                                         value={inventoryObject.category}
                                         onChange={(event) =>
@@ -2078,7 +2078,7 @@ export const SaleInvoiceEdit = ({
                                           <Box sx={style}>
                                             <Box
                                               sx={{
-                                                marginTop: 8,
+                                                marginTop: 1,
                                                 display: "flex",
                                                 flexDirection: "column",
                                                 alignItems: "center",
@@ -2105,9 +2105,9 @@ export const SaleInvoiceEdit = ({
                                                 <TextField
                                                   margin="normal"
                                                   required
-                                                  fullWidth
+                                                  sx={{width: "300px", marginLeft: "187px"}}
                                                   id="Category"
-                                                  label="Categroy"
+                                                  label="Category"
                                                   name="Category"
                                                   autoComplete="Category"
                                                   value={categoryApi}
@@ -2130,11 +2130,14 @@ export const SaleInvoiceEdit = ({
                                                     mb: 2,
                                                     color: "whitesmoke",
                                                     background: "#212121",
+                                                    width: "100px",
+                                                    marginLeft: "280px",
+                                                    marginTop: "10px"
                                                   }}
                                                 >
                                                   Submit
                                                 </Button>
-                                                <List sx={{ maxWidth: 300 }}>
+                                                <List sx={{maxWidth: 300, marginLeft: "190px"}}>
                                                   {addCategory.length > 0 ? (
                                                     addCategory.map(
                                                       (item, index) => (
@@ -2174,7 +2177,7 @@ export const SaleInvoiceEdit = ({
                                         </Box>
                                       </Modal>
                                       <TextField
-                                        fullWidth
+                                        sx={{margin: "10px", width: "98%"}}
                                         select
                                         value={inventoryObject.companyName}
                                         onChange={(event) =>
@@ -2217,7 +2220,7 @@ export const SaleInvoiceEdit = ({
                                           <Box sx={style}>
                                             <Box
                                               sx={{
-                                                marginTop: 8,
+                                                marginTop: 1,
                                                 display: "flex",
                                                 flexDirection: "column",
                                                 alignItems: "center",
@@ -2242,9 +2245,9 @@ export const SaleInvoiceEdit = ({
                                                 <TextField
                                                   margin="normal"
                                                   required
-                                                  fullWidth
+                                                  sx={{width: "300px", marginLeft: "190px"}}
                                                   id="Category"
-                                                  label="Categroy"
+                                                  label="Category"
                                                   name="Category"
                                                   autoComplete="Category"
                                                   value={categoryApi}
@@ -2257,7 +2260,6 @@ export const SaleInvoiceEdit = ({
                                                 />
                                                 <Button
                                                   type="submit"
-                                                  fullWidth
                                                   variant="contained"
                                                   onClick={
                                                     handleClickForCompany
@@ -2267,11 +2269,14 @@ export const SaleInvoiceEdit = ({
                                                     mb: 2,
                                                     color: "whitesmoke",
                                                     background: "#212121",
+                                                    width: "100px",
+                                                    marginLeft: "285px",
+                                                    marginTop: "10px"
                                                   }}
                                                 >
                                                   Submit
                                                 </Button>
-                                                <List sx={{ maxWidth: 300 }}>
+                                                <List sx={{maxWidth: 300, marginLeft: "185px"}}>
                                                   {addCategory.length > 0 ? (
                                                     addCategory.map(
                                                       (item, index) => (
@@ -2314,7 +2319,7 @@ export const SaleInvoiceEdit = ({
                                         id="outlined-basic"
                                         label="HSN Code"
                                         variant="outlined"
-                                        sx={{ margin: "10px" }}
+                                        sx={{margin: "10px", width: "48%"}}
                                         value={inventoryObject.hsn}
                                         onChange={(event) =>
                                           handleTextFieldChangeForInventory(
@@ -2327,7 +2332,7 @@ export const SaleInvoiceEdit = ({
                                         id="outlined-basic"
                                         label="Total Stock"
                                         variant="outlined"
-                                        sx={{ margin: "10px" }}
+                                        sx={{margin: "10px", width: "47.42%"}}
                                         value={inventoryObject.totalStock}
                                         onChange={(event) =>
                                           handleTextFieldChangeForInventory(
@@ -2340,15 +2345,16 @@ export const SaleInvoiceEdit = ({
 
                                     <Button
                                       type="submit"
-                                      fullWidth
                                       variant="contained"
                                       onClick={handleForNewItemCreation}
                                       sx={{
-                                        mt: 3,
+                                        mt: 2,
                                         mb: 2,
+                                        ml: 49,
                                         color: "whitesmoke",
                                         background: "#212121",
-                                      }}
+                                        width: "100px"
+                                    }}
                                     >
                                       Submit
                                     </Button>
@@ -2540,7 +2546,7 @@ export const SaleInvoiceEdit = ({
           </TableContainer>
         </Box>
         <Box sx={{ display: "flex" }}>
-          <Box sx={{ width: "50%" }}>
+          <Box sx={{ width: "50%", marginLeft: "-10px"}}>
             <Box sx={{ padding: "10px" }}>
               <Button
                 onClick={handleToggleNotes}
@@ -2550,7 +2556,7 @@ export const SaleInvoiceEdit = ({
                 +Add Notes
               </Button>
               {openNotes && (
-                <Box sx={{ display: "flex", padding: "10px" }}>
+                <Box sx={{ display: "flex", padding: "10px", marginLeft: "-10px" }}>
                   <TextField
                     label="Enter Notes"
                     variant="outlined"
@@ -2575,7 +2581,7 @@ export const SaleInvoiceEdit = ({
                 +Terms and Conditions
               </Button>
               {openTermCondition && (
-                <Box sx={{ display: "flex", padding: "10px" }}>
+                <Box sx={{ display: "flex", padding: "10px", marginLeft: "-10px"}}>
                   <TextField
                     label="Enter Terms & Conditions"
                     variant="outlined"
@@ -2591,7 +2597,7 @@ export const SaleInvoiceEdit = ({
                 </Box>
               )}
               {!openTermCondition && (
-                <Box sx={{ padding: "10px" }}>
+                <Box sx={{ padding: "10px", marginLeft: "-10px"}}>
                   <Typography>
                     1. Goods once sold will not be taken back or exchanged{" "}
                   </Typography>
@@ -2619,7 +2625,7 @@ export const SaleInvoiceEdit = ({
                           </Box>*/}
             <Box>
               <Box sx={{ padding: "10px" }}>
-                <Button variant="contained" onClick={addField}>
+                <Button variant="contained" onClick={addField} sx={{marginLeft: "-3px"}}>
                   Add Additional Charges
                 </Button>
                 {fields.map((field, index) => (
@@ -2627,7 +2633,7 @@ export const SaleInvoiceEdit = ({
                     key={index}
                     sx={{ marginTop: 2, display: "flex", alignItems: "center" }}
                   >
-                    <Box sx={{ width: "65%" }}>
+                    <Box sx={{width: "70%", marginLeft: "-2px"}}>
                       <TextField
                         label="Enter Charges (ex.Transport Charge)"
                         value={field.key}
@@ -2688,7 +2694,7 @@ export const SaleInvoiceEdit = ({
                   ))}
                 </Box>
               </Box>
-              <Box sx={{ padding: "10px" }}>
+              <Box sx={{ padding: "10px", marginLeft: "-3px" }}>
                 <Button
                   variant="contained"
                   onClick={() => setShowAddDiscount(!showAddDiscount)}
@@ -2976,7 +2982,7 @@ const ChildModal = ({ shipId, setShipTo, setBillTo }) => {
         variant="outlined"
         color="primary"
         onClick={handleOpen}
-        sx={{ margin: "10px" }}
+        sx={{margin: "10px", marginLeft: "230px"}}
       >
         Add New Shipping Address
       </Button>
@@ -3012,6 +3018,8 @@ const ChildModal = ({ shipId, setShipTo, setBillTo }) => {
                   display: "flex",
                   borderStyle: "dashed",
                   borderWidth: "2px",
+                  padding: "5px",
+                  marginTop: "7px"
                 }}
               >
                 <Typography component="h1" variant="h5">
@@ -3048,7 +3056,6 @@ const ChildModal = ({ shipId, setShipTo, setBillTo }) => {
                   <TextField
                     select
                     fullWidth={true}
-                    sx={{ margin: "10px" }}
                     label="State"
                     variant="outlined"
                     margin="normal"
@@ -3065,7 +3072,7 @@ const ChildModal = ({ shipId, setShipTo, setBillTo }) => {
                   <TextField
                     margin="normal"
                     required
-                    label="Pin Code *"
+                    label="Pin Code"
                     fullWidth={true}
                     onChange={(e) => setZip(e.target.value)}
                   />
@@ -3073,12 +3080,12 @@ const ChildModal = ({ shipId, setShipTo, setBillTo }) => {
 
                 <Button
                   type="submit"
-                  fullWidth
                   variant="contained"
                   onClick={handleClick}
                   sx={{
-                    mt: 3,
+                    mt: 1,
                     mb: 2,
+                    ml: 7,
                     color: "whitesmoke",
                     background: "#212121",
                   }}

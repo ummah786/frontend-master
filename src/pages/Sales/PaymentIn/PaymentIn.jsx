@@ -165,7 +165,7 @@ export const PaymentIn = () => {
           <Box>
             <Box>
               <Button variant="contained">Payment In</Button>
-              <Box sx={{ right: "0", float: "right" }}>
+              <Box sx={{ right: "0", float: "right", marginRight:"5px" }}>
                 <ButtonGroup
                   variant="contained"
                   aria-label="Basic button group"
@@ -177,13 +177,14 @@ export const PaymentIn = () => {
               </Box>
             </Box>
             <Box>
-              <Box sx={{ display: "flex", width: "100%", margin: "5px" }}>
-                <Box sx={{ width: "50%" }}>
+              <Box sx={{ display: "flex", width: "100%", marginLeft: "-24px", marginTop: "10px"}}>
+                <Box sx={{ width: "37%"}}>
                   <Search>
                     <SearchIconWrapper>
                       <SearchIcon />
                     </SearchIconWrapper>
                     <StyledInputBase
+                      sx={{ height: "54px"}}
                       value={filter}
                       onChange={handleFilterChange}
                       placeholder="Search Sale Invoice"
@@ -191,17 +192,19 @@ export const PaymentIn = () => {
                     />
                   </Search>
                 </Box>
-                <Box>
+                <Box sx={{ marginBottom: "10px", marginTop: "-8px"}}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
                         label="Start Date:"
+                        sx={{ width: "405px"}}
                         value={startDate}
                         onChange={handleStartDateChange}
                         renderInput={(params) => <TextField {...params} />}
                       />
                       <DatePicker
                         label="End Date:"
+                        sx={{ width: "400px"}}
                         value={endDate}
                         onChange={handleEndDateChange}
                         renderInput={(params) => <TextField {...params} />}

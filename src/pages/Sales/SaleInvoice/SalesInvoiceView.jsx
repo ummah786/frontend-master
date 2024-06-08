@@ -145,10 +145,10 @@ const SalesInvoiceView = ({ onBooleanChange, idFlagView }) => {
       {editFlag ? (
         <Box>
           <Box>
-            <Button variant="contained" onClick={handleMainView}>
+            <Button variant="contained" onClick={handleMainView} sx={{marginLeft: "10px", width: "150px", marginBottom: "10px"}}>
               Sales Invoice
             </Button>
-            <Box sx={{ right: "0", float: "right" }}>
+            <Box sx={{ right: "0", float: "right", marginRight: "10px"}}>
               <ButtonGroup variant="contained" aria-label="Basic button group">
                 <Tooltip title="Duplicate this invoice">
                   <IconButton aria-label="edit">
@@ -220,7 +220,7 @@ const SalesInvoiceView = ({ onBooleanChange, idFlagView }) => {
             <Box sx={{ right: "0", float: "right" }}>
               <Button
                 variant="outlined"
-                sx={{ margin: "10px", width: "150px" }}
+                sx={{ margin: "10px", width: "150px", height: "55px" }}
                 onClick={() => setOpenPaymentRecord(true)}
               >
                 Record Payment In

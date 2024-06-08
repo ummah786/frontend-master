@@ -1055,7 +1055,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                                 required
                                                                                 sx={{width: "300px", marginLeft: "185px"}}
                                                                                 id="Category"
-                                                                                label="Categroy"
+                                                                                label="Category"
                                                                                 name="Category"
                                                                                 autoComplete="Category"
                                                                                 value={categoryApi}
@@ -1407,7 +1407,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                         <Box sx={{display: "flex"}}>
                             <Box
                                 sx={{
-                                    width: "50%",
+                                    width: "50%", marginLeft: "8px"
                                 }}
                             >
                                 <Box sx={{margin: "5px"}}>
@@ -2166,14 +2166,14 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                                                         color: "whitesmoke",
                                                                                                         background: "#212121",
                                                                                                         width: "100px",
-                                                                                                        marginLeft: "280px",
+                                                                                                        marginLeft: "285px",
                                                                                                         marginTop: "10px"
                                                                                                     }}
                                                                                                 >
                                                                                                     Submit
                                                                                                 </Button>
                                                                                                 <List
-                                                                                                    sx={{maxWidth: 300, marginLeft: "270px"}}>
+                                                                                                    sx={{maxWidth: 300, marginLeft: "185px"}}>
                                                                                                     {addCategory.length > 0 ? (
                                                                                                         addCategory.map(
                                                                                                             (item, index) => (
@@ -2444,7 +2444,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                     </TableContainer>
                 </Box>
                 <Box sx={{display: "flex"}}>
-                    <Box sx={{width: "50%"}}>
+                    <Box sx={{width: "50%", marginLeft: "-10px"}}>
                         <Box sx={{padding: "10px"}}>
                             <Button
                                 onClick={handleToggleNotes}
@@ -2454,7 +2454,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                 +Add Notes
                             </Button>
                             {openNotes && (
-                                <Box sx={{display: "flex", padding: "10px"}}>
+                                <Box sx={{display: "flex", padding: "10px", marginLeft: "-10px"}}>
                                     <TextField
                                         label="Enter Notes"
                                         variant="outlined"
@@ -2479,7 +2479,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                 +Terms and Conditions
                             </Button>
                             {openTermCondition && (
-                                <Box sx={{display: "flex", padding: "10px"}}>
+                                <Box sx={{display: "flex", padding: "10px", marginLeft: "-10px"}}>
                                     <TextField
                                         label="Enter Terms & Conditions"
                                         variant="outlined"
@@ -2495,7 +2495,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                 </Box>
                             )}
                             {!openTermCondition && (
-                                <Box sx={{padding: "10px"}}>
+                                <Box sx={{padding: "10px", marginLeft: "-10px"}}>
                                     <Typography>
                                         1. Goods once sold will not be taken back or exchanged{" "}
                                     </Typography>
@@ -2523,7 +2523,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                         </Box>*/}
                         <Box>
                             <Box sx={{padding: "10px"}}>
-                                <Button variant="contained" onClick={addField}>
+                                <Button variant="contained" onClick={addField} sx={{marginLeft: "-3px"}}>
                                     Add Additional Charges
                                 </Button>
                                 {fields.map((field, index) => (
@@ -2531,7 +2531,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                         key={index}
                                         sx={{marginTop: 2, display: "flex", alignItems: "center"}}
                                     >
-                                        <Box sx={{width: "65%"}}>
+                                        <Box sx={{width: "70%", marginLeft: "-2px"}}>
                                             <TextField
                                                 label="Enter Charges (ex.Transport Charge)"
                                                 value={field.key}
@@ -2592,7 +2592,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                     ))}
                                 </Box>
                             </Box>
-                            <Box sx={{padding: "10px"}}>
+                            <Box sx={{padding: "10px", marginLeft: "-3px"}}>
                                 <Button
                                     variant="contained"
                                     onClick={() => setShowAddDiscount(!showAddDiscount)}
@@ -2915,7 +2915,9 @@ const ChildModal = ({shipId, setShipTo, setBillTo}) => {
                                 sx={{
                                     display: "flex",
                                     borderStyle: "dashed",
-                                    borderWidth: "2px"
+                                    borderWidth: "2px",
+                                    padding: "5px",
+                                    marginTop: "7px"
                                 }}
                             >
                                 <Typography component="h1" variant="h5">
@@ -2952,7 +2954,6 @@ const ChildModal = ({shipId, setShipTo, setBillTo}) => {
                                     <TextField
                                         select
                                         fullWidth={true}
-                                        sx={{margin: "10px"}}
                                         label="State"
                                         variant="outlined"
                                         margin="normal"
@@ -2969,7 +2970,7 @@ const ChildModal = ({shipId, setShipTo, setBillTo}) => {
                                     <TextField
                                         margin="normal"
                                         required
-                                        label="Pin Code *"
+                                        label="Pin Code"
                                         fullWidth={true}
                                         onChange={(e) => setZip(e.target.value)}
                                     />
@@ -2977,12 +2978,12 @@ const ChildModal = ({shipId, setShipTo, setBillTo}) => {
 
                                 <Button
                                     type="submit"
-                                    fullWidth
                                     variant="contained"
                                     onClick={handleClick}
                                     sx={{
-                                        mt: 3,
+                                        mt: 1,
                                         mb: 2,
+                                        ml: 7,
                                         color: "whitesmoke",
                                         background: "#212121",
                                     }}

@@ -207,7 +207,7 @@ export const SalesInvoice = () => {
             </Box>
 
             <Box>
-              <Box sx={{ display: "flex", width: "100%", marginLeft: "-20px", marginTop: "10px"}}>
+              <Box sx={{ display: "flex", width: "99%", marginLeft: "-22px", marginTop: "10px"}}>
                 <Box sx={{ width: "36%"}}>
                   <Search>
                     <SearchIconWrapper>
@@ -227,7 +227,7 @@ export const SalesInvoice = () => {
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
                         label="Start Date:"
-                        sx={{ width: "395px"}}
+                        sx={{ width: "400px"}}
                         value={startDate}
                         onChange={handleStartDateChange}
                         renderInput={(params) => <TextField {...params} />}

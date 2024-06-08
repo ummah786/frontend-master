@@ -227,7 +227,7 @@ const PaymentCreate = ({ onBooleanChange }) => {
     <>
       <Box>
         <Box>
-          <Button variant="contained">Payment In</Button>
+          <Button variant="contained" sx={{marginLeft: "128px", marginTop: "10px"}}>Payment In</Button>
           <Box
             sx={{
               right: "0",
@@ -235,21 +235,16 @@ const PaymentCreate = ({ onBooleanChange }) => {
               justifyContent: "space-around",
             }}
           >
-            <ButtonGroup
-              variant="contained"
-              aria-label="Basic button group"
-              sx={{ justifyContent: "space-around" }}
-            >
-              <Button onClick={onBooleanChange}>Cancel</Button>
+              <Button onClick={onBooleanChange} variant="contained" sx={{marginRight: "10px", marginTop: "10px", width: "100px"}}>Cancel</Button>
               <Button
                 type="submit"
-                fullWidth
+                sx={{marginRight: "130px", marginTop: "10px", width: "100px"}}
                 variant="contained"
                 onClick={handleSubmitPaymentCreate}
               >
                 Save
               </Button>
-            </ButtonGroup>
+           
           </Box>
         </Box>
       </Box>
@@ -262,7 +257,7 @@ const PaymentCreate = ({ onBooleanChange }) => {
       >
         <Grid item xs={1}></Grid>
         <Grid item xs={10}>
-          <Box sx={{ display: "flex", margin: "20px" }}>
+          <Box sx={{ display: "flex", margin: "20px", marginTop: "-5px" }}>
             <Box
               sx={{
                 width: "50%",
@@ -270,7 +265,7 @@ const PaymentCreate = ({ onBooleanChange }) => {
                 borderRadius: "4px",
               }}
             >
-              <Box sx={{ margin: "7px" }}>
+              <Box sx={{ margin: "10px" }}>
                 <Autocomplete
                   disablePortal
                   onChange={onSelectAutoComplete}
@@ -283,12 +278,12 @@ const PaymentCreate = ({ onBooleanChange }) => {
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="Party Name /Mobile /GST Number"
+                      label="Party Name/Mobile/GST Number"
                     />
                   )}
                 />
               </Box>
-              <Box sx={{ margin: "5px" }}>
+              <Box sx={{ margin: "10px" }}>
                 <TextField
                   id="outlined-basic"
                   label="Enter Payment Amount"
@@ -307,7 +302,7 @@ const PaymentCreate = ({ onBooleanChange }) => {
               }}
             >
               <Box sx={{ display: "flex" }}>
-                <Box sx={{ width: "50%", marginLeft: "5px" }}>
+                <Box sx={{ width: "50%", marginLeft: "8px" }}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
@@ -319,7 +314,7 @@ const PaymentCreate = ({ onBooleanChange }) => {
                     </DemoContainer>
                   </LocalizationProvider>
                 </Box>
-                <Box sx={{ width: "50%", margin: "7px" }}>
+                <Box sx={{ width: "50%", margin: "8px" }}>
                   <TextField
                     select
                     label="Payment Mode"
@@ -336,7 +331,7 @@ const PaymentCreate = ({ onBooleanChange }) => {
                   </TextField>
                 </Box>
               </Box>
-              <Box sx={{ marginLeft: "5px", marginRight: "5px" }}>
+              <Box sx={{ marginLeft: "9px", marginRight: "5px", marginTop: "4px" }}>
                 <TextField
                   id="outlined-basic"
                   variant="outlined"
