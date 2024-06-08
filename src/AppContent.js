@@ -27,16 +27,16 @@ import HelpSupport from "./pages/HelpSupport/HelpSupport";
 import {Pricing} from "./pages/Pricing/Pricing";
 import Attendance from "./pages/Attendance/Attendance";
 import {ReportDetail} from "./pages/Report/ReportDetail";
-import Quotation from "./pages/Sales/QuotationEstimate/Quotation";
-import SalesReturn from "./pages/Sales/SalesReturn/SalesReturn";
-import CreditNote from "./pages/Sales/CreditNote/CreditNote";
-import ProformaInvoice from "./pages/Sales/ProformaInvoice/ProformaInvoice";
-import DeliveryChallan from "./pages/Sales/DeliveryChallan/DeliveryChallan";
-import PurchaseInvoices from "./pages/Purchases/PurchaseInvoices/PurchaseInvoices";
-import PurchaseOrders from "./pages/Purchases/PurchaseOrders/PurchaseOrders";
-import PurcaseReturn from "./pages/Purchases/PurchaseReturn/PurcaseReturn";
-import PaymentOut from "./pages/Purchases/PaymentOut/PaymentOut";
-import DebitNote from "./pages/Purchases/DebitNote/DebitNote";
+import {Quotation} from "./pages/Sales/QuotationEstimate/Quotation";
+import {SalesReturn} from "./pages/Sales/SalesReturn/SalesReturn";
+import {CreditNote} from "./pages/Sales/CreditNote/CreditNote";
+import {ProformaInvoice} from "./pages/Sales/ProformaInvoice/ProformaInvoice";
+import {DeliveryChallan} from "./pages/Sales/DeliveryChallan/DeliveryChallan";
+import {PurchaseInvoices} from "./pages/Purchases/PurchaseInvoices/PurchaseInvoices";
+import {PurchaseOrders} from "./pages/Purchases/PurchaseOrders/PurchaseOrders";
+import {PurchaseReturn} from "./pages/Purchases/PurchaseReturn/PurchaseReturn";
+import {PaymentOut} from "./pages/Purchases/PaymentOut/PaymentOut";
+import {DebitNote} from "./pages/Purchases/DebitNote/DebitNote";
 import AllTransactions from "./pages/Dashboard/AllTransactions";
 
 export const AppContent = ({flag, handleBooleanChange, setFlag}) => {
@@ -76,7 +76,7 @@ export const AppContent = ({flag, handleBooleanChange, setFlag}) => {
             {/* Purchase*/}
             <Route path="/purchases/invoice" element={<PurchaseInvoices/>}/>
             <Route path="/purchases/order" element={<PurchaseOrders/>}/>
-            <Route path="/purchases/return" element={<PurcaseReturn/>}/>
+            <Route path="/purchases/return" element={<PurchaseReturn/>}/>
             <Route path="/purchases/payment-out" element={<PaymentOut/>}/>
             <Route path="/purchases/debit-note" element={<DebitNote/>}/>
 

@@ -30,15 +30,15 @@ import { useEffect, useState } from "react";
 import ArticleIcon from "@mui/icons-material/Article";
 import IconButton from "@mui/material/IconButton";
 import axios from "axios";
-import { DeliveryChallanCreate } from "./DeliveryChallanCreate";
+import { PurchaseReturnCreate } from "./PurchaseReturnCreate";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useDispatch, useSelector } from "react-redux";
 import { addSalePurchase } from "../../../redux/Action";
-import DeliveryChallanView from "./DeliveryChallanView";
-export const DeliveryChallan = () => {
+import PurchaseReturnView from "./PurchaseReturnView";
+export const PurchaseReturn = () => {
   const loginData = useSelector((state) => state.loginReducerValue);
   const { salePurchaseUser } = useSelector(
     (state) => state.salePurchaseReducerValue
@@ -143,11 +143,11 @@ export const DeliveryChallan = () => {
     <>
       {flag ? (
         <Box>
-          <DeliveryChallanCreate onBooleanChange={handleBooleanChange} />
+          <PurchaseReturnCreate onBooleanChange={handleBooleanChange} />
         </Box>
       ) : flagView ? (
         <Box>
-          <DeliveryChallanView onBooleanChange={handleBooleanChangeView} idFlagView={idFlagView} />
+          <PurchaseReturnView onBooleanChange={handleBooleanChangeView} idFlagView={idFlagView} />
         </Box>
       ) : (
         <Box>
