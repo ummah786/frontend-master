@@ -604,22 +604,22 @@ export const PurchaseReturnEdit = ({
   };
   const handleBilltoSHipToo = (event) => {
     const selectedParty = event.target.value;
-    
+
     if (!selectedParty) {
       console.error("Event target value is undefined");
       return;
     }
-  
+
     const { shippingAddress, billingAddress, mobileNumber, gstNumber } = selectedParty;
-  
+
     // If shippingAddress is undefined, set it to an empty string
     const updatedShippingAddress = shippingAddress || "";
-  
+
     setShipTo(selectedParty);
     setBillTo(selectedParty);
     setShipToAddress(updatedShippingAddress);
     setShipToFlag(false);
-  
+
     const updatedObject = {
       ...salePurchaseObject,
       billAddress: billingAddress,
@@ -627,7 +627,7 @@ export const PurchaseReturnEdit = ({
       gst: gstNumber,
       shipAddress: updatedShippingAddress, // Use updatedShippingAddress here
     };
-    
+
     setSalePurchaseObject(updatedObject);
   };
 
@@ -837,7 +837,7 @@ export const PurchaseReturnEdit = ({
     <Box component="form" onSubmit={handleSubmitSaleInvoiceCreate}>
       <Box sx={{ maxHeight: 300 }}>
         <Box>
-          <Button variant="contained">Sale Invoice Edit</Button>
+          <Button variant="contained">Purchase Return Edit</Button>
           <Box
             sx={{ right: "0", float: "right", justifyContent: "space-around" }}
           >
@@ -1559,7 +1559,7 @@ export const PurchaseReturnEdit = ({
             <Box sx={{ display: "flex" }}>
               <Box sx={{ width: "50%", margin: "10px" }}>
                 <TextField
-                  label="Sales Invoice No: "
+                  label="Purchase Return No: "
                   disabled={true}
                   onChange={(event) =>
                     handleTextFieldChange(event, "salesInvoiceNo")
@@ -1571,31 +1571,9 @@ export const PurchaseReturnEdit = ({
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoContainer components={["DatePicker", "DatePicker"]}>
                     <DatePicker
-                      label="Sales Invoice Date:"
+                      label="Purchase Return Date:"
                       value={saleInvoiceDate}
                       onChange={(newValue) => setSaleInvoiceDate(newValue)}
-                    />
-                  </DemoContainer>
-                </LocalizationProvider>
-              </Box>
-            </Box>
-            <Box sx={{ display: "flex" }}>
-              <Box sx={{ width: "50%", margin: "10px" }}>
-                <TextField
-                  label="Payment Terms: "
-                  value={salePurchaseObject.paymentTerms}
-                  onChange={(event) =>
-                    handleTextFieldChange(event, "paymentTerms")
-                  }
-                />
-              </Box>
-              <Box sx={{ width: "50%", margin: "10px" }}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer components={["DatePicker", "DatePicker"]}>
-                    <DatePicker
-                      label="Due Date:"
-                      value={dueDate}
-                      onChange={(newValue) => setDueDate(newValue)}
                     />
                   </DemoContainer>
                 </LocalizationProvider>

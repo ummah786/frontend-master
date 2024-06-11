@@ -1119,7 +1119,7 @@ export const SalesReturnCreate = ({onBooleanChange}) => {
 
                                                     <Button
                                                         type="submit"
-                                                        
+
                                                         variant="contained"
                                                         onClick={handleSubmitForParty}
                                                         sx={{
@@ -1454,7 +1454,7 @@ export const SalesReturnCreate = ({onBooleanChange}) => {
                         <Box sx={{display: "flex"}}>
                             <Box sx={{width: "50%", margin: "10px"}}>
                                 <TextField
-                                    label="Sales Invoice No: "
+                                    label="Sales Return No: "
                                     onChange={(event) =>
                                         handleTextFieldChange(event, "salesInvoiceNo")
                                     }
@@ -1465,7 +1465,7 @@ export const SalesReturnCreate = ({onBooleanChange}) => {
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                                         <DatePicker
-                                            label="Sales Invoice Date:"
+                                            label="Sales Return Date:"
                                             value={saleInvoiceDate}
                                             onChange={(newValue) => setSaleInvoiceDate(newValue)}
                                         />
@@ -1473,7 +1473,7 @@ export const SalesReturnCreate = ({onBooleanChange}) => {
                                 </LocalizationProvider>
                             </Box>
                         </Box>
-                        <Box sx={{display: "flex"}}>
+                       {/* <Box sx={{display: "flex"}}>
                             <Box sx={{width: "50%", margin: "10px"}}>
                                 <TextField
                                     label="Payment Terms: "
@@ -1494,7 +1494,7 @@ export const SalesReturnCreate = ({onBooleanChange}) => {
                                     </DemoContainer>
                                 </LocalizationProvider>
                             </Box>
-                        </Box>
+                        </Box>*/}
                     </Box>
                 </Box>
                 <Box>
@@ -2242,7 +2242,7 @@ export const SalesReturnCreate = ({onBooleanChange}) => {
                                                                         </Box>
 
                                                                         <Button
-                                                                            type="submit" 
+                                                                            type="submit"
                                                                             variant="contained"
                                                                             onClick={handleForNewItemCreation}
                                                                             sx={{

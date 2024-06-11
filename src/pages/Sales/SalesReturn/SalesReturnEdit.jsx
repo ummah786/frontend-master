@@ -604,22 +604,22 @@ export const SalesReturnEdit = ({
   };
   const handleBilltoSHipToo = (event) => {
     const selectedParty = event.target.value;
-    
+
     if (!selectedParty) {
       console.error("Event target value is undefined");
       return;
     }
-  
+
     const { shippingAddress, billingAddress, mobileNumber, gstNumber } = selectedParty;
-  
+
     // If shippingAddress is undefined, set it to an empty string
     const updatedShippingAddress = shippingAddress || "";
-  
+
     setShipTo(selectedParty);
     setBillTo(selectedParty);
     setShipToAddress(updatedShippingAddress);
     setShipToFlag(false);
-  
+
     const updatedObject = {
       ...salePurchaseObject,
       billAddress: billingAddress,
@@ -627,7 +627,7 @@ export const SalesReturnEdit = ({
       gst: gstNumber,
       shipAddress: updatedShippingAddress, // Use updatedShippingAddress here
     };
-    
+
     setSalePurchaseObject(updatedObject);
   };
 
@@ -1559,7 +1559,7 @@ export const SalesReturnEdit = ({
             <Box sx={{ display: "flex" }}>
               <Box sx={{ width: "50%", margin: "10px" }}>
                 <TextField
-                  label="Sales Invoice No: "
+                  label="Sales Return No: "
                   disabled={true}
                   onChange={(event) =>
                     handleTextFieldChange(event, "salesInvoiceNo")
@@ -1571,7 +1571,7 @@ export const SalesReturnEdit = ({
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoContainer components={["DatePicker", "DatePicker"]}>
                     <DatePicker
-                      label="Sales Invoice Date:"
+                      label="Sales Return Date:"
                       value={saleInvoiceDate}
                       onChange={(newValue) => setSaleInvoiceDate(newValue)}
                     />
@@ -1579,7 +1579,7 @@ export const SalesReturnEdit = ({
                 </LocalizationProvider>
               </Box>
             </Box>
-            <Box sx={{ display: "flex" }}>
+           {/* <Box sx={{ display: "flex" }}>
               <Box sx={{ width: "50%", margin: "10px" }}>
                 <TextField
                   label="Payment Terms: "
@@ -1600,7 +1600,7 @@ export const SalesReturnEdit = ({
                   </DemoContainer>
                 </LocalizationProvider>
               </Box>
-            </Box>
+            </Box>*/}
           </Box>
         </Box>
         <Box>

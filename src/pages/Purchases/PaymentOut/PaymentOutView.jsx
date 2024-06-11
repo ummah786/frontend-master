@@ -92,7 +92,7 @@ export const PaymentOutView = ({onBooleanChange, idFlagView}) => {
               <Box>
                 <Box>
                   <Button variant="contained" onClick={handleMainView}>
-                    Payment In View
+                    Payment Out View
                   </Button>
                   <Box sx={{right: "0", float: "right"}}>
                     <ButtonGroup

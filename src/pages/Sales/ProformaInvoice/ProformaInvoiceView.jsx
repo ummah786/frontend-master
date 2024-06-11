@@ -146,7 +146,7 @@ const ProformaInvoiceView = ({ onBooleanChange, idFlagView }) => {
         <Box>
           <Box>
             <Button variant="contained" onClick={handleMainView}>
-              Sales Invoice
+              Proforma Invoice
             </Button>
             <Box sx={{ right: "0", float: "right" }}>
               <ButtonGroup variant="contained" aria-label="Basic button group">

@@ -731,7 +731,7 @@ export const DeliveryChallanCreate = ({onBooleanChange}) => {
         <Box component="form" onSubmit={handleSubmitSaleInvoiceCreate}>
             <Box sx={{maxHeight: 300}}>
                 <Box sx={{marginBottom:"10px"}}>
-                    <Button variant="contained">Sale Invoice</Button>
+                    <Button variant="contained">Delivery Challan</Button>
                     <Box
                         sx={{right: "0", float: "right", justifyContent: "space-around", margin: "10px", marginTop: "1px"}}
                     >
@@ -1119,7 +1119,7 @@ export const DeliveryChallanCreate = ({onBooleanChange}) => {
 
                                                     <Button
                                                         type="submit"
-                                                        
+
                                                         variant="contained"
                                                         onClick={handleSubmitForParty}
                                                         sx={{
@@ -1454,7 +1454,7 @@ export const DeliveryChallanCreate = ({onBooleanChange}) => {
                         <Box sx={{display: "flex"}}>
                             <Box sx={{width: "50%", margin: "10px"}}>
                                 <TextField
-                                    label="Sales Invoice No: "
+                                    label="Challan No: "
                                     onChange={(event) =>
                                         handleTextFieldChange(event, "salesInvoiceNo")
                                     }
@@ -1465,7 +1465,7 @@ export const DeliveryChallanCreate = ({onBooleanChange}) => {
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                                         <DatePicker
-                                            label="Sales Invoice Date:"
+                                            label="Challan Date:"
                                             value={saleInvoiceDate}
                                             onChange={(newValue) => setSaleInvoiceDate(newValue)}
                                         />
@@ -2242,7 +2242,7 @@ export const DeliveryChallanCreate = ({onBooleanChange}) => {
                                                                         </Box>
 
                                                                         <Button
-                                                                            type="submit" 
+                                                                            type="submit"
                                                                             variant="contained"
                                                                             onClick={handleForNewItemCreation}
                                                                             sx={{

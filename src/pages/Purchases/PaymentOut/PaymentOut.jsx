@@ -150,14 +150,14 @@ export const PaymentOut = () => {
                 <Box>
                     <Box>
                         <Box>
-                            <Button variant="contained">Payment In</Button>
+                            <Button variant="contained">Payment Out</Button>
                             <Box sx={{right: "0", float: "right"}}>
                                 <ButtonGroup
                                     variant="contained"
                                     aria-label="Basic button group"
                                 >
                                     <Button onClick={handleBooleanChange}>
-                                        Create Payment In
+                                        Create Payment Out
                                     </Button>
                                 </ButtonGroup>
                             </Box>

@@ -731,7 +731,7 @@ export const ProformaInvoiceCreate = ({onBooleanChange}) => {
         <Box component="form" onSubmit={handleSubmitSaleInvoiceCreate}>
             <Box sx={{maxHeight: 300}}>
                 <Box sx={{marginBottom:"10px"}}>
-                    <Button variant="contained">Sale Invoice</Button>
+                    <Button variant="contained">Proforma Invoice</Button>
                     <Box
                         sx={{right: "0", float: "right", justifyContent: "space-around", margin: "10px", marginTop: "1px"}}
                     >
@@ -1119,7 +1119,7 @@ export const ProformaInvoiceCreate = ({onBooleanChange}) => {
 
                                                     <Button
                                                         type="submit"
-                                                        
+
                                                         variant="contained"
                                                         onClick={handleSubmitForParty}
                                                         sx={{
@@ -1454,7 +1454,7 @@ export const ProformaInvoiceCreate = ({onBooleanChange}) => {
                         <Box sx={{display: "flex"}}>
                             <Box sx={{width: "50%", margin: "10px"}}>
                                 <TextField
-                                    label="Sales Invoice No: "
+                                    label="Proforma Invoice No: "
                                     onChange={(event) =>
                                         handleTextFieldChange(event, "salesInvoiceNo")
                                     }
@@ -1465,7 +1465,7 @@ export const ProformaInvoiceCreate = ({onBooleanChange}) => {
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                                         <DatePicker
-                                            label="Sales Invoice Date:"
+                                            label="Proforma Invoice Date:"
                                             value={saleInvoiceDate}
                                             onChange={(newValue) => setSaleInvoiceDate(newValue)}
                                         />
@@ -2242,7 +2242,7 @@ export const ProformaInvoiceCreate = ({onBooleanChange}) => {
                                                                         </Box>
 
                                                                         <Button
-                                                                            type="submit" 
+                                                                            type="submit"
                                                                             variant="contained"
                                                                             onClick={handleForNewItemCreation}
                                                                             sx={{

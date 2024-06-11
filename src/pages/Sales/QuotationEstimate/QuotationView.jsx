@@ -146,7 +146,7 @@ const QuotationView = ({ onBooleanChange, idFlagView }) => {
         <Box>
           <Box>
             <Button variant="contained" onClick={handleMainView}>
-              Sales Invoice
+              Quotation
             </Button>
             <Box sx={{ right: "0", float: "right" }}>
               <ButtonGroup variant="contained" aria-label="Basic button group">

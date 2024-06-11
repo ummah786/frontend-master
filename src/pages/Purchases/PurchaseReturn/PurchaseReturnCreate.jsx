@@ -731,7 +731,7 @@ export const PurchaseReturnCreate = ({onBooleanChange}) => {
         <Box component="form" onSubmit={handleSubmitSaleInvoiceCreate}>
             <Box sx={{maxHeight: 300}}>
                 <Box sx={{marginBottom:"10px"}}>
-                    <Button variant="contained">Sale Invoice</Button>
+                    <Button variant="contained">Purchase Return</Button>
                     <Box
                         sx={{right: "0", float: "right", justifyContent: "space-around", margin: "10px", marginTop: "1px"}}
                     >
@@ -1119,7 +1119,7 @@ export const PurchaseReturnCreate = ({onBooleanChange}) => {
 
                                                     <Button
                                                         type="submit"
-                                                        
+
                                                         variant="contained"
                                                         onClick={handleSubmitForParty}
                                                         sx={{
@@ -1454,7 +1454,7 @@ export const PurchaseReturnCreate = ({onBooleanChange}) => {
                         <Box sx={{display: "flex"}}>
                             <Box sx={{width: "50%", margin: "10px"}}>
                                 <TextField
-                                    label="Sales Invoice No: "
+                                    label="Purchase Return No: "
                                     onChange={(event) =>
                                         handleTextFieldChange(event, "salesInvoiceNo")
                                     }
@@ -1465,31 +1465,9 @@ export const PurchaseReturnCreate = ({onBooleanChange}) => {
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                                         <DatePicker
-                                            label="Sales Invoice Date:"
+                                            label="Purchase Return Date:"
                                             value={saleInvoiceDate}
                                             onChange={(newValue) => setSaleInvoiceDate(newValue)}
-                                        />
-                                    </DemoContainer>
-                                </LocalizationProvider>
-                            </Box>
-                        </Box>
-                        <Box sx={{display: "flex"}}>
-                            <Box sx={{width: "50%", margin: "10px"}}>
-                                <TextField
-                                    label="Payment Terms: "
-                                    value={salePurchaseObject.paymentTerms}
-                                    onChange={(event) =>
-                                        handleTextFieldChange(event, "paymentTerms")
-                                    }
-                                />
-                            </Box>
-                            <Box sx={{width: "50%", margin: "10px"}}>
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DemoContainer components={["DatePicker", "DatePicker"]}>
-                                        <DatePicker
-                                            label="Due Date:"
-                                            value={dueDate}
-                                            onChange={(newValue) => setDueDate(newValue)}
                                         />
                                     </DemoContainer>
                                 </LocalizationProvider>
@@ -2242,7 +2220,7 @@ export const PurchaseReturnCreate = ({onBooleanChange}) => {
                                                                         </Box>
 
                                                                         <Button
-                                                                            type="submit" 
+                                                                            type="submit"
                                                                             variant="contained"
                                                                             onClick={handleForNewItemCreation}
                                                                             sx={{

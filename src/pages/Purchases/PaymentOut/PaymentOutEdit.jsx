@@ -215,7 +215,7 @@ export const PaymentOutEdit = ({
     return <>
         <Box>
             <Box>
-                <Button variant="contained">Payment In</Button>
+                <Button variant="contained">Payment Out</Button>
                 <Box
                     sx={{
                         right: "0",
@@ -299,7 +299,7 @@ export const PaymentOutEdit = ({
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                                         <DatePicker
-                                            label="Sales Invoice Date:"
+                                            label="Payment Out Date:"
                                             value={paymentDate}
                                             fullWidth={true}
                                             onChange={(newValue) => setPaymentDate(newValue)}

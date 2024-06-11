@@ -153,59 +153,18 @@ export const Quotation = () => {
         <Box>
           <Box>
             <Box>
-              <Button variant="contained" sx={{margin: "5px"}}>Sales Return</Button>
+              <Button variant="contained" sx={{margin: "5px"}}>Quotation</Button>
               <Box sx={{ right: "0", float: "right", margin: "5px", marginRight: "10px"}}>
                 <ButtonGroup
                   variant="contained"
                   aria-label="Basic button group"
                 >
                   <Button onClick={handleBooleanChange}>
-                    Create Sales Return
+                    Create Quotation
                   </Button>
                 </ButtonGroup>
               </Box>
             </Box>
-            <Box sx={{ flexGrow: 1, padding: 2 }}>
-              <Grid container spacing={2}>
-                <Grid item xs={4}>
-                  <Paper sx={{ padding: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #ddd', marginLeft: "-10px"}}>
-                    <Box display="flex" alignItems="center">
-                      <TrendingUpIcon color="primary" />
-                      <Typography variant="h6" sx={{ marginLeft: 1 }}>Stock Value</Typography>
-                    </Box>
-                    <Box textAlign="right">
-                      <Typography variant="h5" color="textPrimary">₹ 3,952.38</Typography>
-                    </Box>
-                    <Link href="#" sx={{ marginLeft: 1 }}>🔗</Link>
-                  </Paper>
-                </Grid>
-                <Grid item xs={4}>
-                  <Paper sx={{ padding: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #ddd' }}>
-                    <Box display="flex" alignItems="center">
-                      <InventoryIcon color="warning" />
-                      <Typography variant="h6" sx={{ marginLeft: 1 }}>Low Stock</Typography>
-                    </Box>
-                    <Box textAlign="right">
-                      <Typography variant="h5" color="textPrimary">0</Typography>
-                    </Box>
-                    <Link href="#" sx={{ marginLeft: 1 }}>🔗</Link>
-                  </Paper>
-                </Grid>
-                <Grid item xs={4}>
-                  <Paper sx={{ padding: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #ddd', width: "403px"}}>
-                    <Box display="flex" alignItems="center">
-                      <ErrorIcon color="error" />
-                      <Typography variant="h6" sx={{ marginLeft: 1 }}>Items Expiring (30 days)</Typography>
-                    </Box>
-                    <Box textAlign="right">
-                      <Typography variant="h5" color="textPrimary">0</Typography>
-                    </Box>
-                    <Link href="#" sx={{ marginLeft: 1 }}>🔗</Link>
-                  </Paper>
-                </Grid>
-              </Grid>
-            </Box>
-
             <Box>
               <Box sx={{ display: "flex", width: "100%", marginLeft: "-20px", marginTop: "10px"}}>
                 <Box sx={{ width: "36%"}}>
@@ -217,7 +176,7 @@ export const Quotation = () => {
                     sx={{ height: "54px"}}
                       value={filter}
                       onChange={handleFilterChange}
-                      placeholder="Search Sale Return"
+                      placeholder="Search Quotation No"
                       inputProps={{ "aria-label": "search" }}
                     />
                   </Search>
