@@ -11,7 +11,7 @@ import {InventoryGodown} from "./pages/Stock/InventoryGodown";
 import {InventoryShop} from "./pages/Stock/InventoryShop";
 import {Expense} from "./pages/Expense/Expense";
 import {ScreenShare} from "./WebRtc/ScreenShare";
-import {Chat} from "./pages/Chat";
+import {Chat} from "./pages/ChatComponent/Chat";
 import {CashAndBank} from "./pages/CashAndBank/CashAndBank";
 import {SalesInvoice} from "./pages/Sales/SaleInvoice/SalesInvoice";
 import {PaymentIn} from "./pages/Sales/PaymentIn/PaymentIn";
