@@ -1455,6 +1455,7 @@ export const QuotationCreate = ({onBooleanChange}) => {
                             <Box sx={{width: "50%", margin: "10px"}}>
                                 <TextField
                                     label="Quotation No: "
+                                    disabled={true}
                                     onChange={(event) =>
                                         handleTextFieldChange(event, "salesInvoiceNo")
                                     }

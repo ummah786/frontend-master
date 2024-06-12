@@ -1119,7 +1119,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
 
                                                     <Button
                                                         type="submit"
-                                                        
+
                                                         variant="contained"
                                                         onClick={handleSubmitForParty}
                                                         sx={{
@@ -1455,6 +1455,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                             <Box sx={{width: "50%", margin: "10px"}}>
                                 <TextField
                                     label="Sales Invoice No: "
+                                    disabled={true}
                                     onChange={(event) =>
                                         handleTextFieldChange(event, "salesInvoiceNo")
                                     }
@@ -2242,7 +2243,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                         </Box>
 
                                                                         <Button
-                                                                            type="submit" 
+                                                                            type="submit"
                                                                             variant="contained"
                                                                             onClick={handleForNewItemCreation}
                                                                             sx={{
