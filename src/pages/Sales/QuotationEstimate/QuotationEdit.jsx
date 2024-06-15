@@ -796,7 +796,7 @@ export const QuotationEdit = ({
     salePurchaseObject["autoRoundOffMark"] = checked;
     salePurchaseObject["markFullyPaid"] = checkedMark;
 
-    salePurchaseObject["billType"] = "SALE_INVOICE";
+    salePurchaseObject["billType"] = "QUOTATION";
 
     salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
     salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
