@@ -66,12 +66,8 @@ export const DebitNote = () => {
     useEffect(() => {
         if (Array.isArray(salePurchaseUser)) {
             let filteredData = salePurchaseUser;
-
-            // Filter for billType 'SALE_INVOICE'
             filteredData = filteredData.filter((employee) => employee.billType === 'DEBIT_NOTE');
-
             if (startDate && endDate) {
-                // Filter based on the date range
                 filteredData = filteredData.filter((employee) => {
                     return (
                         formatDate(employee.salesInvoiceDate) >= formatDate(startDate) &&

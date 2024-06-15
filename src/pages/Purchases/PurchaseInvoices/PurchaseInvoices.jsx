@@ -74,7 +74,7 @@ export const PurchaseInvoices = () => {
     const handleFilterChange = (event) => {
         setFilter(event.target.value);
     };
-    PURCHASE_INVOICE
+
     useEffect(() => {
         if (Array.isArray(salePurchaseUser)) {
             let filteredData = salePurchaseUser;
