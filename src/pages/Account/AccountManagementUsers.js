@@ -255,17 +255,17 @@ export const AccountManagementUsers = () => {
                             alignItems: 'center',
                             justifyContent: 'space-between'
                         }}>
-                            <Box sx={{ display: 'flex', width: '40%', justifyContent: 'center', alignItems: 'center' }}>
+                            <Box sx={{display: 'flex', width: '40%', justifyContent: 'center', alignItems: 'center'}}>
                                 <Search>
                                     <SearchIconWrapper>
-                                        <SearchIcon />
+                                        <SearchIcon/>
                                     </SearchIconWrapper>
                                     <StyledInputBase
                                         type="text"
                                         value={filter}
                                         onChange={handleFilterChange}
                                         placeholder="Search by User Name or Mobile Number"
-                                        inputProps={{ 'aria-label': 'search' }}
+                                        inputProps={{'aria-label': 'search'}}
                                     />
                                 </Search>
                             </Box>

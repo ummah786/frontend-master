@@ -10,7 +10,6 @@ import {Party} from "./pages/Party/Party";
 import {InventoryGodown} from "./pages/Stock/InventoryGodown";
 import {InventoryShop} from "./pages/Stock/InventoryShop";
 import {Expense} from "./pages/Expense/Expense";
-import {ScreenShare} from "./WebRtc/ScreenShare";
 import {Chat} from "./pages/ChatComponent/Chat";
 import {CashAndBank} from "./pages/CashAndBank/CashAndBank";
 import {SalesInvoice} from "./pages/Sales/SaleInvoice/SalesInvoice";
@@ -81,7 +80,7 @@ export const AppContent = ({flag, handleBooleanChange, setFlag}) => {
             <Route path="/purchases/debit-note" element={<DebitNote/>}/>
 
             <Route path="/expenses" element={<Expense/>}/>
-            <Route path="/feedback" element={<ScreenShare/>}/>
+            <Route path="/feedback" element={<Feedback/>}/>
             <Route path="/attendance" element={<Attendance/>}/>
 
 

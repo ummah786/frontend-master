@@ -6,12 +6,19 @@ import store from "../src/redux/store";
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+//import {ChakraProvider} from '@chakra-ui/react'
+//import {ContextProvider} from './pages/VideoScreenAndChat/Context'
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
         <Provider store={store}>
-            <App/>
+        //    <ContextProvider>
+          //      <ChakraProvider>
+                    <App/>
+            //    </ChakraProvider>
+          //  </ContextProvider>
         </Provider>
     </React.StrictMode>
 );
