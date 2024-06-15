@@ -66,9 +66,13 @@ export const SalesReturn = () => {
     useEffect(() => {
         if (Array.isArray(salePurchaseUser)) {
             let filteredData = salePurchaseUser;
+
+            // Filter for billType 'SALE_INVOICE'
+            filteredData = filteredData.filter((employee) => employee.billType === 'SALE_RETURN');
+
             if (startDate && endDate) {
                 // Filter based on the date range
-                filteredData = salePurchaseUser.filter((employee) => {
+                filteredData = filteredData.filter((employee) => {
                     return (
                         formatDate(employee.salesInvoiceDate) >= formatDate(startDate) &&
                         formatDate(employee.salesInvoiceDate) <= formatDate(endDate)
@@ -93,41 +97,7 @@ export const SalesReturn = () => {
         }
     }, [filter, salePurchaseUser, startDate, endDate]);
     const handleCheckboxClick = (id) => {
-        const selectedIndex = selectedRows.indexOf(id);  useEffect(() => {
-        if (Array.isArray(salePurchaseUser)) {
-          let filteredData = salePurchaseUser;
-
-          // Filter for billType 'SALE_INVOICE'
-          filteredData = filteredData.filter((employee) => employee.billType === 'SALE_RETURN');
-
-          if (startDate && endDate) {
-            // Filter based on the date range
-            filteredData = filteredData.filter((employee) => {
-              return (
-                  formatDate(employee.salesInvoiceDate) >= formatDate(startDate) &&
-                  formatDate(employee.salesInvoiceDate) <= formatDate(endDate)
-              );
-            });
-          } else if (startDate) {
-            filteredData = filteredData.filter((employee) => {
-              return formatDate(employee.salesInvoiceDate) >= formatDate(startDate);
-            });
-          } else if (endDate) {
-            // Filter based on the date range
-            filteredData = filteredData.filter((employee) => {
-              return formatDate(employee.salesInvoiceDate) <= formatDate(endDate);
-            });
-          }
-
-          if (filter && filter.trim() !== "") {
-            filteredData = filteredData.filter((employee) => {
-              return String(employee.id).includes(filter);
-            });
-          }
-
-          setFilterSalePurchase(filteredData);
-        }
-      }, [filter, salePurchaseUser, startDate, endDate]);
+        const selectedIndex = selectedRows.indexOf(id);
         let newSelected = [];
         if (selectedIndex === -1) {
             newSelected = newSelected.concat(selectedRows, id);
