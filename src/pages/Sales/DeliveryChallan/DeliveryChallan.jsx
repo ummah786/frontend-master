@@ -63,35 +63,41 @@ export const DeliveryChallan = () => {
         setFilter(event.target.value);
     };
 
-    useEffect(() => {
-        if (Array.isArray(salePurchaseUser)) {
-            let filteredData = salePurchaseUser;
-            if (startDate && endDate) {
-                // Filter based on the date range
-                filteredData = salePurchaseUser.filter((employee) => {
-                    return (
-                        formatDate(employee.salesInvoiceDate) >= formatDate(startDate) &&
-                        formatDate(employee.salesInvoiceDate) <= formatDate(endDate)
-                    );
-                });
-            } else if (startDate) {
-                filteredData = salePurchaseUser.filter((employee) => {
-                    return formatDate(employee.salesInvoiceDate) >= formatDate(startDate);
-                });
-            } else if (endDate) {
-                // Filter based on the date range
-                filteredData = salePurchaseUser.filter((employee) => {
-                    return formatDate(employee.salesInvoiceDate) <= formatDate(endDate);
-                });
-            }
-            if (filter && filter.trim() !== "") {
-                filteredData = filteredData.filter((employee) => {
-                    return String(employee.id).includes(filter);
-                });
-            }
-            setFilterSalePurchase(filteredData);
-        }
-    }, [filter, salePurchaseUser, startDate, endDate]);
+  useEffect(() => {
+    if (Array.isArray(salePurchaseUser)) {
+      let filteredData = salePurchaseUser;
+
+      // Filter for billType 'SALE_INVOICE'
+      filteredData = filteredData.filter((employee) => employee.billType === 'DELIVERY_CHALLAN');
+
+      if (startDate && endDate) {
+        // Filter based on the date range
+        filteredData = filteredData.filter((employee) => {
+          return (
+              formatDate(employee.salesInvoiceDate) >= formatDate(startDate) &&
+              formatDate(employee.salesInvoiceDate) <= formatDate(endDate)
+          );
+        });
+      } else if (startDate) {
+        filteredData = filteredData.filter((employee) => {
+          return formatDate(employee.salesInvoiceDate) >= formatDate(startDate);
+        });
+      } else if (endDate) {
+        // Filter based on the date range
+        filteredData = filteredData.filter((employee) => {
+          return formatDate(employee.salesInvoiceDate) <= formatDate(endDate);
+        });
+      }
+
+      if (filter && filter.trim() !== "") {
+        filteredData = filteredData.filter((employee) => {
+          return String(employee.id).includes(filter);
+        });
+      }
+
+      setFilterSalePurchase(filteredData);
+    }
+  }, [filter, salePurchaseUser, startDate, endDate]);
     const handleCheckboxClick = (id) => {
         const selectedIndex = selectedRows.indexOf(id);
         let newSelected = [];

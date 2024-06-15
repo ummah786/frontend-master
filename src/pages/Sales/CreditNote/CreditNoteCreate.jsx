@@ -692,7 +692,7 @@ export const CreditNoteCreate = ({onBooleanChange}) => {
         salePurchaseObject["autoRoundOffMark"] = checked;
         salePurchaseObject["markFullyPaid"] = checkedMark;
 
-        salePurchaseObject["billType"] = "SALE_INVOICE";
+        salePurchaseObject["billType"] = "CREATE_NOTE";
 
         salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
         salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;

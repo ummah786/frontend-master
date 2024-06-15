@@ -58,10 +58,13 @@ export const PaymentIn = () => {
 
     useEffect(() => {
         if (Array.isArray(salePurchaseUser)) {
-            let filteredData = salePurchaseUser;
+          let filteredData = salePurchaseUser;
+
+          // Filter for billType 'SALE_INVOICE'
+          filteredData = filteredData.filter((employee) => employee.billType === 'PAYMENT_IN');
             if (startDate && endDate) {
                 // Filter based on the date range
-                filteredData = salePurchaseUser.filter((employee) => {
+                filteredData = filteredData.filter((employee) => {
                     return (
                         formatDate(employee.salesInvoiceDate) >= formatDate(startDate) &&
                         formatDate(employee.salesInvoiceDate) <= formatDate(endDate)
@@ -85,6 +88,7 @@ export const PaymentIn = () => {
             setFilterSalePurchase(filteredData);
         }
     }, [filter, salePurchaseUser, startDate, endDate]);
+
     const handleCheckboxClick = (id) => {
         const selectedIndex = selectedRows.indexOf(id);
         let newSelected = [];
