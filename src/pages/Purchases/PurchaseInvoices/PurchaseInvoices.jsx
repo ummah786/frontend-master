@@ -1,6 +1,17 @@
-import {Box, ButtonGroup, Card, CardContent, Checkbox, Grid, TableCell, TextField, Typography,Avatar} from "@mui/material";
+import {
+    Avatar,
+    Box,
+    ButtonGroup,
+    Card,
+    CardContent,
+    Checkbox,
+    Grid,
+    TableCell,
+    TextField,
+    Typography
+} from "@mui/material";
 import Table from "@mui/material/Table";
-import { Paid, LocalMall } from '@mui/icons-material';
+import {LocalMall, Paid} from '@mui/icons-material';
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
@@ -9,16 +20,14 @@ import Paper from "@mui/material/Paper";
 import SearchIcon from "@mui/icons-material/Search";
 import Button from "@mui/material/Button";
 import * as React from "react";
-
-
 import {useEffect, useState} from "react";
 import {
-  formatDate,
-  Search,
-  SearchIconWrapper,
-  StyledInputBase,
-  StyledTableCell,
-  StyledTableRow,
+    formatDate,
+    Search,
+    SearchIconWrapper,
+    StyledInputBase,
+    StyledTableCell,
+    StyledTableRow,
 } from "../../../commonStyle";
 import ArticleIcon from "@mui/icons-material/Article";
 import IconButton from "@mui/material/IconButton";
@@ -65,33 +74,39 @@ export const PurchaseInvoices = () => {
     const handleFilterChange = (event) => {
         setFilter(event.target.value);
     };
-
+    PURCHASE_INVOICE
     useEffect(() => {
         if (Array.isArray(salePurchaseUser)) {
             let filteredData = salePurchaseUser;
+
+            // Filter for billType 'SALE_INVOICE'
+            filteredData = filteredData.filter((employee) => employee.billType === 'PURCHASE_INVOICE');
+
             if (startDate && endDate) {
                 // Filter based on the date range
-                filteredData = salePurchaseUser.filter((employee) => {
+                filteredData = filteredData.filter((employee) => {
                     return (
                         formatDate(employee.salesInvoiceDate) >= formatDate(startDate) &&
                         formatDate(employee.salesInvoiceDate) <= formatDate(endDate)
                     );
                 });
             } else if (startDate) {
-                filteredData = salePurchaseUser.filter((employee) => {
+                filteredData = filteredData.filter((employee) => {
                     return formatDate(employee.salesInvoiceDate) >= formatDate(startDate);
                 });
             } else if (endDate) {
                 // Filter based on the date range
-                filteredData = salePurchaseUser.filter((employee) => {
+                filteredData = filteredData.filter((employee) => {
                     return formatDate(employee.salesInvoiceDate) <= formatDate(endDate);
                 });
             }
+
             if (filter && filter.trim() !== "") {
                 filteredData = filteredData.filter((employee) => {
                     return String(employee.id).includes(filter);
                 });
             }
+
             setFilterSalePurchase(filteredData);
         }
     }, [filter, salePurchaseUser, startDate, endDate]);
@@ -199,7 +214,7 @@ export const PurchaseInvoices = () => {
                                         <CardContent>
                                             <Box display="flex" alignItems="center">
                                                 <Avatar sx={{bgcolor: '#ffebee', marginRight: 1}}>
-                                                   {/* <Unpaid/>*/}
+                                                    {/* <Unpaid/>*/}
                                                 </Avatar>
                                                 <Typography variant="subtitle1" color="textSecondary">
                                                     Unpaid

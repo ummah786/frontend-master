@@ -21,11 +21,11 @@ import axios from "axios";
 import {addSalePurchase} from "../../../redux/Action";
 
 export const PaymentOutEdit = ({
-                                  onBooleanChange,
-                                  idFlagView,
-                                  editFlag,
-                                  filterSalePurchase,
-                              }) => {
+                                   onBooleanChange,
+                                   idFlagView,
+                                   editFlag,
+                                   filterSalePurchase,
+                               }) => {
     console.log("values  ", idFlagView, editFlag, filterSalePurchase);
     useEffect(() => {
         setPaymentAmount(filterSalePurchase.amountSettled);
@@ -66,7 +66,7 @@ export const PaymentOutEdit = ({
         salePurchaseObject["items"] = JSON.stringify(salePurchaseObjectResponse);
         salePurchaseObject["amountSettled"] = paymentAmount;
         salePurchaseObject["invoiceAmount"] = totalSelectedPartyAmount;
-        salePurchaseObject["billType"] = "PAYMENT_IN";
+        salePurchaseObject["billType"] = "PAYMENT_OUT";
         salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
         salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
 

@@ -692,7 +692,7 @@ export const PurchaseReturnCreate = ({onBooleanChange}) => {
         salePurchaseObject["autoRoundOffMark"] = checked;
         salePurchaseObject["markFullyPaid"] = checkedMark;
 
-        salePurchaseObject["billType"] = "SALE_INVOICE";
+        salePurchaseObject["billType"] = "PURCHASE_RETURN";
 
         salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
         salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
@@ -730,21 +730,28 @@ export const PurchaseReturnCreate = ({onBooleanChange}) => {
     return (
         <Box component="form" onSubmit={handleSubmitSaleInvoiceCreate}>
             <Box sx={{maxHeight: 300}}>
-                <Box sx={{marginBottom:"10px"}}>
+                <Box sx={{marginBottom: "10px"}}>
                     <Button variant="contained">Purchase Return</Button>
                     <Box
-                        sx={{right: "0", float: "right", justifyContent: "space-around", margin: "10px", marginTop: "1px"}}
+                        sx={{
+                            right: "0",
+                            float: "right",
+                            justifyContent: "space-around",
+                            margin: "10px",
+                            marginTop: "1px"
+                        }}
                     >
-                            <Button variant="contained" onClick={onBooleanChange} sx={{marginRight: "40px", marginLeft: "-105px"}}>Cancel</Button>
-                            <Button
+                        <Button variant="contained" onClick={onBooleanChange}
+                                sx={{marginRight: "40px", marginLeft: "-105px"}}>Cancel</Button>
+                        <Button
                             sx={{marginRight: "10px", marginTop: "-60px"}}
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                onClick={handleSubmitSaleInvoiceCreate}
-                            >
-                                Save
-                            </Button>
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            onClick={handleSubmitSaleInvoiceCreate}
+                        >
+                            Save
+                        </Button>
                     </Box>
                 </Box>
 
@@ -878,7 +885,8 @@ export const PurchaseReturnCreate = ({onBooleanChange}) => {
                                                         marginTop: "5px"
                                                     }}
                                                 >
-                                                    <Typography component="h1" variant="h5" padding="7px" paddingBottom="10px" textColor={"common.black"}>
+                                                    <Typography component="h1" variant="h5" padding="7px"
+                                                                paddingBottom="10px" textColor={"common.black"}>
                                                         Add New Party
                                                     </Typography>
                                                     <ModalClose
@@ -891,7 +899,7 @@ export const PurchaseReturnCreate = ({onBooleanChange}) => {
                                                     />
                                                 </Box>
                                                 <Box component="form" onSubmit={handleSubmitForParty}>
-                                                    <Box  sx={{marginTop: "5px"}}>
+                                                    <Box sx={{marginTop: "5px"}}>
                                                         <TextField
                                                             id="outlined-basic"
                                                             label="Name"
@@ -1053,7 +1061,10 @@ export const PurchaseReturnCreate = ({onBooleanChange}) => {
                                                                             <TextField
                                                                                 margin="normal"
                                                                                 required
-                                                                                sx={{width: "300px", marginLeft: "185px"}}
+                                                                                sx={{
+                                                                                    width: "300px",
+                                                                                    marginLeft: "185px"
+                                                                                }}
                                                                                 id="Category"
                                                                                 label="Categroy"
                                                                                 name="Category"
@@ -1080,7 +1091,10 @@ export const PurchaseReturnCreate = ({onBooleanChange}) => {
                                                                             >
                                                                                 Submit
                                                                             </Button>
-                                                                            <List sx={{maxWidth: 300, marginLeft: "185px"}}>
+                                                                            <List sx={{
+                                                                                maxWidth: 300,
+                                                                                marginLeft: "185px"
+                                                                            }}>
                                                                                 {addCategory.length > 0 ? (
                                                                                     addCategory.map((item, index) => (
                                                                                         <ListItem
@@ -1306,7 +1320,8 @@ export const PurchaseReturnCreate = ({onBooleanChange}) => {
                                                                         marginTop: "7px"
                                                                     }}
                                                                 >
-                                                                    <Typography component="h1" variant="h5" sx={{padding: "7px"}}>
+                                                                    <Typography component="h1" variant="h5"
+                                                                                sx={{padding: "7px"}}>
                                                                         Edit Shipping Address
                                                                     </Typography>
                                                                     <ModalClose
@@ -1737,7 +1752,8 @@ export const PurchaseReturnCreate = ({onBooleanChange}) => {
                                                                             borderWidth: "2px",
                                                                         }}
                                                                     >
-                                                                        <Typography component="h1" variant="h5" padding={1}>
+                                                                        <Typography component="h1" variant="h5"
+                                                                                    padding={1}>
                                                                             Add New Items
                                                                         </Typography>
                                                                         <ModalClose
@@ -1978,7 +1994,10 @@ export const PurchaseReturnCreate = ({onBooleanChange}) => {
                                                                                                 <TextField
                                                                                                     margin="normal"
                                                                                                     required
-                                                                                                    sx={{width: "300px", marginLeft: "187px"}}
+                                                                                                    sx={{
+                                                                                                        width: "300px",
+                                                                                                        marginLeft: "187px"
+                                                                                                    }}
                                                                                                     id="Category"
                                                                                                     label="Category"
                                                                                                     name="Category"
@@ -2010,7 +2029,10 @@ export const PurchaseReturnCreate = ({onBooleanChange}) => {
                                                                                                     Submit
                                                                                                 </Button>
                                                                                                 <List
-                                                                                                    sx={{maxWidth: 300, marginLeft: "260px"}}>
+                                                                                                    sx={{
+                                                                                                        maxWidth: 300,
+                                                                                                        marginLeft: "260px"
+                                                                                                    }}>
                                                                                                     {addCategory.length > 0 ? (
                                                                                                         addCategory.map(
                                                                                                             (item, index) => (
@@ -2119,7 +2141,10 @@ export const PurchaseReturnCreate = ({onBooleanChange}) => {
                                                                                                 <TextField
                                                                                                     margin="normal"
                                                                                                     required
-                                                                                                    sx={{width: "300px", marginLeft: "190px"}}
+                                                                                                    sx={{
+                                                                                                        width: "300px",
+                                                                                                        marginLeft: "190px"
+                                                                                                    }}
                                                                                                     id="Category"
                                                                                                     label="Category"
                                                                                                     name="Category"
@@ -2151,7 +2176,10 @@ export const PurchaseReturnCreate = ({onBooleanChange}) => {
                                                                                                     Submit
                                                                                                 </Button>
                                                                                                 <List
-                                                                                                    sx={{maxWidth: 300, marginLeft: "270px"}}>
+                                                                                                    sx={{
+                                                                                                        maxWidth: 300,
+                                                                                                        marginLeft: "270px"
+                                                                                                    }}>
                                                                                                     {addCategory.length > 0 ? (
                                                                                                         addCategory.map(
                                                                                                             (item, index) => (
