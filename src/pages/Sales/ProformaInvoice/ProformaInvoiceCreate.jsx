@@ -97,10 +97,10 @@ export const ProformaInvoiceCreate = ({onBooleanChange}) => {
     const [rValues, setRValues] = useState([]);
     const [rRates, setRRates] = useState([]);
     const dispatch = useDispatch();
-    const [saleInvoiceDate, setSaleInvoiceDate] = React.useState(
+    const [proformaDate, setProformaDate] = React.useState(
         dayjs("2024-01-01")
     );
-    const [dueDate, setDueDate] = React.useState(dayjs("2024-01-01"));
+    const [proformaExpireDate, setProformaExpireDate] = React.useState(dayjs("2024-01-01"));
 
     useEffect(() => {
     }, [partyUser, billTo]);
@@ -679,8 +679,8 @@ export const ProformaInvoiceCreate = ({onBooleanChange}) => {
         e.preventDefault();
         salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
         salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
-        salePurchaseObject["salesInvoiceDate"] = saleInvoiceDate;
-        salePurchaseObject["salesDueDate"] = dueDate;
+        salePurchaseObject["proformaDate"] = proformaDate;
+        salePurchaseObject["proformaExpireDate"] = proformaExpireDate;
         salePurchaseObject["totalAmount"] = totalAmountTableOperation;
         salePurchaseObject["addAdditionalCharges"] = JSON.stringify(fields);
 
@@ -1471,9 +1471,9 @@ export const ProformaInvoiceCreate = ({onBooleanChange}) => {
                                 <TextField
                                     label="Proforma Invoice No: "
                                     onChange={(event) =>
-                                        handleTextFieldChange(event, "salesInvoiceNo")
+                                        handleTextFieldChange(event, "proformaNo")
                                     }
-                                    value={salePurchaseObject.salesInvoiceNo}
+                                    value={salePurchaseObject.proformaNo}
                                 />
                             </Box>
                             <Box sx={{width: "50%", margin: "10px"}}>
@@ -1481,8 +1481,8 @@ export const ProformaInvoiceCreate = ({onBooleanChange}) => {
                                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                                         <DatePicker
                                             label="Proforma Invoice Date:"
-                                            value={saleInvoiceDate}
-                                            onChange={(newValue) => setSaleInvoiceDate(newValue)}
+                                            value={proformaDate}
+                                            onChange={(newValue) => setProformaDate(newValue)}
                                         />
                                     </DemoContainer>
                                 </LocalizationProvider>
@@ -1502,9 +1502,9 @@ export const ProformaInvoiceCreate = ({onBooleanChange}) => {
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                                         <DatePicker
-                                            label="Due Date:"
-                                            value={dueDate}
-                                            onChange={(newValue) => setDueDate(newValue)}
+                                            label="Expire Date:"
+                                            value={proformaExpireDate}
+                                            onChange={(newValue) => setProformaExpireDate(newValue)}
                                         />
                                     </DemoContainer>
                                 </LocalizationProvider>

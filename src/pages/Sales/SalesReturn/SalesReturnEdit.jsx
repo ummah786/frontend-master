@@ -123,7 +123,7 @@ export const SalesReturnEdit = ({
     const [rValues, setRValues] = useState([]);
     const [rRates, setRRates] = useState([]);
     const dispatch = useDispatch();
-    const [saleInvoiceDate, setSaleInvoiceDate] = React.useState(
+    const [salesReturnDate, setSalesReturnDate] = React.useState(
         dayjs("2024-01-01")
     );
     const [dueDate, setDueDate] = React.useState(dayjs("2024-01-01"));
@@ -160,7 +160,7 @@ export const SalesReturnEdit = ({
             }
             if (filteredResponse.salesInvoiceDate) {
                 const parsedDate = dayjs(filteredResponse.salesInvoiceDate);
-                setSaleInvoiceDate(parsedDate);
+                setSalesReturnDate(parsedDate);
             }
             if (filteredResponse.salesDueDate) {
                 const parsedDate = dayjs(filteredResponse.salesDueDate);
@@ -771,8 +771,7 @@ export const SalesReturnEdit = ({
         e.preventDefault();
         salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
         salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
-        salePurchaseObject["salesInvoiceDate"] = saleInvoiceDate;
-        salePurchaseObject["salesDueDate"] = dueDate;
+        salePurchaseObject["salesReturnDate"] = salesReturnDate;
         salePurchaseObject["totalAmount"] = totalAmountTableOperation;
         salePurchaseObject["addAdditionalCharges"] = JSON.stringify(fields);
 
@@ -1550,9 +1549,9 @@ export const SalesReturnEdit = ({
                                     label="Sales Return No: "
                                     disabled={true}
                                     onChange={(event) =>
-                                        handleTextFieldChange(event, "salesInvoiceNo")
+                                        handleTextFieldChange(event, "salesReturnNo")
                                     }
-                                    value={salePurchaseObject.id}
+                                    value={salePurchaseObject.salesReturnNo}
                                 />
                             </Box>
                             <Box sx={{width: "50%", margin: "10px"}}>
@@ -1560,8 +1559,8 @@ export const SalesReturnEdit = ({
                                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                                         <DatePicker
                                             label="Sales Return Date:"
-                                            value={saleInvoiceDate}
-                                            onChange={(newValue) => setSaleInvoiceDate(newValue)}
+                                            value={salesReturnDate}
+                                            onChange={(newValue) => setSalesReturnDate(newValue)}
                                         />
                                     </DemoContainer>
                                 </LocalizationProvider>

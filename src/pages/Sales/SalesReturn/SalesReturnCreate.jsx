@@ -97,7 +97,7 @@ export const SalesReturnCreate = ({onBooleanChange}) => {
     const [rValues, setRValues] = useState([]);
     const [rRates, setRRates] = useState([]);
     const dispatch = useDispatch();
-    const [saleInvoiceDate, setSaleInvoiceDate] = React.useState(
+    const [salesReturnDate, setSalesReturnDate] = React.useState(
         dayjs("2024-01-01")
     );
     const [dueDate, setDueDate] = React.useState(dayjs("2024-01-01"));
@@ -679,8 +679,8 @@ export const SalesReturnCreate = ({onBooleanChange}) => {
         e.preventDefault();
         salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
         salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
-        salePurchaseObject["salesInvoiceDate"] = saleInvoiceDate;
-        salePurchaseObject["salesDueDate"] = dueDate;
+        salePurchaseObject["salesReturnDate"] = salesReturnDate;
+
         salePurchaseObject["totalAmount"] = totalAmountTableOperation;
         salePurchaseObject["addAdditionalCharges"] = JSON.stringify(fields);
 
@@ -1471,9 +1471,9 @@ export const SalesReturnCreate = ({onBooleanChange}) => {
                                 <TextField
                                     label="Sales Return No: "
                                     onChange={(event) =>
-                                        handleTextFieldChange(event, "salesInvoiceNo")
+                                        handleTextFieldChange(event, "salesReturnNo")
                                     }
-                                    value={salePurchaseObject.salesInvoiceNo}
+                                    value={salePurchaseObject.salesReturnNo}
                                 />
                             </Box>
                             <Box sx={{width: "50%", margin: "10px"}}>
@@ -1481,8 +1481,8 @@ export const SalesReturnCreate = ({onBooleanChange}) => {
                                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                                         <DatePicker
                                             label="Sales Return Date:"
-                                            value={saleInvoiceDate}
-                                            onChange={(newValue) => setSaleInvoiceDate(newValue)}
+                                            value={salesReturnDate}
+                                            onChange={(newValue) => setSalesReturnDate(newValue)}
                                         />
                                     </DemoContainer>
                                 </LocalizationProvider>

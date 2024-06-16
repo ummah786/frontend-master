@@ -123,10 +123,9 @@ export const CreditNoteEdit = ({
     const [rValues, setRValues] = useState([]);
     const [rRates, setRRates] = useState([]);
     const dispatch = useDispatch();
-    const [saleInvoiceDate, setSaleInvoiceDate] = React.useState(
+    const [creditNoteDate, setCreditNoteDate] = React.useState(
         dayjs("2024-01-01")
     );
-    const [dueDate, setDueDate] = React.useState(dayjs("2024-01-01"));
 
     const [doubleCheckedForCheckMar, setDoubleCheckedForCheckMar] =
         useState(false);
@@ -160,7 +159,7 @@ export const CreditNoteEdit = ({
             }
             if (filteredResponse.salesInvoiceDate) {
                 const parsedDate = dayjs(filteredResponse.salesInvoiceDate);
-                setSaleInvoiceDate(parsedDate);
+                setCreditNoteDate(parsedDate);
             }
             if (filteredResponse.salesDueDate) {
                 const parsedDate = dayjs(filteredResponse.salesDueDate);
@@ -771,8 +770,7 @@ export const CreditNoteEdit = ({
         e.preventDefault();
         salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
         salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
-        salePurchaseObject["salesInvoiceDate"] = saleInvoiceDate;
-        salePurchaseObject["salesDueDate"] = dueDate;
+        salePurchaseObject["creditNoteDate"] = creditNoteDate;
         salePurchaseObject["totalAmount"] = totalAmountTableOperation;
         salePurchaseObject["addAdditionalCharges"] = JSON.stringify(fields);
 
@@ -1550,9 +1548,9 @@ export const CreditNoteEdit = ({
                                     label="Credit Note No: "
                                     disabled={true}
                                     onChange={(event) =>
-                                        handleTextFieldChange(event, "salesInvoiceNo")
+                                        handleTextFieldChange(event, "creditNoteNo")
                                     }
-                                    value={salePurchaseObject.id}
+                                    value={salePurchaseObject.creditNoteNo}
                                 />
                             </Box>
                             <Box sx={{width: "50%", margin: "10px"}}>
@@ -1560,8 +1558,8 @@ export const CreditNoteEdit = ({
                                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                                         <DatePicker
                                             label="Credit Note Date:"
-                                            value={saleInvoiceDate}
-                                            onChange={(newValue) => setSaleInvoiceDate(newValue)}
+                                            value={creditNoteDate}
+                                            onChange={(newValue) => setCreditNoteDate(newValue)}
                                         />
                                     </DemoContainer>
                                 </LocalizationProvider>

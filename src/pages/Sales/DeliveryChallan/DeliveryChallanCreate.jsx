@@ -97,10 +97,10 @@ export const DeliveryChallanCreate = ({onBooleanChange}) => {
     const [rValues, setRValues] = useState([]);
     const [rRates, setRRates] = useState([]);
     const dispatch = useDispatch();
-    const [saleInvoiceDate, setSaleInvoiceDate] = React.useState(
+    const [deliveryDate, setDeliveryDate] = React.useState(
         dayjs("2024-01-01")
     );
-    const [dueDate, setDueDate] = React.useState(dayjs("2024-01-01"));
+    const [deliveryDueDate, setDeliveryDueDate] = React.useState(dayjs("2024-01-01"));
 
     useEffect(() => {
     }, [partyUser, billTo]);
@@ -679,8 +679,8 @@ export const DeliveryChallanCreate = ({onBooleanChange}) => {
         e.preventDefault();
         salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
         salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
-        salePurchaseObject["salesInvoiceDate"] = saleInvoiceDate;
-        salePurchaseObject["salesDueDate"] = dueDate;
+        salePurchaseObject["deliveryDate"] = deliveryDate;
+        salePurchaseObject["deliveryDueDate"] = deliveryDueDate;
         salePurchaseObject["totalAmount"] = totalAmountTableOperation;
         salePurchaseObject["addAdditionalCharges"] = JSON.stringify(fields);
 
@@ -1471,9 +1471,9 @@ export const DeliveryChallanCreate = ({onBooleanChange}) => {
                                 <TextField
                                     label="Challan No: "
                                     onChange={(event) =>
-                                        handleTextFieldChange(event, "salesInvoiceNo")
+                                        handleTextFieldChange(event, "deliveryNo")
                                     }
-                                    value={salePurchaseObject.salesInvoiceNo}
+                                    value={salePurchaseObject.deliveryNo}
                                 />
                             </Box>
                             <Box sx={{width: "50%", margin: "10px"}}>
@@ -1481,8 +1481,8 @@ export const DeliveryChallanCreate = ({onBooleanChange}) => {
                                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                                         <DatePicker
                                             label="Challan Date:"
-                                            value={saleInvoiceDate}
-                                            onChange={(newValue) => setSaleInvoiceDate(newValue)}
+                                            value={deliveryDate}
+                                            onChange={(newValue) => setDeliveryDate(newValue)}
                                         />
                                     </DemoContainer>
                                 </LocalizationProvider>
@@ -1503,8 +1503,8 @@ export const DeliveryChallanCreate = ({onBooleanChange}) => {
                                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                                         <DatePicker
                                             label="Due Date:"
-                                            value={dueDate}
-                                            onChange={(newValue) => setDueDate(newValue)}
+                                            value={deliveryDueDate}
+                                            onChange={(newValue) => setDeliveryDueDate(newValue)}
                                         />
                                     </DemoContainer>
                                 </LocalizationProvider>

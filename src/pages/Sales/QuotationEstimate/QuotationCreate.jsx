@@ -97,7 +97,7 @@ export const QuotationCreate = ({onBooleanChange}) => {
     const [rValues, setRValues] = useState([]);
     const [rRates, setRRates] = useState([]);
     const dispatch = useDispatch();
-    const [saleInvoiceDate, setSaleInvoiceDate] = React.useState(
+    const [quotationDate, setQuotationDate] = React.useState(
         dayjs("2024-01-01")
     );
     const [dueDate, setDueDate] = React.useState(dayjs("2024-01-01"));
@@ -679,8 +679,8 @@ export const QuotationCreate = ({onBooleanChange}) => {
         e.preventDefault();
         salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
         salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
-        salePurchaseObject["salesInvoiceDate"] = saleInvoiceDate;
-        salePurchaseObject["salesDueDate"] = dueDate;
+        salePurchaseObject["quotationDate"] = quotationDate;
+        //salePurchaseObject["salesDueDate"] = dueDate;
         salePurchaseObject["totalAmount"] = totalAmountTableOperation;
         salePurchaseObject["addAdditionalCharges"] = JSON.stringify(fields);
 
@@ -1457,9 +1457,9 @@ export const QuotationCreate = ({onBooleanChange}) => {
                                     label="Quotation No: "
                                     disabled={true}
                                     onChange={(event) =>
-                                        handleTextFieldChange(event, "salesInvoiceNo")
+                                        handleTextFieldChange(event, "quotationNo")
                                     }
-                                    value={salePurchaseObject.salesInvoiceNo}
+                                    value={salePurchaseObject.quotationNo}
                                 />
                             </Box>
                             <Box sx={{width: "50%", margin: "10px"}}>
@@ -1467,8 +1467,8 @@ export const QuotationCreate = ({onBooleanChange}) => {
                                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                                         <DatePicker
                                             label="Quotation Date:"
-                                            value={saleInvoiceDate}
-                                            onChange={(newValue) => setSaleInvoiceDate(newValue)}
+                                            value={quotationDate}
+                                            onChange={(newValue) => setQuotationDate(newValue)}
                                         />
                                     </DemoContainer>
                                 </LocalizationProvider>

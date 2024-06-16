@@ -123,10 +123,11 @@ export const ProformaInvoiceEdit = ({
     const [rValues, setRValues] = useState([]);
     const [rRates, setRRates] = useState([]);
     const dispatch = useDispatch();
-    const [saleInvoiceDate, setSaleInvoiceDate] = React.useState(
+    const [proformaDate, setProformaDate] = React.useState(
         dayjs("2024-01-01")
     );
-    const [dueDate, setDueDate] = React.useState(dayjs("2024-01-01"));
+    const [proformaExpireDate, setProformaExpireDate] = React.useState(dayjs("2024-01-01"));
+
 
     const [doubleCheckedForCheckMar, setDoubleCheckedForCheckMar] =
         useState(false);
@@ -771,8 +772,8 @@ export const ProformaInvoiceEdit = ({
         e.preventDefault();
         salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
         salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
-        salePurchaseObject["salesInvoiceDate"] = saleInvoiceDate;
-        salePurchaseObject["salesDueDate"] = dueDate;
+        salePurchaseObject["proformaDate"] = proformaDate;
+        salePurchaseObject["proformaExpireDate"] = proformaExpireDate;
         salePurchaseObject["totalAmount"] = totalAmountTableOperation;
         salePurchaseObject["addAdditionalCharges"] = JSON.stringify(fields);
 
@@ -1550,9 +1551,9 @@ export const ProformaInvoiceEdit = ({
                                     label="Proforma Invoice No: "
                                     disabled={true}
                                     onChange={(event) =>
-                                        handleTextFieldChange(event, "salesInvoiceNo")
+                                        handleTextFieldChange(event, "proformaNo")
                                     }
-                                    value={salePurchaseObject.id}
+                                    value={salePurchaseObject.proformaNo}
                                 />
                             </Box>
                             <Box sx={{width: "50%", margin: "10px"}}>
@@ -1560,8 +1561,8 @@ export const ProformaInvoiceEdit = ({
                                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                                         <DatePicker
                                             label="Proforma Invoice Date:"
-                                            value={saleInvoiceDate}
-                                            onChange={(newValue) => setSaleInvoiceDate(newValue)}
+                                            value={proformaDate}
+                                            onChange={(newValue) => setProformaDate(newValue)}
                                         />
                                     </DemoContainer>
                                 </LocalizationProvider>
@@ -1582,8 +1583,8 @@ export const ProformaInvoiceEdit = ({
                                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                                         <DatePicker
                                             label="Due Date:"
-                                            value={dueDate}
-                                            onChange={(newValue) => setDueDate(newValue)}
+                                            value={proformaExpireDate}
+                                            onChange={(newValue) => setProformaExpireDate(newValue)}
                                         />
                                     </DemoContainer>
                                 </LocalizationProvider>
