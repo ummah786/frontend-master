@@ -123,7 +123,7 @@ export const PurchaseReturnEdit = ({
     const [rValues, setRValues] = useState([]);
     const [rRates, setRRates] = useState([]);
     const dispatch = useDispatch();
-    const [saleInvoiceDate, setSaleInvoiceDate] = React.useState(
+    const [purchaseReturnDate, setPurchaseReturnDate] = React.useState(
         dayjs("2024-01-01")
     );
     const [dueDate, setDueDate] = React.useState(dayjs("2024-01-01"));
@@ -160,7 +160,7 @@ export const PurchaseReturnEdit = ({
             }
             if (filteredResponse.salesInvoiceDate) {
                 const parsedDate = dayjs(filteredResponse.salesInvoiceDate);
-                setSaleInvoiceDate(parsedDate);
+                setPurchaseReturnDate(parsedDate);
             }
             if (filteredResponse.salesDueDate) {
                 const parsedDate = dayjs(filteredResponse.salesDueDate);
@@ -771,8 +771,8 @@ export const PurchaseReturnEdit = ({
         e.preventDefault();
         salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
         salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
-        salePurchaseObject["salesInvoiceDate"] = saleInvoiceDate;
-        salePurchaseObject["salesDueDate"] = dueDate;
+        salePurchaseObject["purchaseReturnDate"] = purchaseReturnDate;
+       // salePurchaseObject["salesDueDate"] = dueDate;
         salePurchaseObject["totalAmount"] = totalAmountTableOperation;
         salePurchaseObject["addAdditionalCharges"] = JSON.stringify(fields);
 
@@ -1550,9 +1550,9 @@ export const PurchaseReturnEdit = ({
                                     label="Purchase Return No: "
                                     disabled={true}
                                     onChange={(event) =>
-                                        handleTextFieldChange(event, "salesInvoiceNo")
+                                        handleTextFieldChange(event, "purchaseReturnNo")
                                     }
-                                    value={salePurchaseObject.id}
+                                    value={salePurchaseObject.purchaseReturnNo}
                                 />
                             </Box>
                             <Box sx={{width: "50%", margin: "10px"}}>
@@ -1560,8 +1560,8 @@ export const PurchaseReturnEdit = ({
                                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                                         <DatePicker
                                             label="Purchase Return Date:"
-                                            value={saleInvoiceDate}
-                                            onChange={(newValue) => setSaleInvoiceDate(newValue)}
+                                            value={purchaseReturnDate}
+                                            onChange={(newValue) => setPurchaseReturnDate(newValue)}
                                         />
                                     </DemoContainer>
                                 </LocalizationProvider>

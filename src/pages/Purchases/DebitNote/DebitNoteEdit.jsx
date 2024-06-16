@@ -123,7 +123,7 @@ export const DebitNoteEdit = ({
     const [rValues, setRValues] = useState([]);
     const [rRates, setRRates] = useState([]);
     const dispatch = useDispatch();
-    const [saleInvoiceDate, setSaleInvoiceDate] = React.useState(
+    const [debitNoteDate, setDebitNoteDate] = React.useState(
         dayjs("2024-01-01")
     );
     const [dueDate, setDueDate] = React.useState(dayjs("2024-01-01"));
@@ -160,7 +160,7 @@ export const DebitNoteEdit = ({
             }
             if (filteredResponse.salesInvoiceDate) {
                 const parsedDate = dayjs(filteredResponse.salesInvoiceDate);
-                setSaleInvoiceDate(parsedDate);
+                setDebitNoteDate(parsedDate);
             }
             if (filteredResponse.salesDueDate) {
                 const parsedDate = dayjs(filteredResponse.salesDueDate);
@@ -771,8 +771,8 @@ export const DebitNoteEdit = ({
         e.preventDefault();
         salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
         salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
-        salePurchaseObject["salesInvoiceDate"] = saleInvoiceDate;
-        salePurchaseObject["salesDueDate"] = dueDate;
+        salePurchaseObject["debitNoteDate"] = debitNoteDate;
+      //  salePurchaseObject["salesDueDate"] = dueDate;
         salePurchaseObject["totalAmount"] = totalAmountTableOperation;
         salePurchaseObject["addAdditionalCharges"] = JSON.stringify(fields);
 
@@ -1550,9 +1550,9 @@ export const DebitNoteEdit = ({
                                     label="Debit Note No: "
                                     disabled={true}
                                     onChange={(event) =>
-                                        handleTextFieldChange(event, "salesInvoiceNo")
+                                        handleTextFieldChange(event, "debitNoteNo")
                                     }
-                                    value={salePurchaseObject.id}
+                                    value={salePurchaseObject.debitNoteNo}
                                 />
                             </Box>
                             <Box sx={{width: "50%", margin: "10px"}}>
@@ -1560,8 +1560,8 @@ export const DebitNoteEdit = ({
                                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                                         <DatePicker
                                             label="Debit Note Date:"
-                                            value={saleInvoiceDate}
-                                            onChange={(newValue) => setSaleInvoiceDate(newValue)}
+                                            value={debitNoteDate}
+                                            onChange={(newValue) => setDebitNoteDate(newValue)}
                                         />
                                     </DemoContainer>
                                 </LocalizationProvider>

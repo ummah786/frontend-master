@@ -97,10 +97,10 @@ export const PurchaseInvoicesCreate = ({onBooleanChange}) => {
     const [rValues, setRValues] = useState([]);
     const [rRates, setRRates] = useState([]);
     const dispatch = useDispatch();
-    const [saleInvoiceDate, setSaleInvoiceDate] = React.useState(
+    const [purchaseInvDate, setPurchaseInvDate] = React.useState(
         dayjs("2024-01-01")
     );
-    const [dueDate, setDueDate] = React.useState(dayjs("2024-01-01"));
+    const [purchaseDueDate, setPurchaseDueDate] = React.useState(dayjs("2024-01-01"));
 
     useEffect(() => {
     }, [partyUser, billTo]);
@@ -679,8 +679,8 @@ export const PurchaseInvoicesCreate = ({onBooleanChange}) => {
         e.preventDefault();
         salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
         salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
-        salePurchaseObject["purchaseInvDate"] = saleInvoiceDate;
-        salePurchaseObject["purchaseDueDate"] = dueDate;
+        salePurchaseObject["purchaseInvDate"] = purchaseInvDate;
+        salePurchaseObject["purchaseDueDate"] = purchaseDueDate;
         salePurchaseObject["totalAmount"] = totalAmountTableOperation;
         salePurchaseObject["addAdditionalCharges"] = JSON.stringify(fields);
 
@@ -1473,7 +1473,7 @@ export const PurchaseInvoicesCreate = ({onBooleanChange}) => {
                                     onChange={(event) =>
                                         handleTextFieldChange(event, "purchaseInvNo")
                                     }
-                                    value={salePurchaseObject.salesInvoiceNo}
+                                    value={salePurchaseObject.purchaseInvNo}
                                 />
                             </Box>
                             <Box sx={{width: "33%", margin: "10px"}}>
@@ -1482,7 +1482,7 @@ export const PurchaseInvoicesCreate = ({onBooleanChange}) => {
                                     onChange={(event) =>
                                         handleTextFieldChange(event, "purchaseOriginalInvNo")
                                     }
-                                    value={salePurchaseObject.salesInvoiceNo}
+                                    value={salePurchaseObject.purchaseOriginalInvNo}
                                 />
                             </Box>
                             <Box sx={{width: "50%", margin: "10px"}}>
@@ -1490,8 +1490,8 @@ export const PurchaseInvoicesCreate = ({onBooleanChange}) => {
                                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                                         <DatePicker
                                             label="Purchase Invoice Date:"
-                                            value={saleInvoiceDate}
-                                            onChange={(newValue) => setSaleInvoiceDate(newValue)}
+                                            value={purchaseInvDate}
+                                            onChange={(newValue) => setPurchaseInvDate(newValue)}
                                         />
                                     </DemoContainer>
                                 </LocalizationProvider>
@@ -1512,8 +1512,8 @@ export const PurchaseInvoicesCreate = ({onBooleanChange}) => {
                                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                                         <DatePicker
                                             label="Due Date:"
-                                            value={dueDate}
-                                            onChange={(newValue) => setDueDate(newValue)}
+                                            value={purchaseDueDate}
+                                            onChange={(newValue) => setPurchaseDueDate(newValue)}
                                         />
                                     </DemoContainer>
                                 </LocalizationProvider>

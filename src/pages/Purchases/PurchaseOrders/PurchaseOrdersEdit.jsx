@@ -123,10 +123,10 @@ export const PurchaseOrdersEdit = ({
     const [rValues, setRValues] = useState([]);
     const [rRates, setRRates] = useState([]);
     const dispatch = useDispatch();
-    const [saleInvoiceDate, setSaleInvoiceDate] = React.useState(
+    const [purchaseDate, setPurchaseDate] = React.useState(
         dayjs("2024-01-01")
     );
-    const [dueDate, setDueDate] = React.useState(dayjs("2024-01-01"));
+    const [validDate, setValidDate] = React.useState(dayjs("2024-01-01"));
 
     const [doubleCheckedForCheckMar, setDoubleCheckedForCheckMar] =
         useState(false);
@@ -160,11 +160,11 @@ export const PurchaseOrdersEdit = ({
             }
             if (filteredResponse.salesInvoiceDate) {
                 const parsedDate = dayjs(filteredResponse.salesInvoiceDate);
-                setSaleInvoiceDate(parsedDate);
+                setPurchaseDate(parsedDate);
             }
             if (filteredResponse.salesDueDate) {
                 const parsedDate = dayjs(filteredResponse.salesDueDate);
-                setDueDate(parsedDate);
+                setValidDate(parsedDate);
             }
             if (filteredResponse.addAdditionalCharges) {
                 const addAdditional = JSON.parse(filteredResponse.addAdditionalCharges);
@@ -771,8 +771,8 @@ export const PurchaseOrdersEdit = ({
         e.preventDefault();
         salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
         salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
-        salePurchaseObject["salesInvoiceDate"] = saleInvoiceDate;
-        salePurchaseObject["salesDueDate"] = dueDate;
+        salePurchaseObject["purchaseDate"] = purchaseDate;
+        salePurchaseObject["validDate"] = validDate;
         salePurchaseObject["totalAmount"] = totalAmountTableOperation;
         salePurchaseObject["addAdditionalCharges"] = JSON.stringify(fields);
 
@@ -1547,21 +1547,21 @@ export const PurchaseOrdersEdit = ({
                         <Box sx={{display: "flex"}}>
                             <Box sx={{width: "50%", margin: "10px"}}>
                                 <TextField
-                                    label="PO No: "
+                                    label="Po No: "
                                     disabled={true}
                                     onChange={(event) =>
-                                        handleTextFieldChange(event, "salesInvoiceNo")
+                                        handleTextFieldChange(event, "purchaseNo")
                                     }
-                                    value={salePurchaseObject.id}
+                                    value={salePurchaseObject.purchaseNo}
                                 />
                             </Box>
                             <Box sx={{width: "50%", margin: "10px"}}>
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                                         <DatePicker
-                                            label="PO Date:"
-                                            value={saleInvoiceDate}
-                                            onChange={(newValue) => setSaleInvoiceDate(newValue)}
+                                            label="Po Date:"
+                                            value={purchaseDate}
+                                            onChange={(newValue) => setPurchaseDate(newValue)}
                                         />
                                     </DemoContainer>
                                 </LocalizationProvider>
@@ -1573,8 +1573,8 @@ export const PurchaseOrdersEdit = ({
                                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                                         <DatePicker
                                             label="Valid Date:"
-                                            value={dueDate}
-                                            onChange={(newValue) => setDueDate(newValue)}
+                                            value={validDate}
+                                            onChange={(newValue) => setValidDate(newValue)}
                                         />
                                     </DemoContainer>
                                 </LocalizationProvider>

@@ -97,10 +97,10 @@ export const PurchaseOrdersCreate = ({onBooleanChange}) => {
     const [rValues, setRValues] = useState([]);
     const [rRates, setRRates] = useState([]);
     const dispatch = useDispatch();
-    const [saleInvoiceDate, setSaleInvoiceDate] = React.useState(
+    const [purchaseDate, setPurchaseDate] = React.useState(
         dayjs("2024-01-01")
     );
-    const [dueDate, setDueDate] = React.useState(dayjs("2024-01-01"));
+    const [validDate, setValidDate] = React.useState(dayjs("2024-01-01"));
 
     useEffect(() => {
     }, [partyUser, billTo]);
@@ -679,8 +679,8 @@ export const PurchaseOrdersCreate = ({onBooleanChange}) => {
         e.preventDefault();
         salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
         salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
-        salePurchaseObject["salesInvoiceDate"] = saleInvoiceDate;
-        salePurchaseObject["salesDueDate"] = dueDate;
+        salePurchaseObject["purchaseDate"] = purchaseDate;
+        salePurchaseObject["validDate"] = validDate;
         salePurchaseObject["totalAmount"] = totalAmountTableOperation;
         salePurchaseObject["addAdditionalCharges"] = JSON.stringify(fields);
 
@@ -1469,11 +1469,11 @@ export const PurchaseOrdersCreate = ({onBooleanChange}) => {
                         <Box sx={{display: "flex"}}>
                             <Box sx={{width: "50%", margin: "10px"}}>
                                 <TextField
-                                    label="PO No: "
+                                    label="Po. No: "
                                     onChange={(event) =>
-                                        handleTextFieldChange(event, "salesInvoiceNo")
+                                        handleTextFieldChange(event, "purchaseNo")
                                     }
-                                    value={salePurchaseObject.salesInvoiceNo}
+                                    value={salePurchaseObject.purchaseNo}
                                 />
                             </Box>
                             <Box sx={{width: "50%", margin: "10px"}}>
@@ -1481,8 +1481,8 @@ export const PurchaseOrdersCreate = ({onBooleanChange}) => {
                                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                                         <DatePicker
                                             label="PO Date:"
-                                            value={saleInvoiceDate}
-                                            onChange={(newValue) => setSaleInvoiceDate(newValue)}
+                                            value={purchaseDate}
+                                            onChange={(newValue) => setPurchaseDate(newValue)}
                                         />
                                     </DemoContainer>
                                 </LocalizationProvider>
@@ -1494,8 +1494,8 @@ export const PurchaseOrdersCreate = ({onBooleanChange}) => {
                                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                                         <DatePicker
                                             label="Valid Date:"
-                                            value={dueDate}
-                                            onChange={(newValue) => setDueDate(newValue)}
+                                            value={validDate}
+                                            onChange={(newValue) => setValidDate(newValue)}
                                         />
                                     </DemoContainer>
                                 </LocalizationProvider>

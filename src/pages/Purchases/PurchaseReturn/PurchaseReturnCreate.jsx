@@ -97,7 +97,7 @@ export const PurchaseReturnCreate = ({onBooleanChange}) => {
     const [rValues, setRValues] = useState([]);
     const [rRates, setRRates] = useState([]);
     const dispatch = useDispatch();
-    const [saleInvoiceDate, setSaleInvoiceDate] = React.useState(
+    const [purchaseReturnDate, setPurchaseReturnDate] = React.useState(
         dayjs("2024-01-01")
     );
     const [dueDate, setDueDate] = React.useState(dayjs("2024-01-01"));
@@ -679,8 +679,8 @@ export const PurchaseReturnCreate = ({onBooleanChange}) => {
         e.preventDefault();
         salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
         salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
-        salePurchaseObject["salesInvoiceDate"] = saleInvoiceDate;
-        salePurchaseObject["salesDueDate"] = dueDate;
+        salePurchaseObject["purchaseReturnDate"] = purchaseReturnDate;
+       // salePurchaseObject["salesDueDate"] = dueDate;
         salePurchaseObject["totalAmount"] = totalAmountTableOperation;
         salePurchaseObject["addAdditionalCharges"] = JSON.stringify(fields);
 
@@ -694,8 +694,6 @@ export const PurchaseReturnCreate = ({onBooleanChange}) => {
 
         salePurchaseObject["billType"] = "PURCHASE_RETURN";
 
-        salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
-        salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
         salePurchaseObject["items"] = JSON.stringify(employees);
 
         //Party Information
@@ -1471,9 +1469,9 @@ export const PurchaseReturnCreate = ({onBooleanChange}) => {
                                 <TextField
                                     label="Purchase Return No: "
                                     onChange={(event) =>
-                                        handleTextFieldChange(event, "salesInvoiceNo")
+                                        handleTextFieldChange(event, "purchaseReturnNo")
                                     }
-                                    value={salePurchaseObject.salesInvoiceNo}
+                                    value={salePurchaseObject.purchaseReturnNo}
                                 />
                             </Box>
                             <Box sx={{width: "50%", margin: "10px"}}>
@@ -1481,8 +1479,8 @@ export const PurchaseReturnCreate = ({onBooleanChange}) => {
                                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                                         <DatePicker
                                             label="Purchase Return Date:"
-                                            value={saleInvoiceDate}
-                                            onChange={(newValue) => setSaleInvoiceDate(newValue)}
+                                            value={purchaseReturnDate}
+                                            onChange={(newValue) => setPurchaseReturnDate(newValue)}
                                         />
                                     </DemoContainer>
                                 </LocalizationProvider>

@@ -123,10 +123,10 @@ export const PurchaseInvoicesEdit = ({
     const [rValues, setRValues] = useState([]);
     const [rRates, setRRates] = useState([]);
     const dispatch = useDispatch();
-    const [saleInvoiceDate, setSaleInvoiceDate] = React.useState(
+    const [purchaseInvDate, setPurchaseInvDate] = React.useState(
         dayjs("2024-01-01")
     );
-    const [dueDate, setDueDate] = React.useState(dayjs("2024-01-01"));
+    const [purchaseDueDate, setPurchaseDueDate] = React.useState(dayjs("2024-01-01"));
 
     const [doubleCheckedForCheckMar, setDoubleCheckedForCheckMar] =
         useState(false);
@@ -160,11 +160,11 @@ export const PurchaseInvoicesEdit = ({
             }
             if (filteredResponse.salesInvoiceDate) {
                 const parsedDate = dayjs(filteredResponse.salesInvoiceDate);
-                setSaleInvoiceDate(parsedDate);
+                setPurchaseInvDate(parsedDate);
             }
             if (filteredResponse.salesDueDate) {
                 const parsedDate = dayjs(filteredResponse.salesDueDate);
-                setDueDate(parsedDate);
+                setPurchaseDueDate(parsedDate);
             }
             if (filteredResponse.addAdditionalCharges) {
                 const addAdditional = JSON.parse(filteredResponse.addAdditionalCharges);
@@ -771,8 +771,8 @@ export const PurchaseInvoicesEdit = ({
         e.preventDefault();
         salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
         salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
-        salePurchaseObject["salesInvoiceDate"] = saleInvoiceDate;
-        salePurchaseObject["salesDueDate"] = dueDate;
+        salePurchaseObject["purchaseInvDate"] = purchaseInvDate;
+        salePurchaseObject["purchaseDueDate"] = purchaseDueDate;
         salePurchaseObject["totalAmount"] = totalAmountTableOperation;
         salePurchaseObject["addAdditionalCharges"] = JSON.stringify(fields);
 
@@ -1545,14 +1545,22 @@ export const PurchaseInvoicesEdit = ({
                         }}
                     >
                         <Box sx={{display: "flex"}}>
-                            <Box sx={{width: "50%", margin: "10px"}}>
+                            <Box sx={{width: "33%", margin: "10px"}}>
                                 <TextField
-                                    label="Purchase Invoice No: "
-                                    disabled={true}
+                                    label="P. In No "
                                     onChange={(event) =>
-                                        handleTextFieldChange(event, "salesInvoiceNo")
+                                        handleTextFieldChange(event, "purchaseInvNo")
                                     }
-                                    value={salePurchaseObject.id}
+                                    value={salePurchaseObject.purchaseInvNo}
+                                />
+                            </Box>
+                            <Box sx={{width: "33%", margin: "10px"}}>
+                                <TextField
+                                    label="Original In No "
+                                    onChange={(event) =>
+                                        handleTextFieldChange(event, "purchaseOriginalInvNo")
+                                    }
+                                    value={salePurchaseObject.purchaseOriginalInvNo}
                                 />
                             </Box>
                             <Box sx={{width: "50%", margin: "10px"}}>
@@ -1560,8 +1568,8 @@ export const PurchaseInvoicesEdit = ({
                                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                                         <DatePicker
                                             label="Purchase Invoice Date:"
-                                            value={saleInvoiceDate}
-                                            onChange={(newValue) => setSaleInvoiceDate(newValue)}
+                                            value={purchaseInvDate}
+                                            onChange={(newValue) => setPurchaseInvDate(newValue)}
                                         />
                                     </DemoContainer>
                                 </LocalizationProvider>
@@ -1582,8 +1590,8 @@ export const PurchaseInvoicesEdit = ({
                                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                                         <DatePicker
                                             label="Due Date:"
-                                            value={dueDate}
-                                            onChange={(newValue) => setDueDate(newValue)}
+                                            value={purchaseDueDate}
+                                            onChange={(newValue) => setPurchaseDueDate(newValue)}
                                         />
                                     </DemoContainer>
                                 </LocalizationProvider>
