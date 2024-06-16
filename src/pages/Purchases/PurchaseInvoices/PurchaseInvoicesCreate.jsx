@@ -679,8 +679,8 @@ export const PurchaseInvoicesCreate = ({onBooleanChange}) => {
         e.preventDefault();
         salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
         salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
-        salePurchaseObject["salesInvoiceDate"] = saleInvoiceDate;
-        salePurchaseObject["salesDueDate"] = dueDate;
+        salePurchaseObject["purchaseInvDate"] = saleInvoiceDate;
+        salePurchaseObject["purchaseDueDate"] = dueDate;
         salePurchaseObject["totalAmount"] = totalAmountTableOperation;
         salePurchaseObject["addAdditionalCharges"] = JSON.stringify(fields);
 
@@ -1471,7 +1471,7 @@ export const PurchaseInvoicesCreate = ({onBooleanChange}) => {
                                 <TextField
                                     label="P. In No "
                                     onChange={(event) =>
-                                        handleTextFieldChange(event, "salesInvoiceNo")
+                                        handleTextFieldChange(event, "purchaseInvNo")
                                     }
                                     value={salePurchaseObject.salesInvoiceNo}
                                 />
@@ -1480,7 +1480,7 @@ export const PurchaseInvoicesCreate = ({onBooleanChange}) => {
                                 <TextField
                                     label="Original In No "
                                     onChange={(event) =>
-                                        handleTextFieldChange(event, "salesInvoiceNo")
+                                        handleTextFieldChange(event, "purchaseOriginalInvNo")
                                     }
                                     value={salePurchaseObject.salesInvoiceNo}
                                 />
