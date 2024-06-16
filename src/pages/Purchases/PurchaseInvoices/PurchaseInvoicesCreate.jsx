@@ -1467,9 +1467,18 @@ export const PurchaseInvoicesCreate = ({onBooleanChange}) => {
                         }}
                     >
                         <Box sx={{display: "flex"}}>
-                            <Box sx={{width: "50%", margin: "10px"}}>
+                            <Box sx={{width: "33%", margin: "10px"}}>
                                 <TextField
-                                    label="Purchase Invoice No: "
+                                    label="P. In No "
+                                    onChange={(event) =>
+                                        handleTextFieldChange(event, "salesInvoiceNo")
+                                    }
+                                    value={salePurchaseObject.salesInvoiceNo}
+                                />
+                            </Box>
+                            <Box sx={{width: "33%", margin: "10px"}}>
+                                <TextField
+                                    label="Original In No "
                                     onChange={(event) =>
                                         handleTextFieldChange(event, "salesInvoiceNo")
                                     }
