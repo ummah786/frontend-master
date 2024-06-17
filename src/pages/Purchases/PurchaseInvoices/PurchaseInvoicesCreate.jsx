@@ -674,11 +674,21 @@ export const PurchaseInvoicesCreate = ({onBooleanChange}) => {
         });
         setEmployees(updatedEmployees);
     };
+    const handleIncrementNumber = () => {
+        let saleInvoiceValue = 0;
+        if (Array.isArray(salePurchaseUser) && salePurchaseUser.length > 0) {
+            const filteredData = salePurchaseUser.filter((employee) => employee.billType === 'PURCHASE_INVOICE');
+            if (filteredData.length > 0) {
+                saleInvoiceValue = Math.max(...filteredData.map((employee) => employee.salesInvoiceNo));
+            }
+        }
+        return saleInvoiceValue + 1;
+    };
 
+    const [purchaseInvNo, setPurchaseInvNo] = useState(handleIncrementNumber());
     const handleSubmitSaleInvoiceCreate = async (e) => {
         e.preventDefault();
-        salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
-        salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
+        salePurchaseObject["purchaseInvNo"] = purchaseInvNo;
         salePurchaseObject["purchaseInvDate"] = purchaseInvDate;
         salePurchaseObject["purchaseDueDate"] = purchaseDueDate;
         salePurchaseObject["totalAmount"] = totalAmountTableOperation;
@@ -1470,10 +1480,11 @@ export const PurchaseInvoicesCreate = ({onBooleanChange}) => {
                             <Box sx={{width: "33%", margin: "10px"}}>
                                 <TextField
                                     label="P. In No "
+                                    disabled={true}
                                     onChange={(event) =>
                                         handleTextFieldChange(event, "purchaseInvNo")
                                     }
-                                    value={salePurchaseObject.purchaseInvNo}
+                                    value={purchaseInvNo}
                                 />
                             </Box>
                             <Box sx={{width: "33%", margin: "10px"}}>

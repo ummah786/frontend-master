@@ -673,14 +673,25 @@ export const QuotationCreate = ({onBooleanChange}) => {
             return employee;
         });
         setEmployees(updatedEmployees);
+    };    const handleIncrementNumber = () => {
+        let saleInvoiceValue = 0;
+        if (Array.isArray(salePurchaseUser) && salePurchaseUser.length > 0) {
+            const filteredData = salePurchaseUser.filter((employee) => employee.billType === 'QUOTATION');
+            if (filteredData.length > 0) {
+                saleInvoiceValue = Math.max(...filteredData.map((employee) => employee.quotationNo));
+            }
+        }
+        return saleInvoiceValue + 1;
     };
+
+    const [quotationNo, setQuotationNo] = useState(handleIncrementNumber());
 
     const handleSubmitSaleInvoiceCreate = async (e) => {
         e.preventDefault();
         salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
         salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
         salePurchaseObject["quotationDate"] = quotationDate;
-        //salePurchaseObject["salesDueDate"] = dueDate;
+        salePurchaseObject["quotationNo"] = quotationNo;
         salePurchaseObject["totalAmount"] = totalAmountTableOperation;
         salePurchaseObject["addAdditionalCharges"] = JSON.stringify(fields);
 
@@ -1459,7 +1470,7 @@ export const QuotationCreate = ({onBooleanChange}) => {
                                     onChange={(event) =>
                                         handleTextFieldChange(event, "quotationNo")
                                     }
-                                    value={salePurchaseObject.quotationNo}
+                                    value={quotationNo}
                                 />
                             </Box>
                             <Box sx={{width: "50%", margin: "10px"}}>

@@ -674,13 +674,24 @@ export const SalesReturnCreate = ({onBooleanChange}) => {
         });
         setEmployees(updatedEmployees);
     };
+    const handleIncrementNumber = () => {
+        let saleInvoiceValue = 0;
+        if (Array.isArray(salePurchaseUser) && salePurchaseUser.length > 0) {
+            const filteredData = salePurchaseUser.filter((employee) => employee.billType === 'SALE_RETURN');
+            if (filteredData.length > 0) {
+                saleInvoiceValue = Math.max(...filteredData.map((employee) => employee.salesInvoiceNo));
+            }
+        }
+        return saleInvoiceValue + 1;
+    };
 
+    const [salesReturnNo, setSalesReturnNo] = useState(handleIncrementNumber());
     const handleSubmitSaleInvoiceCreate = async (e) => {
         e.preventDefault();
         salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
         salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
         salePurchaseObject["salesReturnDate"] = salesReturnDate;
-
+        salePurchaseObject["salesReturnNo"] = salesReturnNo;
         salePurchaseObject["totalAmount"] = totalAmountTableOperation;
         salePurchaseObject["addAdditionalCharges"] = JSON.stringify(fields);
 
@@ -1470,10 +1481,11 @@ export const SalesReturnCreate = ({onBooleanChange}) => {
                             <Box sx={{width: "50%", margin: "10px"}}>
                                 <TextField
                                     label="Sales Return No: "
+                                    disabled={true}
                                     onChange={(event) =>
                                         handleTextFieldChange(event, "salesReturnNo")
                                     }
-                                    value={salePurchaseObject.salesReturnNo}
+                                    value={salesReturnNo}
                                 />
                             </Box>
                             <Box sx={{width: "50%", margin: "10px"}}>

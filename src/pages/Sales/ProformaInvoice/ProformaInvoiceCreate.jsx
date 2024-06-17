@@ -674,11 +674,22 @@ export const ProformaInvoiceCreate = ({onBooleanChange}) => {
         });
         setEmployees(updatedEmployees);
     };
+    const handleIncrementNumber = () => {
+        let saleInvoiceValue = 0;
+        if (Array.isArray(salePurchaseUser) && salePurchaseUser.length > 0) {
+            const filteredData = salePurchaseUser.filter((employee) => employee.billType === 'PROFORMA_INVOICE');
+            if (filteredData.length > 0) {
+                saleInvoiceValue = Math.max(...filteredData.map((employee) => employee.salesInvoiceNo));
+            }
+        }
+        return saleInvoiceValue + 1;
+    };
 
+    const [proformaNo, setProformaNo] = useState(handleIncrementNumber());
     const handleSubmitSaleInvoiceCreate = async (e) => {
         e.preventDefault();
-        salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
-        salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
+        salePurchaseObject["proformaNo"] = proformaNo;
+
         salePurchaseObject["proformaDate"] = proformaDate;
         salePurchaseObject["proformaExpireDate"] = proformaExpireDate;
         salePurchaseObject["totalAmount"] = totalAmountTableOperation;
@@ -1470,10 +1481,11 @@ export const ProformaInvoiceCreate = ({onBooleanChange}) => {
                             <Box sx={{width: "50%", margin: "10px"}}>
                                 <TextField
                                     label="Proforma Invoice No: "
+                                    disabled={true}
                                     onChange={(event) =>
                                         handleTextFieldChange(event, "proformaNo")
                                     }
-                                    value={salePurchaseObject.proformaNo}
+                                    value={proformaNo}
                                 />
                             </Box>
                             <Box sx={{width: "50%", margin: "10px"}}>

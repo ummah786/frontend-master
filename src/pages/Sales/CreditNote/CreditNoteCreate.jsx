@@ -674,11 +674,21 @@ export const CreditNoteCreate = ({onBooleanChange}) => {
         });
         setEmployees(updatedEmployees);
     };
+    const handleIncrementNumber = () => {
+        let saleInvoiceValue = 0;
+        if (Array.isArray(salePurchaseUser) && salePurchaseUser.length > 0) {
+            const filteredData = salePurchaseUser.filter((employee) => employee.billType === 'CREATE_NOTE');
+            if (filteredData.length > 0) {
+                saleInvoiceValue = Math.max(...filteredData.map((employee) => employee.salesInvoiceNo));
+            }
+        }
+        return saleInvoiceValue + 1;
+    };
 
+    const [creditNoteNo, setCreditNoteNo] = useState(handleIncrementNumber());
     const handleSubmitSaleInvoiceCreate = async (e) => {
         e.preventDefault();
-        salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
-        salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
+        salePurchaseObject["creditNoteNo"] = creditNoteNo;
         salePurchaseObject["creditNoteDate"] = creditNoteDate;
         salePurchaseObject["totalAmount"] = totalAmountTableOperation;
         salePurchaseObject["addAdditionalCharges"] = JSON.stringify(fields);
@@ -1469,10 +1479,11 @@ export const CreditNoteCreate = ({onBooleanChange}) => {
                             <Box sx={{width: "50%", margin: "10px"}}>
                                 <TextField
                                     label="Credit Note No: "
+                                    disabled={true}
                                     onChange={(event) =>
                                         handleTextFieldChange(event, "creditNoteNo")
                                     }
-                                    value={salePurchaseObject.creditNoteNo}
+                                    value={creditNoteNo}
                                 />
                             </Box>
                             <Box sx={{width: "50%", margin: "10px"}}>

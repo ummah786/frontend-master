@@ -101,6 +101,18 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
         dayjs("2024-01-01")
     );
     const [dueDate, setDueDate] = React.useState(dayjs("2024-01-01"));
+    const handleIncrementNumber = () => {
+        let saleInvoiceValue = 0;
+        if (Array.isArray(salePurchaseUser) && salePurchaseUser.length > 0) {
+            const filteredData = salePurchaseUser.filter((employee) => employee.billType === 'SALE_INVOICE');
+            if (filteredData.length > 0) {
+                saleInvoiceValue = Math.max(...filteredData.map((employee) => employee.salesInvoiceNo));
+            }
+        }
+        return saleInvoiceValue + 1;
+    };
+
+    const [salesInvoiceNo, setSalesInvoiceNo] = useState(handleIncrementNumber());
 
     useEffect(() => {
     }, [partyUser, billTo]);
@@ -679,6 +691,8 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
         e.preventDefault();
         salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
         salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
+
+        salePurchaseObject["salesInvoiceNo"] = salesInvoiceNo;
         salePurchaseObject["salesInvoiceDate"] = saleInvoiceDate;
         salePurchaseObject["salesDueDate"] = dueDate;
         salePurchaseObject["totalAmount"] = totalAmountTableOperation;
@@ -1459,7 +1473,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                     onChange={(event) =>
                                         handleTextFieldChange(event, "salesInvoiceNo")
                                     }
-                                    value={salePurchaseObject.salesInvoiceNo}
+                                    value={salesInvoiceNo}
                                 />
                             </Box>
                             <Box sx={{width: "50%", margin: "10px"}}>

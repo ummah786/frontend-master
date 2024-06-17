@@ -672,11 +672,21 @@ export const DebitNoteCreate = ({onBooleanChange}) => {
         });
         setEmployees(updatedEmployees);
     };
+    const handleIncrementNumber = () => {
+        let saleInvoiceValue = 0;
+        if (Array.isArray(salePurchaseUser) && salePurchaseUser.length > 0) {
+            const filteredData = salePurchaseUser.filter((employee) => employee.billType === 'DEBIT_NOTE');
+            if (filteredData.length > 0) {
+                saleInvoiceValue = Math.max(...filteredData.map((employee) => employee.salesInvoiceNo));
+            }
+        }
+        return saleInvoiceValue + 1;
+    };
 
+    const [debitNoteNo, setDebitNoteNo] = useState(handleIncrementNumber());
     const handleSubmitSaleInvoiceCreate = async (e) => {
         e.preventDefault();
-        salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
-        salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
+        salePurchaseObject["debitNoteNo"] = debitNoteNo;
         salePurchaseObject["debitNoteDate"] = debitNoteDate;
        // salePurchaseObject["salesDueDate"] = dueDate;
         salePurchaseObject["totalAmount"] = totalAmountTableOperation;
@@ -1468,10 +1478,11 @@ export const DebitNoteCreate = ({onBooleanChange}) => {
                             <Box sx={{width: "50%", margin: "10px"}}>
                                 <TextField
                                     label="Debit Note No: "
+                                    disabled={true}
                                     onChange={(event) =>
                                         handleTextFieldChange(event, "debitNoteNo")
                                     }
-                                    value={salePurchaseObject.debitNoteNo}
+                                    value={debitNoteNo}
                                 />
                             </Box>
                             <Box sx={{width: "50%", margin: "10px"}}>

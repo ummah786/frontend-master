@@ -674,11 +674,21 @@ export const DeliveryChallanCreate = ({onBooleanChange}) => {
         });
         setEmployees(updatedEmployees);
     };
+    const handleIncrementNumber = () => {
+        let saleInvoiceValue = 0;
+        if (Array.isArray(salePurchaseUser) && salePurchaseUser.length > 0) {
+            const filteredData = salePurchaseUser.filter((employee) => employee.billType === 'DELIVERY_CHALLAN');
+            if (filteredData.length > 0) {
+                saleInvoiceValue = Math.max(...filteredData.map((employee) => employee.salesInvoiceNo));
+            }
+        }
+        return saleInvoiceValue + 1;
+    };
 
+    const [deliveryNo, setDeliveryNo] = useState(handleIncrementNumber());
     const handleSubmitSaleInvoiceCreate = async (e) => {
         e.preventDefault();
-        salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
-        salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
+        salePurchaseObject["deliveryNo"] = deliveryNo;
         salePurchaseObject["deliveryDate"] = deliveryDate;
         salePurchaseObject["deliveryDueDate"] = deliveryDueDate;
         salePurchaseObject["totalAmount"] = totalAmountTableOperation;
@@ -1470,10 +1480,11 @@ export const DeliveryChallanCreate = ({onBooleanChange}) => {
                             <Box sx={{width: "50%", margin: "10px"}}>
                                 <TextField
                                     label="Challan No: "
+                                    disabled={true}
                                     onChange={(event) =>
                                         handleTextFieldChange(event, "deliveryNo")
                                     }
-                                    value={salePurchaseObject.deliveryNo}
+                                    value={deliveryNo}
                                 />
                             </Box>
                             <Box sx={{width: "50%", margin: "10px"}}>
