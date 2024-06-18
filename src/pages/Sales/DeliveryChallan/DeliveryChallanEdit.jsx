@@ -127,7 +127,7 @@ export const DeliveryChallanEdit = ({
         dayjs("2024-01-01")
     );
     const [deliveryDueDate, setDeliveryDueDate] = React.useState(dayjs("2024-01-01"));
-
+    const [dueDate, setDueDate] = React.useState(dayjs("2024-01-01"));
     const [doubleCheckedForCheckMar, setDoubleCheckedForCheckMar] =
         useState(false);
     useEffect(() => {

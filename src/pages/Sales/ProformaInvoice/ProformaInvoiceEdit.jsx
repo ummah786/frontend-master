@@ -126,6 +126,7 @@ export const ProformaInvoiceEdit = ({
     const [proformaDate, setProformaDate] = React.useState(
         dayjs("2024-01-01")
     );
+    const [dueDate, setDueDate] = React.useState(dayjs("2024-01-01"));
     const [proformaExpireDate, setProformaExpireDate] = React.useState(dayjs("2024-01-01"));
 
 
