@@ -108,7 +108,7 @@ export const InventoryShop = () => {
         inventoryObject["primary_user_id"] = loginData.primary_user_id;
         inventoryObject["secondary_user_id"] = loginData.secondary_user_id;
         const response = await axios.post(
-            "http://localhost:8700/hesabbook/inventory/save",
+            "http://api.hesabbook.in/hesabbook/inventory/save",
             inventoryObject
         );
         console.log("Submit Response :--    ", response.data);
@@ -121,7 +121,7 @@ export const InventoryShop = () => {
     async function handleDelete(id, event) {
         console.log("DELETE ID " + id);
         const response = await axios.post(
-            `http://localhost:8700/hesabbook/inventory/delete/${id}`
+            `http://api.hesabbook.in/hesabbook/inventory/delete/${id}`
         );
         console.log("Submit delete Response :--    ", response.data);
         fetchAllManageUserData();
@@ -147,7 +147,7 @@ export const InventoryShop = () => {
         const fetchData = async () => {
             try {
                 const response = await axios.get(
-                    `http://localhost:8700/hesabbook/inventory/all/${loginData.primary_user_id}`
+                    `http://api.hesabbook.in/hesabbook/inventory/all/${loginData.primary_user_id}`
                 );
                 console.log(response.data.response);
                 setInventory(response.data.response);
@@ -163,7 +163,7 @@ export const InventoryShop = () => {
         const fetchData = async () => {
             try {
                 const response = await axios.get(
-                    `http://localhost:8700/hesabbook/inventory/all/${loginData.primary_user_id}`
+                    `http://api.hesabbook.in/hesabbook/inventory/all/${loginData.primary_user_id}`
                 );
                 console.log("Party Response ", response.data.response);
                 if (response.data.code === 200) {
@@ -226,7 +226,7 @@ export const InventoryShop = () => {
         const formData = new FormData();
         formData.append("file", files);
         const response = await axios.post(
-            `http://localhost:8700/hesabbook/inventory/upload/${loginData.primary_user_id}/${loginData.secondary_user_id}`,
+            `http://api.hesabbook.in/hesabbook/inventory/upload/${loginData.primary_user_id}/${loginData.secondary_user_id}`,
             excelData
         );
         console.log("response from handleSave ", response.data);

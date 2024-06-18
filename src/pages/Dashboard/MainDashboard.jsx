@@ -22,7 +22,7 @@ export const MainDashboard = () => {
     const [fetchBusiness, setFetchBusiness] = useState([]);
     const getProductKeyValuePair = async () => {
         const response = await axios.get(
-            `http://localhost:8700/hesabbook/product/key/value/get/primary/${loginData.primary_user_id}`
+            `http://api.hesabbook.in/hesabbook/product/key/value/get/primary/${loginData.primary_user_id}`
         );
         console.log("Submit delete Response :--    ", response.data.response);
         let responseData = [];
@@ -62,7 +62,7 @@ export const MainDashboard = () => {
     const getPartyDetails = async () => {
         try {
             const response = await axios.get(
-                `http://localhost:8700/hesabbook/partner/all/${loginData.primary_user_id}`
+                `http://api.hesabbook.in/hesabbook/partner/all/${loginData.primary_user_id}`
             );
             console.log("Party Response ", response.data.response);
             if (response.data.code === 200) {
@@ -75,7 +75,7 @@ export const MainDashboard = () => {
     const getInventoryDetails = async () => {
         try {
             const response = await axios.get(
-                `http://localhost:8700/hesabbook/inventory/all/${loginData.primary_user_id}`
+                `http://api.hesabbook.in/hesabbook/inventory/all/${loginData.primary_user_id}`
             );
             if (response.data.code === 200) {
                 dispatch(addInventory(response.data.response));

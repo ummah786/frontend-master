@@ -276,7 +276,7 @@ export const SalesReturnCreate = ({onBooleanChange}) => {
         manageUserObj["primary_user_id"] = loginData.primary_user_id;
         manageUserObj["secondary_user_id"] = loginData.secondary_user_id;
         const response = await axios.post(
-            "http://localhost:8700/hesabbook/partner/save",
+            "http://api.hesabbook.in/hesabbook/partner/save",
             manageUserObj
         );
         console.log("Submit Response :--    ", response.data);
@@ -423,7 +423,7 @@ export const SalesReturnCreate = ({onBooleanChange}) => {
         inventoryObject["primary_user_id"] = loginData.primary_user_id;
         inventoryObject["secondary_user_id"] = loginData.secondary_user_id;
         const response = await axios.post(
-            "http://localhost:8700/hesabbook/inventory/save",
+            "http://api.hesabbook.in/hesabbook/inventory/save",
             inventoryObject
         );
         console.log("Submit Response :--    ", response.data);
@@ -719,7 +719,7 @@ export const SalesReturnCreate = ({onBooleanChange}) => {
 
         console.log("Sale Purchase Object ", salePurchaseObject);
         const response = await axios.post(
-            "http://localhost:8700/hesabbook/sale/purchase/save",
+            "http://api.hesabbook.in/hesabbook/sale/purchase/save",
             salePurchaseObject
         );
         console.log("Response   ", response);
