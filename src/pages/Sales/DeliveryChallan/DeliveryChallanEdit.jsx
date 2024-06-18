@@ -126,6 +126,9 @@ export const DeliveryChallanEdit = ({
     const [deliveryDate, setDeliveryDate] = React.useState(
         dayjs("2024-01-01")
     );
+    const [saleInvoiceDate, setSaleInvoiceDate] = React.useState(
+        dayjs("2024-01-01")
+    );
     const [deliveryDueDate, setDeliveryDueDate] = React.useState(dayjs("2024-01-01"));
     const [dueDate, setDueDate] = React.useState(dayjs("2024-01-01"));
     const [doubleCheckedForCheckMar, setDoubleCheckedForCheckMar] =
