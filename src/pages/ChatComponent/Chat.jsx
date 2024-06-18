@@ -59,7 +59,7 @@ export const Chat = () => {
     }, [partyUser]);
 
     useEffect(() => {
-        const socket = new SockJS("http://localhost:8700/webrtc");
+        const socket = new SockJS("http://api.hesabbook.in/webrtc");
         const client = Stomp.over(socket);
         client.connect({}, () => {
             setStompClient(client);
@@ -89,7 +89,7 @@ export const Chat = () => {
                                 manageUserObj["partyType"] = "Supplier";
                                 manageUserObj["primary_user_id"] = loginData.primary_user_id;
                                 manageUserObj["secondary_user_id"] = loginData.secondary_user_id;
-                                const response = await axios.post("http://localhost:8700/hesabbook/partner/save", manageUserObj);
+                                const response = await axios.post("http://api.hesabbook.in/hesabbook/partner/save", manageUserObj);
                                 console.log("Submit Receive Message :--    ", receivedMessage);
                                 addObjectOnTop(response.data.response);
                                 setSelectedContact(response.data.response);
@@ -127,7 +127,7 @@ export const Chat = () => {
     };
 
     const fetchContactInformation = (mobileNumber) => {
-        return fetch(`http://localhost:8700/hesabbook/user/mobile/${mobileNumber}`).then((response) => {
+        return fetch(`http://api.hesabbook.in/hesabbook/user/mobile/${mobileNumber}`).then((response) => {
             if (!response.ok) {
                 throw new Error("Failed to fetch contact information");
             }

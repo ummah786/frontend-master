@@ -9,7 +9,7 @@ export const WebSocketProvider = ({children}) => {
     const [isClientReady, setIsClientReady] = useState(false);
     const [stompClient, setStompClient] = useState(null);
     useEffect(() => {
-        const socket = new SockJS("http://localhost:8700/websocket-example");
+        const socket = new SockJS("http://api.hesabbook.in/websocket-example");
         const client = Stomp.over(socket);
         client.connect({}, () => {
             setStompClient(client);

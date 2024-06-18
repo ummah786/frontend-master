@@ -43,7 +43,7 @@ export const MyUserDetails = () => {
             try {
                 console.log("LoginData  ", loginData);
 
-                /!*                const response = await axios.get('http://localhost:8700/hesabbook/user/get/258');
+                /!*                const response = await axios.get('http://api.hesabbook.in/hesabbook/user/get/258');
                                 console.log("user response ", response.data);
                                 if (response.data.code === 200) {
                                     setMyUser(login);

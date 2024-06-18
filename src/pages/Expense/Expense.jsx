@@ -109,7 +109,7 @@ export const Expense = () => {
 
         manageUserObj['totalAmount'] = totalSalary;
         manageUserObj['expenseItemsList'] = JSON.stringify(employees);
-        const response = await axios.post('http://localhost:8700/hesabbook/expense/save', manageUserObj);
+        const response = await axios.post('http://api.hesabbook.in/hesabbook/expense/save', manageUserObj);
         addObjectOnTop(response.data.response)
         setManageUserObj(expenseDataModel);
         setEnable(prevState => !prevState);
@@ -132,7 +132,7 @@ export const Expense = () => {
     };
 
     async function handleDelete(id, event) {
-        const response = await axios.post(`http://localhost:8700/hesabbook/expense/delete/${id}`);
+        const response = await axios.post(`http://api.hesabbook.in/hesabbook/expense/delete/${id}`);
         dispatch(removeExpense(id));
         setFilteredEmployees(expenseUser);
     }
@@ -156,7 +156,7 @@ export const Expense = () => {
     function fetchAllManageUserData() {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8700/hesabbook/expense/all/${loginData.primary_user_id}`);
+                const response = await axios.get(`http://api.hesabbook.in/hesabbook/expense/all/${loginData.primary_user_id}`);
                 console.log(response.data.response);
                 setMangUser(response.data.response);
                 dispatch(addExpense(mangUser))
@@ -195,7 +195,7 @@ export const Expense = () => {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get(`http://localhost:8700/hesabbook/expense/all/${loginData.primary_user_id}`);
+            const response = await axios.get(`http://api.hesabbook.in/hesabbook/expense/all/${loginData.primary_user_id}`);
             setMangUser(response.data.response);
             localStorage.setItem('mangeUser', mangUser);
             dispatch(addExpense(response.data.response));
