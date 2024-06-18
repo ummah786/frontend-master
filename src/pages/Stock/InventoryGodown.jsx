@@ -65,7 +65,7 @@ export const InventoryGodown = () => {
 
     async function handleDelete(id, event) {
         console.log("DELETE ID " + id)
-        const response = await axios.post(`http://localhost:8700/hesabbook/business/account/delete/${id}`);
+        const response = await axios.post(`http://api.hesabbook.in/hesabbook/business/account/delete/${id}`);
         //  fetchAllManageUserData();
         dispatch(removeGodown(id));
         setFilteredEmployees(godownUser);
@@ -99,7 +99,7 @@ export const InventoryGodown = () => {
     function fetchAllManageUserData() {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8700/hesabbook/business/account/all');
+                const response = await axios.get('http://api.hesabbook.in/hesabbook/business/account/all');
                 console.log(response.data.response);
                 setMangUser(response.data.response);
                 localStorage.setItem('business-details', response.data.response);

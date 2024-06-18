@@ -106,7 +106,7 @@ export const Party = () => {
         event.preventDefault();
         manageUserObj['primary_user_id'] = loginData.primary_user_id;
         manageUserObj['secondary_user_id'] = loginData.secondary_user_id;
-        const response = await axios.post('http://localhost:8700/hesabbook/partner/save', manageUserObj);
+        const response = await axios.post('http://api.hesabbook.in/hesabbook/partner/save', manageUserObj);
         console.log('Submit Response :--    ', response.data);
         console.log('on Submit :-->', manageUserObj);
         addObjectOnTop(response.data.response);
@@ -137,7 +137,7 @@ export const Party = () => {
 
     async function handleDelete(id, event) {
         console.log("DELETE ID " + id)
-        const response = await axios.post(`http://localhost:8700/hesabbook/partner/delete/${id}`);
+        const response = await axios.post(`http://api.hesabbook.in/hesabbook/partner/delete/${id}`);
         console.log('Submit delete Response :--    ', response.data);
         dispatch(removeParty(id));
         // fetchAllManageUserData();
@@ -164,7 +164,7 @@ export const Party = () => {
 
     /*    const fetchData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8700/hesabbook/manageuser/all/${loginData.primary_user_id}`);
+                const response = await axios.get(`http://api.hesabbook.in/hesabbook/manageuser/all/${loginData.primary_user_id}`);
                 setMangUser(response.data.response);
                 dispatch(a(response.data.response));
                 setFilteredEmployees(response.data.response);
@@ -193,7 +193,7 @@ export const Party = () => {
     function fetchAllManageUserData() {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8700/hesabbook/partner/all');
+                const response = await axios.get('http://api.hesabbook.in/hesabbook/partner/all');
                 console.log(response.data);
                 setMangUser(response.data);
                 localStorage.setItem('mangeUser', mangUser);
@@ -208,7 +208,7 @@ export const Party = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8700/hesabbook/partner/all/${loginData.primary_user_id}`);
+                const response = await axios.get(`http://api.hesabbook.in/hesabbook/partner/all/${loginData.primary_user_id}`);
                 console.log('Party Response ', response.data.response);
                 if (response.data.code === 200) {
                     setMangUser(response.data.response);
@@ -291,7 +291,7 @@ export const Party = () => {
         console.log("data sheet ", columns);
         const formData = new FormData();
         formData.append('file', files);
-        const response = await axios.post(`http://localhost:8700/hesabbook/partner/upload/${loginData.primary_user_id}/${loginData.secondary_user_id}`, excelData);
+        const response = await axios.post(`http://api.hesabbook.in/hesabbook/partner/upload/${loginData.primary_user_id}/${loginData.secondary_user_id}`, excelData);
         console.log("response from handleSave ", response.data)
 
     };

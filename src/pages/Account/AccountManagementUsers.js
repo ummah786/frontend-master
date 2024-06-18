@@ -102,7 +102,7 @@ export const AccountManagementUsers = () => {
         event.preventDefault();
         manageUserObj['primary_user_id'] = loginData.primary_user_id;
         manageUserObj['secondary_user_id'] = loginData.secondary_user_id;
-        const response = await axios.post('http://localhost:8700/hesabbook/manageuser/save', manageUserObj);
+        const response = await axios.post('http://api.hesabbook.in/hesabbook/manageuser/save', manageUserObj);
 
         addObjectOnTop(response.data.response)
         setManageUserObj(manageUserDataModel);
@@ -125,7 +125,7 @@ export const AccountManagementUsers = () => {
     };
 
     async function handleDelete(id, event) {
-        const response = await axios.post(`http://localhost:8700/hesabbook/manageuser/delete/${id}`);
+        const response = await axios.post(`http://api.hesabbook.in/hesabbook/manageuser/delete/${id}`);
         console.log('Submit delete Response :--    ', response.data);
         dispatch(removeManageUser(id));
         //   fetchAllManageUserData();
@@ -151,7 +151,7 @@ export const AccountManagementUsers = () => {
     function fetchAllManageUserData() {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8700/hesabbook/manageuser/all');
+                const response = await axios.get('http://api.hesabbook.in/hesabbook/manageuser/all');
                 console.log(response.data);
                 setMangUser(response.data);
                 localStorage.setItem('mangeUser', mangUser);
@@ -193,14 +193,14 @@ export const AccountManagementUsers = () => {
         event.preventDefault();
         manageUserObj['primary_user_id'] = loginData.primary_user_id;
         manageUserObj['secondary_user_id'] = loginData.secondary_user_id;
-        const response = await axios.post('http://localhost:8700/hesabbook/manageuser/save', manageUserObj);
+        const response = await axios.post('http://api.hesabbook.in/hesabbook/manageuser/save', manageUserObj);
         addObjectOnTop(response.data.response)
         setManageUserObj(manageUserDataModel);
         setCAFlag(false);
     };
     const fetchData = async () => {
         try {
-            const response = await axios.get(`http://localhost:8700/hesabbook/manageuser/all/${loginData.primary_user_id}`);
+            const response = await axios.get(`http://api.hesabbook.in/hesabbook/manageuser/all/${loginData.primary_user_id}`);
             setMangUser(response.data.response);
             localStorage.setItem('mangeUser', mangUser);
             dispatch(addManageUser(response.data.response));
