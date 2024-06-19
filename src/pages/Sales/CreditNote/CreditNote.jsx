@@ -171,7 +171,7 @@ export const CreditNote = () => {
                                             sx={{height: "54px"}}
                                             value={filter}
                                             onChange={handleFilterChange}
-                                            placeholder="Search Sale Return"
+                                            placeholder="Search Credit Note No"
                                             inputProps={{"aria-label": "search"}}
                                         />
                                     </Search>

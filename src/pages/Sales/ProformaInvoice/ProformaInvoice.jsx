@@ -172,7 +172,7 @@ export const ProformaInvoice = () => {
                                             sx={{height: "54px"}}
                                             value={filter}
                                             onChange={handleFilterChange}
-                                            placeholder="Search Sale Return"
+                                            placeholder="Search Proforma Invoice No"
                                             inputProps={{"aria-label": "search"}}
                                         />
                                     </Search>

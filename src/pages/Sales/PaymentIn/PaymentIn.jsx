@@ -177,7 +177,7 @@ export const PaymentIn = () => {
                                             sx={{height: "54px"}}
                                             value={filter}
                                             onChange={handleFilterChange}
-                                            placeholder="Search Sale Invoice"
+                                            placeholder="Search Payment Number"
                                             inputProps={{"aria-label": "search"}}
                                         />
                                     </Search>

@@ -37,6 +37,18 @@ const PaymentOutCreate = ({onBooleanChange}) => {
         (state) => state.salePurchaseReducerValue
     );
     const dispatch = useDispatch();
+    const handleIncrementNumber = () => {
+        let saleInvoiceValue = 0;
+        if (Array.isArray(salePurchaseUser) && salePurchaseUser.length > 0) {
+            const filteredData = salePurchaseUser.filter((employee) => employee.billType === 'PAYMENT_OUT');
+            if (filteredData.length > 0) {
+                saleInvoiceValue = Math.max(...filteredData.map((employee) => employee.salesInvoiceNo));
+            }
+        }
+        return saleInvoiceValue + 1;
+    };
+
+    const [paymentOutNo, setPaymentOutNo] = useState(handleIncrementNumber());
     const handleSubmitPaymentCreate = async (e) => {
         e.preventDefault();
         let salePurchaseObject = {};
@@ -54,6 +66,7 @@ const PaymentOutCreate = ({onBooleanChange}) => {
             },
             0
         );
+        salePurchaseObject["paymentNumberOut"] = paymentOutNo;
         salePurchaseObject["paymentDate"] = paymentDate;
         salePurchaseObject["paymentMode"] = paymentMode;
         salePurchaseObject["gson"] = JSON.stringify(salePurchaseObjectResponse);

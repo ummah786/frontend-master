@@ -180,7 +180,7 @@ export const PaymentOut = () => {
                                         <StyledInputBase
                                             value={filter}
                                             onChange={handleFilterChange}
-                                            placeholder="Search Sale Invoice"
+                                            placeholder="Search Payment Out No"
                                             inputProps={{"aria-label": "search"}}
                                         />
                                     </Search>

@@ -172,7 +172,7 @@ export const DeliveryChallan = () => {
                                             sx={{height: "54px"}}
                                             value={filter}
                                             onChange={handleFilterChange}
-                                            placeholder="Search Sale Return"
+                                            placeholder="Search Delivery Challan No"
                                             inputProps={{"aria-label": "search"}}
                                         />
                                     </Search>
