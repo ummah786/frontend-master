@@ -108,5 +108,9 @@ export function formatDate(datetimeString) {
 }
 
 export const getDate=()=> {
-  return "2024-01-01";
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 }
