@@ -42,7 +42,7 @@ const PaymentCreate = ({onBooleanChange}) => {
         if (Array.isArray(salePurchaseUser) && salePurchaseUser.length > 0) {
             const filteredData = salePurchaseUser.filter((employee) => employee.billType === 'PAYMENT_IN');
             if (filteredData.length > 0) {
-                saleInvoiceValue = Math.max(...filteredData.map((employee) => employee.salesInvoiceNo));
+                saleInvoiceValue = Math.max(...filteredData.map((employee) => employee.paymentNumberIn));
             }
         }
         return saleInvoiceValue + 1;
