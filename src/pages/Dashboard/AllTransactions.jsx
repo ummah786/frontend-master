@@ -114,7 +114,7 @@ const AllTransactions = () => {
                     </TableBody>
                 </Table>
                 <TablePagination
-                    rowsPerPageOptions={[6, 10, 25]}
+                    rowsPerPageOptions={[5, 10, 25]}
                     component="div"
                     count={filterSalePurchase.length}
                     rowsPerPage={rowsPerPage}
