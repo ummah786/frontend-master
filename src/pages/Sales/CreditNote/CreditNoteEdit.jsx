@@ -28,7 +28,7 @@ import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import TableCell from "@mui/material/TableCell";
 import EditIcon from "@mui/icons-material/Edit";
 import {useDispatch, useSelector} from "react-redux";
-import {StyledTableCell, StyledTableRow} from "../../../commonStyle";
+import {StyledTableCell, StyledTableRow,getDate} from "../../../commonStyle";
 import axios from "axios";
 import {DELETE_KEY_VALUE, SAVE_ADDRESS, SAVE_KEY_VALUE,} from "../../apiendpoint/APIEndPoint";
 import ButtonGroup from "@mui/material/ButtonGroup";
@@ -124,9 +124,9 @@ export const CreditNoteEdit = ({
     const [rRates, setRRates] = useState([]);
     const dispatch = useDispatch();
     const [creditNoteDate, setCreditNoteDate] = React.useState(
-        dayjs("2024-01-01")
+        dayjs(getDate())
     );
-    const [dueDate, setDueDate] = React.useState(dayjs("2024-01-01"));
+    const [dueDate, setDueDate] = React.useState(dayjs(getDate()));
     const [doubleCheckedForCheckMar, setDoubleCheckedForCheckMar] =
         useState(false);
     useEffect(() => {

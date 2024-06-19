@@ -16,7 +16,7 @@ import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import {formatDate, StyledTableCellTableView, StyledTableRow,} from "../../../commonStyle";
+import {formatDate, StyledTableCellTableView, StyledTableRow,getDate} from "../../../commonStyle";
 import axios from "axios";
 import {addSalePurchase} from "../../../redux/Action";
 
@@ -28,7 +28,7 @@ const PaymentCreate = ({onBooleanChange}) => {
     const [totalTableAmount, setTotalTableAmount] = useState(0);
     const [paymentMode, setPaymentMode] = useState("");
     const [addNote, setAddNote] = useState("");
-    const [paymentDate, setPaymentDate] = React.useState(dayjs("2024-01-01"));
+    const [paymentDate, setPaymentDate] = React.useState(dayjs(getDate()));
     const [selectParty, setSelectParty] = useState("");
     const [paymentAmount, setPaymentAmount] = useState(0);
     const [selectedRows, setSelectedRows] = useState([]);

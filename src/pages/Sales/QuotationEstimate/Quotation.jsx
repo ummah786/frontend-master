@@ -261,7 +261,7 @@ export const Quotation = () => {
                             {formatDate(row.salesInvoiceDate)}
                           </StyledTableCell>
                           <StyledTableCell align="center">
-                            {row.id}
+                            {row.quotationNo}
                           </StyledTableCell>
                           <StyledTableCell align="center">
                             {row.partyName}

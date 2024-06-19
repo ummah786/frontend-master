@@ -250,7 +250,7 @@ export const CreditNote = () => {
                                                         {formatDate(row.salesInvoiceDate)}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center">
-                                                        {row.id}
+                                                        {row.creditNoteNo}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center">
                                                         {row.partyName}

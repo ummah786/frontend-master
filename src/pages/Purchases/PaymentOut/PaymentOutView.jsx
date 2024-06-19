@@ -12,7 +12,7 @@ import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import {formatDate, StyledTableCell, StyledTableRow,} from "../../../commonStyle";
+import {formatDate, StyledTableCell, StyledTableRow,getDate} from "../../../commonStyle";
 import axios from "axios";
 import dayjs from "dayjs";
 import {useDispatch, useSelector} from "react-redux";
@@ -21,7 +21,7 @@ import {removeSalePurchase} from "../../../redux/Action";
 export const PaymentOutView = ({onBooleanChange, idFlagView}) => {
     const [editFlag, setEditFlag] = useState(true);
 
-    const [paymentDate, setPaymentDate] = React.useState(dayjs("2024-01-01"));
+    const [paymentDate, setPaymentDate] = React.useState(dayjs(getDate()));
     const [paymentAmount, setPaymentAmount] = useState("");
     const [paymentType, setPaymentType] = useState("");
     const [note, setNote] = useState("");

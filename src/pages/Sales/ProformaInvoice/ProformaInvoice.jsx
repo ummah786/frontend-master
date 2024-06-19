@@ -251,7 +251,7 @@ export const ProformaInvoice = () => {
                                                         {formatDate(row.salesInvoiceDate)}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center">
-                                                        {row.id}
+                                                        {row.proformaNo}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center">
                                                         {row.partyName}

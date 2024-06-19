@@ -30,14 +30,13 @@ import TableCell from "@mui/material/TableCell";
 import Delete from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import {useDispatch, useSelector} from "react-redux";
-import {style, StyledTableCell, StyledTableRow,} from "../../../commonStyle";
+import {style, StyledTableCell, StyledTableRow,getDate} from "../../../commonStyle";
 import axios from "axios";
 import {DELETE_KEY_VALUE, SAVE_ADDRESS, SAVE_KEY_VALUE,} from "../../apiendpoint/APIEndPoint";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import {List, ListItem, ListItemButton} from "@mui/joy";
 import {InventoryDataModel, partnerDataModel, salePurchaseModel,} from "../../../datamodel/ManageUserDataModel";
 import {addExistingInventory, addKeyCategory, addKeyCompany, addParty, addSalePurchase,} from "../../../redux/Action";
-
 
 export const DebitNoteCreate = ({onBooleanChange}) => {
     const [filteredParty, setFilteredParty] = useState([]);
@@ -98,7 +97,7 @@ export const DebitNoteCreate = ({onBooleanChange}) => {
     const [rRates, setRRates] = useState([]);
     const dispatch = useDispatch();
     const [debitNoteDate, setDebitNoteDate] = React.useState(
-        dayjs("2024-01-01")
+        dayjs(getDate())
     );
     useEffect(() => {
     }, [partyUser, billTo]);

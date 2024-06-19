@@ -106,3 +106,7 @@ export function formatDate(datetimeString) {
   // Combine them into the desired format
   return `${year}-${month}-${day}`;
 }
+
+export const getDate=()=> {
+  return "2024-01-01";
+}

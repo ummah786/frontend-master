@@ -255,7 +255,7 @@ export const PaymentOut = () => {
                                                         {formatDate(row.paymentDate)}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center">
-                                                        {row.id}
+                                                        {row.paymentNumberOut}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center">
                                                         {row.partyName}

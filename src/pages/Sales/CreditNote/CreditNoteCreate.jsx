@@ -30,7 +30,7 @@ import TableCell from "@mui/material/TableCell";
 import Delete from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import {useDispatch, useSelector} from "react-redux";
-import {style, StyledTableCell, StyledTableRow,} from "../../../commonStyle";
+import {style, StyledTableCell, StyledTableRow,getDate} from "../../../commonStyle";
 import axios from "axios";
 import {DELETE_KEY_VALUE, SAVE_ADDRESS, SAVE_KEY_VALUE,} from "../../apiendpoint/APIEndPoint";
 import ButtonGroup from "@mui/material/ButtonGroup";
@@ -98,9 +98,9 @@ export const CreditNoteCreate = ({onBooleanChange}) => {
     const [rRates, setRRates] = useState([]);
     const dispatch = useDispatch();
     const [creditNoteDate, setCreditNoteDate] = React.useState(
-        dayjs("2024-01-01")
+        dayjs(getDate())
     );
-    const [dueDate, setDueDate] = React.useState(dayjs("2024-01-01"));
+    const [dueDate, setDueDate] = React.useState(dayjs(getDate()));
 
     useEffect(() => {
     }, [partyUser, billTo]);

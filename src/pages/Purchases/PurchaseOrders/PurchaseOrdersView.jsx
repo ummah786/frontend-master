@@ -28,7 +28,7 @@ import TableRow from "@mui/material/TableRow";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DatePicker} from "@mui/x-date-pickers/DatePicker";
-import {StyledTableCellTableView, StyledTableRow,} from "../../../commonStyle";
+import {StyledTableCellTableView, StyledTableRow,getDate} from "../../../commonStyle";
 import axios from "axios";
 import dayjs from "dayjs";
 import {numberToWords} from "number-to-words";
@@ -40,7 +40,7 @@ import {PurchaseOrdersEdit} from "./PurchaseOrdersEdit";
 const PurchaseOrdersView = ({onBooleanChange, idFlagView}) => {
     const [editFlag, setEditFlag] = useState(true);
 
-    const [paymentDate, setPaymentDate] = React.useState(dayjs("2024-01-01"));
+    const [paymentDate, setPaymentDate] = React.useState(dayjs(getDate()));
     const [paymentAmount, setPaymentAmount] = useState("");
     const [paymentType, setPaymentType] = useState("");
     const [note, setNote] = useState("");
