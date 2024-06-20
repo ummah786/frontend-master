@@ -12,9 +12,9 @@ import {
     addKeyCompany,
     addKeyRack,
     addKeyWarehouse,
-    addParty
+    addParty,
+    addSalePurchase
 } from "../../redux/Action";
-
 
 export const MainDashboard = () => {
     const loginData = useSelector((state) => state.loginReducerValue);
@@ -57,6 +57,7 @@ export const MainDashboard = () => {
         getProductKeyValuePair();
         getPartyDetails();
         getInventoryDetails();
+        fetchSalesPurchase();
     }, [setFetchBusiness]);
 
     const getPartyDetails = async () => {
@@ -79,6 +80,19 @@ export const MainDashboard = () => {
             );
             if (response.data.code === 200) {
                 dispatch(addInventory(response.data.response));
+            }
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+    const fetchSalesPurchase = async () => {
+        try {
+            const response = await axios.get(
+                `http://localhost:8700/hesabbook/sale/purchase/all/${loginData.primary_user_id}`
+            );
+            console.log("Party Response ", response.data.response);
+            if (response.data.code === 200) {
+                dispatch(addSalePurchase(response.data.response));
             }
         } catch (error) {
             console.error("Error fetching data:", error);
