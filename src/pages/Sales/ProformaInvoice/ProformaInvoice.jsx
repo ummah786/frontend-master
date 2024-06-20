@@ -232,7 +232,7 @@ export const ProformaInvoice = () => {
                                                 <StyledTableCell align="center">
                                                     Party Name
                                                 </StyledTableCell>
-                                                <StyledTableCell align="center">Due In</StyledTableCell>
+                                                <StyledTableCell align="center">Expiry Date</StyledTableCell>
                                                 <StyledTableCell align="center">Amount</StyledTableCell>
                                                 <StyledTableCell align="center">Status</StyledTableCell>
                                                 <StyledTableCell align="center">View</StyledTableCell>
@@ -257,7 +257,7 @@ export const ProformaInvoice = () => {
                                                         {row.partyName}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center">
-                                                        {formatDate(row.salesDueDate)}
+                                                        {formatDate(row.proformaExpireDate)}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center">
                                                         <Box>

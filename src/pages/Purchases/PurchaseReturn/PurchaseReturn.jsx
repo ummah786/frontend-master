@@ -259,7 +259,7 @@ export const PurchaseReturn = () => {
                                                         {row.partyName}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center">
-                                                        {formatDate(row.salesDueDate)}
+                                                      -
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center">
                                                         <Box>

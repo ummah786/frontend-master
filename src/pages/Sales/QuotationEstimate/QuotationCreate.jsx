@@ -690,6 +690,8 @@ export const QuotationCreate = ({onBooleanChange}) => {
         e.preventDefault();
         salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
         salePurchaseObject["secondary_user_id"] = loginData.secondary_user_id;
+
+        salePurchaseObject["quotationDueDate"] = dueDate;
         salePurchaseObject["quotationDate"] = quotationDate;
         salePurchaseObject["quotationNo"] = quotationNo;
         salePurchaseObject["totalAmount"] = totalAmountTableOperation;

@@ -258,7 +258,7 @@ export const PurchaseOrders = () => {
                                                         {row.partyName}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center">
-                                                        {formatDate(row.salesDueDate)}
+                                                        {formatDate(row.validDate)}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center">
                                                         <Box>
