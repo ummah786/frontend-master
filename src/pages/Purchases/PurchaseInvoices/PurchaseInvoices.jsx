@@ -316,7 +316,7 @@ export const PurchaseInvoices = () => {
                                                         />
                                                     </TableCell>
                                                     <StyledTableCell align="center">
-                                                        {formatDate(row.creationDateTime)}
+                                                        {formatDate(row.purchaseInvDate)}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center">
                                                         {row.purchaseInvNo}

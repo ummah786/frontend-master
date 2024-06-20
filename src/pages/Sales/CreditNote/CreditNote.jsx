@@ -246,7 +246,7 @@ export const CreditNote = () => {
                                                         />
                                                     </TableCell>
                                                     <StyledTableCell align="center">
-                                                        {formatDate(row.creationDateTime)}
+                                                        {formatDate(row.creditNoteDate)}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center">
                                                         {row.creditNoteNo}

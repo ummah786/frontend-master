@@ -258,7 +258,7 @@ export const Quotation = () => {
                             />
                           </TableCell>
                           <StyledTableCell align="center">
-                            {formatDate(row.creationDateTime)}
+                            {formatDate(row.quotationDate)}
                           </StyledTableCell>
                           <StyledTableCell align="center">
                             {row.quotationNo}

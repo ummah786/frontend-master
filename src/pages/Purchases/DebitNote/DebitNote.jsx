@@ -243,7 +243,7 @@ export const DebitNote = () => {
                                                         />
                                                     </TableCell>
                                                     <StyledTableCell align="center">
-                                                        {formatDate(row.creationDateTime)}
+                                                        {formatDate(row.debitNoteDate)}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center">
                                                         {row.debitNoteNo}

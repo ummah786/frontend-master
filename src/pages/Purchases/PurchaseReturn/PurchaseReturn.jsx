@@ -250,7 +250,7 @@ export const PurchaseReturn = () => {
                                                         />
                                                     </TableCell>
                                                     <StyledTableCell align="center">
-                                                        {formatDate(row.creationDateTime)}
+                                                        {formatDate(row.purchaseReturnDate)}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center">
                                                         {row.purchaseReturnNo}

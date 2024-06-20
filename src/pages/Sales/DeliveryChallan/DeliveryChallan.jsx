@@ -248,7 +248,7 @@ export const DeliveryChallan = () => {
                                                         />
                                                     </TableCell>
                                                     <StyledTableCell align="center">
-                                                        {formatDate(row.creationDateTime)}
+                                                        {formatDate(row.deliveryDate)}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center">
                                                         {row.deliveryNo}
