@@ -58,10 +58,8 @@ function LatestTransactions() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {filterSalePurchase
-                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                        .map((txn) => (
-                            <TableRow key={txn.id}>
+                    {filterSalePurchase.slice(0, 4).map((txn) => (
+                        <TableRow key={txn.id}>
                                 <TableCell>{formatDate(txn.creationDateTime)}</TableCell>
                                 <TableCell>{txn.billType}</TableCell>
                                 <TableCell>

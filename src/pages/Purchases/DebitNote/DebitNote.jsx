@@ -10,12 +10,12 @@ import Button from "@mui/material/Button";
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {
-  formatDate,
-  Search,
-  SearchIconWrapper,
-  StyledInputBase,
-  StyledTableCell,
-  StyledTableRow,
+    formatDate,
+    Search,
+    SearchIconWrapper,
+    StyledInputBase,
+    StyledTableCell,
+    StyledTableRow,
 } from "../../../commonStyle";
 import ArticleIcon from "@mui/icons-material/Article";
 import IconButton from "@mui/material/IconButton";
@@ -223,12 +223,11 @@ export const DebitNote = () => {
                                                 </TableCell>
                                                 <StyledTableCell align="center">Date</StyledTableCell>
                                                 <StyledTableCell align="center">
-                                                    Invoice Number
+                                                    Debit Note Number
                                                 </StyledTableCell>
                                                 <StyledTableCell align="center">
                                                     Party Name
                                                 </StyledTableCell>
-                                                <StyledTableCell align="center">Due In</StyledTableCell>
                                                 <StyledTableCell align="center">Amount</StyledTableCell>
                                                 <StyledTableCell align="center">Status</StyledTableCell>
                                                 <StyledTableCell align="center">View</StyledTableCell>
@@ -244,16 +243,13 @@ export const DebitNote = () => {
                                                         />
                                                     </TableCell>
                                                     <StyledTableCell align="center">
-                                                        {formatDate(row.salesInvoiceDate)}
+                                                        {formatDate(row.creationDateTime)}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center">
                                                         {row.debitNoteNo}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center">
                                                         {row.partyName}
-                                                    </StyledTableCell>
-                                                    <StyledTableCell align="center">
-                                                        {formatDate(row.salesDueDate)}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center">
                                                         <Box>

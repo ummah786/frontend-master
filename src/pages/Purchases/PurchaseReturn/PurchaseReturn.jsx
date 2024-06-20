@@ -229,7 +229,7 @@ export const PurchaseReturn = () => {
                                                 </TableCell>
                                                 <StyledTableCell align="center">Date</StyledTableCell>
                                                 <StyledTableCell align="center">
-                                                    Invoice Number
+                                                    Purchase Return Number
                                                 </StyledTableCell>
                                                 <StyledTableCell align="center">
                                                     Party Name
@@ -250,7 +250,7 @@ export const PurchaseReturn = () => {
                                                         />
                                                     </TableCell>
                                                     <StyledTableCell align="center">
-                                                        {formatDate(row.salesInvoiceDate)}
+                                                        {formatDate(row.creationDateTime)}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center">
                                                         {row.purchaseReturnNo}

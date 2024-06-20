@@ -10,12 +10,12 @@ import Button from "@mui/material/Button";
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {
-  formatDate,
-  Search,
-  SearchIconWrapper,
-  StyledInputBase,
-  StyledTableCell,
-  StyledTableRow,
+    formatDate,
+    Search,
+    SearchIconWrapper,
+    StyledInputBase,
+    StyledTableCell,
+    StyledTableRow,
 } from "../../../commonStyle";
 import ArticleIcon from "@mui/icons-material/Article";
 import IconButton from "@mui/material/IconButton";
@@ -62,41 +62,41 @@ export const CreditNote = () => {
     const handleFilterChange = (event) => {
         setFilter(event.target.value);
     };
-  useEffect(() => {
-    if (Array.isArray(salePurchaseUser)) {
-      let filteredData = salePurchaseUser;
+    useEffect(() => {
+        if (Array.isArray(salePurchaseUser)) {
+            let filteredData = salePurchaseUser;
 
-      // Filter for billType 'SALE_INVOICE'
-      filteredData = filteredData.filter((employee) => employee.billType === 'CREATE_NOTE');
+            // Filter for billType 'SALE_INVOICE'
+            filteredData = filteredData.filter((employee) => employee.billType === 'CREATE_NOTE');
 
-      if (startDate && endDate) {
-        // Filter based on the date range
-        filteredData = filteredData.filter((employee) => {
-          return (
-              formatDate(employee.salesInvoiceDate) >= formatDate(startDate) &&
-              formatDate(employee.salesInvoiceDate) <= formatDate(endDate)
-          );
-        });
-      } else if (startDate) {
-        filteredData = filteredData.filter((employee) => {
-          return formatDate(employee.salesInvoiceDate) >= formatDate(startDate);
-        });
-      } else if (endDate) {
-        // Filter based on the date range
-        filteredData = filteredData.filter((employee) => {
-          return formatDate(employee.salesInvoiceDate) <= formatDate(endDate);
-        });
-      }
+            if (startDate && endDate) {
+                // Filter based on the date range
+                filteredData = filteredData.filter((employee) => {
+                    return (
+                        formatDate(employee.salesInvoiceDate) >= formatDate(startDate) &&
+                        formatDate(employee.salesInvoiceDate) <= formatDate(endDate)
+                    );
+                });
+            } else if (startDate) {
+                filteredData = filteredData.filter((employee) => {
+                    return formatDate(employee.salesInvoiceDate) >= formatDate(startDate);
+                });
+            } else if (endDate) {
+                // Filter based on the date range
+                filteredData = filteredData.filter((employee) => {
+                    return formatDate(employee.salesInvoiceDate) <= formatDate(endDate);
+                });
+            }
 
-      if (filter && filter.trim() !== "") {
-        filteredData = filteredData.filter((employee) => {
-          return String(employee.id).includes(filter);
-        });
-      }
+            if (filter && filter.trim() !== "") {
+                filteredData = filteredData.filter((employee) => {
+                    return String(employee.id).includes(filter);
+                });
+            }
 
-      setFilterSalePurchase(filteredData);
-    }
-  }, [filter, salePurchaseUser, startDate, endDate]);
+            setFilterSalePurchase(filteredData);
+        }
+    }, [filter, salePurchaseUser, startDate, endDate]);
     const handleCheckboxClick = (id) => {
         const selectedIndex = selectedRows.indexOf(id);
         let newSelected = [];
@@ -226,12 +226,11 @@ export const CreditNote = () => {
                                                 </TableCell>
                                                 <StyledTableCell align="center">Date</StyledTableCell>
                                                 <StyledTableCell align="center">
-                                                    Invoice Number
+                                                    Credit Note Number
                                                 </StyledTableCell>
                                                 <StyledTableCell align="center">
                                                     Party Name
                                                 </StyledTableCell>
-                                                <StyledTableCell align="center">Due In</StyledTableCell>
                                                 <StyledTableCell align="center">Amount</StyledTableCell>
                                                 <StyledTableCell align="center">Status</StyledTableCell>
                                                 <StyledTableCell align="center">View</StyledTableCell>
@@ -247,16 +246,13 @@ export const CreditNote = () => {
                                                         />
                                                     </TableCell>
                                                     <StyledTableCell align="center">
-                                                        {formatDate(row.salesInvoiceDate)}
+                                                        {formatDate(row.creationDateTime)}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center">
                                                         {row.creditNoteNo}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center">
                                                         {row.partyName}
-                                                    </StyledTableCell>
-                                                    <StyledTableCell align="center">
-                                                        {formatDate(row.salesDueDate)}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center">
                                                         <Box>

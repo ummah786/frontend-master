@@ -313,7 +313,7 @@ export const SalesInvoice = () => {
                                                         />
                                                     </TableCell>
                                                     <StyledTableCell align="center">
-                                                        {formatDate(row.salesInvoiceDate)}
+                                                        {formatDate(row.creationDateTime)}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center">
                                                         {row.salesInvoiceNo}

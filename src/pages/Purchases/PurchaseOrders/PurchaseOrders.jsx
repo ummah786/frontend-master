@@ -228,12 +228,12 @@ export const PurchaseOrders = () => {
                                                 </TableCell>
                                                 <StyledTableCell align="center">Date</StyledTableCell>
                                                 <StyledTableCell align="center">
-                                                    Invoice Number
+                                                    Purchase Order Number
                                                 </StyledTableCell>
                                                 <StyledTableCell align="center">
                                                     Party Name
                                                 </StyledTableCell>
-                                                <StyledTableCell align="center">Due In</StyledTableCell>
+                                                <StyledTableCell align="center">Valid Till</StyledTableCell>
                                                 <StyledTableCell align="center">Amount</StyledTableCell>
                                                 <StyledTableCell align="center">Status</StyledTableCell>
                                                 <StyledTableCell align="center">View</StyledTableCell>
@@ -249,7 +249,7 @@ export const PurchaseOrders = () => {
                                                         />
                                                     </TableCell>
                                                     <StyledTableCell align="center">
-                                                        {formatDate(row.salesInvoiceDate)}
+                                                        {formatDate(row.creationDateTime)}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center">
                                                         {row.purchaseNo}

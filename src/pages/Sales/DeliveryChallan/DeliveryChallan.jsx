@@ -227,7 +227,7 @@ export const DeliveryChallan = () => {
                                                 </TableCell>
                                                 <StyledTableCell align="center">Date</StyledTableCell>
                                                 <StyledTableCell align="center">
-                                                    Invoice Number
+                                                    Delivery Challan Number
                                                 </StyledTableCell>
                                                 <StyledTableCell align="center">
                                                     Party Name
@@ -248,7 +248,7 @@ export const DeliveryChallan = () => {
                                                         />
                                                     </TableCell>
                                                     <StyledTableCell align="center">
-                                                        {formatDate(row.salesInvoiceDate)}
+                                                        {formatDate(row.creationDateTime)}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center">
                                                         {row.deliveryNo}
