@@ -55,6 +55,7 @@ function LatestTransactions() {
                         <TableCell sx={{fontWeight: 'bold'}}>Transaction No</TableCell>
                         <TableCell sx={{fontWeight: 'bold'}}>Party Name</TableCell>
                         <TableCell sx={{fontWeight: 'bold'}}>Amount</TableCell>
+                        <TableCell sx={{fontWeight: 'bold'}}>View</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

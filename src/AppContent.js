@@ -37,6 +37,7 @@ import {PurchaseReturn} from "./pages/Purchases/PurchaseReturn/PurchaseReturn";
 import {PaymentOut} from "./pages/Purchases/PaymentOut/PaymentOut";
 import {DebitNote} from "./pages/Purchases/DebitNote/DebitNote";
 import AllTransactions from "./pages/Dashboard/AllTransactions";
+import MultiStepForm from "./pages/AppStartUp/MultiStepForm.";
 
 export const AppContent = ({flag, handleBooleanChange, setFlag}) => {
     const [sidebarType, setSidebarType] = useState('default');
@@ -91,6 +92,7 @@ export const AppContent = ({flag, handleBooleanChange, setFlag}) => {
             <Route path="/settings/pricing" element={<Pricing/>}/>
             <Route path="/settings/help/support" element={<HelpSupport/>}/>
             <Route path="/settings/feedback" element={<Feedback/>}/>
+            <Route path="/settings/test" element={<MultiStepForm/>}/>
 
             <Route path="/logout" element={<Logout setFlag={setFlag}/>}/>
 
@@ -104,6 +106,7 @@ export const AppContent = ({flag, handleBooleanChange, setFlag}) => {
                 <div>
                     <Routes>
                         <Route path="/" element={<HesabbookHome onBooleanChange={handleBooleanChange}/>}/>
+                        <Route path="/user/business" element={<MultiStepForm onBooleanChange={handleBooleanChange}/>}/>
                     </Routes>
                 </div>
             ) : (

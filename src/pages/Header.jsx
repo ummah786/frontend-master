@@ -18,6 +18,7 @@ import axios from "axios";
 import {LOGIN_PASSWORD} from "./apiendpoint/APIEndPoint";
 import {addLogin} from "../redux/Action";
 import {useDispatch} from "react-redux";
+import {useNavigate} from 'react-router-dom';
 
 const style = {
     position: 'absolute',
@@ -40,6 +41,7 @@ export const Header = ({onBooleanChange}) => {
     const [openPassword, setOpenPassword] = React.useState(false);
     const [otpPassword, setOtpPassword] = React.useState('');
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     let axiosConfig = {
         headers: {
@@ -63,11 +65,16 @@ export const Header = ({onBooleanChange}) => {
             }, axiosConfig);
             console.log(response.data); // Handle response data
             if (response.data.code === 200) {
-                localStorage.setItem("username",response.data.response.mobileNumber);
-                
-                console.log("hesab response if ", response.data.response);
+                localStorage.setItem("username", response.data.response.mobileNumber);
                 dispatch(addLogin(response.data.response));
-                onBooleanChange();
+                if (response.data.response?.firstTimeLogin === 'Y') {
+                    console.log(" first time login")
+                    //call MultiSetForm
+                    navigate("/user/business")
+                } else {
+                    console.log("not first time login")
+                    onBooleanChange();
+                }
             } else {
                 console.log("hesab response else ", response.data.response);
             }

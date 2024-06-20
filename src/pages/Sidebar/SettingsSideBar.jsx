@@ -44,6 +44,7 @@ const routes = [
     { path: '/settings/pricing', name: 'Pricing', icon: <IconContainer><FaUser color="white" /></IconContainer> },
     { path: '/settings/help/support', name: 'Help And Support', icon: <IconContainer><FaUser color="white" /></IconContainer> },
     { path: '/settings/feedback', name: 'Feedback', icon: <IconContainer><AiFillHeart color="white" /></IconContainer> },
+    { path: '/settings/test', name: 'Testing', icon: <IconContainer><AiFillHeart color="white" /></IconContainer> },
     { path: '/logout', name: 'Logout', icon: <IconContainer><AiFillHeart color="white" /></IconContainer> },
 ];
 
