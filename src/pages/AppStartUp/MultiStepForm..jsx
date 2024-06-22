@@ -1,61 +1,56 @@
 import React, {useState} from 'react';
 import BusinessInfo from './BusinessInfo';
 import BillingInfo from './BillingInfo';
-import OtherInfo from './OtherInfo';
 import {Box, Button, Grid, Paper, Step, StepLabel, Stepper} from '@mui/material';
 import axios from 'axios';
 import {useNavigate} from "react-router-dom";
+import {businessAccountDataModel} from "../../datamodel/ManageUserDataModel";
+import {addBusinessUser, addLogin, addPrimaryBusinessUser} from "../../redux/Action";
+import {useDispatch, useSelector} from "react-redux";
 
 const MultiStepForm = ({onBooleanChange}) => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const loginData = useSelector((state) => state.loginReducerValue);
     const [step, setStep] = useState(0);
-    const [formData, setFormData] = useState({
-        businessName: '',
-        registrationType: '',
-        businessType: [],
-        industryType: '',
-        gstRegistered: '',
-        gstNumber: '',
-        whatsappUpdates: false,
-        billingRequirement: '',
-        businessSize: '',
-        foundBy: '',
-        language: ''
-    });
+    const [manageUserObj, setManageUserObj] = useState(businessAccountDataModel);
 
-    const steps = ['Business Info', 'Billing Info', 'Other Info'];
+
+    const steps = ['Business Info', 'Billing/Other Info'];
 
     const nextStep = () => setStep(step + 1);
     const prevStep = () => setStep(step - 1);
-    const navigate = useNavigate();
 
-    const handleSubmit = () => {
-        axios.post('http://your-spring-boot-api-endpoint/api/saveFormData', formData)
-            .then(response => {
-                console.log('Form submitted successfully:', response.data);
-                alert('Form submitted successfully');
+
+    const handleSubmit = async () => {
+        manageUserObj['primary_user_id'] = loginData.primary_user_id;
+        manageUserObj['secondary_user_id'] = loginData.secondary_user_id;
+        manageUserObj['primaryWithBusiness'] = "Y";
+        const response = await axios.post('http://localhost:8700/hesabbook/business/account/save', manageUserObj);
+        if (response.data.code === 200) {
+            dispatch(addPrimaryBusinessUser(response.data.response));
+            const updateLoginValue = await axios.get(`http://localhost:8700/hesabbook/user/update/first/time/${loginData.id}/${response.data.response.id}/Y`);
+            if (updateLoginValue.status === 200) {
+                console.log("return updateLogin value", updateLoginValue);
+                dispatch(addLogin(updateLoginValue.data.response));
                 onBooleanChange();
                 navigate("/")
-            })
-            .catch(error => {
-                onBooleanChange();
-                navigate("/")
-                console.error('There was an error submitting the form:', error);
-                alert('Error submitting form');
-            });
+            }
+        }
     };
 
     const getStepContent = (stepIndex) => {
         switch (stepIndex) {
             case 0:
-                return <BusinessInfo formData={formData} setFormData={setFormData} nextStep={nextStep}/>;
+                return <BusinessInfo manageUserObj={manageUserObj} setManageUserObj={setManageUserObj}
+                                     nextStep={nextStep}/>;
             case 1:
-                return <BillingInfo formData={formData} setFormData={setFormData} nextStep={nextStep}
+                return <BillingInfo manageUserObj={manageUserObj} setManageUserObj={setManageUserObj}
+                                    nextStep={nextStep}
                                     prevStep={prevStep}/>;
-            case 2:
-                return <OtherInfo formData={formData} setFormData={setFormData} prevStep={prevStep}
-                                  handleSubmit={handleSubmit}/>;
-            default:
-                return 'Unknown stepIndex';
+            /*    case 2:
+                    return <OtherInfo manageUserObj={manageUserObj} setManageUserObj={setManageUserObj} prevStep={prevStep}
+                                      handleSubmit={handleSubmit}/>;*/
         }
     };
 

@@ -56,6 +56,8 @@ export const REMOVE_SALEPURCHASE = 'REMOVE_SALEPURCHASE';
 export const UPDATE_SALEPURCHASE = 'UPDATE_SALEPURCHASE';
 export const GET_SALEPURCHASE = 'GET_SALEPURCHASE';
 
+export const ADD_PRIMARY_BUSINESS_USER="ADD_PRIMARY_BUSINESS_USER";
+
 export const addSalePurchase = (salePurchaseUser) => ({
     type: ADD_SALEPURCHASE,
     payload: salePurchaseUser
@@ -155,7 +157,10 @@ export const updateParty = (party) => ({
     payload: party
 });
 
-
+export const addPrimaryBusinessUser = (businessUser) => ({
+    type: ADD_PRIMARY_BUSINESS_USER,
+    payload: businessUser
+});
 export const addBusinessUser = (businessUser) => ({
     type: ADD_BUSINESS_USER,
     payload: businessUser

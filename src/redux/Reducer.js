@@ -36,7 +36,8 @@ import {
     UPDATE_INVENTORY,
     UPDATE_MANAGE_USER,
     UPDATE_PARTY,
-    UPDATE_SALEPURCHASE
+    UPDATE_SALEPURCHASE,
+    ADD_PRIMARY_BUSINESS_USER
 } from './Action';
 import {
     InventoryDataModel,
@@ -196,6 +197,17 @@ export const manageUserReducer = (state = {manageUsers: [manageUserDataModel]}, 
             return state;
     }
 };
+export const businessPrimaryUserReducer= (state = {businessPrimaryUser: [businessAccountDataModel]}, action) => {
+    switch (action.type) {
+        case ADD_PRIMARY_BUSINESS_USER:
+            return {
+                ...state,
+                businessUser: action.payload
+            };
+        default:
+            return state;
+    }
+    }
 export const businessUserReducer = (state = {businessUser: [businessAccountDataModel]}, action) => {
     switch (action.type) {
         case ADD_EXISTING_BUSINESS_USER:
@@ -324,5 +336,5 @@ export const salePurchaseReducer = (state = {salePurchaseUser: [salePurchaseMode
 export default {
     manageUserReducer, LoginReducer, businessUserReducer, partyReducer, keyCompanyReducer,
     keyBusinessReducer, keyRackReducer, keyWarehouseReducer, keyCategoryReducer,inventoryReducer,
-    salePurchaseReducer
+    salePurchaseReducer,businessPrimaryUserReducer
 };

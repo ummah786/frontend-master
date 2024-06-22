@@ -1,27 +1,24 @@
 import React from 'react';
-import {
-    Checkbox,
-    FormControl,
-    FormControlLabel,
-    FormLabel,
-    InputLabel,
-    ListItemText,
-    MenuItem,
-    Radio,
-    RadioGroup,
-    Select,
-    TextField,
-    Grid,
-    Button
-} from '@mui/material';
+import {Checkbox, FormControlLabel, FormLabel, Grid, MenuItem, Radio, RadioGroup, TextField} from '@mui/material';
+import UserRole from "../../jsonfile/Role";
+import FormControl from "@mui/material/FormControl";
 
 const businessTypes = ['Manufacturer', 'Services'];
 const industryTypes = ['Medicine(Pharma)', 'Technology', 'Finance'];
 
-const BusinessInfo = ({ formData, setFormData, nextStep }) => {
+const BusinessInfo = ({manageUserObj, setManageUserObj, nextStep}) => {
+
+
     const handleChange = (event) => {
-        const { name, value } = event.target;
-        setFormData({ ...formData, [name]: value });
+        const {name, value} = event.target;
+        setManageUserObj({...manageUserObj, [name]: value});
+    };
+
+    const handleTextFieldChange = (event, field) => {
+        setManageUserObj({
+            ...manageUserObj,
+            [field]: event.target.value,
+        });
     };
 
     return (
@@ -30,83 +27,109 @@ const BusinessInfo = ({ formData, setFormData, nextStep }) => {
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <TextField
-                        label="Your business name"
-                        name="businessName"
-                        value={formData.businessName}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                        required
+                        id="outlined-basic"
+                        label="Business Name"
+                        variant="outlined"
+                        sx={{width: "100%", margin: "10px"}}
+                        value={manageUserObj.businessName}
+                        onChange={(event) =>
+                            handleTextFieldChange(event, "businessName")
+                        }
                     />
                 </Grid>
                 <Grid item xs={12}>
-                    <FormControl fullWidth margin="normal" required>
-                        <InputLabel>Business registration type</InputLabel>
-                        <Select
-                            name="registrationType"
-                            value={formData.registrationType}
-                            onChange={handleChange}
-                        >
-                            <MenuItem value="Private Limited Company">Private Limited Company</MenuItem>
-                            <MenuItem value="Public Limited Company">Public Limited Company</MenuItem>
-                        </Select>
-                    </FormControl>
+                    <TextField
+                        sx={{width: "100%", margin: "10px"}}
+                        select
+                        value={manageUserObj.businessRegistrationType}
+                        onChange={(event) =>
+                            handleTextFieldChange(event, "businessRegistrationType")
+                        }
+                        label="Business Registration Type"
+                        variant="outlined"
+                        margin="normal"
+                    >
+                        {UserRole.businessRegistrationType.map((brt) => (
+                            <MenuItem key={brt.name} value={brt.name}>
+                                {brt.name}
+                            </MenuItem>
+                        ))}
+                    </TextField>
                 </Grid>
                 <Grid item xs={12}>
-                    <FormControl fullWidth margin="normal" required>
-                        <InputLabel>Business type</InputLabel>
-                        <Select
-                            name="businessType"
-                            multiple
-                            value={formData.businessType}
-                            onChange={handleChange}
-                            renderValue={(selected) => selected.join(', ')}
-                        >
-                            {businessTypes.map((type) => (
-                                <MenuItem key={type} value={type}>
-                                    <Checkbox checked={formData.businessType.indexOf(type) > -1} />
-                                    <ListItemText primary={type} />
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                    <TextField
+                        sx={{width: "100%", margin: "10px"}}
+                        select
+                        value={manageUserObj.businessType}
+                        onChange={(event) =>
+                            handleTextFieldChange(event, "businessType")
+                        }
+                        label="Business Type"
+                        variant="outlined"
+                        margin="normal"
+                    >
+                        {UserRole.businessType.map((bt) => (
+                            <MenuItem key={bt.name} value={bt.name}>
+                                {bt.name}
+                            </MenuItem>
+                        ))}
+                    </TextField>
                 </Grid>
                 <Grid item xs={12}>
-                    <FormControl fullWidth margin="normal" required>
-                        <InputLabel>Industry type</InputLabel>
-                        <Select
-                            name="industryType"
-                            value={formData.industryType}
-                            onChange={handleChange}
-                        >
-                            {industryTypes.map((type) => (
-                                <MenuItem key={type} value={type}>{type}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                    <TextField
+                        sx={{width: "100%", margin: "10px"}}
+                        select
+                        value={manageUserObj.industryType}
+                        onChange={(event) =>
+                            handleTextFieldChange(event, "industryType")
+                        }
+                        label="Industry Type"
+                        variant="outlined"
+                        margin="normal"
+                    >
+                        {UserRole.industryType.map((userrole) => (
+                            <MenuItem key={userrole.name} value={userrole.name}>
+                                {userrole.name}
+                            </MenuItem>
+                        ))}
+                    </TextField>
                 </Grid>
                 <Grid item xs={12}>
-                    <FormControl component="fieldset" margin="normal">
-                        <FormLabel component="legend">Is your business GST registered?</FormLabel>
+                    <FormControl>
+                        <FormLabel id="demo-controlled-radio-buttons-group">
+                            Are you GST Registered?
+                        </FormLabel>
                         <RadioGroup
-                            name="gstRegistered"
-                            value={formData.gstRegistered}
-                            onChange={handleChange}
-                            row
+                            aria-labelledby="demo-controlled-radio-buttons-group"
+                            name="controlled-radio-buttons-group"
+                            value={manageUserObj.gstUser}
+                            onChange={(event) =>
+                                handleTextFieldChange(event, "gstUser")
+                            }
                         >
-                            <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
-                            <FormControlLabel value="No" control={<Radio />} label="No" />
+                            <FormControlLabel
+                                value="Yes"
+                                control={<Radio/>}
+                                label="Yes"
+                            />
+                            <FormControlLabel
+                                value="No"
+                                control={<Radio/>}
+                                label="No"
+                            />
                         </RadioGroup>
                     </FormControl>
                 </Grid>
                 <Grid item xs={12}>
                     <TextField
-                        label="GSTIN No (Optional)"
-                        name="gstNumber"
-                        value={formData.gstNumber}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
+                        id="outlined-basic"
+                        label="GST Number"
+                        variant="outlined"
+                        sx={{width: "100%", margin: "10px"}}
+                        value={manageUserObj.gstNumber}
+                        onChange={(event) =>
+                            handleTextFieldChange(event, "gstNumber")
+                        }
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -114,8 +137,11 @@ const BusinessInfo = ({ formData, setFormData, nextStep }) => {
                         control={
                             <Checkbox
                                 name="whatsappUpdates"
-                                checked={formData.whatsappUpdates}
-                                onChange={(e) => setFormData({ ...formData, whatsappUpdates: e.target.checked })}
+                                checked={manageUserObj.whatsappUpdates}
+                                onChange={(e) => setManageUserObj({
+                                    ...manageUserObj,
+                                    whatsappUpdates: e.target.checked
+                                })}
                             />
                         }
                         label="Receive account updates and reminders on WhatsApp"
@@ -123,7 +149,8 @@ const BusinessInfo = ({ formData, setFormData, nextStep }) => {
                 </Grid>
             </Grid>
         </div>
-    );
+    )
+        ;
 };
 
 export default BusinessInfo;

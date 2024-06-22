@@ -13,6 +13,7 @@ import {
   manageUserReducer,
   partyReducer,
   salePurchaseReducer,
+  businessPrimaryUserReducer
 } from "./Reducer";
 
 import { thunk } from "redux-thunk";
@@ -32,6 +33,7 @@ const reducer = combineReducers({
   keyWarehouseReducerValue: keyWarehouseReducer,
   keyCategoryReducerValue: keyCategoryReducer,
   salePurchaseReducerValue: salePurchaseReducer,
+  primaryBusinessReducerValue: businessPrimaryUserReducer
 });
 const store = createStore(reducer, composeEnhancers(applyMiddleware(thunk)));
 

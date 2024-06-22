@@ -6,6 +6,7 @@ import BalanceInfo from "./BalanceInfo";
 import {useDispatch, useSelector} from "react-redux";
 import axios from "axios";
 import {
+    addBusinessUser,
     addInventory,
     addKeyBusiness,
     addKeyCategory,
@@ -58,7 +59,19 @@ export const MainDashboard = () => {
         getPartyDetails();
         getInventoryDetails();
         fetchSalesPurchase();
+        getBusinessDetails();
     }, [setFetchBusiness]);
+    const getBusinessDetails = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8700/hesabbook/business/account/all/${loginData.primary_user_id}`);
+            console.log("Party Response ", response.data.response);
+            if (response.data.code === 200) {
+                dispatch(addBusinessUser(response.data.response));
+            }
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    }
 
     const getPartyDetails = async () => {
         try {

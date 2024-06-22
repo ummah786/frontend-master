@@ -30,6 +30,12 @@ export const businessAccountDataModel = {
     signature: "",
     primary_user_id: "",
     secondary_user_id: "",
+    whatsappUpdates: false,
+    billingRequirement: '',
+    businessSize: '',
+    foundBy: '',
+    language: '',
+    primary: ''
 };
 
 export const partnerDataModel = {

@@ -38,6 +38,7 @@ import {PaymentOut} from "./pages/Purchases/PaymentOut/PaymentOut";
 import {DebitNote} from "./pages/Purchases/DebitNote/DebitNote";
 import AllTransactions from "./pages/Dashboard/AllTransactions";
 import MultiStepForm from "./pages/AppStartUp/MultiStepForm.";
+import BusinessSettingsForm from "./pages/Account/BusinessSettingsForm";
 
 export const AppContent = ({flag, handleBooleanChange, setFlag}) => {
     const [sidebarType, setSidebarType] = useState('default');
@@ -87,7 +88,8 @@ export const AppContent = ({flag, handleBooleanChange, setFlag}) => {
 
             <Route path="/settings/manage/users" element={<AccountManagementUsers/>}/>
             <Route path="/settings/account" element={<MyUserDetails/>}/>
-            <Route path="/settings/manage/business" element={<MyBusinessAccount/>}/>
+
+          <Route path="/settings/manage/business" element={<MyBusinessAccount/>}/>
             <Route path="/settings/thermal/print" element={<Print/>}/>
             <Route path="/settings/pricing" element={<Pricing/>}/>
             <Route path="/settings/help/support" element={<HelpSupport/>}/>

@@ -1,10 +1,10 @@
 import React from 'react';
 import { FormControl, InputLabel, MenuItem, Select, Grid, Button } from '@mui/material';
 
-const OtherInfo = ({ formData, setFormData, prevStep, handleSubmit }) => {
+const OtherInfo = ({ manageUserObj, setManageUserObj, prevStep, handleSubmit }) => {
     const handleChange = (event) => {
         const { name, value } = event.target;
-        setFormData({ ...formData, [name]: value });
+        setManageUserObj({ ...manageUserObj, [name]: value });
     };
 
     return (
@@ -16,7 +16,7 @@ const OtherInfo = ({ formData, setFormData, prevStep, handleSubmit }) => {
                         <InputLabel>Source</InputLabel>
                         <Select
                             name="foundBy"
-                            value={formData.foundBy}
+                            value={manageUserObj.foundBy}
                             onChange={handleChange}
                         >
                             <MenuItem value="Google or other search engine">Google or other search engine</MenuItem>
@@ -32,7 +32,7 @@ const OtherInfo = ({ formData, setFormData, prevStep, handleSubmit }) => {
                         <InputLabel>Language</InputLabel>
                         <Select
                             name="language"
-                            value={formData.language}
+                            value={manageUserObj.language}
                             onChange={handleChange}
                         >
                             <MenuItem value="English">English</MenuItem>
