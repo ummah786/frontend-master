@@ -1,115 +1,245 @@
-import React from 'react';
-import { Box, Flex, Grid, Heading, Text, Image, Table, Tbody, Tr, Td, Thead, Th } from '@chakra-ui/react';
+import React, {useState} from 'react';
+import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
+    Box,
+    Button,
+    Card,
+    CardContent,
+    Checkbox,
+    FormControl,
+    FormControlLabel,
+    FormGroup,
+    Grid,
+    MenuItem,
+    Paper,
+    Radio,
+    RadioGroup,
+    TextField,
+    Typography
+} from '@mui/material';
 
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {makeStyles} from '@material-ui/core/styles';
+
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+    },
+    paper: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+    },
+}));
 const Invoice = () => {
+    const classes = useStyles();
+    const [selectedTheme, setSelectedTheme] = useState('');
+
+    const handleThemeChange = (event) => {
+        setSelectedTheme(event.target.value);
+    };
+
+    const themes = [
+        'Advanced GST',
+        'Stylish',
+        'Advanced GST (Tally)',
+        'Billbook',
+        'Advanced GST (A5)',
+        'Billbook (A5)',
+        'Modern',
+        'Simple',
+    ];
+    const themeImages = {
+        'Advanced GST': 'advance-gst.svg',
+        'Stylish': 'style.svg',
+        'Advanced GST (Tally)': 'advance-gst-tally.svg',
+        'Billbook': 'billbook.svg',
+        'Advanced GST (A5)': 'advance-gst-a5.svg',
+        'Billbook (A5)': 'billbook-a5.svg',
+        'Modern': 'modern.svg',
+        'Simple': 'simple.svg'
+    };
+    const [theme, setTheme] = useState('');
+    const [settings, setSettings] = useState({
+        showPartyBalance: true,
+        enableFreeItemQuantity: true,
+        showItemDescription: true,
+        showPhoneNumber: true,
+    });
+    const [industryType, setIndustryType] = useState('Medicine(Pharma)');
+    const [itemTableColumns, setItemTableColumns] = useState({
+        price: true,
+        quantity: true,
+        batchNo: true,
+        expDate: true,
+        mfgDate: true,
+    });
+
+
+    const handleSettingsChange = (event) => {
+        setSettings({
+            ...settings,
+            [event.target.name]: event.target.checked,
+        });
+    };
+
+    const handleIndustryTypeChange = (event) => {
+        setIndustryType(event.target.value);
+    };
+
+    const handleItemTableColumnsChange = (event) => {
+        setItemTableColumns({
+            ...itemTableColumns,
+            [event.target.name]: event.target.checked,
+        });
+    };
+
     return (
-        <Box border="1px" borderColor="gray.200" p={5} m={5} maxW="800px" mx="auto">
-            {/* Business Details */}
-            <Flex justifyContent="space-between" alignItems="center" mb={10}>
-                <Box>
-                    <Box mb={4}>
-                        <Text fontSize="2xl" fontWeight="bold">Business Name</Text>
-                        <Text>Business karne ka naya tareeka</Text>
-                    </Box>
+        <Grid container spacing={3}>
+            <Grid item xs={8}>
+                <Paper className={classes.paper}>
                     <Box>
-                        <Text fontSize="lg" fontWeight="bold">BILL TO</Text>
-                        <Text>Sample Party</Text>
-                        <Text>No F2, Outer Circle, Connaught Circus, New Delhi, 110001</Text>
-                        <Text>Mobile: 7400417400</Text>
-                        <Text>GSTIN: 07ABCCZH2702H4ZZ</Text>
-                        <Text>State: Delhi</Text>
+                        <Typography component="div" variant="h5">hu</Typography>
                     </Box>
-                </Box>
-                <Box textAlign="right">
-                    <Text fontSize="lg" fontWeight="bold">SHIP TO</Text>
-                    <Text>Sample Party</Text>
-                    <Text>1234123 324324324, Bengaluru</Text>
-                </Box>
-            </Flex>
-
-            {/* Customize Invoice Section */}
-            <Flex justifyContent="center" alignItems="center" mb={10} py={10} bg="gray.100">
-                <Box textAlign="center">
-                    <Image boxSize="50px" src="/path-to-your-icon.png" alt="Customize Icon" mb={4} />
-                    <Heading size="lg">Customize your own Invoice</Heading>
-                </Box>
-            </Flex>
-
-            {/* Item Table */}
-            <Box>
-                <Text fontSize="xl" fontWeight="bold" mb={4}>Item Table Columns</Text>
-                <Table variant="simple">
-                    <Thead>
-                        <Tr>
-                            <Th>NO.</Th>
-                            <Th>ITEMS</Th>
-                            <Th>HSN</Th>
-                            <Th>BATCH NO.</Th>
-                            <Th>EXP. DATE</Th>
-                            <Th>MFG DATE</Th>
-                            <Th>QUANTITY</Th>
-                            <Th>PRICE/ITEM</Th>
-                            <Th>DISCOUNT</Th>
-                            <Th>TOTAL</Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        <Tr>
-                            <Td>1</Td>
-                            <Td>
-                                <Text fontWeight="bold">SAMSUNG A30</Text>
-                                <Text fontSize="sm">Samsung phone</Text>
-                            </Td>
-                            <Td>1234</Td>
-                            <Td>BATCH NO.</Td>
-                            <Td>EXP. DATE</Td>
-                            <Td>MFG DATE</Td>
-                            <Td>1 PCS</Td>
-                            <Td>10,000</Td>
-                            <Td>0</Td>
-                            <Td>10,000</Td>
-                        </Tr>
-                        <Tr>
-                            <Td>2</Td>
-                            <Td>
-                                <Text fontWeight="bold">A12</Text>
-                                <Text fontSize="sm">Samsung phone</Text>
-                            </Td>
-                            <Td>40511209</Td>
-                            <Td>-</Td>
-                            <Td>-</Td>
-                            <Td>MFG DATE</Td>
-                            <Td>1 BOX</Td>
-                            <Td>342.86</Td>
-                            <Td>0</Td>
-                            <Td>342.86</Td>
-                        </Tr>
-                        <Tr>
-                            <Td>3</Td>
-                            <Td>
-                                <Text fontWeight="bold">Headphones BT12</Text>
-                                <Text fontSize="sm">Wireless headphone</Text>
-                            </Td>
-                            <Td>2032</Td>
-                            <Td>-</Td>
-                            <Td>-</Td>
-                            <Td>-</Td>
-                            <Td>2 PCS</Td>
-                            <Td>900</Td>
-                            <Td>0</Td>
-                            <Td>1,800</Td>
-                        </Tr>
-                    </Tbody>
-                </Table>
-            </Box>
-
-            {/* Totals */}
-            <Box mt={10} textAlign="right">
-                <Text>IGST @ 5%: ₹107.14</Text>
-                <Text>IGST @ 18%: ₹1,800</Text>
-                <Text fontWeight="bold">Total: ₹14,050</Text>
-            </Box>
-        </Box>
+                </Paper>
+            </Grid>
+            <Grid item xs={4}>
+                <Paper className={classes.paper}>
+                    <Box>
+                        <Typography variant="h6" gutterBottom>
+                            Themes
+                        </Typography>
+                        <FormControl component="fieldset">
+                            <RadioGroup
+                                aria-label="themes"
+                                name="themes"
+                                value={selectedTheme}
+                                onChange={handleThemeChange}
+                            >
+                                <Grid container spacing={2}>
+                                    {themes.map((theme) => (
+                                        <Grid item xs={6} sm={3} key={theme}>
+                                            <Card variant="outlined">
+                                                <CardContent>
+                                                    <img
+                                                        src={`../../images/invoice/${themeImages[theme]}`}
+                                                        alt={theme}
+                                                        style={{width: '100%'}}
+                                                    />
+                                                    <FormControlLabel
+                                                        value={theme}
+                                                        control={<Radio/>}
+                                                        label={theme}
+                                                    />
+                                                </CardContent>
+                                            </Card>
+                                        </Grid>
+                                    ))}
+                                </Grid>
+                            </RadioGroup>
+                        </FormControl>
+                        <Accordion>
+                            <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+                                <Typography>Theme Settings</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <FormGroup>
+                                    <FormControlLabel
+                                        control={<Checkbox checked={settings.showPartyBalance}
+                                                           onChange={handleSettingsChange}
+                                                           name="showPartyBalance"/>}
+                                        label="Show party balance in invoice"
+                                    />
+                                    <FormControlLabel
+                                        control={<Checkbox checked={settings.enableFreeItemQuantity}
+                                                           onChange={handleSettingsChange}
+                                                           name="enableFreeItemQuantity"/>}
+                                        label="Enable free item quantity"
+                                    />
+                                    <FormControlLabel
+                                        control={<Checkbox checked={settings.showItemDescription}
+                                                           onChange={handleSettingsChange}
+                                                           name="showItemDescription"/>}
+                                        label="Show item description in invoice"
+                                    />
+                                    <FormControlLabel
+                                        control={<Checkbox checked={settings.showPhoneNumber}
+                                                           onChange={handleSettingsChange}
+                                                           name="showPhoneNumber"/>}
+                                        label="Show phone number on invoice"
+                                    />
+                                </FormGroup>
+                            </AccordionDetails>
+                        </Accordion>
+                        <Accordion>
+                            <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+                                <Typography>Invoice Details</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <TextField
+                                    select
+                                    label="Industry Type"
+                                    value={industryType}
+                                    onChange={handleIndustryTypeChange}
+                                    fullWidth
+                                >
+                                    <MenuItem value="Medicine(Pharma)">Medicine(Pharma)</MenuItem>
+                                    <MenuItem value="Electronics">Electronics</MenuItem>
+                                    <MenuItem value="Grocery">Grocery</MenuItem>
+                                </TextField>
+                                <FormControlLabel
+                                    control={<Checkbox name="drugLicenceNo"/>}
+                                    label="Drug Licence No."
+                                />
+                                <FormControlLabel
+                                    control={<Checkbox name="referredByDr"/>}
+                                    label="Referred by Dr."
+                                />
+                            </AccordionDetails>
+                        </Accordion>
+                        <Accordion>
+                            <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+                                <Typography>Item Table Columns</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <FormGroup>
+                                    <FormControlLabel
+                                        control={<Checkbox checked={itemTableColumns.price}
+                                                           onChange={handleItemTableColumnsChange}
+                                                           name="price"/>}
+                                        label="Price/Item (₹)"
+                                    />
+                                    <FormControlLabel
+                                        control={<Checkbox checked={itemTableColumns.quantity}
+                                                           onChange={handleItemTableColumnsChange} name="quantity"/>}
+                                        label="Quantity"
+                                    />
+                                    <FormControlLabel
+                                        control={<Checkbox checked={itemTableColumns.batchNo}
+                                                           onChange={handleItemTableColumnsChange} name="batchNo"/>}
+                                        label="Batch No."
+                                    />
+                                    <FormControlLabel
+                                        control={<Checkbox checked={itemTableColumns.expDate}
+                                                           onChange={handleItemTableColumnsChange} name="expDate"/>}
+                                        label="Exp. Date"
+                                    />
+                                    <FormControlLabel
+                                        control={<Checkbox checked={itemTableColumns.mfgDate}
+                                                           onChange={handleItemTableColumnsChange} name="mfgDate"/>}
+                                        label="Mfg Date"
+                                    />
+                                    <Button variant="outlined">+ Add Custom Column</Button>
+                                </FormGroup>
+                            </AccordionDetails>
+                        </Accordion>
+                    </Box>
+                </Paper>
+            </Grid>
+        </Grid>
     );
 };
 
