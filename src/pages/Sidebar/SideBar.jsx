@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {NavLink, useLocation, useNavigate} from 'react-router-dom';
 import {FaHome, FaLock, FaUser} from 'react-icons/fa';
 import {MdMessage} from 'react-icons/md';
@@ -140,11 +140,16 @@ const settings = [
 const SideBar = ({children}) => {
     const {businessUser} = useSelector((state) => state.manageBusinessReducerValue);
     const [anchorElUser, setAnchorElUser] = useState(null);
-    const [selectedBusiness, setSelectedBusiness] = useState('Business 1');
+    const [selectedBusiness, setSelectedBusiness] = useState(localStorage.getItem("BusinessName") || '');
     const [isOpen, setIsOpen] = useState(true);
     const location = useLocation();
     const navigate = useNavigate();
     const [notificationsCount, setNotificationsCount] = useState(5);
+    const [businessNameFromLS, setBusinessNameFromLS] = useState(localStorage.getItem("BusinessName") || '');
+    useEffect(() => {
+        setSelectedBusiness(businessNameFromLS);
+    }, [businessNameFromLS]);
+
 
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);

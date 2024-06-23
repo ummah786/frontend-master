@@ -5,7 +5,7 @@ import {Box, Button, Grid, Paper, Step, StepLabel, Stepper} from '@mui/material'
 import axios from 'axios';
 import {useNavigate} from "react-router-dom";
 import {businessAccountDataModel} from "../../datamodel/ManageUserDataModel";
-import {addBusinessUser, addLogin, addPrimaryBusinessUser} from "../../redux/Action";
+import {addLogin, addPrimaryBusinessUser} from "../../redux/Action";
 import {useDispatch, useSelector} from "react-redux";
 
 const MultiStepForm = ({onBooleanChange}) => {
@@ -29,6 +29,7 @@ const MultiStepForm = ({onBooleanChange}) => {
         const response = await axios.post('http://localhost:8700/hesabbook/business/account/save', manageUserObj);
         if (response.data.code === 200) {
             dispatch(addPrimaryBusinessUser(response.data.response));
+            localStorage.setItem("BusinessName", response.data.response.businessName);
             const updateLoginValue = await axios.get(`http://localhost:8700/hesabbook/user/update/first/time/${loginData.id}/${response.data.response.id}/Y`);
             if (updateLoginValue.status === 200) {
                 console.log("return updateLogin value", updateLoginValue);

@@ -1,25 +1,12 @@
-import React, { useState } from 'react';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { FaHome, FaUser } from 'react-icons/fa';
-import { AiFillHeart } from 'react-icons/ai';
-import { AnimatePresence, motion } from 'framer-motion';
+import React, {useEffect, useState} from 'react';
+import {NavLink, useLocation, useNavigate} from 'react-router-dom';
+import {FaHome, FaUser} from 'react-icons/fa';
+import {AiFillHeart} from 'react-icons/ai';
+import {AnimatePresence, motion} from 'framer-motion';
 import SidebarMenu from './SidebarMenu';
-import {
-    AppBar,
-    Box,
-    Toolbar,
-    Typography,
-    IconButton,
-    MenuItem,
-    Tooltip,
-    Avatar,
-    Menu,
-    Badge,
-    InputLabel
-} from '@mui/material';
-import { Menu as MenuIcon, Notifications as NotificationsIcon, Mail as MailIcon } from '@mui/icons-material';
+import {AppBar, Avatar, Badge, Box, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography} from '@mui/material';
+import {Mail as MailIcon, Menu as MenuIcon, Notifications as NotificationsIcon} from '@mui/icons-material';
 import styled from 'styled-components';
-import { Radio, RadioGroup, FormControlLabel, FormControl, FormLabel } from '@mui/material';
 import Select from '@mui/material/Select';
 import './SideBar.css';
 import {useSelector} from "react-redux";
@@ -35,41 +22,61 @@ const IconContainer = styled.div`
 `;
 
 const routes = [
-    { path: '/', name: 'Back to Dashboard', icon: <IconContainer><FaHome color="white" /></IconContainer> },
-    { path: '/settings/Account', name: 'Account', icon: <IconContainer><FaUser color="white" /></IconContainer> },
-    { path: '/settings/manage/business', name: 'Manage Business', icon: <IconContainer><FaUser color="white" /></IconContainer> },
-    { path: '/settings/invoice', name: 'Invoice Settings', icon: <IconContainer><FaUser color="white" /></IconContainer> },
-    { path: '/settings/thermal/Print', name: 'Thermal Print', icon: <IconContainer><FaUser color="white" /></IconContainer> },
-    { path: '/settings/manage/users', name: 'Manage Users', icon: <IconContainer><FaUser color="white" /></IconContainer> },
-    { path: '/settings/reminders', name: 'Reminders', icon: <IconContainer><FaUser color="white" /></IconContainer> },
-    { path: '/settings/pricing', name: 'Pricing', icon: <IconContainer><FaUser color="white" /></IconContainer> },
-    { path: '/settings/help/support', name: 'Help And Support', icon: <IconContainer><FaUser color="white" /></IconContainer> },
-    { path: '/settings/feedback', name: 'Feedback', icon: <IconContainer><AiFillHeart color="white" /></IconContainer> },
-    { path: '/settings/test', name: 'Testing', icon: <IconContainer><AiFillHeart color="white" /></IconContainer> },
-    { path: '/logout', name: 'Logout', icon: <IconContainer><AiFillHeart color="white" /></IconContainer> },
+    {path: '/', name: 'Back to Dashboard', icon: <IconContainer><FaHome color="white"/></IconContainer>},
+    {path: '/settings/Account', name: 'Account', icon: <IconContainer><FaUser color="white"/></IconContainer>},
+    {
+        path: '/settings/manage/business',
+        name: 'Manage Business',
+        icon: <IconContainer><FaUser color="white"/></IconContainer>
+    },
+    {path: '/settings/invoice', name: 'Invoice Settings', icon: <IconContainer><FaUser color="white"/></IconContainer>},
+    {
+        path: '/settings/thermal/Print',
+        name: 'Thermal Print',
+        icon: <IconContainer><FaUser color="white"/></IconContainer>
+    },
+    {
+        path: '/settings/manage/users',
+        name: 'Manage Users',
+        icon: <IconContainer><FaUser color="white"/></IconContainer>
+    },
+    {path: '/settings/reminders', name: 'Reminders', icon: <IconContainer><FaUser color="white"/></IconContainer>},
+    {path: '/settings/pricing', name: 'Pricing', icon: <IconContainer><FaUser color="white"/></IconContainer>},
+    {
+        path: '/settings/help/support',
+        name: 'Help And Support',
+        icon: <IconContainer><FaUser color="white"/></IconContainer>
+    },
+    {path: '/settings/feedback', name: 'Feedback', icon: <IconContainer><AiFillHeart color="white"/></IconContainer>},
+    {path: '/settings/test', name: 'Testing', icon: <IconContainer><AiFillHeart color="white"/></IconContainer>},
+    {path: '/logout', name: 'Logout', icon: <IconContainer><AiFillHeart color="white"/></IconContainer>},
 ];
 
 const settings = [
-    { name: 'Profile', path: '/profile' },
-    { name: 'Account', path: '/Account' },
-    { name: 'Dashboard', path: '/' },
-    { name: 'Logout', path: '/logout' }
+    {name: 'Profile', path: '/profile'},
+    {name: 'Account', path: '/Account'},
+    {name: 'Dashboard', path: '/'},
+    {name: 'Logout', path: '/logout'}
 ];
 
 const showAnimation = {
-    hidden: { width: 0, opacity: 0, transition: { duration: 0.5 } },
-    show: { opacity: 1, width: "auto", transition: { duration: 0.5 } },
+    hidden: {width: 0, opacity: 0, transition: {duration: 0.5}},
+    show: {opacity: 1, width: "auto", transition: {duration: 0.5}},
 };
 
-const SettingsSideBar = ({ children }) => {
+const SettingsSideBar = ({children}) => {
     const [anchorElUser, setAnchorElUser] = useState(null);
     const [isOpen, setIsOpen] = useState(true);
     const location = useLocation();
     const navigate = useNavigate();
     const [notificationsCount, setNotificationsCount] = useState(5);
-    const [selectedBusiness, setSelectedBusiness] = useState('Business 1');
+    const [selectedBusiness, setSelectedBusiness] = useState(localStorage.getItem("BusinessName") || '');
     const {businessUser} = useSelector((state) => state.manageBusinessReducerValue);
 
+    const [businessNameFromLS, setBusinessNameFromLS] = useState(localStorage.getItem("BusinessName") || '');
+    useEffect(() => {
+        setSelectedBusiness(businessNameFromLS);
+    }, [businessNameFromLS]);
     const handleBusinessChange = (event) => {
         setSelectedBusiness(event.target.value);
     };
@@ -103,10 +110,10 @@ const SettingsSideBar = ({ children }) => {
         <>
             <AppBar position="static">
                 <Toolbar variant="dense">
-                    <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={toggleSidebar}>
-                        <MenuIcon />
+                    <IconButton edge="start" color="inherit" aria-label="menu" sx={{mr: 2}} onClick={toggleSidebar}>
+                        <MenuIcon/>
                     </IconButton>
-                    <Typography variant="h6" color="inherit" component="div" sx={{ flexGrow: 1 }}>
+                    <Typography variant="h6" color="inherit" component="div" sx={{flexGrow: 1}}>
                         {getRouteName()}
                     </Typography>
                     <Box sx={{flexGrow: 0, display: 'flex', gap: '10px'}}>
@@ -114,8 +121,8 @@ const SettingsSideBar = ({ children }) => {
                             value={selectedBusiness}
                             onChange={handleBusinessChange}
                             displayEmpty
-                            inputProps={{ 'aria-label': 'Without label' }}
-                            sx={{ color: 'inherit', '& .MuiSvgIcon-root': { color: 'inherit' } }}
+                            inputProps={{'aria-label': 'Without label'}}
+                            sx={{color: 'inherit', '& .MuiSvgIcon-root': {color: 'inherit'}}}
                         >
                             {Array.isArray(businessUser) && businessUser.length > 0 ? (
                                 businessUser.map((business) => (
@@ -213,7 +220,7 @@ const SettingsSideBar = ({ children }) => {
                         ))}
                     </section>
                 </motion.div>
-                <main style={{ height: 'calc(100vh - 64px)', overflowY: 'auto', overflowX: 'hidden' }}>
+                <main style={{height: 'calc(100vh - 64px)', overflowY: 'auto', overflowX: 'hidden'}}>
                     {children}
                 </main>
             </div>

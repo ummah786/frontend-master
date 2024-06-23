@@ -67,12 +67,24 @@ export const MainDashboard = () => {
             console.log("Party Response ", response.data.response);
             if (response.data.code === 200) {
                 dispatch(addBusinessUser(response.data.response));
+                let businessName = '';
+                if (loginData.businessId) {
+                    const matchingBusiness = response.data.response.filter(obj => obj.id === parseInt(loginData.businessId, 10)); // Convert to integer for comparison
+                    if (Array.isArray(matchingBusiness) && matchingBusiness.length > 0) {
+                        businessName = matchingBusiness[0].businessName;
+                    }
+                }
+                if (businessName) {
+                    localStorage.setItem("BusinessName", businessName);
+                } else {
+                    console.warn("No matching business found for the given businessId.");
+                }
             }
+
         } catch (error) {
             console.error("Error fetching data:", error);
         }
     }
-
     const getPartyDetails = async () => {
         try {
             const response = await axios.get(

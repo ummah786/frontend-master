@@ -40,6 +40,7 @@ export const Header = ({onBooleanChange}) => {
     const [phone, setPhone] = React.useState('');
     const [openPassword, setOpenPassword] = React.useState(false);
     const [otpPassword, setOtpPassword] = React.useState('');
+    const [invalidCred, setInvalidCred] = React.useState('');
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -75,11 +76,15 @@ export const Header = ({onBooleanChange}) => {
                     console.log("not first time login")
                     onBooleanChange();
                 }
+            } else if (response.data.code === 500) {
+                setInvalidCred(response.data.response);
             } else {
-                console.log("hesab response else ", response.data.response);
+                alert("Invalid credentials. Please check your mobile number and temporary password.");
             }
+
         } catch (error) {
             console.error('Error:', error);
+            alert("An error occurred while logging in. Please try again later.");
         }
     };
     const toggleDrawer = (page) => {
@@ -179,8 +184,9 @@ export const Header = ({onBooleanChange}) => {
                                     >
                                         <ModalClose variant="plain" sx={{m: 1}}/>
                                         <Typography component="h1" variant="h5">
-                                            Login/Registration
+                                            {invalidCred ? invalidCred : 'Login/Registration'}
                                         </Typography>
+
                                         <Box component="form" onSubmit={handleClick} noValidate sx={{mt: 1}}>
                                             <TextField
                                                 margin="normal"

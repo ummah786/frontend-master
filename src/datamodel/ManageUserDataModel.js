@@ -123,6 +123,8 @@ export const userDetailModel = {
     isLogin: "",
     lastLoginDate: "",
     token: "",
+    businessId: "",
+    firstTimeLogin: "",
 };
 
 export const godownDataModel = {
