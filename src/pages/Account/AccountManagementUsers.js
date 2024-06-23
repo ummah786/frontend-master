@@ -32,6 +32,7 @@ export const AccountManagementUsers = () => {
     const [filter, setFilter] = useState('');
     const [filteredEmployees, setFilteredEmployees] = useState([]);
     const {manageUsers} = useSelector(state => state.manageUserReducerValue);
+    const {businessUser} = useSelector((state) => state.manageBusinessReducerValue);
     const [fetchBusiness, setFetchBusiness] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [selectedOption, setSelectedOption] = useState(null);
@@ -98,12 +99,26 @@ export const AccountManagementUsers = () => {
             [field]: event.target.value,
         });
     };
+    const getBusinessId = () => {
+        const businessName = manageUserObj.accountBusinessName;
+        const value = businessUser.filter((x) => x.businessName === businessName);
+        if (Array.isArray(value) && value.length > 0) {
+            return value[0].id; // Assuming businessId is the field you need
+        }
+        return null;
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
+        const businessId = getBusinessId();
+        if (!businessId) {
+            console.error('Business ID not found');
+            return;
+        }
+        manageUserObj['businessId'] = businessId;
         manageUserObj['primary_user_id'] = loginData.primary_user_id;
         manageUserObj['secondary_user_id'] = loginData.secondary_user_id;
         const response = await axios.post('http://localhost:8700/hesabbook/manageuser/save', manageUserObj);
-
         addObjectOnTop(response.data.response)
         setManageUserObj(manageUserDataModel);
         setEnable(prevState => !prevState);
