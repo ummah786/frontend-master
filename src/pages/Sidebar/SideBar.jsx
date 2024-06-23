@@ -23,6 +23,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Select from '@mui/material/Select';
 import styled from 'styled-components';
 import './SideBar.css';
+import {useSelector} from "react-redux";
 
 const IconContainer = styled.div`
     display: flex;
@@ -137,6 +138,7 @@ const settings = [
 ];
 
 const SideBar = ({children}) => {
+    const {businessUser} = useSelector((state) => state.manageBusinessReducerValue);
     const [anchorElUser, setAnchorElUser] = useState(null);
     const [selectedBusiness, setSelectedBusiness] = useState('Business 1');
     const [isOpen, setIsOpen] = useState(true);
@@ -205,9 +207,17 @@ const SideBar = ({children}) => {
                             inputProps={{'aria-label': 'Without label'}}
                             sx={{color: 'inherit', '& .MuiSvgIcon-root': {color: 'inherit'}}}
                         >
-                            <MenuItem value="Business 1">Business 1</MenuItem>
-                            <MenuItem value="Business 2">Business 2</MenuItem>
-                            <MenuItem value="Business 3">Business 3</MenuItem>
+                            {Array.isArray(businessUser) && businessUser.length > 0 ? (
+                                businessUser.map((business) => (
+                                    <MenuItem key={business.businessId} value={business.businessName}>
+                                        {business.businessName}
+                                    </MenuItem>
+                                ))
+                            ) : (
+                                <MenuItem value="">
+                                    <em>No businesses available</em>
+                                </MenuItem>
+                            )}
                         </Select>
                         <Tooltip title="Messages">
                             <IconButton color="inherit">

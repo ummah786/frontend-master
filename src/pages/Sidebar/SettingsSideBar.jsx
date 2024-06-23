@@ -22,6 +22,7 @@ import styled from 'styled-components';
 import { Radio, RadioGroup, FormControlLabel, FormControl, FormLabel } from '@mui/material';
 import Select from '@mui/material/Select';
 import './SideBar.css';
+import {useSelector} from "react-redux";
 
 const IconContainer = styled.div`
     display: flex;
@@ -67,6 +68,7 @@ const SettingsSideBar = ({ children }) => {
     const navigate = useNavigate();
     const [notificationsCount, setNotificationsCount] = useState(5);
     const [selectedBusiness, setSelectedBusiness] = useState('Business 1');
+    const {businessUser} = useSelector((state) => state.manageBusinessReducerValue);
 
     const handleBusinessChange = (event) => {
         setSelectedBusiness(event.target.value);
@@ -115,9 +117,17 @@ const SettingsSideBar = ({ children }) => {
                             inputProps={{ 'aria-label': 'Without label' }}
                             sx={{ color: 'inherit', '& .MuiSvgIcon-root': { color: 'inherit' } }}
                         >
-                            <MenuItem value="Business 1">Business 1</MenuItem>
-                            <MenuItem value="Business 2">Business 2</MenuItem>
-                            <MenuItem value="Business 3">Business 3</MenuItem>
+                            {Array.isArray(businessUser) && businessUser.length > 0 ? (
+                                businessUser.map((business) => (
+                                    <MenuItem key={business.businessId} value={business.businessName}>
+                                        {business.businessName}
+                                    </MenuItem>
+                                ))
+                            ) : (
+                                <MenuItem value="">
+                                    <em>No businesses available</em>
+                                </MenuItem>
+                            )}
                         </Select>
                         <Tooltip title="Messages">
                             <IconButton color="inherit">
