@@ -86,8 +86,10 @@ export const InventoryDataModel = {
     packageItems: "", // 5  * 10
     salePrice: "",
     salePriceTax: "",
+    actualSalePrice: "",
     purchasePrice: "",
     purchasePriceTax: "",
+    actualPurchasePrice: "",
     salt: "",
     batchNo: "",
     mfgDate: "",

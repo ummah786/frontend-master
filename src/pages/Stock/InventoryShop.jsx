@@ -23,13 +23,13 @@ import {useDispatch, useSelector} from "react-redux";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Delete from "@mui/icons-material/Delete";
 import {
-  addExistingInventory,
-  addInventory,
-  addKeyCategory,
-  addKeyCompany,
-  addKeyRack,
-  addKeyWarehouse,
-  updateInventory,
+    addExistingInventory,
+    addInventory,
+    addKeyCategory,
+    addKeyCompany,
+    addKeyRack,
+    addKeyWarehouse,
+    updateInventory,
 } from "../../redux/Action";
 import ArticleIcon from "@mui/icons-material/Article";
 import * as XLSX from "xlsx";
@@ -113,7 +113,7 @@ export const InventoryShop = () => {
         );
         console.log("Submit Response :--    ", response.data);
         console.log("on Submit :-->", inventoryObject);
-        dispatch(addExistingInventory(response.data));
+        dispatch(addExistingInventory(response.data.response));
         setInventoryObject(InventoryDataModel);
         setEnable((prevState) => !prevState);
     };
@@ -574,11 +574,11 @@ export const InventoryShop = () => {
                                                             {row.mrp}
                                                         </StyledTableCell>
                                                         <StyledTableCell align="center">
-                                                            {row.salePrice}
+                                                            {row.actualSalePrice}
                                                         </StyledTableCell>
                                                         <StyledTableCell align="center">
-                                                            {row.purchasePrice}
-                                                        </StyledTableCell>
+                                                            {row.actualPurchasePrice}
+                                                             </StyledTableCell>
                                                         <StyledTableCell align="center">
                                                             <IconButton
                                                                 aria-label="edit"
@@ -1493,7 +1493,7 @@ export const InventoryShop = () => {
                 <MainItemDetails detailFlagId={detailFlagId} onBooleanChange={handleDetailFlag}/>
             </Box>
         )
-          }
+        }
         </>
     )
         ;

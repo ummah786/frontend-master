@@ -378,7 +378,7 @@ export const Party = () => {
                                         <PeopleIcon/>
                                         <Typography variant="h6" sx={{ml: 1}}>All Parties</Typography>
                                     </Box>
-                                    <Typography variant="h3">3</Typography>
+                                    <Typography variant="h3">{mangUser.length}</Typography>
                                 </Paper>
                                 <Paper
                                     elevation={3}

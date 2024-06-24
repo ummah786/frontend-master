@@ -30,7 +30,7 @@ import TableCell from "@mui/material/TableCell";
 import Delete from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import {useDispatch, useSelector} from "react-redux";
-import {style, StyledTableCell, StyledTableRow,getDate} from "../../../commonStyle";
+import {getDate, style, StyledTableCell, StyledTableRow} from "../../../commonStyle";
 import axios from "axios";
 import {DELETE_KEY_VALUE, SAVE_ADDRESS, SAVE_KEY_VALUE,} from "../../apiendpoint/APIEndPoint";
 import ButtonGroup from "@mui/material/ButtonGroup";
@@ -665,7 +665,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                         value * employee.salePrice -
                         (employee.gst / 100) * value * employee.salePrice -
                         employee.discount;
-                    employee.total = value * employee.salePrice;
+                    employee.total = value * employee.salePrice + (employee.gst / 100)*value * employee.salePrice;
                     return {...employee, [key]: value};
                 } else if (key === "discount") {
                     employee.total =
@@ -676,7 +676,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                 } else if (key === "gst") {
                     employee.total =
                         employee.salePrice * employee.quantity - employee.discount;
-                    employee.total = employee.total + (value / 100) * employee.total;
+                    employee.total = employee.total + (value / 100) * employee.total ;
                     return {...employee, [key]: value};
                 } else {
                     return {...employee, [key]: value};
@@ -686,7 +686,6 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
         });
         setEmployees(updatedEmployees);
     };
-
     const handleSubmitSaleInvoiceCreate = async (e) => {
         e.preventDefault();
         salePurchaseObject["primary_user_id"] = loginData.primary_user_id;
@@ -744,21 +743,28 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
     return (
         <Box component="form" onSubmit={handleSubmitSaleInvoiceCreate}>
             <Box sx={{maxHeight: 300}}>
-                <Box sx={{marginBottom:"10px"}}>
+                <Box sx={{marginBottom: "10px"}}>
                     <Button variant="contained">Sale Invoice</Button>
                     <Box
-                        sx={{right: "0", float: "right", justifyContent: "space-around", margin: "10px", marginTop: "1px"}}
+                        sx={{
+                            right: "0",
+                            float: "right",
+                            justifyContent: "space-around",
+                            margin: "10px",
+                            marginTop: "1px"
+                        }}
                     >
-                            <Button variant="contained" onClick={onBooleanChange} sx={{marginRight: "40px", marginLeft: "-105px"}}>Cancel</Button>
-                            <Button
+                        <Button variant="contained" onClick={onBooleanChange}
+                                sx={{marginRight: "40px", marginLeft: "-105px"}}>Cancel</Button>
+                        <Button
                             sx={{marginRight: "10px", marginTop: "-60px"}}
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                onClick={handleSubmitSaleInvoiceCreate}
-                            >
-                                Save
-                            </Button>
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            onClick={handleSubmitSaleInvoiceCreate}
+                        >
+                            Save
+                        </Button>
                     </Box>
                 </Box>
 
@@ -892,7 +898,8 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                         marginTop: "5px"
                                                     }}
                                                 >
-                                                    <Typography component="h1" variant="h5" padding="7px" paddingBottom="10px" textColor={"common.black"}>
+                                                    <Typography component="h1" variant="h5" padding="7px"
+                                                                paddingBottom="10px" textColor={"common.black"}>
                                                         Add New Party
                                                     </Typography>
                                                     <ModalClose
@@ -905,7 +912,7 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                     />
                                                 </Box>
                                                 <Box component="form" onSubmit={handleSubmitForParty}>
-                                                    <Box  sx={{marginTop: "5px"}}>
+                                                    <Box sx={{marginTop: "5px"}}>
                                                         <TextField
                                                             id="outlined-basic"
                                                             label="Name"
@@ -1067,7 +1074,10 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                             <TextField
                                                                                 margin="normal"
                                                                                 required
-                                                                                sx={{width: "300px", marginLeft: "185px"}}
+                                                                                sx={{
+                                                                                    width: "300px",
+                                                                                    marginLeft: "185px"
+                                                                                }}
                                                                                 id="Category"
                                                                                 label="Category"
                                                                                 name="Category"
@@ -1094,7 +1104,10 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                             >
                                                                                 Submit
                                                                             </Button>
-                                                                            <List sx={{maxWidth: 300, marginLeft: "185px"}}>
+                                                                            <List sx={{
+                                                                                maxWidth: 300,
+                                                                                marginLeft: "185px"
+                                                                            }}>
                                                                                 {addCategory.length > 0 ? (
                                                                                     addCategory.map((item, index) => (
                                                                                         <ListItem
@@ -1320,7 +1333,8 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                         marginTop: "7px"
                                                                     }}
                                                                 >
-                                                                    <Typography component="h1" variant="h5" sx={{padding: "7px"}}>
+                                                                    <Typography component="h1" variant="h5"
+                                                                                sx={{padding: "7px"}}>
                                                                         Edit Shipping Address
                                                                     </Typography>
                                                                     <ModalClose
@@ -1774,7 +1788,8 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                             borderWidth: "2px",
                                                                         }}
                                                                     >
-                                                                        <Typography component="h1" variant="h5" padding={1}>
+                                                                        <Typography component="h1" variant="h5"
+                                                                                    padding={1}>
                                                                             Add New Items
                                                                         </Typography>
                                                                         <ModalClose
@@ -2015,7 +2030,10 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                                                 <TextField
                                                                                                     margin="normal"
                                                                                                     required
-                                                                                                    sx={{width: "300px", marginLeft: "187px"}}
+                                                                                                    sx={{
+                                                                                                        width: "300px",
+                                                                                                        marginLeft: "187px"
+                                                                                                    }}
                                                                                                     id="Category"
                                                                                                     label="Category"
                                                                                                     name="Category"
@@ -2047,7 +2065,10 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                                                     Submit
                                                                                                 </Button>
                                                                                                 <List
-                                                                                                    sx={{maxWidth: 300, marginLeft: "260px"}}>
+                                                                                                    sx={{
+                                                                                                        maxWidth: 300,
+                                                                                                        marginLeft: "260px"
+                                                                                                    }}>
                                                                                                     {addCategory.length > 0 ? (
                                                                                                         addCategory.map(
                                                                                                             (item, index) => (
@@ -2156,7 +2177,10 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                                                 <TextField
                                                                                                     margin="normal"
                                                                                                     required
-                                                                                                    sx={{width: "300px", marginLeft: "190px"}}
+                                                                                                    sx={{
+                                                                                                        width: "300px",
+                                                                                                        marginLeft: "190px"
+                                                                                                    }}
                                                                                                     id="Category"
                                                                                                     label="Category"
                                                                                                     name="Category"
@@ -2188,7 +2212,10 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                                                     Submit
                                                                                                 </Button>
                                                                                                 <List
-                                                                                                    sx={{maxWidth: 300, marginLeft: "185px"}}>
+                                                                                                    sx={{
+                                                                                                        maxWidth: 300,
+                                                                                                        marginLeft: "185px"
+                                                                                                    }}>
                                                                                                     {addCategory.length > 0 ? (
                                                                                                         addCategory.map(
                                                                                                             (item, index) => (
@@ -2357,10 +2384,10 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
                                                                             {row.itemCode}
                                                                         </TableCell>
                                                                         <TableCell align="center">
-                                                                            {row.salePrice}
+                                                                            {row.actualSalePrice}
                                                                         </TableCell>
                                                                         <TableCell align="center">
-                                                                            {row.purchasePrice}
+                                                                            {row.actualPurchasePrice}
                                                                         </TableCell>
                                                                         <TableCell align="center">
                                                                             {row.totalStock}
