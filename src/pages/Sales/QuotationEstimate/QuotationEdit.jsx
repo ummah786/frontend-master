@@ -2773,7 +2773,7 @@ export const QuotationEdit = ({
               </Box>
             </Box>
 
-            <Box>
+      {/*      <Box>
               <Box sx={{ padding: "10px", display: "flex" }}>
                 <Box sx={{ width: "65%" }}>
                   <FormControlLabel
@@ -2840,7 +2840,7 @@ export const QuotationEdit = ({
                   <Typography> ₹ {balanceAmount}</Typography>
                 </Box>
               </Box>
-            </Box>
+            </Box>*/}
             <Box>
               <Card variant="outlined">
                 <Box>
