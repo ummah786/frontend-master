@@ -189,7 +189,7 @@ export const PurchaseInvoicesEdit = ({
     useEffect(() => {
         employees.forEach((employee) => updateRValuesAndRates(employee));
         const totalAmountWithOutTaxReturn = employees.reduce(
-            (acc, emp) => acc + parseFloat(emp.quantity) * parseFloat(emp.salePrice),
+            (acc, emp) => acc + parseFloat(emp.quantity) * parseFloat(emp.purchasePrice),
             0
         );
         setTotalAmountWithOutTax(totalAmountWithOutTaxReturn);
@@ -219,7 +219,7 @@ export const PurchaseInvoicesEdit = ({
     const updateRValuesAndRates = (employee) => {
         if (employee.gst) {
             const calculatedRValue =
-                (employee.salePrice * employee.quantity * employee.gst) / 200;
+                (employee.purchasePrice * employee.quantity * employee.gst) / 200;
             const calculatedRRate = employee.gst / 2;
             const index = employees.findIndex((emp) => emp.id === employee.id); // Find index of current employee
 
@@ -469,16 +469,17 @@ export const PurchaseInvoicesEdit = ({
 
     const calculateTotal = (item) => {
         return (
-            item.quantity * item.salePrice -
+            item.quantity * item.purchasePrice -
             item.discount +
-            (item.quantity * item.salePrice * item.gst) / 100
+            (item.quantity * item.purchasePrice * item.gst) / 100
         );
     };
 
     const updateTotal = (employeess) => {
         console.log("Employee     " + employees);
         const updatedEmployees = employeess.map((employee) => {
-            return {...employee, total: calculateTotal(employee)};
+           const total = calculateTotal(employee);
+            return {...employee, total: parseFloat(total.toFixed(2))};
         });
         setEmployees(updatedEmployees);
     };
@@ -742,20 +743,20 @@ export const PurchaseInvoicesEdit = ({
             if (employee.id === id) {
                 if (key === "quantity") {
                     employee.total =
-                        value * employee.salePrice -
-                        (employee.gst / 100) * value * employee.salePrice -
+                        value * employee.purchasePrice -
+                        (employee.gst / 100) * value * employee.purchasePrice -
                         employee.discount;
-                    employee.total = value * employee.salePrice;
+                    employee.total = value * employee.purchasePrice;
                     return {...employee, [key]: value};
                 } else if (key === "discount") {
                     employee.total =
-                        employee.salePrice * employee.quantity +
-                        (employee.gst / 100) * employee.salePrice * employee.quantity;
+                        employee.purchasePrice * employee.quantity +
+                        (employee.gst / 100) * employee.purchasePrice * employee.quantity;
                     employee.total = employee.total - value;
                     return {...employee, [key]: value};
                 } else if (key === "gst") {
                     employee.total =
-                        employee.salePrice * employee.quantity - employee.discount;
+                        employee.purchasePrice * employee.quantity - employee.discount;
                     employee.total = employee.total + (value / 100) * employee.total;
                     return {...employee, [key]: value};
                 } else {
@@ -1658,11 +1659,11 @@ export const PurchaseInvoicesEdit = ({
                                         <StyledTableCell align="center">
                                             <TextField
                                                 disabled={true}
-                                                value={employee.salePrice}
+                                                value={employee.purchasePrice}
                                                 onChange={(e) =>
                                                     handleInputChange(
-                                                        employee.salePrice,
-                                                        "salePrice",
+                                                        employee.purchasePrice,
+                                                        "purchasePrice",
                                                         e.target.value
                                                     )
                                                 }
@@ -2438,10 +2439,10 @@ export const PurchaseInvoicesEdit = ({
                                                                             {row.itemCode}
                                                                         </TableCell>
                                                                         <TableCell align="center">
-                                                                            {row.salePrice}
+                                                                                {row.actualSalePrice}
                                                                         </TableCell>
                                                                         <TableCell align="center">
-                                                                            {row.purchasePrice}
+                                                                            {row.actualPurchasePrice}
                                                                         </TableCell>
                                                                         <TableCell align="center">
                                                                             {row.totalStock}

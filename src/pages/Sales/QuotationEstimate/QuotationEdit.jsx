@@ -2438,10 +2438,10 @@ export const QuotationEdit = ({
                                       {row.itemCode}
                                     </TableCell>
                                     <TableCell align="center">
-                                      {row.salePrice}
+                                      {row.actualSalePrice}
                                     </TableCell>
                                     <TableCell align="center">
-                                      {row.purchasePrice}
+                                      {row.actualPurchasePrice}
                                     </TableCell>
                                     <TableCell align="center">
                                       {row.totalStock}

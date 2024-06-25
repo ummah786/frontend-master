@@ -134,7 +134,7 @@ export const DebitNoteCreate = ({onBooleanChange}) => {
     const updateRValuesAndRates = (employee) => {
         if (employee.gst) {
             const calculatedRValue =
-                (employee.salePrice * employee.quantity * employee.gst) / 200;
+                (employee.purchasePrice * employee.quantity * employee.gst) / 200;
             const calculatedRRate = employee.gst / 2;
             const index = employees.findIndex((emp) => emp.id === employee.id); // Find index of current employee
 
@@ -384,16 +384,17 @@ export const DebitNoteCreate = ({onBooleanChange}) => {
 
     const calculateTotal = (item) => {
         return (
-            item.quantity * item.salePrice -
+            item.quantity * item.purchasePrice -
             item.discount +
-            (item.quantity * item.salePrice * item.gst) / 100
+            (item.quantity * item.purchasePrice * item.gst) / 100
         );
     };
 
     const updateTotal = (employeess) => {
         console.log("Employee     " + employees);
         const updatedEmployees = employeess.map((employee) => {
-            return {...employee, total: calculateTotal(employee)};
+           const total = calculateTotal(employee);
+            return {...employee, total: parseFloat(total.toFixed(2))};
         });
         setEmployees(updatedEmployees);
     };
@@ -647,20 +648,20 @@ export const DebitNoteCreate = ({onBooleanChange}) => {
             if (employee.id === id) {
                 if (key === "quantity") {
                     employee.total =
-                        value * employee.salePrice -
-                        (employee.gst / 100) * value * employee.salePrice -
+                        value * employee.purchasePrice -
+                        (employee.gst / 100) * value * employee.purchasePrice -
                         employee.discount;
-                    employee.total = value * employee.salePrice;
+                    employee.total = value * employee.purchasePrice;
                     return {...employee, [key]: value};
                 } else if (key === "discount") {
                     employee.total =
-                        employee.salePrice * employee.quantity +
-                        (employee.gst / 100) * employee.salePrice * employee.quantity;
+                        employee.purchasePrice * employee.quantity +
+                        (employee.gst / 100) * employee.purchasePrice * employee.quantity;
                     employee.total = employee.total - value;
                     return {...employee, [key]: value};
                 } else if (key === "gst") {
                     employee.total =
-                        employee.salePrice * employee.quantity - employee.discount;
+                        employee.purchasePrice * employee.quantity - employee.discount;
                     employee.total = employee.total + (value / 100) * employee.total;
                     return {...employee, [key]: value};
                 } else {
@@ -1557,10 +1558,10 @@ export const DebitNoteCreate = ({onBooleanChange}) => {
                                         <StyledTableCell align="center">
                                             <TextField
                                                 disabled={true}
-                                                value={employee.salePrice}
+                                                value={employee.purchasePrice}
                                                 onChange={(e) =>
                                                     handleInputChange(
-                                                        employee.salePrice,
+                                                        employee.purchasePrice,
                                                         "salePrice",
                                                         e.target.value
                                                     )
@@ -2356,10 +2357,10 @@ export const DebitNoteCreate = ({onBooleanChange}) => {
                                                                             {row.itemCode}
                                                                         </TableCell>
                                                                         <TableCell align="center">
-                                                                            {row.salePrice}
+                                                                                {row.actualSalePrice}
                                                                         </TableCell>
                                                                         <TableCell align="center">
-                                                                            {row.purchasePrice}
+                                                                            {row.actualPurchasePrice}
                                                                         </TableCell>
                                                                         <TableCell align="center">
                                                                             {row.totalStock}

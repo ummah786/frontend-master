@@ -484,7 +484,7 @@ const SalesInvoiceView = ({onBooleanChange, idFlagView}) => {
                                                                             {row.quantity}
                                                                         </TableCell>
                                                                         <TableCell align="center">
-                                                                            {row.salePrice}
+                                                                            {row.actualSalePrice}
                                                                         </TableCell>
                                                                         <TableCell align="center">
                                                                             {row.gst}

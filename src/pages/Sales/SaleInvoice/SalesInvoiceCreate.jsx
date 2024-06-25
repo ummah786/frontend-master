@@ -408,7 +408,8 @@ export const SalesInvoiceCreate = ({onBooleanChange}) => {
     const updateTotal = (employeess) => {
         console.log("Employee     " + employees);
         const updatedEmployees = employeess.map((employee) => {
-            return {...employee, total: calculateTotal(employee)};
+           const total = calculateTotal(employee);
+            return {...employee, total: parseFloat(total.toFixed(2))};
         });
         setEmployees(updatedEmployees);
     };

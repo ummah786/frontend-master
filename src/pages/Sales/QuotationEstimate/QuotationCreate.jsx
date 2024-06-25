@@ -396,7 +396,8 @@ export const QuotationCreate = ({onBooleanChange}) => {
     const updateTotal = (employeess) => {
         console.log("Employee     " + employees);
         const updatedEmployees = employeess.map((employee) => {
-            return {...employee, total: calculateTotal(employee)};
+           const total = calculateTotal(employee);
+            return {...employee, total: parseFloat(total.toFixed(2))};
         });
         setEmployees(updatedEmployees);
     };
@@ -2356,10 +2357,10 @@ export const QuotationCreate = ({onBooleanChange}) => {
                                                                             {row.itemCode}
                                                                         </TableCell>
                                                                         <TableCell align="center">
-                                                                            {row.salePrice}
+                                                                            {row.actualSalePrice}
                                                                         </TableCell>
                                                                         <TableCell align="center">
-                                                                            {row.purchasePrice}
+                                                                            {row.actualPurchasePrice}
                                                                         </TableCell>
                                                                         <TableCell align="center">
                                                                             {row.totalStock}
