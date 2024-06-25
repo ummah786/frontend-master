@@ -654,18 +654,18 @@ export const QuotationCreate = ({onBooleanChange}) => {
                         value * employee.salePrice -
                         (employee.gst / 100) * value * employee.salePrice -
                         employee.discount;
-                    employee.total = value * employee.salePrice;
+                    employee.total = parseFloat((value * employee.salePrice).toFixed(2));
                     return {...employee, [key]: value};
                 } else if (key === "discount") {
                     employee.total =
                         employee.salePrice * employee.quantity +
                         (employee.gst / 100) * employee.salePrice * employee.quantity;
-                    employee.total = employee.total - value;
+                     employee.total = parseFloat((employee.total - value).toFixed(2));
                     return {...employee, [key]: value};
                 } else if (key === "gst") {
                     employee.total =
                         employee.salePrice * employee.quantity - employee.discount;
-                    employee.total = employee.total + (value / 100) * employee.total;
+                   employee.total = parseFloat((employee.total + (value / 100) * employee.total).toFixed(2));
                     return {...employee, [key]: value};
                 } else {
                     return {...employee, [key]: value};

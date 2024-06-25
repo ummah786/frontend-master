@@ -752,12 +752,12 @@ export const PurchaseReturnEdit = ({
                     employee.total =
                         employee.purchasePrice * employee.quantity +
                         (employee.gst / 100) * employee.purchasePrice * employee.quantity;
-                    employee.total = employee.total - value;
+                     employee.total = parseFloat((employee.total - value).toFixed(2));
                     return {...employee, [key]: value};
                 } else if (key === "gst") {
                     employee.total =
                         employee.purchasePrice * employee.quantity - employee.discount;
-                    employee.total = employee.total + (value / 100) * employee.total;
+                   employee.total = parseFloat((employee.total + (value / 100) * employee.total).toFixed(2));
                     return {...employee, [key]: value};
                 } else {
                     return {...employee, [key]: value};
