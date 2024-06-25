@@ -2708,7 +2708,7 @@ export const PurchaseOrdersCreate = ({onBooleanChange}) => {
                             </Box>
                         </Box>
 
-                        <Box>
+            {/*            <Box>
                             <Box sx={{padding: "10px", display: "flex"}}>
                                 <Box sx={{width: "65%"}}>
                                     <FormControlLabel
@@ -2775,7 +2775,7 @@ export const PurchaseOrdersCreate = ({onBooleanChange}) => {
                                     <Typography> ₹ {balanceAmount}</Typography>
                                 </Box>
                             </Box>
-                        </Box>
+                        </Box>*/}
                         <Box>
                             <Card variant="outlined">
                                 <Box>
