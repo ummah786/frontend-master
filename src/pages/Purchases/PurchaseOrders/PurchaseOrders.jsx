@@ -207,7 +207,7 @@ export const PurchaseOrders = () => {
                                         select
                                         fullWidth={true}
                                         sx={{margin: "10px", width: "200px"}}
-                                        label="Show Invoice"
+                                        label="Show Orders"
                                         variant="outlined"
                                         margin="normal"
                                         onChange={(event) => setSelectOrderType(event.target.value)}
