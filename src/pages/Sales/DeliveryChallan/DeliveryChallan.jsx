@@ -10,12 +10,12 @@ import Button from "@mui/material/Button";
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {
-  formatDate,
-  Search,
-  SearchIconWrapper,
-  StyledInputBase,
-  StyledTableCell,
-  StyledTableRow,
+    formatDate,
+    Search,
+    SearchIconWrapper,
+    StyledInputBase,
+    StyledTableCell,
+    StyledTableRow,
 } from "../../../commonStyle";
 import ArticleIcon from "@mui/icons-material/Article";
 import IconButton from "@mui/material/IconButton";
@@ -28,6 +28,8 @@ import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import {useDispatch, useSelector} from "react-redux";
 import {addSalePurchase} from "../../../redux/Action";
 import DeliveryChallanView from "./DeliveryChallanView";
+import UserRole from "../../../jsonfile/Role.json";
+import MenuItem from "@mui/material/MenuItem";
 
 export const DeliveryChallan = () => {
     const loginData = useSelector((state) => state.loginReducerValue);
@@ -37,7 +39,7 @@ export const DeliveryChallan = () => {
     const dispatch = useDispatch();
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
-
+    const [selectOrderType, setSelectOrderType] = useState("");
     const handleStartDateChange = (newStartDate) => {
         setStartDate(newStartDate);
     };
@@ -63,41 +65,41 @@ export const DeliveryChallan = () => {
         setFilter(event.target.value);
     };
 
-  useEffect(() => {
-    if (Array.isArray(salePurchaseUser)) {
-      let filteredData = salePurchaseUser;
+    useEffect(() => {
+        if (Array.isArray(salePurchaseUser)) {
+            let filteredData = salePurchaseUser;
 
-      // Filter for billType 'SALE_INVOICE'
-      filteredData = filteredData.filter((employee) => employee.billType === 'DELIVERY_CHALLAN');
+            // Filter for billType 'SALE_INVOICE'
+            filteredData = filteredData.filter((employee) => employee.billType === 'DELIVERY_CHALLAN');
 
-      if (startDate && endDate) {
-        // Filter based on the date range
-        filteredData = filteredData.filter((employee) => {
-          return (
-              formatDate(employee.salesInvoiceDate) >= formatDate(startDate) &&
-              formatDate(employee.salesInvoiceDate) <= formatDate(endDate)
-          );
-        });
-      } else if (startDate) {
-        filteredData = filteredData.filter((employee) => {
-          return formatDate(employee.salesInvoiceDate) >= formatDate(startDate);
-        });
-      } else if (endDate) {
-        // Filter based on the date range
-        filteredData = filteredData.filter((employee) => {
-          return formatDate(employee.salesInvoiceDate) <= formatDate(endDate);
-        });
-      }
+            if (startDate && endDate) {
+                // Filter based on the date range
+                filteredData = filteredData.filter((employee) => {
+                    return (
+                        formatDate(employee.salesInvoiceDate) >= formatDate(startDate) &&
+                        formatDate(employee.salesInvoiceDate) <= formatDate(endDate)
+                    );
+                });
+            } else if (startDate) {
+                filteredData = filteredData.filter((employee) => {
+                    return formatDate(employee.salesInvoiceDate) >= formatDate(startDate);
+                });
+            } else if (endDate) {
+                // Filter based on the date range
+                filteredData = filteredData.filter((employee) => {
+                    return formatDate(employee.salesInvoiceDate) <= formatDate(endDate);
+                });
+            }
 
-      if (filter && filter.trim() !== "") {
-        filteredData = filteredData.filter((employee) => {
-          return String(employee.id).includes(filter);
-        });
-      }
+            if (filter && filter.trim() !== "") {
+                filteredData = filteredData.filter((employee) => {
+                    return String(employee.id).includes(filter);
+                });
+            }
 
-      setFilterSalePurchase(filteredData);
-    }
-  }, [filter, salePurchaseUser, startDate, endDate]);
+            setFilterSalePurchase(filteredData);
+        }
+    }, [filter, salePurchaseUser, startDate, endDate]);
     const handleCheckboxClick = (id) => {
         const selectedIndex = selectedRows.indexOf(id);
         let newSelected = [];
@@ -182,20 +184,37 @@ export const DeliveryChallan = () => {
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker
                                                 label="Start Date:"
-                                                sx={{width: "395px"}}
+                                                sx={{width: "200px"}}
                                                 value={startDate}
                                                 onChange={handleStartDateChange}
                                                 renderInput={(params) => <TextField {...params} />}
                                             />
                                             <DatePicker
                                                 label="End Date:"
-                                                sx={{width: "400px"}}
+                                                sx={{width: "200px"}}
                                                 value={endDate}
                                                 onChange={handleEndDateChange}
                                                 renderInput={(params) => <TextField {...params} />}
                                             />
                                         </DemoContainer>
                                     </LocalizationProvider>
+                                </Box>
+                                <Box sx={{marginBottom: "10px", marginTop: "-8px"}}>
+                                    <TextField
+                                        select
+                                        fullWidth={true}
+                                        sx={{margin: "10px", width: "200px"}}
+                                        label="Show Challans"
+                                        variant="outlined"
+                                        margin="normal"
+                                        onChange={(event) => setSelectOrderType(event.target.value)}
+                                    >
+                                        {UserRole.showChallans.map((indi) => (
+                                            <MenuItem key={indi.name} value={indi.name}>
+                                                {indi.name}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
                                 </Box>
                             </Box>
                             <Box>

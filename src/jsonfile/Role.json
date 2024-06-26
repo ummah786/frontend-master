@@ -879,5 +879,49 @@
     {
       "name": "SMS"
     }
+  ],
+  "showInvoice": [
+    {
+      "name": "Show All Invoices"
+    },
+    {
+      "name": "Show Open Invoices"
+    },
+    {
+      "name": "Show Closed Invoices"
+    }
+  ],
+  "showOrders": [
+    {
+      "name": "Show All Orders"
+    },
+    {
+      "name": "Show Open Orders"
+    },
+    {
+      "name": "Show Closed Orders"
+    }
+  ],
+  "showChallans": [
+    {
+      "name": "Show All Challans"
+    },
+    {
+      "name": "Show Open Challans"
+    },
+    {
+      "name": "Show Closed Challans"
+    }
+  ],
+  "showQuotation": [
+    {
+      "name": "Show All Quotation"
+    },
+    {
+      "name": "Show Open Quotation"
+    },
+    {
+      "name": "Show Closed Quotation"
+    }
   ]
 }

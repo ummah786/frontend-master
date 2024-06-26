@@ -28,6 +28,8 @@ import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import {useDispatch, useSelector} from "react-redux";
 import {addSalePurchase} from "../../../redux/Action";
 import ProformaInvoiceView from "./ProformaInvoiceView";
+import UserRole from "../../../jsonfile/Role.json";
+import MenuItem from "@mui/material/MenuItem";
 
 export const ProformaInvoice = () => {
     const loginData = useSelector((state) => state.loginReducerValue);
@@ -37,7 +39,7 @@ export const ProformaInvoice = () => {
     const dispatch = useDispatch();
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
-
+    const [selectOrderType, setSelectOrderType] = useState("");
     const handleStartDateChange = (newStartDate) => {
         setStartDate(newStartDate);
     };
@@ -182,20 +184,37 @@ export const ProformaInvoice = () => {
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker
                                                 label="Start Date:"
-                                                sx={{width: "395px"}}
+                                                sx={{width: "200px"}}
                                                 value={startDate}
                                                 onChange={handleStartDateChange}
                                                 renderInput={(params) => <TextField {...params} />}
                                             />
                                             <DatePicker
                                                 label="End Date:"
-                                                sx={{width: "400px"}}
+                                                sx={{width: "200px"}}
                                                 value={endDate}
                                                 onChange={handleEndDateChange}
                                                 renderInput={(params) => <TextField {...params} />}
                                             />
                                         </DemoContainer>
                                     </LocalizationProvider>
+                                </Box>
+                                <Box sx={{marginBottom: "10px", marginTop: "-8px"}}>
+                                    <TextField
+                                        select
+                                        fullWidth={true}
+                                        sx={{margin: "10px", width: "200px"}}
+                                        label="Show Invoices"
+                                        variant="outlined"
+                                        margin="normal"
+                                        onChange={(event) => setSelectOrderType(event.target.value)}
+                                    >
+                                        {UserRole.showInvoice.map((indi) => (
+                                            <MenuItem key={indi.name} value={indi.name}>
+                                                {indi.name}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
                                 </Box>
                             </Box>
                             <Box>

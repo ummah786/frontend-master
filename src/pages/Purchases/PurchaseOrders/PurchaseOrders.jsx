@@ -10,12 +10,12 @@ import Button from "@mui/material/Button";
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {
-  formatDate,
-  Search,
-  SearchIconWrapper,
-  StyledInputBase,
-  StyledTableCell,
-  StyledTableRow,
+    formatDate,
+    Search,
+    SearchIconWrapper,
+    StyledInputBase,
+    StyledTableCell,
+    StyledTableRow,
 } from "../../../commonStyle";
 import ArticleIcon from "@mui/icons-material/Article";
 import IconButton from "@mui/material/IconButton";
@@ -28,6 +28,8 @@ import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import {useDispatch, useSelector} from "react-redux";
 import {addSalePurchase} from "../../../redux/Action";
 import PurchaseOrdersView from "./PurchaseOrdersView";
+import UserRole from "../../../jsonfile/Role.json";
+import MenuItem from "@mui/material/MenuItem";
 
 export const PurchaseOrders = () => {
     const loginData = useSelector((state) => state.loginReducerValue);
@@ -51,6 +53,8 @@ export const PurchaseOrders = () => {
     const [flag, setFlag] = useState(false);
     const [flagView, setFlagView] = useState(false);
     const [idFlagView, setIdFlagView] = useState('');
+    const [purchaseOrderType, setPurchaseOrderType] = useState('');
+    const [selectOrderType, setSelectOrderType] = useState("");
     const handleBooleanChange = () => {
         setFlag((prevState) => !prevState);
     };
@@ -183,20 +187,37 @@ export const PurchaseOrders = () => {
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker
                                                 label="Start Date:"
-                                                sx={{width: "395px"}}
+                                                sx={{width: "200px"}}
                                                 value={startDate}
                                                 onChange={handleStartDateChange}
                                                 renderInput={(params) => <TextField {...params} />}
                                             />
                                             <DatePicker
                                                 label="End Date:"
-                                                sx={{width: "400px"}}
+                                                sx={{width: "200px"}}
                                                 value={endDate}
                                                 onChange={handleEndDateChange}
                                                 renderInput={(params) => <TextField {...params} />}
                                             />
                                         </DemoContainer>
                                     </LocalizationProvider>
+                                </Box>
+                                <Box sx={{marginBottom: "10px", marginTop: "-8px"}}>
+                                    <TextField
+                                        select
+                                        fullWidth={true}
+                                        sx={{margin: "10px", width: "200px"}}
+                                        label="Show Invoice"
+                                        variant="outlined"
+                                        margin="normal"
+                                        onChange={(event) => setSelectOrderType(event.target.value)}
+                                    >
+                                        {UserRole.showOrders.map((indi) => (
+                                            <MenuItem key={indi.name} value={indi.name}>
+                                                {indi.name}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
                                 </Box>
                             </Box>
                             <Box>
