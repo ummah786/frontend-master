@@ -56,7 +56,10 @@ export const Party = () => {
 
     const [addCategory, setAddCategory] = React.useState([]);
     const [detailFlag, setDetailFlag] = React.useState(true);
-    const [detailFlagId,setDetailFlagId]=React.useState('');
+    const [detailFlagId, setDetailFlagId] = React.useState('');
+
+    const [toCollect, setToCollect] = useState(0);
+    const [toPay, setToPay] = useState(0);
 
     const handleDetailFlag = () => {
         setDetailFlag((prevState) => !prevState);
@@ -149,18 +152,25 @@ export const Party = () => {
         if (partyUser.length > 1 && !(partyUser[0].id === '')) {
             console.log("done your job")
             setFilteredEmployees(partyUser);
+
+            const {collect, pay} = partyUser.reduce(
+                (acc, party) => {
+                    if (party.openingBalanceType === 'To Collect') {
+                        acc.collect += parseFloat(party.openingBalance);
+                    } else if (party.openingBalanceType === 'To Pay') {
+                        acc.pay += parseFloat(party.openingBalance);
+                    }
+                    return acc;
+                },
+                {collect: 0, pay: 0}
+            );
+            setToCollect(collect);
+            setToPay(pay);
+
+
         }
     }, [partyUser]);
 
-
-    useEffect(() => {
-        if (partyUser.length > 1 && !(partyUser[0].id === '')) {
-            console.log("done your job")
-            setFilteredEmployees(partyUser);
-        } else {
-            // fetchData();
-        }
-    }, [partyUser]);
 
     /*    const fetchData = async () => {
             try {
@@ -396,7 +406,7 @@ export const Party = () => {
                                         <AttachMoneyIcon/>
                                         <Typography variant="h6" sx={{ml: 1}}>To Collect</Typography>
                                     </Box>
-                                    <Typography variant="h3">₹ 300</Typography>
+                                    <Typography variant="h3">₹ {toCollect}</Typography>
                                 </Paper>
                                 <Paper
                                     elevation={3}
@@ -414,7 +424,7 @@ export const Party = () => {
                                         <MoneyOffIcon/>
                                         <Typography variant="h6" sx={{ml: 1}}>To Pay</Typography>
                                     </Box>
-                                    <Typography variant="h3">₹ 200</Typography>
+                                    <Typography variant="h3">₹ {toPay}</Typography>
                                 </Paper>
                             </Box>
 
@@ -784,7 +794,7 @@ export const Party = () => {
             </Box>
         ) : (
             <Box>
-                <MainPartyDetails detailFlagId={detailFlagId}  onBooleanChange={handleDetailFlag}/>
+                <MainPartyDetails detailFlagId={detailFlagId} onBooleanChange={handleDetailFlag}/>
             </Box>
         )
         }
